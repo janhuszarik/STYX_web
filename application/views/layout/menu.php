@@ -1,5 +1,4 @@
 <body>
-
 <header id="header" class="header header-sticky header-sticky-smart disable-transition-all z-index-5">
 
 	<div class="topbar bg-body border-bottom">
