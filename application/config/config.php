@@ -6,8 +6,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $server = ( $_SERVER['HTTP_HOST'] );
     
     if ($server == 'localhost'){
-        $config['base_url'] = 'http://localhost/styx_web.at/';
-        define('BASE_URL', 'http://localhost/styx_web.at/');
+        $config['base_url'] = 'http://localhost/styx_web/';
+        define('BASE_URL', 'http://localhost/styx_web/');
         define( 'APP_PATH', realpath(__DIR__ .'/../../'));
     } else {
 		$config['base_url'] = 'https://www.styx.at/';
