@@ -27,7 +27,7 @@
 							<div class="col-lg-6">
 								<div class="form-group">
 									<label class="col-form-label" for="inputDefault">URL (//applications/config/routes.php)</label>
-									<input type="text" name="url" class="form-control" id="inputDefault" value="<?=!empty($menu->url)?$menu->url: ''?>" required>
+									<input type="text" name="url" class="form-control" id="inputDefault" value="<?=!empty($menu->url)?$menu->url: ''?>">
 									<small>Soll die Unterseite einen klassischen Link zu einer anderen Website enthalten, muss diese den gesamten
 										Link und das Präfix https:// enthalten, ansonsten erfolgt keine Verlinkung auf die Unterseite, sondern eine interne Weiterleitung.</small>
 								</div>
