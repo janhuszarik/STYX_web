@@ -1395,7 +1395,7 @@
 	<div id="offCanvasNavBar" class="offcanvas offcanvas-start" style="--bs-offcanvas-width: 310px">
 
 		<div class="offcanvas-header bg-body-tertiary">
-			<h3 class="offcanvas-title text-uppercase"><img src="<?=BASE_URL.LOGO?>" height="80px" alt="STYX LOGO"></h3>
+			<h3 class="offcanvas-title text-uppercase">Glowing</h3>
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<hr class="mt-0">
@@ -1438,7 +1438,7 @@
 		</div>
 		<hr class="mb-0">
 		<div class="offcanvas-footer bg-body-tertiary">
-			© 2023 STYX Naturcosmetic <br>
+			© 2023 Glowing. <br>
 			All rights reserved.
 		</div>
 	</div>
