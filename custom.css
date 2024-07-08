@@ -1,0 +1,351 @@
+.top-photo-section {
+	width: 100%;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.top-photo {
+	width: 100%;
+	height: auto;
+	max-height: 300px;
+	object-fit: cover;
+}
+/* Add this to your CSS file */
+.top-photo-section {
+	position: relative;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.top-photo {
+	width: 100%;
+	height: auto;
+	max-height: 400px;
+	object-fit: cover;
+}
+
+.photo-title-overlay {
+	position: absolute;
+	top: 300px;
+	left: 20px;
+	background: rgba(255, 255, 255, 0.7);
+	padding: 10px 75px;
+	border-radius: 10px;
+}
+
+.photo-title-overlay h1 {
+	margin: 0;
+	font-size: 24px;
+	color: #000;
+}
+.heading-mycss {
+	font-weight: bold;
+	color: white;
+}/* Skryjeme predvolenú šípku */
+.custom-banner {
+	display: none;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background-color: #ffffff;
+	color: black;
+	text-align: left;
+	padding: 20px;
+	z-index: 1000;
+	box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-banner-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.custom-banner-text-container {
+	max-width: 70%;
+}
+
+.custom-banner-heading {
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+
+.custom-banner-text {
+	font-size: 14px;
+}
+
+.custom-banner-link {
+	display: block;
+	margin-top: 10px;
+	font-size: 14px;
+	color: #007bff;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.custom-banner-buttons-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.custom-banner-buttons-container .custom-button {
+	margin: 5px;
+	width: 200px;
+}
+
+/* Custom styles for the cookie modal */
+#customCookieConsentModal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	max-width: 998px;
+	max-height: 80%;
+	overflow: auto;
+	background-color: rgba(255, 255, 255, 0.9);
+	padding: 20px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+	border-radius: 8px;
+}
+
+#customCookieConsentModal .custom-modal-content {
+	background-color: #fff;
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+}
+
+#customCookieConsentModal .custom-modal-heading {
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+#customCookieConsentModal .custom-cookie-section .card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+	background-color: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+}
+
+#customCookieConsentModal .custom-cookie-section .accordion-toggle {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	font-size: 18px;
+	color: #333;
+	text-decoration: none;
+}
+
+#customCookieConsentModal .custom-cookie-section .accordion-arrow {
+	margin-right: 10px;
+	transition: transform 0.2s ease;
+}
+
+#customCookieConsentModal .custom-cookie-section .collapsed .accordion-arrow {
+	transform: rotate(90deg);
+}
+
+#customCookieConsentModal .custom-cookie-section .switch {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+}
+
+#customCookieConsentModal .custom-cookie-section .switch input {
+	display: none;
+}
+
+#customCookieConsentModal .custom-cookie-section .switch .slider {
+	position: relative;
+	display: block;
+	width: 40px;
+	height: 20px;
+	background-color: #ccc;
+	border-radius: 20px;
+	transition: background-color 0.2s;
+}
+
+#customCookieConsentModal .custom-cookie-section .switch .slider:before {
+	content: "";
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background-color: #fff;
+	top: 1px;
+	left: 1px;
+	transition: transform 0.2s;
+}
+
+#customCookieConsentModal .custom-cookie-section .switch input:checked + .slider {
+	background-color: #2196F3;
+}
+
+#customCookieConsentModal .custom-cookie-section .switch input:checked + .slider:before {
+	transform: translateX(20px);
+}
+
+#customCookieConsentModal .custom-cookie-description {
+	margin-top: 10px;
+	font-size: 16px;
+	color: #333;
+}
+
+#customCookieConsentModal .custom-contact-card {
+	margin-top: 20px;
+}
+
+#customCookieConsentModal .custom-contact-card-body {
+	padding: 20px;
+	background-color: #f5f5f5;
+	border-top: 1px solid #ddd;
+}
+
+#customCookieConsentModal .custom-contact-text {
+	font-size: 16px;
+	margin: 0;
+}
+
+#customCookieConsentModal .custom-contact-button {
+	margin: 0;
+}
+
+#customCookieConsentModal .custom-modal-buttons {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+#customCookieConsentModal .custom-modal-buttons .custom-button {
+	margin: 5px;
+}
+
+/* Styles for the cookie banner */
+#customCookieConsentBanner {
+	display: none;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background-color: #fff;
+	color: #333;
+	text-align: center;
+	padding: 20px;
+	box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+}
+
+#customCookieConsentBanner .custom-banner-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+#customCookieConsentBanner .custom-banner-text-container {
+	text-align: left;
+}
+
+#customCookieConsentBanner .custom-banner-heading {
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+#customCookieConsentBanner .custom-banner-text {
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+#customCookieConsentBanner .custom-banner-link {
+	color: #007bff;
+	text-decoration: none;
+	font-size: 14px;
+}
+
+#customCookieConsentBanner .custom-banner-buttons-container {
+	display: flex;
+	flex-direction: column;
+}
+
+#customCookieConsentBanner .custom-button {
+	margin: 5px;
+}
+
+/* Styles for the cookie icon */
+#customCookieIcon {
+	position: fixed;
+	bottom: 30px;
+	left: 30px;
+	width: 50px;
+	height: 50px;
+	background-color: #ffffff00;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	z-index: 1000;
+}
+
+#customCookieIcon img {
+	width: 50px;
+	height: 50px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+	#customCookieConsentBanner .custom-banner-content {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	#customCookieConsentBanner .custom-banner-buttons-container {
+		flex-direction: row;
+	}
+
+	#customCookieConsentBanner .custom-banner-buttons-container .custom-button {
+		margin: 5px;
+	}
+}
+
+
+.carousel-item {
+	height: 750px; /* Increased height by 50px */
+	background-color: white; /* Set background color to white */
+}
+.carousel-item .container {
+	height: 100%;
+}
+.carousel-item .row {
+	height: 100%;
+}
+.carousel-item .col {
+	height: 100%;
+}
+.carousel-item .d-flex {
+	height: 100%;
+}
+.carousel-caption {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+.carousel {
+	padding-top: 10px;
+}
+
+
+

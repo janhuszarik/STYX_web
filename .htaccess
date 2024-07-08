@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /STYX_web/
+
+RewriteCond %{REQUEST_URI} !^(index\.php|resources|robots\.txt) [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+
+## Presmerovanie HTTP na HTTPS pre styx.at
+#RewriteCond %{HTTP_HOST} ^styx\.at [NC]
+#RewriteCond %{HTTPS} off
+#RewriteRule ^(.*)$ https://styx.at/$1 [L,R=301]
+

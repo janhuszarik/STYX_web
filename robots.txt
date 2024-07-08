@@ -1,0 +1,16 @@
+# Group 1
+User-agent: Googlebot
+Allow: /
+Allow: *
+
+# Group 2
+User-agent: *
+Allow: /
+Allow: *
+Disallow: /unsubscribe/*
+Disallow: /unsubscribe
+
+User-agent: Googlebot-Mobile
+Allow: *
+
+Sitemap: https://www.styx.at/xml/sitemap
