@@ -519,7 +519,7 @@
 						</a>
 					</div>
 					<div class="px-5 d-none d-xl-inline-block">
-						<a class="lh-1 color-inherit text-decoration-none" href="<?=BASE_URL?>" data-bs-toggle="modal" data-bs-target="#signInModal">
+						<a class="lh-1 color-inherit text-decoration-none" href="" data-bs-toggle="modal" data-bs-target="#signInModal">
 							<svg class="icon icon-user-light">
 								<use xlink:href="#icon-user-light"></use>
 							</svg>

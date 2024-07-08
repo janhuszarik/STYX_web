@@ -1029,41 +1029,127 @@
 	</div>
 </div>
 
-<div class="modal" id="signInModal" tabindex="-1" aria-labelledby="signInModal" aria-hidden="true">
+<!-- Login Modal for Non-logged in Users -->
+<div class="modal" id="signInModal" tabindex="-1" aria-labelledby="signInModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header text-center border-0 pb-0">
 				<button type="button" class="btn-close position-absolute end-5 top-5" data-bs-dismiss="modal" aria-label="Close"></button>
-				<h3 class="modal-title w-100" id="signInModalLabel">Sign In</h3>
+				<h3 class="modal-title w-100" id="signInModalLabel">Prihlásenie</h3>
 			</div>
 			<div class="modal-body px-sm-13 px-8">
-				<p class="text-center fs-16 mb-10">Don’t have an account yet? <a href="#" data-bs-toggle="modal" data-bs-target="#signUpModal" class="text-black">Sign up</a> for free</p>
-				<form action="#">
-					<input name="email" type="email" class="form-control mb-5" placeholder="Your email" required>
-					<input name="password" type="password" class="form-control" placeholder="Password" required>
+				<p class="text-center fs-16 mb-10">Nemáte ešte účet? <a href="#" class="text-black">Zaregistrujte sa</a> zadarmo</p>
+				<form id="loginForm">
+					<input name="identity" type="email" class="form-control mb-5" placeholder="Váš email" required>
+					<input name="password" type="password" class="form-control" placeholder="Heslo" required>
 					<div class="d-flex align-items-center justify-content-between mt-8 mb-7">
 						<div class="custom-control d-flex form-check">
-							<input name="stay-signed-in" type="checkbox" class="form-check-input rounded-0 me-3" id="staySignedIn">
-							<label class="custom-control-label text-body" for="staySignedIn">Stay signed in</label>
+							<input name="remember" type="checkbox" class="form-check-input rounded-0 me-3" id="staySignedIn">
+							<label class="custom-control-label text-body" for="staySignedIn">Zostať prihlásený</label>
 						</div>
-						<a href="#" class="text-secondary">Forgot your password?</a>
+						<a href="#" class="text-secondary">Zabudli ste heslo?</a>
 					</div>
-					<button type="submit" value="Login" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary w-100">Log In</button>
+					<button type="submit" value="Login" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary w-100">Prihlásiť sa</button>
 				</form>
-			</div>
-			<div class="modal-footer px-13 pt-0 pb-12 border-0">
-				<div class="border-bottom w-100"></div>
-				<div class="text-center lh-1 mb-8 w-100 mt-n5">
-					<span class="fs-14 bg-body lh-1 px-4">or Log-in with</span>
-				</div>
-				<div class="d-flex w-100">
-					<a href="#" class="btn btn-outline-secondary w-100 border-2x me-5 btn-hover-bg-primary btn-hover-border-primary"><i class="fab fa-facebook-f me-4" style="color: #2E58B2"></i>Facebook</a>
-					<a href="#" class="btn btn-outline-secondary w-100 border-2x mt-0 btn-hover-bg-primary btn-hover-border-primary"><i class="fab fa-google me-4" style="color: #DD4B39"></i>Google</a>
-				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<!-- Modal for Logged-in Users -->
+<div class="modal" id="userOptionsModal" tabindex="-1" aria-labelledby="userOptionsModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header text-center border-0 pb-0">
+				<button type="button" class="btn-close position-absolute end-5 top-5" data-bs-dismiss="modal" aria-label="Close"></button>
+				<h3 class="modal-title w-100" id="userOptionsModalLabel">Možnosti</h3>
+			</div>
+			<div class="modal-body px-sm-13 px-8 text-center">
+				<a href="/admin" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary w-100 mb-3">Administrator</a>
+				<a href="/logout" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary w-100">Logout</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const loginForm = document.getElementById('loginForm');
+
+		loginForm.addEventListener('submit', async function (event) {
+			event.preventDefault();
+
+			const formData = new FormData(loginForm);
+			const data = {
+				identity: formData.get('identity'),
+				password: formData.get('password'),
+				remember: formData.get('remember') ? true : false
+			};
+
+			try {
+				const response = await fetch('http://localhost/STYX_web/auth/login', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(data)
+				});
+
+				if (!response.ok) {
+					throw new Error('Network response was not ok: ' + response.statusText);
+				}
+
+				const result = await response.json();
+
+				if (result.status === 'success' || result.status === 'redirect') {
+					window.location.href = result.redirect;
+				} else {
+					alert('Prihlásenie zlyhalo: ' + result.message);
+				}
+			} catch (error) {
+				console.error('Chyba počas prihlásenia:', error);
+
+				// Ak chyba je odpoveď, ktorá nie je JSON
+				if (error.message.includes('Unexpected token')) {
+					alert('Prihlásenie zlyhalo: Neplatná odpoveď servera. Skúste to prosím neskôr.');
+				} else {
+					alert('Počas prihlásenia došlo k chybe: ' + error.message);
+				}
+			}
+		});
+	});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="modal" id="signUpModal" tabindex="-1" aria-labelledby="signUpModal" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">

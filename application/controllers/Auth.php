@@ -9,15 +9,15 @@ class Auth extends CI_Controller
 {
 	public $data = [];
 
-	public function __construct()
-	{
+	public function __construct() {
 		parent::__construct();
-		$this->load->database();
 		$this->load->library(['ion_auth', 'form_validation']);
 		$this->load->helper(['url', 'language']);
-
-		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
-
+		$this->load->model('ion_auth_model');
+		$this->form_validation->set_error_delimiters(
+			$this->config->item('error_start_delimiter', 'ion_auth'),
+			$this->config->item('error_end_delimiter', 'ion_auth')
+		);
 		$this->lang->load('auth');
 	}
 
@@ -63,64 +63,68 @@ class Auth extends CI_Controller
 	 * Log the user in
 	 */
 	public function login() {
-		// Check if the user is already logged in
+		// Skontrolovať, či je používateľ už prihlásený
 		if ($this->ion_auth->logged_in()) {
-			// Set flash message and redirect based on the user's role
-			if ($this->ion_auth->is_admin()) {
-				$this->session->set_flashdata('message', 'Sie sind bereits als Admin eingeloggt!');
-				redirect(BASE_URL . 'admin');
-			} else {
-				$this->session->set_flashdata('message', 'Sie sind bereits eingeloggt!');
-				redirect(BASE_URL);
-			}
+			// Presmerovať na administrátorskú stránku alebo hlavnú stránku podľa roly používateľa
+			$redirect_url = $this->ion_auth->is_admin() ? BASE_URL . 'admin' : BASE_URL;
+			$response = [
+				'status' => 'redirect',
+				'message' => 'Ste už prihlásený',
+				'redirect' => $redirect_url
+			];
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode($response));
+			return;
 		}
+
+		// Získať JSON dáta z požiadavky
+		$input = json_decode(trim(file_get_contents('php://input')), true);
 
 		$this->data['title'] = $this->lang->line('login_heading');
 
-		// Validate form input
+		// Validácia vstupu z formulára
+		$this->form_validation->set_data($input);
 		$this->form_validation->set_rules('identity', str_replace(':', '', $this->lang->line('login_identity_label')), 'required');
 		$this->form_validation->set_rules('password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
 
 		if ($this->form_validation->run() === TRUE) {
-			// Check to see if the user is logging in
-			// Check for "remember me"
-			$remember = (bool)$this->input->post('remember');
+			// Skontrolovať, či sa používateľ prihlasuje
+			// Skontrolovať "zapamätať si ma"
+			$remember = (bool)$input['remember'];
 
-			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
-				// If the login is successful, redirect them based on the user's role
-				if ($this->ion_auth->is_admin()) {
-					$this->session->set_flashdata('message', 'Erfolgreich eingeloggt! Willkommen Admin!');
-					redirect(BASE_URL . 'admin', 'refresh');
-				} else {
-					$this->session->set_flashdata('message', 'Erfolgreich eingeloggt! Willkommen ' . user(true) . '!');
-					redirect(BASE_URL, 'refresh');
-				}
+			if ($this->ion_auth->login($input['identity'], $input['password'], $remember)) {
+				// Ak je prihlásenie úspešné, presmerovať na základe roly používateľa
+				$response = [
+					'status' => 'success',
+					'redirect' => $this->ion_auth->is_admin() ? BASE_URL . 'admin' : BASE_URL
+				];
 			} else {
-				// If the login was un-successful, redirect them back to the login page
-				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect(BASE_URL . 'login', 'refresh'); // Use redirects instead of loading views for compatibility with MY_Controller libraries
+				// Ak prihlásenie zlyhalo, vrátiť JSON odpoveď s chybovou správou
+				$response = [
+					'status' => 'error',
+					'message' => $this->ion_auth->errors()
+				];
 			}
 		} else {
-			// The user is not logging in so display the login page
-			// Set the flash data error message if there is one
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-
-			$this->data['identity'] = [
-				'name' => 'identity',
-				'id' => 'identity',
-				'type' => 'text',
-				'value' => $this->form_validation->set_value('identity'),
+			// Používateľ sa neprihlasuje, zobraziť prihlasovaciu stránku
+			// Nastaviť flash data chybovú správu, ak je nejaká
+			$response = [
+				'status' => 'error',
+				'message' => validation_errors()
 			];
-
-			$this->data['password'] = [
-				'name' => 'password',
-				'id' => 'password',
-				'type' => 'password',
-			];
-
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'login', $this->data);
 		}
+
+		// Odoslať odpoveď ako JSON
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
 	}
+
+
+
+
+
 
 
 	/**
