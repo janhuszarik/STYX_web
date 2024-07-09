@@ -63,62 +63,63 @@ class Auth extends CI_Controller
 	 * Log the user in
 	 */
 	public function login() {
-		// Skontrolovať, či je používateľ už prihlásený
+		// Check if the user is already logged in
 		if ($this->ion_auth->logged_in()) {
-			// Presmerovať na administrátorskú stránku alebo hlavnú stránku podľa roly používateľa
-			$redirect_url = $this->ion_auth->is_admin() ? BASE_URL . 'admin' : BASE_URL;
-			$response = [
-				'status' => 'redirect',
-				'message' => 'Ste už prihlásený',
-				'redirect' => $redirect_url
-			];
-			$this->output
-				->set_content_type('application/json')
-				->set_output(json_encode($response));
-			return;
+			// Set flash message and redirect based on the user's role
+			if ($this->ion_auth->is_admin()) {
+				$this->session->set_flashdata('message', 'Sie sind bereits als Admin eingeloggt!');
+				redirect(BASE_URL . 'admin');
+			} else {
+				$this->session->set_flashdata('message', 'Sie sind bereits eingeloggt!');
+				redirect(BASE_URL);
+			}
 		}
-
-		// Získať JSON dáta z požiadavky
-		$input = json_decode(trim(file_get_contents('php://input')), true);
 
 		$this->data['title'] = $this->lang->line('login_heading');
 
-		// Validácia vstupu z formulára
-		$this->form_validation->set_data($input);
+		// Validate form input
 		$this->form_validation->set_rules('identity', str_replace(':', '', $this->lang->line('login_identity_label')), 'required');
 		$this->form_validation->set_rules('password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
 
 		if ($this->form_validation->run() === TRUE) {
-			// Skontrolovať, či sa používateľ prihlasuje
-			// Skontrolovať "zapamätať si ma"
-			$remember = (bool)$input['remember'];
+			// Check to see if the user is logging in
+			// Check for "remember me"
+			$remember = (bool)$this->input->post('remember');
 
-			if ($this->ion_auth->login($input['identity'], $input['password'], $remember)) {
-				// Ak je prihlásenie úspešné, presmerovať na základe roly používateľa
-				$response = [
-					'status' => 'success',
-					'redirect' => $this->ion_auth->is_admin() ? BASE_URL . 'admin' : BASE_URL
-				];
+			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
+				// If the login is successful, redirect them based on the user's role
+				if ($this->ion_auth->is_admin()) {
+					$this->session->set_flashdata('message', 'Erfolgreich eingeloggt! Willkommen Admin!');
+					redirect(BASE_URL . 'admin', 'refresh');
+				} else {
+					$this->session->set_flashdata('message', 'Erfolgreich eingeloggt! Willkommen ' . user(true) . '!');
+					redirect(BASE_URL, 'refresh');
+				}
 			} else {
-				// Ak prihlásenie zlyhalo, vrátiť JSON odpoveď s chybovou správou
-				$response = [
-					'status' => 'error',
-					'message' => $this->ion_auth->errors()
-				];
+				// If the login was un-successful, redirect them back to the login page
+				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				redirect(BASE_URL . 'login', 'refresh'); // Use redirects instead of loading views for compatibility with MY_Controller libraries
 			}
 		} else {
-			// Používateľ sa neprihlasuje, zobraziť prihlasovaciu stránku
-			// Nastaviť flash data chybovú správu, ak je nejaká
-			$response = [
-				'status' => 'error',
-				'message' => validation_errors()
-			];
-		}
+			// The user is not logging in so display the login page
+			// Set the flash data error message if there is one
+			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
-		// Odoslať odpoveď ako JSON
-		$this->output
-			->set_content_type('application/json')
-			->set_output(json_encode($response));
+			$this->data['identity'] = [
+				'name' => 'identity',
+				'id' => 'identity',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('identity'),
+			];
+
+			$this->data['password'] = [
+				'name' => 'password',
+				'id' => 'password',
+				'type' => 'password',
+			];
+
+			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'login', $this->data);
+		}
 	}
 
 

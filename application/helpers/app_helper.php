@@ -12,7 +12,7 @@ if (!function_exists('load_menu_data')) {
 	function load_menu_data(&$data) {
 		$CI =& get_instance();
 		$CI->load->model('App_model');
-		$data['menu_items'] = $CI->App_model->get_menu_items();
+		$data['menuItems'] = $CI->App_model->get_menu_items();
 	}
 }
 
