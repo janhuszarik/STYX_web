@@ -1,3 +1,4 @@
+
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" class="header-effect-shrink" data-plugin-options="{'stickyEnabled': true, 'stickyEffect': 'shrink', 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyChangeLogo': true, 'stickyStartAt': 30, 'stickyHeaderContainerHeight': 70}">
@@ -55,8 +56,8 @@
 										<ul class="nav nav-pills flex-column flex-lg-row" id="mainNav">
 											<?php foreach ($menuItems as $index => $item): ?>
 												<?php $url = empty($item->url) ? BASE_URL : $item->url; ?>
-												<li class="dropdown">
-													<a class="dropdown-item <?= ($current_url == $url) ? 'active' : '' ?> <?= !empty($item->children) ? 'has-children' : '' ?>" href="<?= $url ?>">
+												<li class="dropdown <?= !empty($item->children) ? 'has-children' : '' ?>">
+													<a class="dropdown-item <?= ($current_url == $url) ? 'active' : '' ?>" href="<?= $url ?>">
 														<?= $item->name ?>
 														<?php if (!empty($item->children)): ?>
 															<i class="fas fa-angle-down ms-2"></i>
@@ -94,3 +95,27 @@
 			</div>
 		</div>
 	</header>
+</div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		// Select all menu items that have children
+		const menuItemsWithChildren = document.querySelectorAll('.has-children > a');
+
+		menuItemsWithChildren.forEach(item => {
+			item.addEventListener('click', function(event) {
+				// Prevent default action (navigation)
+				event.preventDefault();
+
+				// Toggle the visibility of the submenu
+				const submenu = this.nextElementSibling;
+				if (submenu.style.display === 'block') {
+					submenu.style.display = 'none';
+				} else {
+					submenu.style.display = 'block';
+				}
+			});
+		});
+	});
+</script>
+</body>
