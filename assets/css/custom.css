@@ -1,0 +1,53 @@
+.slider-container {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	height: 600px;
+}
+
+.slider-section {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	transition: opacity 1s ease-in-out;
+}
+
+.slider-section.active {
+	opacity: 1;
+}
+
+.slider-navigation {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	justify-content: space-between;
+	z-index: 1000;
+}
+
+.slider-navigation .prev,
+.slider-navigation .next {
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	padding: 10px;
+	cursor: pointer;
+	user-select: none;
+	font-size: 24px;
+}
+
+.text-background {
+	background-color: rgba(255, 255, 255, 0.6); /* White with 60% opacity */
+	border-radius: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 32px;
+	text-align: center;
+	width: 80%; /* Fixed width */
+	max-width: 800px; /* Optional: Maximum width */
+	height: 200px; /* Fixed height */
+	margin: 0 auto; /* Center the text container */
+	position: relative; /* Ensure position-relative for the absolute children */
+}
