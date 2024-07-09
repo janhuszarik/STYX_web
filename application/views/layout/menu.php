@@ -1,9 +1,9 @@
 
 
 <header id="header" class="header header-sticky header-sticky-smart disable-transition-all z-index-5">
-	<div class="topbar bg-section-10">
+	<div style="background-color: rgba(8,156,8,0.8)" class="topbar">
 		<div class="container-xxl container">
-			<p class="mb-0 text-body-emphasis text-center p-4 fs-15px fw-bold ls-1">
+			<p class="mb-0 text-dark-emphasis  text-center p-4 fs-15px fw-bold ls-1">
 				STYX Naturcosmetic - nachhaltige Kosmetik aus Österreich
 			</p>
 		</div>
@@ -162,6 +162,18 @@
 						</div>
 					</div>
 				</div>
+				<style>
+					.navbar-nav .nav-item:hover .dropdown-menu {
+						display: block;
+					}
+					.navbar-nav .dropdown-menu {
+						display: none;
+						position: absolute;
+						top: 100%;
+						left: 0;
+					}
+				</style>
+
 				<div class="w-100 d-none d-xl-flex align-items-center justify-content-center">
 					<ul class="navbar-nav">
 						<?php foreach ($menuItems as $index => $item): ?>
@@ -175,7 +187,7 @@
 										<button class="dropdown-toggle border-0 bg-transparent ms-2" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownMenuButton-<?= $index ?>">
 											<i class="fas fa-angle-down"></i>
 										</button>
-										<ul class="dropdown-menu mega-menu start-0 py-6" aria-labelledby="dropdownMenuButton-<?= $index ?>" style="width:800px">
+										<ul class="dropdown-menu mega-menu start-0 py-6" aria-labelledby="dropdownMenuButton-<?= $index ?>" style="width:250px">
 											<?php foreach ($item->children as $child): ?>
 												<?php $child_url = empty($child->url) ? BASE_URL : $child->url; ?>
 												<li>
@@ -191,6 +203,7 @@
 						<?php endforeach; ?>
 					</ul>
 				</div>
+
 
 
 
