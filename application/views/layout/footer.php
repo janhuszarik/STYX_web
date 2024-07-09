@@ -5,8 +5,8 @@
 		</div>
 		<div class="row py-5 my-4">
 			<div class="col-md-6 mb-4 mb-lg-0">
-				<a href="index.html" class="logo pe-0 pe-lg-3">
-					<img alt="Porto Website Template" src="img/logo-footer.png" class="opacity-7 bottom-4" height="32">
+				<a href="<?=BASE_URL?>" class="logo pe-0 pe-lg-3">
+					<img alt="STYX Logo" src="<?=BASE_URL.LOGO?>" class="opacity-7 bottom-4" height="32">
 				</a>
 				<p class="mt-2 mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu pulvinar magna. Phasellus semper scelerisque purus, et semper nisl lacinia sit amet. Praesent venenatis turpis vitae purus semper...</p>
 				<p class="mb-0"><a href="#" class="btn-flat btn-xs text-color-light"><strong class="text-2">VIEW MORE</strong><i class="fas fa-angle-right p-relative top-1 ps-2"></i></a></p>
