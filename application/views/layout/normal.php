@@ -1,9 +1,9 @@
 <?php
     /**
-     * Project STYX REMISE
+     * Project STYX
      * User: Jan Huszarik
      * Copyright: Jan Huszarik
-     * Date: 3.5.2024
+     * Date: 1.7.2024
      * Time: 17:24
      * mail: jan.huszarik@styx.at
      */

@@ -13,15 +13,13 @@ class app_model extends CI_Model {
 	}
 
 	public function get_menu_items() {
-		// Retrieve top-level menu items
 		$this->db->select('*');
 		$this->db->from('menu');
 		$this->db->where('parent', 0);
-		$this->db->order_by('orderBy', 'ASC'); // Sort by orderBy
+		$this->db->order_by('orderBy', 'ASC');
 		$query = $this->db->get();
 		$menu_items = $query->result();
 
-		// Retrieve children for each top-level menu item
 		foreach ($menu_items as &$item) {
 			$item->children = $this->get_menu_children($item->id);
 		}
@@ -34,7 +32,7 @@ class app_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('menu');
 		$this->db->where('parent', $parent_id);
-		$this->db->order_by('orderBy', 'ASC'); // Sort by orderBy
+		$this->db->order_by('orderBy', 'ASC');
 		$query = $this->db->get();
 		return $query->result();
 	}

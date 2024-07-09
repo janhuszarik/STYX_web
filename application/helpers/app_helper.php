@@ -12,11 +12,12 @@ if (!function_exists('load_menu_data')) {
 	function load_menu_data(&$data) {
 		$CI =& get_instance();
 		$CI->load->model('App_model');
-		$data['menuItems'] = $CI->App_model->get_menu_items();
+		$data['menu_items'] = $CI->App_model->get_menu_items();
 	}
 }
 
-	function dd($var_dump){
+
+function dd($var_dump){
 
 	echo '<pre>';
 	var_dump($var_dump);

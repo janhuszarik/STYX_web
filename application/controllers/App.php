@@ -21,12 +21,37 @@ class App extends CI_Controller
 		$this->output->set_status_header(200);
 	}
 
+
+	public function index() {
+
+
+		// Prispôsobenie podľa cookies
+		if ($this->input->cookie('performance_cookies') === 'true') {
+			// Inicializuj analytický kód
+		}
+
+		if ($this->input->cookie('functional_cookies') === 'true') {
+			// Ulož alebo načítaj užívateľské nastavenia
+		}
+
+		if ($this->input->cookie('targeting_cookies') === 'true') {
+			// Zobraz cielené reklamy
+		}
+		$data['user'] = $this->ion_auth->user()->row();
+		$data['sliders'] = $this->App_model->getSliders(true);
+		$data['news'] = $this->App_model->getNews();
+
+		$data['title'] = 'STYX Remise - Die neue Eventlocation in Ober-Grafendorf';
+		$data['description'] = 'STYX Remise - Die neue Eventlocation in Ober-Grafendorf';
+		$data['keywords'] = 'STYX, Remise, Events, Event, Location, Feiern, Feste, Feier, Fest, Hochzeit, Seminare, Messen, Tagungen, Konzerte, Nieder-Österreich';
+		$data['page'] = 'home';
+		$this->load->view('layout/normal', $data);
+	}
 	protected function load_global_data() {
 		$data = array();
 		load_menu_data($data);
 		$this->load->vars($data);
 	}
-
 	private function check_cookie_consent() {
 		if (!$this->input->cookie('cookie_consent', TRUE)) {
 			setcookie('cookie_consent', 'false', time() + 86400, "/");
@@ -49,29 +74,7 @@ class App extends CI_Controller
 		echo json_encode(array("status" => "success"));
 	}
 
-	public function index() {
-		$data['user'] = $this->ion_auth->user()->row();
-		$data['sliders'] = $this->App_model->getSliders(true);
-		$data['news'] = $this->App_model->getNews();
-		// Prispôsobenie podľa cookies
-		if ($this->input->cookie('performance_cookies') === 'true') {
-			// Inicializuj analytický kód
-		}
 
-		if ($this->input->cookie('functional_cookies') === 'true') {
-			// Ulož alebo načítaj užívateľské nastavenia
-		}
-
-		if ($this->input->cookie('targeting_cookies') === 'true') {
-			// Zobraz cielené reklamy
-		}
-
-		$data['title'] = 'STYX Remise - Die neue Eventlocation in Ober-Grafendorf';
-		$data['description'] = 'STYX Remise - Die neue Eventlocation in Ober-Grafendorf';
-		$data['keywords'] = 'STYX, Remise, Events, Event, Location, Feiern, Feste, Feier, Fest, Hochzeit, Seminare, Messen, Tagungen, Konzerte, Nieder-Österreich';
-		$data['page'] = 'home';
-		$this->load->view('layout/normal', $data);
-	}
 
 	public function contact(){
         
@@ -99,6 +102,7 @@ class App extends CI_Controller
             }
             redirect(BASE_URL.'kontakt');
         }
+		$data['menu_items'] = $this->App_model->get_menu_items();
 
         $data['title'] = 'Kontakt ';
         $data['page'] = 'app/contact';
