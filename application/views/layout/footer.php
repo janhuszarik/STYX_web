@@ -1,44 +1,52 @@
-<footer class="pt-15 pt-lg-20 pb-16 footer bg-section-4">
+<footer class="pt-16 pt-lg-19 pb-16 footer">
 	<div class="container container-xxl pt-4">
 		<div class="row">
-			<div class="col-lg col-md-4 col-12 mb-11 mb-lg-0 fs-14px">
-				<h3 class="fs-5 mb-6 ">Company</h3>
+			<div class="col-lg-5 col-12 mb-11 mb-lg-0">
+
+				<h3 class="mb-6 text-primary">Care for Your Skin, <br> Care for Your Beauty</h3>
+				<p >Give your inbox some love with new products, tips, &amp; more.</p>
 
 
-				<p class="pe-xl-18 lh-2">
-					Find a location nearest you. See <a class="" href="#"><u class="fw-medium">Our Stores</u></a>
-				</p>
-				<p class="mb-0 lh-2"><strong class="text-body-emphasis">+391 (0)35 2568 4593</strong>
-					<br>
-					hello@domain.com
-				</p>
-
+				<form class="pt-6 pe-xl-8 form-border-transparent">
+					<div class="input-group position-relative">
+						<input type="email" class="form-control rounded pe-15 lh-1 py-7" placeholder="Your email">
+						<button type="submit" class="btn fs-28px bg-transparent text-secondary position-absolute btn-custom px-8 z-index-5 h-100 lh-0">
+							<svg class="icon icon-long-arrow-right">
+								<use xlink:href="#icon-long-arrow-right"></use>
+							</svg>
+						</button>
+					</div>
+				</form>
 			</div>
-			<div class="col-lg col-md-4 col-12 mb-11 mb-lg-0">
-				<h3 class="fs-5 mb-6 ">Useful links</h3>
+			<div class="col-md col-12 mb-11 mb-lg-0 offset-lg-2">
+				<h3 class="fs-5 mb-6 ">About us</h3>
 
 				<ul class="list-unstyled mb-0 fw-medium ">
 
 					<li class="pt-3 mb-4">
-						<a href="#" title="New Products" class="text-body">New Products</a>
+						<a href="#" title="About us" class="text-body">About us</a>
 					</li>
 
 					<li class="pt-3 mb-4">
-						<a href="#" title="Best Sellers" class="text-body">Best Sellers</a>
+						<a href="#" title="Careers" class="text-body">Careers</a>
 					</li>
 
 					<li class="pt-3 mb-4">
-						<a href="#" title="Bundle &amp; Save" class="text-body">Bundle &amp; Save</a>
+						<a href="#" title="Store Locations" class="text-body">Store Locations</a>
 					</li>
 
 					<li class="pt-3 mb-4">
-						<a href="#" title="Online Gift Card" class="text-body">Online Gift Card</a>
+						<a href="#" title="Our Blog" class="text-body">Our Blog</a>
+					</li>
+
+					<li class="pt-3 mb-4">
+						<a href="#" title="Reviews" class="text-body">Reviews</a>
 					</li>
 
 				</ul>
 
 			</div>
-			<div class="col-lg col-md-4 col-12 mb-11 mb-lg-0">
+			<div class="col-md col-12 mb-11 mb-lg-0">
 				<h3 class="fs-5 mb-6 ">Information</h3>
 
 				<ul class="list-unstyled mb-0 fw-medium ">
@@ -66,21 +74,9 @@
 				</ul>
 
 			</div>
-			<div class="col-lg-5 col-12 mb-11 mb-lg-0">
-				<h3 class="mb-4 ">Good emails.</h3>
-				<p class="lh-2 ">Enter your email below to be the first to know about new collections and product launches.</p>
-				<form class=" pt-8">
-					<div class="input-group position-relative">
-						<input type="email" class="form-control bg-body rounded-left" placeholder="Enter your email address">
-						<button type="submit" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary ms-0">
-							Subscribe
-						</button>
-					</div>
-				</form>
-			</div>
 		</div>
 		<div class="row align-items-center mt-0 mt-lg-20 pt-lg-4">
-			<div class="col-sm-12 col-md-6 col-lg-4 d-flex align-items-center order-2 order-lg-1 fs-6 mt-8 mt-lg-0">
+			<div class="col-sm-12 col-md-6 col-lg-4 d-flex align-items-center order-2 order-lg-1 fs-6 mt-7 mt-md-11 mt-lg-0">
 				<p class="mb-0">© Glowing 2023</p>
 				<ul class="list-inline fs-18px ms-6 mb-0">
 					<li class="list-inline-item me-8">
@@ -105,7 +101,7 @@
 					<img class="lazy-image dark-mode-img img-fluid" src="#" data-src="./assets/images/others/logo-white.png" width="179" height="26" alt="Glowing - Bootstrap 5 HTML Templates">
 				</a>
 			</div>
-			<div class="col-sm-12 col-md-6 col-lg-4 order-3 text-sm-start text-lg-end mt-8 mt-lg-0">
+			<div class="col-sm-12 col-md-6 col-lg-4 order-3 text-sm-start text-lg-end mt-7 mt-md-11 mt-lg-0">
 				<img src="#" data-src="./assets/images/footer/img_1.png" width="313" height="28" alt="Paypal" class="img-fluid lazy-image">
 			</div>
 		</div>
@@ -114,27 +110,26 @@
 </footer>
 
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 
 
-<script src="<?=BASE_URL?>/assets/vendors/bootstrap/js/bootstrap.bundle.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/clipboard/clipboard.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/vanilla-lazyload/lazyload.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/waypoints/jquery.waypoints.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/lightgallery/lightgallery.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/lightgallery/plugins/zoom/lg-zoom.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/lightgallery/plugins/video/lg-video.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/lightgallery/plugins/vimeoThumbnail/lg-vimeo-thumbnail.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/isotope/isotope.pkgd.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/slick/slick.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/gsap/gsap.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/gsap/ScrollToPlugin.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/gsap/ScrollTrigger.min.js"></script>
-<script src="<?=BASE_URL?>/assets/vendors/mapbox-gl/mapbox-gl.js"></script>
-<script src="<?=BASE_URL?>/assets/js/theme.min.js"></script>
+<script src="./assets/vendors/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="./assets/vendors/clipboard/clipboard.min.js"></script>
+<script src="./assets/vendors/vanilla-lazyload/lazyload.min.js"></script>
+<script src="./assets/vendors/waypoints/jquery.waypoints.min.js"></script>
+<script src="./assets/vendors/lightgallery/lightgallery.min.js"></script>
+<script src="./assets/vendors/lightgallery/plugins/zoom/lg-zoom.min.js"></script>
+<script src="./assets/vendors/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script>
+<script src="./assets/vendors/lightgallery/plugins/video/lg-video.min.js"></script>
+<script src="./assets/vendors/lightgallery/plugins/vimeoThumbnail/lg-vimeo-thumbnail.min.js"></script>
+<script src="./assets/vendors/isotope/isotope.pkgd.min.js"></script>
+<script src="./assets/vendors/slick/slick.min.js"></script>
+<script src="./assets/vendors/gsap/gsap.min.js"></script>
+<script src="./assets/vendors/gsap/ScrollToPlugin.min.js"></script>
+<script src="./assets/vendors/gsap/ScrollTrigger.min.js"></script>
+<script src="./assets/vendors/mapbox-gl/mapbox-gl.js"></script>
+<script src="./assets/js/theme.min.js"></script>
 
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -1029,127 +1024,41 @@
 	</div>
 </div>
 
-<!-- Login Modal for Non-logged in Users -->
-<div class="modal" id="signInModal" tabindex="-1" aria-labelledby="signInModalLabel" aria-hidden="true">
+<div class="modal" id="signInModal" tabindex="-1" aria-labelledby="signInModal" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header text-center border-0 pb-0">
 				<button type="button" class="btn-close position-absolute end-5 top-5" data-bs-dismiss="modal" aria-label="Close"></button>
-				<h3 class="modal-title w-100" id="signInModalLabel">Prihlásenie</h3>
+				<h3 class="modal-title w-100" id="signInModalLabel">Sign In</h3>
 			</div>
 			<div class="modal-body px-sm-13 px-8">
-				<p class="text-center fs-16 mb-10">Nemáte ešte účet? <a href="#" class="text-black">Zaregistrujte sa</a> zadarmo</p>
-				<form id="loginForm">
-					<input name="identity" type="email" class="form-control mb-5" placeholder="Váš email" required>
-					<input name="password" type="password" class="form-control" placeholder="Heslo" required>
+				<p class="text-center fs-16 mb-10">Don’t have an account yet? <a href="#" data-bs-toggle="modal" data-bs-target="#signUpModal" class="text-black">Sign up</a> for free</p>
+				<form action="#">
+					<input name="email" type="email" class="form-control mb-5" placeholder="Your email" required>
+					<input name="password" type="password" class="form-control" placeholder="Password" required>
 					<div class="d-flex align-items-center justify-content-between mt-8 mb-7">
 						<div class="custom-control d-flex form-check">
-							<input name="remember" type="checkbox" class="form-check-input rounded-0 me-3" id="staySignedIn">
-							<label class="custom-control-label text-body" for="staySignedIn">Zostať prihlásený</label>
+							<input name="stay-signed-in" type="checkbox" class="form-check-input rounded-0 me-3" id="staySignedIn">
+							<label class="custom-control-label text-body" for="staySignedIn">Stay signed in</label>
 						</div>
-						<a href="#" class="text-secondary">Zabudli ste heslo?</a>
+						<a href="#" class="text-secondary">Forgot your password?</a>
 					</div>
-					<button type="submit" value="Login" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary w-100">Prihlásiť sa</button>
+					<button type="submit" value="Login" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary w-100">Log In</button>
 				</form>
 			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Modal for Logged-in Users -->
-<div class="modal" id="userOptionsModal" tabindex="-1" aria-labelledby="userOptionsModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-		<div class="modal-content">
-			<div class="modal-header text-center border-0 pb-0">
-				<button type="button" class="btn-close position-absolute end-5 top-5" data-bs-dismiss="modal" aria-label="Close"></button>
-				<h3 class="modal-title w-100" id="userOptionsModalLabel">Možnosti</h3>
-			</div>
-			<div class="modal-body px-sm-13 px-8 text-center">
-				<a href="/admin" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary w-100 mb-3">Administrator</a>
-				<a href="/logout" class="btn btn-dark btn-hover-bg-primary btn-hover-border-primary w-100">Logout</a>
+			<div class="modal-footer px-13 pt-0 pb-12 border-0">
+				<div class="border-bottom w-100"></div>
+				<div class="text-center lh-1 mb-8 w-100 mt-n5">
+					<span class="fs-14 bg-body lh-1 px-4">or Log-in with</span>
+				</div>
+				<div class="d-flex w-100">
+					<a href="#" class="btn btn-outline-secondary w-100 border-2x me-5 btn-hover-bg-primary btn-hover-border-primary"><i class="fab fa-facebook-f me-4" style="color: #2E58B2"></i>Facebook</a>
+					<a href="#" class="btn btn-outline-secondary w-100 border-2x mt-0 btn-hover-bg-primary btn-hover-border-primary"><i class="fab fa-google me-4" style="color: #DD4B39"></i>Google</a>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
-
-<script>
-	document.addEventListener('DOMContentLoaded', function () {
-		const loginForm = document.getElementById('loginForm');
-
-		loginForm.addEventListener('submit', async function (event) {
-			event.preventDefault();
-
-			const formData = new FormData(loginForm);
-			const data = {
-				identity: formData.get('identity'),
-				password: formData.get('password'),
-				remember: formData.get('remember') ? true : false
-			};
-
-			try {
-				const response = await fetch('http://localhost/STYX_web/auth/login', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(data)
-				});
-
-				if (!response.ok) {
-					throw new Error('Network response was not ok: ' + response.statusText);
-				}
-
-				const result = await response.json();
-
-				if (result.status === 'success' || result.status === 'redirect') {
-					window.location.href = result.redirect;
-				} else {
-					alert('Prihlásenie zlyhalo: ' + result.message);
-				}
-			} catch (error) {
-				console.error('Chyba počas prihlásenia:', error);
-
-				// Ak chyba je odpoveď, ktorá nie je JSON
-				if (error.message.includes('Unexpected token')) {
-					alert('Prihlásenie zlyhalo: Neplatná odpoveď servera. Skúste to prosím neskôr.');
-				} else {
-					alert('Počas prihlásenia došlo k chybe: ' + error.message);
-				}
-			}
-		});
-	});
-
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <div class="modal" id="signUpModal" tabindex="-1" aria-labelledby="signUpModal" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -1213,10 +1122,10 @@
 								</div>
 							</div>
 							<div id="slider" class="slick-slider slick-slider-arrow-inside slick-slider-dots-inside slick-slider-dots-light g-0" data-slick-options='{&#34;arrows&#34;:false,&#34;asNavFor&#34;:&#34;#slider-thumb&#34;,&#34;dots&#34;:false,&#34;slidesToShow&#34;:1}'>
-								<a href="./assets/images/shop/product-gallery-05.jpg" data-gallery="gallery1"><img src="#" data-src="./assets/images/shop/product-gallery-05.jpg" class="h-auto lazy-image" width="540" height="720" alt=""></a>
-								<a href="./assets/images/shop/product-gallery-06.jpg" data-gallery="gallery1"><img src="#" data-src="./assets/images/shop/product-gallery-06.jpg" class="h-auto lazy-image" width="540" height="720" alt=""></a>
-								<a href="./assets/images/shop/product-gallery-07.jpg" data-gallery="gallery1"><img src="#" data-src="./assets/images/shop/product-gallery-07.jpg" class="h-auto lazy-image" width="540" height="720" alt=""></a>
-								<a href="./assets/images/shop/product-gallery-08.jpg" data-gallery="gallery1"><img src="#" data-src="./assets/images/shop/product-gallery-08.jpg" class="h-auto lazy-image" width="540" height="720" alt=""></a>
+								<a href="./assets/images/shop/product-gallery-05.jpg" data-gallery="gallery1" data-thumb-src="./assets/images/shop/product-gallery-05.jpg"><img src="#" data-src="./assets/images/shop/product-gallery-05.jpg" class="h-auto lazy-image" width="540" height="720" alt=""></a>
+								<a href="./assets/images/shop/product-gallery-06.jpg" data-gallery="gallery1" data-thumb-src="./assets/images/shop/product-gallery-06.jpg"><img src="#" data-src="./assets/images/shop/product-gallery-06.jpg" class="h-auto lazy-image" width="540" height="720" alt=""></a>
+								<a href="./assets/images/shop/product-gallery-07.jpg" data-gallery="gallery1" data-thumb-src="./assets/images/shop/product-gallery-07.jpg"><img src="#" data-src="./assets/images/shop/product-gallery-07.jpg" class="h-auto lazy-image" width="540" height="720" alt=""></a>
+								<a href="./assets/images/shop/product-gallery-08.jpg" data-gallery="gallery1" data-thumb-src="./assets/images/shop/product-gallery-08.jpg"><img src="#" data-src="./assets/images/shop/product-gallery-08.jpg" class="h-auto lazy-image" width="540" height="720" alt=""></a>
 							</div>
 						</div>
 						<div class="mt-6">
@@ -1401,40 +1310,397 @@
 		<hr class="mt-0">
 		<div class="offcanvas-body pt-0 mb-2">
 			<ul class="navbar-nav">
-				<?php foreach ($menuItems as $index => $item): ?>
-					<?php $url = empty($item->url) ? BASE_URL : $item->url; ?>
-					<li class="nav-item transition-all-xl-1 py-0 dropdown <?= !empty($item->children) ? 'dropdown-fullwidth' : '' ?>">
-						<a class="nav-link d-flex justify-content-between position-relative text-uppercase fw-semibold ls-1 fs-15px dropdown-toggle <?= ($current_url == $url) ? 'active' : '' ?>" href="<?= $url ?>" data-bs-toggle="dropdown" id="menu-item-<?= $index ?>-canvas" aria-haspopup="true" aria-expanded="false">
-							<?= $item->name ?>
-							<?php if (!empty($item->children)): ?>
-								<i class="fas fa-angle-down ms-2"></i>
-							<?php endif; ?>
-						</a>
-						<?php if (!empty($item->children)): ?>
-							<div class="dropdown-menu mega-menu start-0 py-6" aria-labelledby="menu-item-<?= $index ?>-canvas">
-								<div class="megamenu-home container py-8 px-12">
-									<div class="row">
-										<?php foreach ($item->children as $child): ?>
-											<?php $child_url = empty($child->url) ? BASE_URL : $child->url; ?>
-											<div class="col">
-												<h6 class="fs-18px"><?= $child->name ?></h6>
-												<ul class="list-unstyled">
-													<li>
-														<a href="<?= $child_url ?>" class="border-hover text-decoration-none py-3 d-block <?= ($current_url == $child_url) ? 'active' : '' ?>">
-															<span class="border-hover-target"><?= $child->name ?></span>
-														</a>
-													</li>
-												</ul>
+
+
+
+
+
+
+
+
+
+				<li class="nav-item transition-all-xl-1 py-0 dropdown dropdown-fullwidth">
+					<a class="nav-link d-flex justify-content-between position-relative text-uppercase fw-semibold ls-1 fs-15px dropdown-toggle"
+					   href="./index.html" data-bs-toggle="dropdown" id="menu-item-home-canvas" aria-haspopup="true" aria-expanded="false">Home</a><div class="dropdown-menu mega-menu start-0 py-6 "
+																																						aria-labelledby="menu-item-home-canvas"
+																																						style="width:320px">
+						<div class="megamenu-home container py-8 px-12">
+							<div class="row"><div class="col"><h6 class="fs-18px">Group 1</h6><ul class="list-unstyled"><li>
+											<a href="./home-01.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 01</span></a>
+										</li><li>
+											<a href="./home-02.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 02</span></a>
+										</li><li>
+											<a href="./home-03.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 03</span></a>
+										</li><li>
+											<a href="./home-04.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 04</span></a>
+										</li><li>
+											<a href="./home-05.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 05</span></a>
+										</li><li>
+											<a href="./home-06.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 06</span></a>
+										</li><li>
+											<a href="./home-07.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 07</span></a>
+										</li><li>
+											<a href="./home-08.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 08</span></a>
+										</li><li>
+											<a href="./home-09.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 09</span></a>
+										</li></ul>
+								</div><div class="col"><h6 class="fs-18px">Group 2</h6><ul class="list-unstyled"><li>
+											<a href="./home-10.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 10</span></a>
+										</li><li>
+											<a href="./home-11.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 11</span></a>
+										</li><li>
+											<a href="./home-12.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 12</span></a>
+										</li><li>
+											<a href="./home-13.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 13</span></a>
+										</li><li>
+											<a href="./home-14.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 14</span></a>
+										</li><li>
+											<a href="./home-15.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 15</span></a>
+										</li><li>
+											<a href="./home-16.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 16</span></a>
+										</li><li>
+											<a href="./home-17.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 17</span></a>
+										</li><li>
+											<a href="./home-18.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Home 18</span></a>
+										</li></ul>
+								</div></div>
+						</div>
+
+					</div></li>
+				<li class="nav-item transition-all-xl-1 py-0 dropdown dropdown-fullwidth position-static">
+					<a class="nav-link d-flex justify-content-between position-relative text-uppercase fw-semibold ls-1 fs-15px dropdown-toggle"
+					   href="./store.html" data-bs-toggle="dropdown" id="menu-item-shop-canvas" aria-haspopup="true" aria-expanded="false">Shop</a><div class="dropdown-menu mega-menu start-0 py-6  w-100"
+																																						aria-labelledby="menu-item-shop-canvas"
+					>
+						<div class="megamenu-shop container-wide py-8 px-12">
+							<div class="row"><div class="col"><h6 class="fs-18px">Shop Pages</h6><ul class="list-unstyled mb-0"><li>
+											<a href="./shop/shop-layout-v1.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Shop Layout <sup>v1</sup></span></a>
+										</li><li>
+											<a href="./shop/shop-layout-v2.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Shop Layout <sup>v2</sup></span></a>
+										</li><li>
+											<a href="./shop/shop-layout-v3.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Shop Layout <sup>v3</sup></span></a>
+										</li><li>
+											<a href="./shop/shop-layout-v4.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Shop Layout <sup>v4</sup></span></a>
+										</li><li>
+											<a href="./shop/shop-layout-v5.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Shop Layout <sup>v5</sup></span></a>
+										</li></ul>
+								</div><div class="col"><h6 class="fs-18px">Product Pages</h6><ul class="list-unstyled mb-0"><li>
+											<a href="./shop/product-details-v1.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Detail <sup>v1</sup></span></a>
+										</li><li>
+											<a href="./shop/product-details-v2.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Detail <sup>v2</sup></span></a>
+										</li><li>
+											<a href="./shop/product-details-v3.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Detail <sup>v3</sup></span></a>
+										</li><li>
+											<a href="./shop/product-details-v4.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Detail <sup>v4</sup></span></a>
+										</li><li>
+											<a href="./shop/product-details-v5.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Detail <sup>v5</sup></span></a>
+										</li><li>
+											<a href="./shop/product-details-v6.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Detail <sup>v6</sup></span></a>
+										</li><li>
+											<a href="./shop/product-details-v7.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Detail <sup>v7</sup></span></a>
+										</li><li>
+											<a href="./shop/product-details-v8.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Detail <sup>v8</sup></span></a>
+										</li></ul>
+								</div><div class="col"><h6 class="fs-18px">Product Types</h6><ul class="list-unstyled mb-0"><li>
+											<a href="./shop/product-simple.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Simple</span></a>
+										</li><li>
+											<a href="./shop/product-variable.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Variable</span></a>
+										</li><li>
+											<a href="./shop/product-time-limit.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Time Limit</span></a>
+										</li><li>
+											<a href="./shop/product-grouped.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Grouped</span></a>
+										</li></ul>
+								</div><div class="col"><h6 class="fs-18px">Other Pages</h6><ul class="list-unstyled mb-0"><li>
+											<a href="./shop/shopping-cart.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Shopping Cart</span></a>
+										</li><li>
+											<a href="./shop/compare.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Compare</span></a>
+										</li><li>
+											<a href="./shop/wishlist.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Wishlist</span></a>
+										</li><li>
+											<a href="./shop/checkout.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Checkout</span></a>
+										</li><li>
+											<a href="./user-registration.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Register</span></a>
+										</li><li>
+											<a href="./user-login.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Login</span></a>
+										</li></ul>
+								</div><div class="col d-xxl-block d-none megamenu-shop-banner" data-bs-theme="light">
+									<div class="card border-0 mt-4">
+										<img src="./assets/images/background/bg-mega-menu-shop.jpg" alt="bg mega menu" class="card-img">
+										<div class="card-img-overlay d-flex flex-column mx-2 px-9 py-6">
+											<p class="text-body-emphasis ls-1 fw-semibold mb-4 mt-6 text-uppercase">
+												new collection
+											</p>
+											<h3 class="fs-3">
+												Special <br>
+												Offer
+											</h3>
+											<div class="mt-auto">
+												<a href="#" class="btn btn-white">Shop Sale</a>
 											</div>
-										<?php endforeach; ?>
+										</div>
 									</div>
 								</div>
 							</div>
-						<?php endif; ?>
-					</li>
-				<?php endforeach; ?>
-			</ul>
+						</div>
 
+					</div></li>
+				<li class="nav-item transition-all-xl-1 py-0 dropdown">
+					<a class="nav-link d-flex justify-content-between position-relative text-uppercase fw-semibold ls-1 fs-15px dropdown-toggle"
+					   href="#" data-bs-toggle="dropdown" id="menu-item-pages-canvas" aria-haspopup="true" aria-expanded="false">Pages</a><ul class="dropdown-menu py-6" aria-labelledby="menu-item-pages-canvas"><li  class="dropend" aria-haspopup="true" aria-expanded="false">
+							<a class="dropdown-item pe-6 dropdown-toggle d-flex justify-content-between border-hover"
+							   href="#"  data-bs-toggle="dropdown" id="menu-item-blog-canvas">
+							<span class="border-hover-target">
+								Blog
+							</span>
+							</a><ul class="dropdown-menu py-6"
+									aria-labelledby="menu-item-blog-canvas" data-bs-popper="none">
+								<li>
+									<a class="dropdown-item border-hover" href="./blog/grid.html">
+										<span class="border-hover-target">Blog Grid</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./blog/grid-sidebar.html">
+										<span class="border-hover-target">Blog Grid Sidebar</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./blog/masonry.html">
+										<span class="border-hover-target">Blog Masonry</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./blog/list.html">
+										<span class="border-hover-target">Blog List</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./blog/classic.html">
+										<span class="border-hover-target">Blog Classic</span>
+									</a>
+								</li><li class="dropdown-divider"></li>
+
+								<li>
+									<a class="dropdown-item border-hover" href="./blog/details-01.html">
+										<span class="border-hover-target">Blog Details 01</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./blog/details-02.html">
+										<span class="border-hover-target">Blog Details 02</span>
+									</a>
+								</li></ul></li><li class="dropdown-divider"></li>
+						<li  class="dropend" aria-haspopup="true" aria-expanded="false">
+							<a class="dropdown-item pe-6 dropdown-toggle d-flex justify-content-between border-hover"
+							   href="#"  data-bs-toggle="dropdown" id="menu-item-about-us-canvas">
+							<span class="border-hover-target">
+								About Us
+							</span>
+							</a><ul class="dropdown-menu py-6"
+									aria-labelledby="menu-item-about-us-canvas" data-bs-popper="none">
+								<li>
+									<a class="dropdown-item border-hover" href="./about-us-01.html">
+										<span class="border-hover-target">About Us 01</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./about-us-02.html">
+										<span class="border-hover-target">About Us 02</span>
+									</a>
+								</li></ul></li><li  class="dropend" aria-haspopup="true" aria-expanded="false">
+							<a class="dropdown-item pe-6 dropdown-toggle d-flex justify-content-between border-hover"
+							   href="#"  data-bs-toggle="dropdown" id="menu-item-contact-us-canvas">
+							<span class="border-hover-target">
+								Contact us
+							</span>
+							</a><ul class="dropdown-menu py-6"
+									aria-labelledby="menu-item-contact-us-canvas" data-bs-popper="none">
+								<li>
+									<a class="dropdown-item border-hover" href="./contact-us-01.html">
+										<span class="border-hover-target">Contact Us 01</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./contact-us-02.html">
+										<span class="border-hover-target">Contact Us 02</span>
+									</a>
+								</li></ul></li><li  class="dropend" aria-haspopup="true" aria-expanded="false">
+							<a class="dropdown-item pe-6 dropdown-toggle d-flex justify-content-between border-hover"
+							   href="./dashboard/dashboard.html"  data-bs-toggle="dropdown" id="menu-item-dashboard-canvas">
+							<span class="border-hover-target">
+								Dashboard
+							</span>
+							</a><ul class="dropdown-menu py-6"
+									aria-labelledby="menu-item-dashboard-canvas" data-bs-popper="none">
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/dashboard.html">
+										<span class="border-hover-target">Dashboard</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/product-grid.html">
+										<span class="border-hover-target">Products</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/order-list.html">
+										<span class="border-hover-target">Orders</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/sellers-cards.html">
+										<span class="border-hover-target">Sellers</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/add-product-1.html">
+										<span class="border-hover-target">Add Product</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/transactions-1.html">
+										<span class="border-hover-target">Transaction</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/reviews.html">
+										<span class="border-hover-target">Reviews</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/brands.html">
+										<span class="border-hover-target">Brands</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item border-hover" href="./dashboard/profile-settings.html">
+										<span class="border-hover-target">Settings</span>
+									</a>
+								</li></ul></li><li >
+							<a class="dropdown-item pe-6 border-hover"
+							   href="./faqs.html" >
+							<span class="border-hover-target">
+								FAQs
+							</span>
+							</a></li><li >
+							<a class="dropdown-item pe-6 border-hover"
+							   href="./find-a-store.html" >
+							<span class="border-hover-target">
+								Store
+							</span>
+							</a></li><li >
+							<a class="dropdown-item pe-6 border-hover"
+							   href="./404.html" >
+							<span class="border-hover-target">
+								404
+							</span>
+							</a></li></ul></li>
+				<li class="nav-item transition-all-xl-1 py-0 dropdown dropdown-fullwidth">
+					<a class="nav-link d-flex justify-content-between position-relative text-uppercase fw-semibold ls-1 fs-15px dropdown-toggle"
+					   href="#" data-bs-toggle="dropdown" id="menu-item-blocks-canvas" aria-haspopup="true" aria-expanded="false">Blocks</a><div class="dropdown-menu mega-menu start-0 py-6 "
+																																				 aria-labelledby="menu-item-blocks-canvas"
+																																				 style="width:800px">
+						<div class="megamenu-home container py-8 px-12">
+							<div class="row"><div class="col"><h6 class="fs-18px">Group 1</h6><ul class="list-unstyled"><li>
+											<a href="./blocks/blog.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Blog</span></a>
+										</li><li>
+											<a href="./blocks/banner.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Banner</span></a>
+										</li><li>
+											<a href="./blocks/call-to-action.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Call To Action</span></a>
+										</li><li>
+											<a href="./blocks/hero.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Hero</span></a>
+										</li></ul>
+								</div><div class="col"><h6 class="fs-18px">Group 2</h6><ul class="list-unstyled"><li>
+											<a href="./blocks/products.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Products</span></a>
+										</li><li>
+											<a href="./blocks/products-slide.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Products Slide</span></a>
+										</li><li>
+											<a href="./blocks/product-tabs.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Product Tabs</span></a>
+										</li><li>
+											<a href="./blocks/news-letter.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">News Letter</span></a>
+										</li></ul>
+								</div><div class="col"><h6 class="fs-18px">Group 3</h6><ul class="list-unstyled"><li>
+											<a href="./blocks/features.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Features</span></a>
+										</li><li>
+											<a href="./blocks/info.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Info</span></a>
+										</li><li>
+											<a href="./blocks/instagram.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Instagram</span></a>
+										</li><li>
+											<a href="./blocks/video.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Video</span></a>
+										</li></ul>
+								</div><div class="col"><h6 class="fs-18px">Group 4</h6><ul class="list-unstyled"><li>
+											<a href="./blocks/team.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Team</span></a>
+										</li><li>
+											<a href="./blocks/testimonials.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Testimonials</span></a>
+										</li><li>
+											<a href="./blocks/header.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Header</span></a>
+										</li><li>
+											<a href="./blocks/footer.html" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">Footer</span></a>
+										</li></ul>
+								</div></div>
+						</div>
+
+					</div></li>
+				<li class="nav-item transition-all-xl-1 py-0 dropdown dropdown-fullwidth">
+					<a class="nav-link d-flex justify-content-between position-relative text-uppercase fw-semibold ls-1 fs-15px dropdown-toggle"
+					   href="#" data-bs-toggle="dropdown" id="menu-item-docs-canvas" aria-haspopup="true" aria-expanded="false">Docs</a><div class="dropdown-menu mega-menu start-0 py-6 "
+																																			 aria-labelledby="menu-item-docs-canvas"
+					>
+						<div class="menumega-docs px-8" style="min-width: 250px">
+
+
+							<a href="./docs/usage/getting-started.html" class="d-flex text-decoration-none mb-4 mb-lg-0" title="Documentation">
+								<div class="flex-shrink-0 fs-5 lh-1 text-muted pt-2">
+									<svg class="icon"><use xlink:href="#book"></use></svg>
+								</div>
+								<div class="flex-grow-1 ps-6">
+									<h6 class="mb-2">Documentation</h6>
+									<small>Kick-start customization</small>
+								</div>
+							</a>
+
+
+							<hr class="dropdown-divider mx-n8" />
+
+							<a href="./docs/components/accordion.html" class="d-flex text-decoration-none mb-4 mb-lg-0" title="UI Kit">
+								<div class="flex-shrink-0 fs-5 lh-1 text-muted pt-2">
+									<svg class="icon"><use xlink:href="#layer-group"></use></svg>
+								</div>
+								<div class="flex-grow-1 ps-6">
+									<h6 class="mb-2">UI Kit</h6>
+									<small>Flexible components</small>
+								</div>
+							</a>
+
+
+							<hr class="dropdown-divider mx-n8" />
+
+							<a href="./docs/usage/changelog.html" class="d-flex text-decoration-none mb-4 mb-lg-0" title="Changelog">
+								<div class="flex-shrink-0 fs-5 lh-1 text-muted pt-2">
+									<svg class="icon"><use xlink:href="#pen-to-square"></use></svg>
+								</div>
+								<div class="flex-grow-1 ps-6">
+									<h6 class="mb-2">Changelog</h6>
+									<small>Regular updates</small>
+								</div>
+							</a>
+
+
+							<hr class="dropdown-divider mx-n8" />
+
+							<a href="https://sp.g5plus.net/" class="d-flex text-decoration-none mb-4 mb-lg-0" title="Support" target="_blank">
+								<div class="flex-shrink-0 fs-5 lh-1 text-muted pt-2">
+									<svg class="icon"><use xlink:href="#headset"></use></svg>
+								</div>
+								<div class="flex-grow-1 ps-6">
+									<h6 class="mb-2">Support</h6>
+									<small>https://sp.g5plus.net/</small>
+								</div>
+							</a>
+
+						</div>
+					</div></li>
+			</ul>
 		</div>
 		<hr class="mb-0">
 		<div class="offcanvas-footer bg-body-tertiary">
