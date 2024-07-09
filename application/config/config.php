@@ -10,8 +10,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         define('BASE_URL', 'http://localhost/STYX_web/');
         define( 'APP_PATH', realpath(__DIR__ .'/../../'));
     } else {
-		$config['base_url'] = 'https://www.styx.at/';
-		define('BASE_URL', 'https://www.styx.at/');
+		$config['base_url'] = 'https://styx.styxnatur.at/';
+		define('BASE_URL', 'https://styx.styxnatur.at/');
 		define( 'APP_PATH', realpath(__DIR__ .'/../../'));
     }
     define ( 'VERSION','?v=1.001' );
