@@ -163,16 +163,32 @@
 					</div>
 				</div>
 				<style>
-					.navbar-nav .nav-item:hover .dropdown-menu {
-						display: block;
+					@media (min-width: 1200px) {
+						.navbar-nav .dropdown-menu {
+							display: none;
+							position: absolute;
+							top: 100%;
+							left: 0;
+						}
+						.navbar-nav .nav-item:hover .dropdown-menu {
+							display: block;
+						}
 					}
-					.navbar-nav .dropdown-menu {
-						display: none;
-						position: absolute;
-						top: 100%;
-						left: 0;
+
+					@media (max-width: 1199px) {
+						.navbar-nav .dropdown-menu {
+							display: block;
+							position: relative;
+							top: auto;
+							left: auto;
+						}
+						.navbar-nav .nav-item .dropdown-toggle {
+							display: none;
+						}
 					}
 				</style>
+
+
 
 				<div class="w-100 d-none d-xl-flex align-items-center justify-content-center">
 					<ul class="navbar-nav">
@@ -184,9 +200,6 @@
 										<?= $item->name ?>
 									</a>
 									<?php if (!empty($item->children)): ?>
-										<button class="dropdown-toggle border-0 bg-transparent ms-2" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownMenuButton-<?= $index ?>">
-											<i class="fas fa-angle-down"></i>
-										</button>
 										<ul class="dropdown-menu mega-menu start-0 py-6" aria-labelledby="dropdownMenuButton-<?= $index ?>" style="width:250px">
 											<?php foreach ($item->children as $child): ?>
 												<?php $child_url = empty($child->url) ? BASE_URL : $child->url; ?>
@@ -203,8 +216,6 @@
 						<?php endforeach; ?>
 					</ul>
 				</div>
-
-
 
 
 
