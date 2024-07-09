@@ -19,6 +19,7 @@
 	<!-- Mobile Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
 
+
 	<!-- Web Fonts  -->
 	<link id="googleFonts" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800%7CShadows+Into+Light&display=swap" rel="stylesheet" type="text/css">
 
@@ -45,5 +46,5 @@
 
 	<!-- Head Libs -->
 	<script src="<?=BASE_URL?>assets/vendor/modernizr/modernizr.min.js"></script>
-
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
