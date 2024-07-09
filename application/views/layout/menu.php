@@ -1,9 +1,37 @@
+<style>
+	@media (min-width: 1200px) {
+		.navbar-nav .dropdown-menu {
+			display: none;
+			position: absolute;
+			top: 100%;
+			left: 0;
+		}
+		.navbar-nav .nav-item:hover .dropdown-menu {
+			display: block;
+		}
+	}
+
+	@media (max-width: 1199px) {
+		.navbar-nav .dropdown-menu {
+			display: none; /* Initially hide the submenu */
+			position: relative;
+			top: auto;
+			left: auto;
+		}
+		.navbar-nav .nav-item .dropdown-toggle {
+			display: inline-block; /* Ensure the toggle is visible */
+		}
+		.navbar-nav .nav-item.show .dropdown-menu {
+			display: block; /* Show the submenu when the parent is active */
+		}
+	}
+</style>
 
 
 <header id="header" class="header header-sticky header-sticky-smart disable-transition-all z-index-5">
 	<div style="background-color: rgba(8,156,8,0.8)" class="topbar">
 		<div class="container-xxl container">
-			<p class="mb-0 text-dark-emphasis  text-center p-4 fs-15px fw-bold ls-1">
+			<p class="mb-0 text-dark-emphasis text-center p-4 fs-15px fw-bold ls-1">
 				STYX Naturcosmetic - nachhaltige Kosmetik aus Österreich
 			</p>
 		</div>
@@ -25,7 +53,8 @@
 				</div>
 				<a href="/" class="navbar-brand px-8 py-4 mx-auto">
 					<img class="light-mode-img" src="<?=BASE_URL.LOGO?>" width="179" height="80" alt="STYX Naturcosmetic_logo">
-					<img class="dark-mode-img" src="<?=BASE_URL.LOGO1?>" width="179" height="77" alt="STYX Naturcosmetic_logo"></a>
+					<img class="dark-mode-img" src="<?=BASE_URL.LOGO1?>" width="179" height="77" alt="STYX Naturcosmetic_logo">
+				</a>
 				<div class="icons-actions d-flex justify-content-end w-xl-50 fs-28px text-body-emphasis">
 					<div class="px-5 d-none d-xl-inline-block">
 						<a class="lh-1 color-inherit text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#signInModal">
@@ -34,22 +63,6 @@
 							</svg>
 						</a>
 					</div>
-<!--					<div class="px-5 d-none d-xl-inline-block">-->
-<!--						<a class="position-relative lh-1 color-inherit text-decoration-none" href="/shop/wishlist.html">-->
-<!--							<svg class="icon icon-star-light">-->
-<!--								<use xlink:href="#icon-star-light"></use>-->
-<!--							</svg>-->
-<!--							<span class="badge bg-dark text-white position-absolute top-0 start-100 translate-middle mt-4 rounded-circle fs-13px p-0 square" style="--square-size: 18px">3</span>-->
-<!--						</a>-->
-<!--					</div>-->
-<!--					<div class="px-5 d-none d-xl-inline-block">-->
-<!--						<a class="position-relative lh-1 color-inherit text-decoration-none" href="#" data-bs-toggle="offcanvas" data-bs-target="#shoppingCart" aria-controls="shoppingCart" aria-expanded="false">-->
-<!--							<svg class="icon icon-star-light">-->
-<!--								<use xlink:href="#icon-shopping-bag-open-light"></use>-->
-<!--							</svg>-->
-<!--							<span class="badge bg-dark text-white position-absolute top-0 start-100 translate-middle mt-4 rounded-circle fs-13px p-0 square" style="--square-size: 18px">3</span>-->
-<!--						</a>-->
-<!--					</div>-->
 					<div class="color-modes position-relative ps-5">
 						<a class="bd-theme btn btn-link nav-link dropdown-toggle d-inline-flex align-items-center justify-content-center text-primary p-0 position-relative rounded-circle" href="#" aria-expanded="true" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme (light)">
 							<svg class="bi my-1 theme-icon-active">
@@ -101,14 +114,15 @@
 			<div class="container-xxl container">
 				<div class="d-flex d-xl-none w-100">
 					<div class="w-72px d-flex d-xl-none">
-						<button class="navbar-toggler align-self-center  border-0 shadow-none px-0 canvas-toggle p-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasNavBar" aria-controls="offCanvasNavBar" aria-expanded="false" aria-label="Toggle Navigation">
+						<button class="navbar-toggler align-self-center border-0 shadow-none px-0 canvas-toggle p-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasNavBar" aria-controls="offCanvasNavBar" aria-expanded="false" aria-label="Toggle Navigation">
 							<span class="fs-24 toggle-icon"></span>
 						</button>
 					</div>
 					<div class="d-flex mx-auto">
 						<a href="/" class="navbar-brand px-8 py-4 mx-auto">
 							<img class="light-mode-img" src="<?=BASE_URL.LOGO?>" width="179" height="80" alt="STYX Naturcosmetic_logo">
-							<img class="dark-mode-img" src="<?=BASE_URL.LOGO1?>" width="179" height="80" alt="STYX Naturcosmetic_logo"></a>
+							<img class="dark-mode-img" src="<?=BASE_URL.LOGO1?>" width="179" height="80" alt="STYX Naturcosmetic_logo">
+						</a>
 					</div>
 					<div class="icons-actions d-flex justify-content-end w-xl-50 fs-28px text-body-emphasis w-72px">
 						<div class="px-xl-5 d-inline-block">
@@ -162,33 +176,6 @@
 						</div>
 					</div>
 				</div>
-				<style>
-					@media (min-width: 1200px) {
-						.navbar-nav .dropdown-menu {
-							display: none;
-							position: absolute;
-							top: 100%;
-							left: 0;
-						}
-						.navbar-nav .nav-item:hover .dropdown-menu {
-							display: block;
-						}
-					}
-
-					@media (max-width: 1199px) {
-						.navbar-nav .dropdown-menu {
-							display: block;
-							position: relative;
-							top: auto;
-							left: auto;
-						}
-						.navbar-nav .nav-item .dropdown-toggle {
-							display: none;
-						}
-					}
-				</style>
-
-
 
 				<div class="w-100 d-none d-xl-flex align-items-center justify-content-center">
 					<ul class="navbar-nav">
@@ -200,6 +187,7 @@
 										<?= $item->name ?>
 									</a>
 									<?php if (!empty($item->children)): ?>
+										<button class="dropdown-toggle d-xl-none" data-bs-toggle="dropdown" aria-expanded="false"></button>
 										<ul class="dropdown-menu mega-menu start-0 py-6" aria-labelledby="dropdownMenuButton-<?= $index ?>" style="width:250px">
 											<?php foreach ($item->children as $child): ?>
 												<?php $child_url = empty($child->url) ? BASE_URL : $child->url; ?>
@@ -216,10 +204,23 @@
 						<?php endforeach; ?>
 					</ul>
 				</div>
-
-
-
 			</div>
 		</div>
 	</div>
 </header>
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		var dropdowns = document.querySelectorAll('.dropdown-toggle');
+		dropdowns.forEach(function (dropdown) {
+			dropdown.addEventListener('click', function (e) {
+				var parent = dropdown.closest('.nav-item');
+				if (parent.classList.contains('show')) {
+					parent.classList.remove('show');
+				} else {
+					parent.classList.add('show');
+				}
+			});
+		});
+	});
+</script>
+
