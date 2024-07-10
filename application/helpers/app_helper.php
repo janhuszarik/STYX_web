@@ -15,7 +15,21 @@ if (!function_exists('load_menu_data')) {
 		$data['menuItems'] = $CI->App_model->get_menu_items();
 	}
 }
+//function getLanguages(){
+//	$ci = get_instance();
+//
+//	return $ci->config->config['languages'];
+//
+//}
 
+function language(){
+
+
+	$CI = get_instance();
+	$lang = $CI->config->config['language'];
+	return $CI->config->config['languages'][$lang];
+
+}
 
 function dd($var_dump){
 
@@ -32,16 +46,70 @@ function dd($var_dump){
 	echo '</pre>';
 	die();
 
-};
+}
 
-	function pomlcka($text){
+function langInfo($lang = false)
+{
 
-	if (empty($text)){
-		return '-';
+	if ($lang == 'sk') {
+
+		$info = array(
+			'text' => 'Slovensky',
+			'flag' => BASE_URL . 'img/flag/png/slovak.png'
+		);
+		return $info;
+
+	} elseif ($lang == 'en') {
+		$info = array(
+			'text' => 'Anglicky',
+			'flag' => BASE_URL . 'img/flag/png/english.png'
+		);
+		return $info;
+	} elseif ($lang == 'de') {
+		$info = array(
+			'text' => 'Nemecky',
+			'flag' => BASE_URL . 'img/flag/png/germany.png'
+		);
+		return $info;
+
 	} else {
-		return $text;
+		echo 'chyba';
 	}
 
+}
+
+
+if ( ! function_exists('lang')) {
+	/**
+	 * Lang
+	 *
+	 * Fetches a language variable and optionally outputs a form label
+	 *
+	 * @param string $line The language line
+	 * @param string $for The "for" value (id of the form element)
+	 * @param array $attributes Any additional HTML attributes
+	 * @return    string
+	 */
+	function lang($line, $for = '', $attributes = array())
+	{
+		$line = get_instance()->lang->line($line);
+
+		if ($for !== '') {
+			$line = '<label for="' . $for . '"' . _stringify_attributes($attributes) . '>' . $line . '</label>';
+		}
+
+		return $line;
+	}
+
+	function pomlcka($text)
+	{
+
+		if (empty($text)) {
+			return '-';
+		} else {
+			return $text;
+		}
+	}
 }
 
 //	function crop ($img){
@@ -345,14 +413,7 @@ function dd($var_dump){
 
 
 
-	function language(){
 
-
-	$CI = get_instance();
-	$lang = $CI->config->config['language'];
-	return $CI->config->config['languages'][$lang];
-
-}
 
 
 	function initials($string){

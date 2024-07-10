@@ -11,10 +11,7 @@
 								<nav class="header-nav-top">
 									<ul class="nav nav-pills text-uppercase text-2">
 										<li class="nav-item nav-item-anim-icon d-none d-md-block">
-											<a class="nav-link ps-0" href="about-us.html"><i class="fas fa-angle-right"></i> About Us</a>
-										</li>
-										<li class="nav-item nav-item-anim-icon d-none d-md-block">
-											<a class="nav-link" href="contact-us.html"><i class="fas fa-angle-right"></i> Contact Us</a>
+											<a style="font-weight: bold; color: #14c500; font-size: 13px" class="nav-link ps-0" href="https://www.aroma-derm.com/login.php"><i class="fas fa-angle-right"></i> Login für Händler</a>
 										</li>
 									</ul>
 								</nav>
@@ -80,6 +77,7 @@
 										</ul>
 									</nav>
 								</div>
+
 								<ul class="header-social-icons social-icons d-none d-sm-block">
 									<li class="social-icons-facebook"><a href="http://www.facebook.com/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
 									<li class="social-icons-twitter"><a href="http://www.twitter.com/" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a></li>

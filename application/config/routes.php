@@ -111,3 +111,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //	$route[':any'] 							= 'app/routes';
 //	$route[':any/:any'] 					= 'app/routes';
 //	$route['search'] 						= 'app/routes';
+$route[':any'] = 'app/routes';
+
+$route[':any'] = 'app/routes';
+$route[':any/:any'] = 'app/routes';
+$route['search'] = 'app/routes';

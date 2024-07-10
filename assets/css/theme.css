@@ -352,7 +352,7 @@ pre {
 	font-size: 0.9em;
 	padding: 6px 10px;
 	display: inline-block;
-	letter-spacing: -0.5px;
+	letter-spacing: 0,5;
 }
 
 #header .header-nav-top .nav > li > a [class*="fa-"], #header .header-nav-top .nav > li > a .icons, #header .header-nav-top .nav > li > span [class*="fa-"], #header .header-nav-top .nav > li > span .icons {

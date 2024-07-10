@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="<?= language()?>">
 <head>
 
 	<!-- Basic -->
@@ -8,8 +8,8 @@
 
 	<title><?=$title?></title>
 
-	<meta name="keywords" content="WebSite Template" />
-	<meta name="description" content="Porto - Multipurpose Website Template">
+	<meta name="keywords" content="<?=$keywords?>" />
+	<meta name="description" content="<?=$description?>">
 	<meta name="author" content="okler.net">
 
 	<!-- Favicon -->

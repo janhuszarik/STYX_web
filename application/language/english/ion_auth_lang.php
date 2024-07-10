@@ -1,76 +1,83 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Name:  Ion Auth Lang - Slovak
- *
- * Author: Jakub Vatrt
- * 		  vatrtj@gmail.com
- *
- *
- * Created:  11.11.2016
- *
- * Description:  Slovak language file for Ion Auth messages and errors
- *
- */
+* Name:         Ion Auth Lang - german
+*
+* Author:       Ben Edmunds
+* 		          ben.edmunds@gmail.com
+*               @benedmunds
+* Translation:  Bernd Hückstädt (akademie@joytopia.net),
+*               Benjamin Neu (benny@duxu.de),
+*               Max Vogl (mail@max-vogl.de),
+*               Armin Stebich (ion_auth@mail.lordofbikes.de)
+*
+*
+* Location:     https://github.com/benedmunds/CodeIgniter-Ion-Auth
+*
+* Created:  04.02.2010
+* Last-Edit: 13.11.2019
+*
+* Description:      german language file for Ion Auth messages and errors
+* Beschreibung:     Deutsche Sprach-Datei für Ion Auth System- und Fehlermeldungen
+*
+*/
 
 // Account Creation
-$lang['account_creation_successful'] 	  	 = 'Účet bol úspešne vytvorený';
-$lang['account_creation_unsuccessful'] 	 	 = 'Nie je možné vytvoriť účet';
-$lang['account_creation_duplicate_email'] 	 = 'E-mail už existuje alebo je neplatný';
-$lang['account_creation_duplicate_identity'] = 'Užívateľské meno už existuje alebo je neplatné';
+$lang['account_creation_successful']         = 'Das Benutzerkonto wurde erfolgreich erstellt';
+$lang['account_creation_unsuccessful']       = 'Das Benutzerkonto konnte nicht erstellt werden';
+$lang['account_creation_duplicate_email']    = 'Die Email Adresse ist ungültig oder wird bereits verwendet';
+$lang['account_creation_duplicate_identity'] = 'Der Benutzername ist ungültig oder wird bereits verwendet';
 
 // TODO Please Translate
-$lang['account_creation_missing_default_group'] = 'Základná skupina nenastavená';
-$lang['account_creation_invalid_default_group'] = 'Nesprávne meno základnej skupiny';
+$lang['account_creation_missing_default_group'] = 'Standard Gruppe ist nicht gesetzt';
+$lang['account_creation_invalid_default_group'] = 'Ungültiger Standard Gruppenname';
+
 
 // Password
-$lang['password_change_successful'] 	 	 = 'Heslo bolo úspešne zmenenétu';
-$lang['password_change_unsuccessful'] 	  	 = 'Nie je možné zmeniť heslo';
-$lang['forgot_password_successful'] 	 	 = 'Heslo bolo odoslané na e-mail';
-$lang['forgot_password_unsuccessful'] 	 	 = 'Nie je možné obnoviť heslo';
+$lang['password_change_successful']     = 'Das Kennwort wurde erfolgreich geändert';
+$lang['password_change_unsuccessful']   = 'Das Kennwort konnte nicht geändert werden';
+$lang['forgot_password_successful']     = 'Es wurde eine Email zum Rücksetzen des Kennworts versandt';
+$lang['forgot_password_unsuccessful']   = 'Das Kennwort konnte nicht zurückgesetzt werden';
 
 // Activation
-$lang['activate_successful'] 		  	     = 'Účet bol aktivovaný';
-$lang['activate_unsuccessful'] 		 	     = 'Nie je možné aktivovať účet';
-$lang['deactivate_successful'] 		  	     = 'Účet bol deaktivovaný';
-$lang['deactivate_unsuccessful'] 	  	     = 'Nie je možné deaktivovať účet';
-$lang['activation_email_successful'] 	  	 = 'Aktivačný e-mail bol odoslaný';
-$lang['activation_email_unsuccessful']   	 = 'Nedá sa odoslať aktivačný e-mail';
-$lang['deactivate_current_user_unsuccessful']= 'You cannot De-Activate your self.';
+$lang['activate_successful']                    = 'Das Benutzerkonto wurde aktiviert';
+$lang['activate_unsuccessful']                  = 'Das Benutzerkonto konnte nicht aktiviert werden';
+$lang['deactivate_successful']                  = 'Das Benutzerkonto wurde deaktiviert';
+$lang['deactivate_unsuccessful']                = 'Das Benutzerkonto konnte nicht deaktiviert werden';
+$lang['activation_email_successful']            = 'Es wurde eine Email zum Aktivieren des Benutzerkontos versandt';
+$lang['activation_email_unsuccessful']          = 'Die Aktivierungsmail konnte nicht versandt werden';
+$lang['deactivate_current_user_unsuccessful']   = 'Du kannst dich nicht selbst deaktivieren.';
 
 // Login / Logout
-$lang['login_successful'] 		  	         = 'Úspešne prihlásený';
-$lang['login_unsuccessful'] 		  	     = 'Nesprávny e-mail alebo heslo';
-$lang['login_unsuccessful_not_active'] 		 = 'Účet je neaktívny';
-$lang['login_timeout']                       = 'Dočasne uzamknuté z bezpečnostných dôvodov. Skúste neskôr';
-$lang['logout_successful'] 		 	         = 'Úspešné odhlásenie';
+$lang['login_successful']              = 'Login erfolgreich';
+$lang['login_unsuccessful']            = 'Login fehlgeschlagen';
+$lang['login_unsuccessful_not_active'] = 'Der Account ist deaktiviert';
+$lang['login_timeout']                 = 'Vorübergehend gesperrt. Versuchen Sie es später noch einmal.';
+$lang['logout_successful']             = 'Logout erfolgreich';
 
 // Account Changes
-$lang['update_successful'] 		 	         = 'Informácie o účte boli úspešne aktualizované';
-$lang['update_unsuccessful'] 		 	     = 'Informácie o účte sa nedájú aktualizovať';
-$lang['delete_successful'] 		 	         = 'Užívateľ bol zmazaný';
-$lang['delete_unsuccessful'] 		 	     = 'Užívateľ sa nedá zmazať ';
+$lang['update_successful']   = 'Die Konto-Informationen wurden erfolgreich geändert';
+$lang['update_unsuccessful'] = 'Die Konto-Informationen konnten nicht geändert werden';
+$lang['delete_successful']   = 'Das Benutzerkonto wurde gelöscht';
+$lang['delete_unsuccessful'] = 'Das Benutzerkonto konnte nicht gelöscht werden';
 
 // Groups
-$lang['group_creation_successful']  = 'Skupina úspešne vytvorená';
-$lang['group_already_exists']       = 'Meno skupiny už existuje';
-$lang['group_update_successful']    = 'Detaily skupiny upravené';
-$lang['group_delete_successful']    = 'Skupina zmazaná';
-$lang['group_delete_unsuccessful'] 	= 'Nemôžem zmazať skupinu';
-$lang['group_delete_notallowed']    = 'Nemôžem zmazať administrátorskú skupinu';
-$lang['group_name_required'] 		= 'Meno skupiny je požadované pole';
-$lang['group_name_admin_not_alter'] = 'Administratorská skupina nemôže byť zmenená';
+$lang['group_creation_successful']  = 'Gruppe wurde erfolgreich erstellt';
+$lang['group_already_exists']       = 'Gruppenname bereits vergeben';
+$lang['group_update_successful']    = 'Gruppendetails aktualisiert';
+$lang['group_delete_successful']    = 'Gruppe gelöscht';
+$lang['group_delete_unsuccessful']  = 'Gruppe konnte nicht gelöscht werden';
+$lang['group_delete_notallowed']    = 'Sie können die Administrator Gruppe nicht löschen';
+$lang['group_name_required']        = '"Gruppenname" ist ein Pflichtfeld';
+$lang['group_name_admin_not_alter'] = 'Admin Gruppenname kann nicht geändert werden';
 
 // Activation Email
-$lang['email_activation_subject']            = 'Aktivácia účtu';
-$lang['email_activate_heading']    = 'Aktivujte účet na %s';
-$lang['email_activate_subheading'] = 'Prosím kliknite na tento odkaz pre %s.';
-$lang['email_activate_link']       = 'Aktivujte váš účet';
+$lang['email_activation_subject']  = 'Aktivierung des Kontos';
+$lang['email_activate_heading']    = 'Konto aktivieren für %s';
+$lang['email_activate_subheading'] = 'Bitte klicken Sie auf diesen Link, um %s.';
+$lang['email_activate_link']       = 'Aktivieren Sie Ihr Benutzerkonto';
+
 // Forgot Password Email
-$lang['email_forgotten_password_subject']    = 'Obnovenie hesla kontrola';
-$lang['email_forgot_password_heading']    = 'Obnoviť heslo pre %s';
-$lang['email_forgot_password_subheading'] = 'Prosím kliknite na tento odkaz pre %s.';
-$lang['email_forgot_password_link']       = 'Reset vášho hesla';
-// New Password Email
-$lang['email_new_password_subject']          = 'Nové heslo';
-$lang['email_new_password_heading']    = 'Nové heslo pre %s';
-$lang['email_new_password_subheading'] = 'Vaše heslo bolo resetované na: %s';
+$lang['email_forgotten_password_subject'] = 'Vergessenes Kennwort bestätigen';
+$lang['email_forgot_password_heading']    = 'Kennwort zurücksetzen für %s';
+$lang['email_forgot_password_subheading'] = 'Bitte klicken Sie auf diesen Link, um %s.';
+$lang['email_forgot_password_link']       = 'Ihr Kennwort zurückzusetzen';
