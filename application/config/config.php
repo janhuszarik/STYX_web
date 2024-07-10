@@ -107,11 +107,7 @@ $config['url_suffix'] = '';
 |
 */
 	$config['language']	= 'german';
-	$config['languages']    = [
-//		'slovak' 	=> 'sk',
-		'english' 	=> 'en',
-		'german' 	=> 'de',
-];
+	$config['languages'] = ['english' 	=> 'en', 'german' 	=> 'de',];
 
 /*
 |--------------------------------------------------------------------------

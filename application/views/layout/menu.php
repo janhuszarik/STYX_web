@@ -11,7 +11,7 @@
 								<nav class="header-nav-top">
 									<ul class="nav nav-pills text-uppercase text-2">
 										<li class="nav-item nav-item-anim-icon d-none d-md-block">
-											<a style="font-weight: bold; color: #14c500; font-size: 13px" class="nav-link ps-0" href="https://www.aroma-derm.com/login.php"><i class="fas fa-angle-right"></i> Login für Händler</a>
+											<a style="font-weight: bold; color: #14c500; font-size: 13px" class="nav-link ps-0" href="https://www.aroma-derm.com/login.php"><i class="fas fa-angle-right"></i> <?=lang('PRICE_HEADER')?></a>
 										</li>
 									</ul>
 								</nav>
@@ -77,7 +77,13 @@
 										</ul>
 									</nav>
 								</div>
-
+								<?php foreach (getLanguages() as $l): ?>
+									<li>
+										<a href="<?= BASE_URL . $l ?>">
+											<img src="<?= langInfo($l)['flag'] ?>" width="28px" alt="">
+										</a>
+									</li>
+								<?php endforeach; ?>
 								<ul class="header-social-icons social-icons d-none d-sm-block">
 									<li class="social-icons-facebook"><a href="http://www.facebook.com/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
 									<li class="social-icons-twitter"><a href="http://www.twitter.com/" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a></li>

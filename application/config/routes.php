@@ -68,7 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['error404only'] 					= 'app/error404only';
 	$route['sitemap'] 						= 'xml/sitemap';
     $route['sitemap.xml'] 					= 'xml/sitemap';
-
+	$route['translate_uri_dashes'] = FALSE;
 
 // administrator
 
