@@ -15,20 +15,15 @@ if (!function_exists('load_menu_data')) {
 		$data['menuItems'] = $CI->App_model->get_menu_items();
 	}
 }
-//function getLanguages(){
-//	$ci = get_instance();
-//
-//	return $ci->config->config['languages'];
-//
-//}
+function getLanguages() {
+	$ci = get_instance();
+	return $ci->config->config['languages'];
+}
 
-function language(){
-
-
+function language() {
 	$CI = get_instance();
 	$lang = $CI->config->config['language'];
-	return $CI->config->config['languages'][$lang];
-
+	return $lang;
 }
 
 function dd($var_dump){
@@ -48,33 +43,26 @@ function dd($var_dump){
 
 }
 
-function langInfo($lang = false)
-{
 
-	if ($lang == 'sk') {
 
-		$info = array(
+function langInfo($lang = false) {
+	$languages = [
+		'sk' => [
 			'text' => 'Slovensky',
 			'flag' => BASE_URL . 'img/flag/png/slovak.png'
-		);
-		return $info;
-
-	} elseif ($lang == 'en') {
-		$info = array(
+		],
+		'en' => [
 			'text' => 'Anglicky',
 			'flag' => BASE_URL . 'img/flag/png/english.png'
-		);
-		return $info;
-	} elseif ($lang == 'de') {
-		$info = array(
+		],
+		'de' => [
 			'text' => 'Nemecky',
 			'flag' => BASE_URL . 'img/flag/png/germany.png'
-		);
-		return $info;
+		],
+		// Pridajte ďalšie jazyky sem
+	];
 
-	} else {
-		echo 'chyba';
-	}
+	return $languages[$lang] ?? null; // Vráti null, ak jazyk nie je podporovaný
 
 }
 
@@ -116,13 +104,7 @@ if ( ! function_exists('lang')) {
 
 	}
 
-	function getLanguages()
-	{
-		$ci = get_instance();
 
-		return $ci->config->config['languages'];
-
-	}
 
 	function url_oprava($str, $separator = '-', $lowercase = FALSE)
 	{

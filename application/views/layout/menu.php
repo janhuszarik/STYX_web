@@ -1,4 +1,3 @@
-
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" class="header-effect-shrink" data-plugin-options="{'stickyEnabled': true, 'stickyEffect': 'shrink', 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyChangeLogo': true, 'stickyStartAt': 30, 'stickyHeaderContainerHeight': 70}">
@@ -12,6 +11,18 @@
 									<ul class="nav nav-pills text-uppercase text-2">
 										<li class="nav-item nav-item-anim-icon d-none d-md-block">
 											<a style="font-weight: bold; color: #14c500; font-size: 13px" class="nav-link ps-0" href="https://www.aroma-derm.com/login.php"><i class="fas fa-angle-right"></i> <?=lang('PRICE_HEADER')?></a>
+										</li>
+
+										<li class="nav-item dropdown nav-item-left-border d-none d-sm-block nav-item-left-border-remove nav-item-left-border-md-show">
+											<a class="nav-link" href="#" role="button" id="dropdownLanguage" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<img id="languageFlag" src="<?=BASE_URL?>assets/img/blank.gif" class="flag" alt="Language" />
+												<span id="languageText">Language</span>
+												<i class="fas fa-angle-down"></i>
+											</a>
+											<div class="dropdown-menu" aria-labelledby="dropdownLanguage">
+												<a class="dropdown-item" href="#" data-lang="en"><img src="<?=BASE_URL?>assets/img/blank.gif" class="flag flag-us" alt="English" /> English</a>
+												<a class="dropdown-item" href="#" data-lang="de"><img src="<?=BASE_URL?>assets/img/blank.gif" class="flag flag-at" alt="Deutsch" /> Deutsch</a>
+											</div>
 										</li>
 									</ul>
 								</nav>
@@ -77,6 +88,7 @@
 										</ul>
 									</nav>
 								</div>
+
 								<?php foreach (getLanguages() as $l): ?>
 									<li>
 										<a href="<?= BASE_URL . $l ?>">
@@ -103,15 +115,57 @@
 
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
-		// Select all menu items that have children
+		// Skript na nastavenie aktuálneho jazyka
+		const languageMap = {
+			'en': {
+				flagClass: 'flag-us',
+				text: 'English'
+			},
+			'de': {
+				flagClass: 'flag-at',
+				text: 'Deutsch'
+			}
+		};
+
+		function setLanguage(lang) {
+			const flagImg = document.getElementById('languageFlag');
+			const langText = document.getElementById('languageText');
+
+			if (languageMap[lang]) {
+				flagImg.className = 'flag ' + languageMap[lang].flagClass;
+				flagImg.alt = languageMap[lang].text;
+				langText.textContent = languageMap[lang].text;
+			}
+		}
+
+		function saveLanguage(lang) {
+			localStorage.setItem('selectedLanguage', lang);
+		}
+
+		function loadLanguage() {
+			return localStorage.getItem('selectedLanguage') || 'de';
+		}
+
+		const currentLanguage = loadLanguage();
+		setLanguage(currentLanguage);
+
+		document.querySelectorAll('.dropdown-item').forEach(item => {
+			item.addEventListener('click', function(event) {
+				event.preventDefault();
+				const selectedLang = this.getAttribute('data-lang');
+				saveLanguage(selectedLang);
+				setLanguage(selectedLang);
+				// Presmerovanie na novú URL
+				window.location.href = selectedLang === 'en' ? '<?=BASE_URL?>en' : '<?=BASE_URL?>de';
+			});
+		});
+
+		// Skript na prepínanie submenu
 		const menuItemsWithChildren = document.querySelectorAll('.has-children > a');
 
 		menuItemsWithChildren.forEach(item => {
 			item.addEventListener('click', function(event) {
-				// Prevent default action (navigation)
 				event.preventDefault();
-
-				// Toggle the visibility of the submenu
 				const submenu = this.nextElementSibling;
 				if (submenu.style.display === 'block') {
 					submenu.style.display = 'none';
@@ -122,4 +176,5 @@
 		});
 	});
 </script>
+
 </body>
