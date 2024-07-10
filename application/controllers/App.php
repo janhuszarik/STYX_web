@@ -15,10 +15,12 @@ class App extends CI_Controller
 		$this->load->language('app_lang');
 		setlocale(LC_ALL,'de_DE');
 		$this->load->language('app_lang');
+
 		$this->load_global_data();
 
 //		require_once APP_PATH . '/vendor/autoload.php';
 		$this->output->set_status_header(200);
+		$this->load_language_from_url();
 	}
 
 
@@ -47,11 +49,25 @@ class App extends CI_Controller
 		$data['page'] = 'home';
 		$this->load->view('layout/normal', $data);
 	}
-	protected function load_global_data() {
+	protected function load_language_from_url() {
+		$uri_segment = $this->uri->segment(1);
+		$available_languages = ['en', 'de'];
+
+		if (in_array($uri_segment, $available_languages)) {
+			$this->load_global_data($uri_segment);
+		} else {
+			$this->load_global_data();
+		}
+	}
+
+	protected function load_global_data($lang = 'de') {
 		$data = array();
-		load_menu_data($data);
+		load_menu_data($data, $lang);
 		$this->load->vars($data);
 	}
+
+
+
 	private function check_cookie_consent() {
 		if (!$this->input->cookie('cookie_consent', TRUE)) {
 			setcookie('cookie_consent', 'false', time() + 86400, "/");

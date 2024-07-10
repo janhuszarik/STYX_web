@@ -40,6 +40,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$post['active'] = isset($post['active']) ? $post['active'] : '0';
+			$post['lang'] = isset($post['lang']) ? $post['lang'] : 'de';
 
 			if (!empty($id)) {
 				if ($this->Admin_model->menuSave($post)) {
@@ -69,21 +70,12 @@ class Admin extends CI_Controller
 			}
 		}
 
-		if (empty($id)) {
-			$data['menus'] = $this->Admin_model->getFullMenu();
-			$data['menu'] = $this->Admin_model->getMenu($id);
-			$data['menuparent'] = $this->Admin_model->getMenu(false, true);
-			$data['title'] = isset($menu->name) ? 'Upraviť MENU položku&nbsp: ' . $menu->name : 'MENU položky';
-			$data['page'] = 'admin/settings/menu';
-			$this->load->view('admin/layout/normal', $data);
-		} else {
-			$data['menu'] = $this->Admin_model->getMenu($id);
-			$data['menus'] = $this->Admin_model->getFullMenu();
-			$data['menuparent'] = $this->Admin_model->getMenu(false, true);
-			$data['title'] = isset($menu->name) ? 'Upraviť MENU položku&nbsp: ' . $menu->name : 'MENU položky';
-			$data['page'] = 'admin/settings/menu';
-			$this->load->view('admin/layout/normal', $data);
-		}
+		$data['menus'] = $this->Admin_model->getFullMenu();
+		$data['menu'] = $this->Admin_model->getMenu($id);
+		$data['menuparent'] = $this->Admin_model->getMenu(false, true);
+		$data['title'] = isset($menu->name) ? 'Upraviť MENU položku&nbsp: ' . $menu->name : 'MENU položky';
+		$data['page'] = 'admin/settings/menu';
+		$this->load->view('admin/layout/normal', $data);
 	}
 
 

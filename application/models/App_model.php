@@ -12,20 +12,38 @@ class app_model extends CI_Model {
 
 	}
 
-	public function get_menu_items() {
+
+	public function get_menu_items($lang = 'de') {
 		$this->db->select('*');
 		$this->db->from('menu');
-		$this->db->where('parent', 0);
+		$this->db->where('lang', $lang);
 		$this->db->order_by('orderBy', 'ASC');
 		$query = $this->db->get();
-		$menu_items = $query->result();
+		$menuItems = $query->result();
 
-		foreach ($menu_items as &$item) {
-			$item->children = $this->get_menu_children($item->id);
+		// Debugovací výpis
+		log_message('debug', 'Menu items loaded for lang ' . $lang . ': ' . print_r($menuItems, true));
+
+		$menu = array();
+		foreach ($menuItems as $item) {
+			if ($item->parent == 0) {
+				$menu[] = $item;
+			}
 		}
 
-		return $menu_items;
+		foreach ($menu as $key => $parent) {
+			$parent->children = array();
+			foreach ($menuItems as $item) {
+				if ($item->parent == $parent->id) {
+					$parent->children[] = $item;
+				}
+			}
+		}
+
+		return $menu;
 	}
+
+
 
 // Method to retrieve child menu items
 	private function get_menu_children($parent_id) {

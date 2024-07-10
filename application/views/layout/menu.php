@@ -62,29 +62,33 @@
 								<div class="header-nav-main header-nav-main-square header-nav-main-dropdown-no-borders header-nav-main-effect-2 header-nav-main-sub-effect-1">
 									<nav class="collapse">
 										<ul class="nav nav-pills flex-column flex-lg-row" id="mainNav">
-											<?php foreach ($menuItems as $index => $item): ?>
-												<?php $url = empty($item->url) ? BASE_URL : $item->url; ?>
-												<li class="dropdown <?= !empty($item->children) ? 'has-children' : '' ?>">
-													<a class="dropdown-item <?= ($current_url == $url) ? 'active' : '' ?>" href="<?= $url ?>">
-														<?= $item->name ?>
+											<?php if (!empty($menuItems)): ?>
+												<?php foreach ($menuItems as $index => $item): ?>
+													<?php $url = empty($item->url) ? BASE_URL : $item->url; ?>
+													<li class="dropdown <?= !empty($item->children) ? 'has-children' : '' ?>">
+														<a class="dropdown-item <?= ($current_url == $url) ? 'active' : '' ?>" href="<?= $url ?>">
+															<?= $item->name ?>
+															<?php if (!empty($item->children)): ?>
+																<i class="fas fa-angle-down ms-2"></i>
+															<?php endif; ?>
+														</a>
 														<?php if (!empty($item->children)): ?>
-															<i class="fas fa-angle-down ms-2"></i>
+															<ul class="dropdown-menu">
+																<?php foreach ($item->children as $child): ?>
+																	<?php $child_url = empty($child->url) ? BASE_URL : $child->url; ?>
+																	<li>
+																		<a class="dropdown-item <?= ($current_url == $child_url) ? 'active' : '' ?>" href="<?= $child_url ?>">
+																			<?= $child->name ?>
+																		</a>
+																	</li>
+																<?php endforeach; ?>
+															</ul>
 														<?php endif; ?>
-													</a>
-													<?php if (!empty($item->children)): ?>
-														<ul class="dropdown-menu">
-															<?php foreach ($item->children as $child): ?>
-																<?php $child_url = empty($child->url) ? BASE_URL : $child->url; ?>
-																<li>
-																	<a class="dropdown-item <?= ($current_url == $child_url) ? 'active' : '' ?>" href="<?= $child_url ?>">
-																		<?= $child->name ?>
-																	</a>
-																</li>
-															<?php endforeach; ?>
-														</ul>
-													<?php endif; ?>
-												</li>
-											<?php endforeach; ?>
+													</li>
+												<?php endforeach; ?>
+											<?php else: ?>
+												<li><a class="dropdown-item" href="#">No menu items found</a></li>
+											<?php endif; ?>
 										</ul>
 									</nav>
 								</div>
@@ -107,7 +111,6 @@
 
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
-		// Skript na nastavenie aktuálneho jazyka
 		const languageMap = {
 			'en': {
 				flagClass: 'flag-us',
@@ -147,12 +150,10 @@
 				const selectedLang = this.getAttribute('data-lang');
 				saveLanguage(selectedLang);
 				setLanguage(selectedLang);
-				// Presmerovanie na novú URL
 				window.location.href = selectedLang === 'en' ? '<?=BASE_URL?>en' : '<?=BASE_URL?>de';
 			});
 		});
 
-		// Skript na prepínanie submenu
 		const menuItemsWithChildren = document.querySelectorAll('.has-children > a');
 
 		menuItemsWithChildren.forEach(item => {

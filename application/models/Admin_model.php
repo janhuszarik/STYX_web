@@ -15,17 +15,17 @@ function getNewsletters(){
 	function menuSave($post = false)
 	{
 		if ($post) {
-			// Ak existuje položka s rovnakým orderBy, nastaví jej orderBy na null
 			$this->db->where('orderBy', $post['orderBy']);
 			$this->db->where('parent', $post['parent']);
 			$this->db->update('menu', array('orderBy' => null));
 
 			$data = array(
-				'name' => $this->input->post('name'),
-				'url' => $this->input->post('url'),
-				'parent' => $this->input->post('parent'),
-				'orderBy' => $this->input->post('orderBy'),
-				'active' => $this->input->post('active'),
+				'name' => $post['name'],
+				'url' => $post['url'],
+				'parent' => $post['parent'],
+				'orderBy' => $post['orderBy'],
+				'active' => $post['active'],
+				'lang' => $post['lang'],
 				'userId' => $this->ion_auth->user()->row()->id
 			);
 
@@ -37,14 +37,6 @@ function getNewsletters(){
 			}
 		}
 		return false;
-	}
-
-
-	function menuDelete($id)
-	{
-		$this->db->select('*');
-		$this->db->where('id', $id);
-		return $this->db->delete('menu');
 	}
 
 	function getMenu($id = false, $parent = false)
@@ -68,7 +60,7 @@ function getNewsletters(){
 	{
 		$this->db->select('m.*');
 		$this->db->where('m.parent', '0');
-		$this->db->order_by('m.orderBy', 'ASC'); // Zoraďuje podľa orderBy
+		$this->db->order_by('m.orderBy', 'ASC');
 		$hmenu = $this->db->get('menu as m')->result();
 
 		$menu = array();
@@ -77,7 +69,7 @@ function getNewsletters(){
 
 			$this->db->select('m.*');
 			$this->db->where('m.parent', $h->id);
-			$this->db->order_by('m.orderBy', 'ASC'); // Zoraďuje podľa orderBy
+			$this->db->order_by('m.orderBy', 'ASC');
 			$submenu = $this->db->get('menu as m')->result();
 
 			if (!empty($submenu)) {

@@ -20,6 +20,17 @@
 						<div class="row form-group pb-3">
 							<div class="col-lg-6">
 								<div class="form-group">
+									<label class="col-form-label" for="inputLang">Sprache</label>
+									<select class="form-control" name="lang" id="inputLang">
+										<option value="de" <?php echo ($menu->lang == 'de') ? 'selected' : ''; ?>>Deutsch</option>
+										<option value="en" <?php echo ($menu->lang == 'en') ? 'selected' : ''; ?>>English</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row form-group pb-3">
+							<div class="col-lg-6">
+								<div class="form-group">
 									<label class="col-form-label" for="inputDefault">Name des Menüelements</label>
 									<input type="text" name="name" class="form-control" id="inputDefault" value="<?=!empty($menu->name)?$menu->name: ''?>" required>
 								</div>
@@ -89,6 +100,7 @@
 							<thead>
 							<tr>
 								<th>#</th>
+								<th>Sprache</th>
 								<th>Menü</th>
 								<th>Übergeordnet</th>
 								<th>URL</th>
@@ -110,6 +122,7 @@
 									?>
 									<tr>
 										<td title="<?=$m->id?>"><?=$k?></td>
+										<td class="text-center"><?php echo $m->lang; ?></td>
 										<td><?php echo ($m->parent == 0 ? '<strong>' . $m->name . '</strong>' : ' - ' . $m->name); ?></td>
 										<td class="text-center"><?php echo ($m->parent == 0 ? '' : $m->parentName); ?></td>
 										<td class="text-center"><span title="<?php echo (empty($m->url) ? (is_numeric($m->article) ? $m->nameArticle . ' - článok' : '') : $m->url); ?>"><?php echo (empty($m->url) ? '<b>' . substr((is_numeric($m->article) ? $m->urlArticle : ''), 0, 10) . '</b>' : substr($m->url, 0, 10)); ?></span></td>
@@ -124,6 +137,7 @@
 											?>
 											<tr>
 												<td title="<?=$s->id?>"><?=$k?></td>
+												<td class="text-center"><?php echo $s->lang; ?></td>
 												<td><?php echo ($s->parent == 0 ? '<strong>' . $s->name . '</strong>' : ' - ' . $s->name); ?></td>
 												<td class="text-center"><?php echo ($s->parent == 0 ? '' : $s->parentName); ?></td>
 												<td class="text-center"><span title="<?php echo (empty($s->url) ? (is_numeric($s->article) ? $s->nameArticle . ' - článok' : '') : $s->url); ?>"><?php echo (empty($s->url) ? '<b>' . substr((is_numeric($s->article) ? $s->urlArticle : ''), 0, 10) . '</b>' : substr($s->url, 0, 10)); ?></span></td>

@@ -9,12 +9,19 @@
  */
 
 if (!function_exists('load_menu_data')) {
-	function load_menu_data(&$data) {
+	function load_menu_data(&$data, $lang = 'de') {
 		$CI =& get_instance();
 		$CI->load->model('App_model');
-		$data['menuItems'] = $CI->App_model->get_menu_items();
+		$data['menuItems'] = $CI->App_model->get_menu_items($lang);
+
+		// Debugovací výpis
+		log_message('debug', 'Menu items data: ' . print_r($data['menuItems'], true));
 	}
 }
+
+
+
+
 function getLanguages() {
 	$ci = get_instance();
 	return $ci->config->config['languages'];

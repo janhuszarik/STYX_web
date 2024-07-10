@@ -116,3 +116,6 @@ $route[':any'] = 'app/routes';
 $route[':any'] = 'app/routes';
 $route[':any/:any'] = 'app/routes';
 $route['search'] = 'app/routes';
+$route['^en/(.+)$'] = "$1";
+$route['^de/(.+)$'] = "$1";
+
