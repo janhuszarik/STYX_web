@@ -1,99 +1,114 @@
 <body data-plugin-page-transition>
 <div class="body">
-	<header id="header" class="header-effect-shrink" data-plugin-options="{'stickyEnabled': true, 'stickyEffect': 'shrink', 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyChangeLogo': true, 'stickyStartAt': 30, 'stickyHeaderContainerHeight': 70}">
-		<div class="header-body border-color-primary border-bottom-0">
-			<div class="header-top header-top-simple-border-bottom">
-				<div class="container">
-					<div class="header-row py-2">
-						<div class="header-column justify-content-start">
-							<div class="header-row">
-								<nav class="header-nav-top">
-									<ul class="nav nav-pills text-uppercase text-2">
-										<li class="nav-item nav-item-anim-icon d-none d-md-block">
-											<a style="font-weight: bold; color: #14c500; font-size: 13px" class="nav-link ps-0" href="https://www.aroma-derm.com/login.php"><i class="fas fa-angle-right"></i> <?=lang('HÄNDLER_TEXT')?></a>
-										</li>
-
-										<li class="nav-item dropdown nav-item-left-border d-none d-sm-block nav-item-left-border-remove nav-item-left-border-md-show">
-											<a class="nav-link" href="#" role="button" id="dropdownLanguage" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-												<img id="languageFlag" src="<?=BASE_URL?>assets/img/blank.gif" class="flag" alt="Language" />
-												<span id="languageText">Language</span>
-												<i class="fas fa-angle-down"></i>
-											</a>
-											<div class="dropdown-menu" aria-labelledby="dropdownLanguage">
-												<a class="dropdown-item" href="#" data-lang="en"><img src="<?=BASE_URL?>assets/img/blank.gif" class="flag flag-us" alt="English" /> English</a>
-												<a class="dropdown-item" href="#" data-lang="de"><img src="<?=BASE_URL?>assets/img/blank.gif" class="flag flag-at" alt="Deutsch" /> Deutsch</a>
-											</div>
-										</li>
-									</ul>
-								</nav>
-							</div>
-						</div>
-						<div class="header-column justify-content-end">
-							<div class="header-row">
-								<nav class="header-nav-top">
-									<ul class="nav nav-pills">
-										<li class="nav-item">
-											<a href="mailto:<?=lang('EMAIL')?>"><i class="far fa-envelope text-4 text-color-primary" style="top: 1px;"></i><?=lang('EMAIL')?></a>
-										</li>
-										<li class="nav-item">
-											<a href="tel:<?=lang('PHONE_NUMBER')?>"><i class="fab fa-whatsapp text-4 text-color-primary" style="top: 0;"></i> <?=lang('PHONE_NUMBER')?></a>
-										</li>
-									</ul>
-								</nav>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+	<header id="header" data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyStartAt': 45, 'stickySetTop': '-45px', 'stickyChangeLogo': true}">
+		<div class="header-body">
 			<div class="header-container container">
 				<div class="header-row">
 					<div class="header-column">
 						<div class="header-row">
 							<div class="header-logo">
 								<a href="<?=BASE_URL?>">
-									<img alt="STYX Logo" width="150" height="80" data-sticky-width="82" data-sticky-height="40" src="<?=BASE_URL.LOGO?>">
+									<img alt="STYX Logo" width="180" height="80" data-sticky-width="82" data-sticky-height="40" data-sticky-top="25" src="<?=BASE_URL.LOGO?>">
 								</a>
 							</div>
 						</div>
 					</div>
 					<div class="header-column justify-content-end">
+						<div class="header-row pt-3">
+							<nav class="header-nav-top">
+								<ul class="nav nav-pills">
+									<li class="nav-item nav-item-anim-icon d-none d-md-block">
+										<a class="nav-link ps-0" href="about-us.html"><i class="fas fa-angle-right"></i> About Us</a>
+									</li>
+									<li class="nav-item nav-item-anim-icon d-none d-md-block">
+										<a class="nav-link" href="contact-us.html"><i class="fas fa-angle-right"></i> Contact Us</a>
+									</li>
+									<li class="nav-item dropdown nav-item-left-border d-none d-sm-block nav-item-left-border-remove nav-item-left-border-md-show">
+										<div class="d-flex">
+											<?php foreach (getLanguages() as $l){ ?>
+												<div class="active lang me-2">
+													<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="30px" alt=""></a>
+												</div>
+											<?php } ?>
+										</div>
+									</li>
+									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show">
+										<span class="ws-nowrap"><a href="<?=PHONE_HREF?>"><i class="fas fa-phone"></i> <?=PHONE?></a></span>
+									</li>
+								</ul>
+
+							</nav>
+							<div class="header-nav-features">
+								<div class="header-nav-feature header-nav-features-search d-inline-flex">
+									<a href="#" class="header-nav-features-toggle text-decoration-none" data-focus="headerSearch" aria-label="Search"><i class="fas fa-search header-nav-top-icon"></i></a>
+									<div class="header-nav-features-dropdown" id="headerTopSearchDropdown">
+										<form role="search" action="page-search-results.html" method="get">
+											<div class="simple-search input-group">
+												<input class="form-control text-1" id="headerSearch" name="q" type="search" value="" placeholder="Search...">
+												<button class="btn" type="submit" aria-label="Search">
+													<i class="fas fa-search header-nav-top-icon"></i>
+												</button>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="header-nav-feature header-nav-features-cart d-inline-flex ms-2">
+									<a href="#" class="header-nav-features-toggle" aria-label="">
+										<img src="img/icons/icon-cart.svg" width="14" alt="" class="header-nav-top-icon-img">
+										<span class="cart-info d-none">
+                                                <span class="cart-qty">1</span>
+                                            </span>
+									</a>
+									<div class="header-nav-features-dropdown" id="headerTopCartDropdown">
+										<ol class="mini-products-list">
+											<li class="item">
+												<a href="#" title="Camera X1000" class="product-image"><img src="img/products/product-1.jpg" alt="Camera X1000"></a>
+												<div class="product-details">
+													<p class="product-name">
+														<a href="#">Camera X1000</a>
+													</p>
+													<p class="qty-price">
+														1X <span class="price">$890</span>
+													</p>
+													<a href="#" title="Remove This Item" class="btn-remove"><i class="fas fa-times"></i></a>
+												</div>
+											</li>
+										</ol>
+										<div class="totals">
+											<span class="label">Total:</span>
+											<span class="price-total"><span class="price">$890</span></span>
+										</div>
+										<div class="actions">
+											<a class="btn btn-dark" href="#">View Cart</a>
+											<a class="btn btn-primary" href="#">Checkout</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="header-row">
-							<div class="header-nav header-nav-line header-nav-bottom-line">
-								<div class="header-nav-main header-nav-main-square header-nav-main-dropdown-no-borders header-nav-main-effect-2 header-nav-main-sub-effect-1">
+							<div class="header-nav pt-1">
+								<div class="header-nav-main header-nav-main-effect-1 header-nav-main-sub-effect-1">
 									<nav class="collapse">
-										<ul class="nav nav-pills flex-column flex-lg-row" id="mainNav">
-											<?php if (!empty($menuItems)): ?>
-												<?php foreach ($menuItems as $index => $item): ?>
-													<?php $url = empty($item->url) ? BASE_URL : $item->url; ?>
-													<li class="dropdown <?= !empty($item->children) ? 'has-children' : '' ?>">
-														<a class="dropdown-item <?= ($current_url == $url) ? 'active' : '' ?>" href="<?= $url ?>" data-lang="<?= $item->lang ?>">
-															<?= $item->name ?>
-															<?php if (!empty($item->children)): ?>
-																<i class="fas fa-angle-down ms-2"></i>
-															<?php endif; ?>
-														</a>
-														<?php if (!empty($item->children)): ?>
-															<ul class="dropdown-menu">
-																<?php foreach ($item->children as $child): ?>
-																	<?php $child_url = empty($child->url) ? BASE_URL : $child->url; ?>
-																	<li>
-																		<a class="dropdown-item <?= ($current_url == $child_url) ? 'active' : '' ?>" href="<?= $child_url ?>" data-lang="<?= $child->lang ?>">
-																			<?= $child->name ?>
-																		</a>
-																	</li>
-																<?php endforeach; ?>
-															</ul>
-														<?php endif; ?>
-													</li>
-												<?php endforeach; ?>
-											<?php else: ?>
-												<li><a class="dropdown-item" href="#">No menu items found</a></li>
-											<?php endif; ?>
+										<ul class="nav nav-pills" id="mainNav">
+											<?php foreach (getMenu() as $menu) { ?>
+												<li class="nav-item dropdown">
+													<a class="nav-link dropdown-toggle" href="<?= BASE_URL . $menu['url'] ?>">
+														<?= $menu['name'] ?>
+														<?php if (isset($menu['parent'])){ ?>
+															<i class="fa fa-angle-down"></i>
+														<?php } ?>
+													</a>
+													<?php if (isset($menu['parent'])){ ?>
+														<ul class="dropdown-menu">
+															<?php foreach ($menu['parent'] as $subMenu) { ?>
+																<li><a class="dropdown-item" href="<?= BASE_URL . $subMenu['url'] ?>"><?= $subMenu['name'] ?></a></li>
+															<?php } ?>
+														</ul>
+													<?php } ?>
+												</li>
+											<?php } ?>
 										</ul>
-
-
-
-
 									</nav>
 								</div>
 								<ul class="header-social-icons social-icons d-none d-sm-block">
@@ -112,125 +127,4 @@
 		</div>
 	</header>
 </div>
-
-<script>
-	document.addEventListener('DOMContentLoaded', function() {
-		const languageMap = {
-			'en': {
-				flagClass: 'flag-us',
-				text: 'English'
-			},
-			'de': {
-				flagClass: 'flag-at',
-				text: 'Deutsch'
-			}
-		};
-
-		function setLanguage(lang) {
-			const flagImg = document.getElementById('languageFlag');
-			const langText = document.getElementById('languageText');
-
-			if (languageMap[lang]) {
-				flagImg.className = 'flag ' + languageMap[lang].flagClass;
-				flagImg.alt = languageMap[lang].text;
-				langText.textContent = languageMap[lang].text;
-			}
-		}
-
-		function saveLanguage(lang) {
-			localStorage.setItem('selectedLanguage', lang);
-		}
-
-		function loadLanguage() {
-			return localStorage.getItem('selectedLanguage') || 'de';
-		}
-
-		function loadMenu(lang) {
-			fetch(`<?=BASE_URL?>app/get_menu/${lang}`)
-				.then(response => response.json())
-				.then(data => {
-					renderMenu(data.menuItems);
-				})
-				.catch(error => console.error('Error loading menu:', error));
-		}
-
-		function renderMenu(menuItems) {
-			const menu = document.getElementById('mainNav');
-			menu.innerHTML = ''; // Clear existing menu
-
-			if (menuItems.length > 0) {
-				menuItems.forEach(item => {
-					const menuItem = document.createElement('li');
-					menuItem.className = 'dropdown ' + (item.children && item.children.length ? 'has-children' : '');
-
-					const link = document.createElement('a');
-					link.className = 'dropdown-item';
-					link.href = item.url || '<?=BASE_URL?>';
-					link.textContent = item.name;
-
-					if (item.children && item.children.length > 0) {
-						const arrowIcon = document.createElement('i');
-						arrowIcon.className = 'fas fa-angle-down ms-2';
-						link.appendChild(arrowIcon);
-					}
-
-					menuItem.appendChild(link);
-
-					if (item.children && item.children.length > 0) {
-						const subMenu = document.createElement('ul');
-						subMenu.className = 'dropdown-menu';
-
-						item.children.forEach(child => {
-							const subMenuItem = document.createElement('li');
-							const subLink = document.createElement('a');
-							subLink.className = 'dropdown-item';
-							subLink.href = child.url || '<?=BASE_URL?>';
-							subLink.textContent = child.name;
-
-							subMenuItem.appendChild(subLink);
-							subMenu.appendChild(subMenuItem);
-						});
-
-						menuItem.appendChild(subMenu);
-					}
-
-					menu.appendChild(menuItem);
-				});
-			} else {
-				const noItems = document.createElement('li');
-				noItems.innerHTML = '<a class="dropdown-item" href="#">No menu items found</a>';
-				menu.appendChild(noItems);
-			}
-		}
-
-		const currentLanguage = loadLanguage();
-		setLanguage(currentLanguage);
-		loadMenu(currentLanguage);
-
-		document.querySelectorAll('.dropdown-item[data-lang]').forEach(item => {
-			item.addEventListener('click', function(event) {
-				event.preventDefault();
-				const selectedLang = this.getAttribute('data-lang');
-				saveLanguage(selectedLang);
-				window.location.href = `<?=BASE_URL?>${selectedLang}/`; // Update URL and reload page
-			});
-		});
-
-		const menuItemsWithChildren = document.querySelectorAll('.has-children > a');
-
-		menuItemsWithChildren.forEach(item => {
-			item.addEventListener('click', function(event) {
-				event.preventDefault();
-				const submenu = this.nextElementSibling;
-				if (submenu.style.display === 'block') {
-					submenu.style.display = 'none';
-				} else {
-					submenu.style.display = 'block';
-				}
-			});
-		});
-	});
-</script>
-
-
 </body>

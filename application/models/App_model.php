@@ -2,7 +2,22 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class app_model extends CI_Model {
-    
+
+	function routes($lang){
+
+		if ($this->uri->segment('2') == NULL){
+			$url = $this->uri->segment('1');
+		} else {
+			$url = $this->uri->segment('2');
+		}
+		$this->db->select('*');
+		$this->db->where('lang',$lang);
+		$this->db->where('url',$url);
+		$article = $this->db->get('articles')->row();
+
+//        ddd($article);
+		return $article;
+	}
 
 	function getUser($id = false){
 
@@ -10,50 +25,6 @@ class app_model extends CI_Model {
 		$this->db->where('id',$id);
 		return $this->db->get('users')->row();
 
-	}
-
-
-	public function get_menu_items($lang = 'de') {
-		$this->db->select('*');
-		$this->db->from('menu');
-		$this->db->where('lang', $lang);
-		$this->db->order_by('orderBy', 'ASC');
-		$query = $this->db->get();
-
-		// Debugging: vypíše načítané položky
-		$menuItems = $query->result();
-		log_message('debug', 'Menu items for lang: ' . $lang . ' - ' . json_encode($menuItems));
-
-		$menu = array();
-		foreach ($menuItems as $item) {
-			if ($item->parent == 0) {
-				$menu[] = $item;
-			}
-		}
-
-		foreach ($menu as $key => $parent) {
-			$parent->children = array();
-			foreach ($menuItems as $item) {
-				if ($item->parent == $parent->id) {
-					$parent->children[] = $item;
-				}
-			}
-		}
-
-		return $menu;
-	}
-
-
-
-
-// Method to retrieve child menu items
-	private function get_menu_children($parent_id) {
-		$this->db->select('*');
-		$this->db->from('menu');
-		$this->db->where('parent', $parent_id);
-		$this->db->order_by('orderBy', 'ASC');
-		$query = $this->db->get();
-		return $query->result();
 	}
 
 

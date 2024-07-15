@@ -14,67 +14,51 @@ class App extends CI_Controller
 		$this->load->model(array('App_model','Mail_model'));
 		$this->load->language('app_lang');
 		setlocale(LC_ALL,'de_DE');
-		$this->load->language('app_lang');
 
-		$this->load_global_data();
 
-//		require_once APP_PATH . '/vendor/autoload.php';
-		$this->output->set_status_header(200);
-		$this->load_language_from_url();
 	}
 
 
-	public function index() {
-		$this->load_language_from_url();
+	function index(){
+		$this->home();
+	}
 
-		if ($this->input->cookie('performance_cookies') === 'true') {
-			// Inicializuj analytický kód
+	function home(){
+
+
+		if (empty($id)) {
+
+
+			$data['user'] = $this->ion_auth->user()->row();
+			$data['sliders'] = $this->App_model->getSliders(true);
+			$data['news'] = $this->App_model->getNews();
+
+
+			$data['description'] = lang('HOME_DESCRIPTION');
+			$data['keywords'] = lang('HOME_KEYWORDS');
+			$data['image'] = BASE_URL . 'img/metaOg1.jpg';
+			$data['page'] = 'home';
+			$data['title'] ='Minidoku';
+			$this->load->view('layout/normal', $data);
+
+		}else{
+
+
+			$data['user'] = $this->ion_auth->user()->row();
+			$data['sliders'] = $this->App_model->getSliders(true);
+			$data['news'] = $this->App_model->getNews();
+
+			$data['page'] = 'home';
+			$data['description'] = lang('HOME_DESCRIPTION');
+			$data['keywords'] = lang('HOME_KEYWORDS');
+			$data['image'] = BASE_URL . 'img/metaOg1.jpg';
+			$data['title'] ='Minidoku';
+			$this->load->view('layout/normal', $data);
 		}
 
-		if ($this->input->cookie('functional_cookies') === 'true') {
-			// Ulož alebo načítaj užívateľské nastavenia
-		}
-
-		if ($this->input->cookie('targeting_cookies') === 'true') {
-			// Zobraz cielené reklamy
-		}
-		$data['user'] = $this->ion_auth->user()->row();
-		$data['sliders'] = $this->App_model->getSliders(true);
-		$data['news'] = $this->App_model->getNews();
-
-		$data['title'] = 'STYX Remise - Die neue Eventlocation in Ober-Grafendorf';
-		$data['description'] = 'STYX Remise - Die neue Eventlocation in Ober-Grafendorf';
-		$data['keywords'] = 'STYX, Remise, Events, Event, Location, Feiern, Feste, Feier, Fest, Hochzeit, Seminare, Messen, Tagungen, Konzerte, Nieder-Österreich';
-		$data['page'] = 'home';
-		$this->load->view('layout/normal', $data);
 	}
 
-	protected function load_language_from_url() {
-		$uri_segment = $this->uri->segment(1);
-		$available_languages = ['en', 'de'];
 
-		if (in_array($uri_segment, $available_languages)) {
-			$lang = $uri_segment;
-		} else {
-			$lang = 'de';
-		}
-		$this->load_global_data($lang);
-		$this->config->set_item('language', $lang); // Update language in config
-	}
-
-	protected function load_global_data($lang = 'de') {
-		$data = array();
-		load_menu_data($data, $lang);
-		$this->load->vars($data);
-		// Debugging: vypíše aktuálny jazyk a menu položky
-		log_message('debug', 'Global data loaded for lang: ' . $lang . ' - ' . json_encode($data['menuItems']));
-	}
-
-	public function get_menu($lang) {
-		$this->load->model('App_model');
-		$menuItems = $this->App_model->get_menu_items($lang);
-		echo json_encode(['menuItems' => $menuItems]);
-	}
 
 
 

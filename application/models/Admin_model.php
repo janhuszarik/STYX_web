@@ -80,6 +80,12 @@ function getNewsletters(){
 		}
 		return $menu;
 	}
+	public function menuDelete($id) {
+
+		$this->db->where('id', $id);
+		return $this->db->delete('menu');
+
+	}
 
 
 	public function get_all_sliders() {
