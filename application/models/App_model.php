@@ -19,10 +19,10 @@ class app_model extends CI_Model {
 		$this->db->where('lang', $lang);
 		$this->db->order_by('orderBy', 'ASC');
 		$query = $this->db->get();
-		$menuItems = $query->result();
 
-		// Debugovací výpis
-		log_message('debug', 'Menu items loaded for lang ' . $lang . ': ' . print_r($menuItems, true));
+		// Debugging: vypíše načítané položky
+		$menuItems = $query->result();
+		log_message('debug', 'Menu items for lang: ' . $lang . ' - ' . json_encode($menuItems));
 
 		$menu = array();
 		foreach ($menuItems as $item) {
@@ -42,6 +42,7 @@ class app_model extends CI_Model {
 
 		return $menu;
 	}
+
 
 
 

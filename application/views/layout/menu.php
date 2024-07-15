@@ -10,7 +10,7 @@
 								<nav class="header-nav-top">
 									<ul class="nav nav-pills text-uppercase text-2">
 										<li class="nav-item nav-item-anim-icon d-none d-md-block">
-											<a style="font-weight: bold; color: #14c500; font-size: 13px" class="nav-link ps-0" href="https://www.aroma-derm.com/login.php"><i class="fas fa-angle-right"></i> <?=lang('PRICE_HEADER')?></a>
+											<a style="font-weight: bold; color: #14c500; font-size: 13px" class="nav-link ps-0" href="https://www.aroma-derm.com/login.php"><i class="fas fa-angle-right"></i> <?=lang('HÄNDLER_TEXT')?></a>
 										</li>
 
 										<li class="nav-item dropdown nav-item-left-border d-none d-sm-block nav-item-left-border-remove nav-item-left-border-md-show">
@@ -33,10 +33,10 @@
 								<nav class="header-nav-top">
 									<ul class="nav nav-pills">
 										<li class="nav-item">
-											<a href="mailto:mail@domain.com"><i class="far fa-envelope text-4 text-color-primary" style="top: 1px;"></i> mail@domain.com</a>
+											<a href="mailto:<?=lang('EMAIL')?>"><i class="far fa-envelope text-4 text-color-primary" style="top: 1px;"></i><?=lang('EMAIL')?></a>
 										</li>
 										<li class="nav-item">
-											<a href="tel:123-456-7890"><i class="fab fa-whatsapp text-4 text-color-primary" style="top: 0;"></i> 123-456-7890</a>
+											<a href="tel:<?=lang('PHONE_NUMBER')?>"><i class="fab fa-whatsapp text-4 text-color-primary" style="top: 0;"></i> <?=lang('PHONE_NUMBER')?></a>
 										</li>
 									</ul>
 								</nav>
@@ -66,7 +66,7 @@
 												<?php foreach ($menuItems as $index => $item): ?>
 													<?php $url = empty($item->url) ? BASE_URL : $item->url; ?>
 													<li class="dropdown <?= !empty($item->children) ? 'has-children' : '' ?>">
-														<a class="dropdown-item <?= ($current_url == $url) ? 'active' : '' ?>" href="<?= $url ?>">
+														<a class="dropdown-item <?= ($current_url == $url) ? 'active' : '' ?>" href="<?= $url ?>" data-lang="<?= $item->lang ?>">
 															<?= $item->name ?>
 															<?php if (!empty($item->children)): ?>
 																<i class="fas fa-angle-down ms-2"></i>
@@ -77,7 +77,7 @@
 																<?php foreach ($item->children as $child): ?>
 																	<?php $child_url = empty($child->url) ? BASE_URL : $child->url; ?>
 																	<li>
-																		<a class="dropdown-item <?= ($current_url == $child_url) ? 'active' : '' ?>" href="<?= $child_url ?>">
+																		<a class="dropdown-item <?= ($current_url == $child_url) ? 'active' : '' ?>" href="<?= $child_url ?>" data-lang="<?= $child->lang ?>">
 																			<?= $child->name ?>
 																		</a>
 																	</li>
@@ -90,6 +90,10 @@
 												<li><a class="dropdown-item" href="#">No menu items found</a></li>
 											<?php endif; ?>
 										</ul>
+
+
+
+
 									</nav>
 								</div>
 								<ul class="header-social-icons social-icons d-none d-sm-block">
@@ -141,16 +145,75 @@
 			return localStorage.getItem('selectedLanguage') || 'de';
 		}
 
+		function loadMenu(lang) {
+			fetch(`<?=BASE_URL?>app/get_menu/${lang}`)
+				.then(response => response.json())
+				.then(data => {
+					renderMenu(data.menuItems);
+				})
+				.catch(error => console.error('Error loading menu:', error));
+		}
+
+		function renderMenu(menuItems) {
+			const menu = document.getElementById('mainNav');
+			menu.innerHTML = ''; // Clear existing menu
+
+			if (menuItems.length > 0) {
+				menuItems.forEach(item => {
+					const menuItem = document.createElement('li');
+					menuItem.className = 'dropdown ' + (item.children && item.children.length ? 'has-children' : '');
+
+					const link = document.createElement('a');
+					link.className = 'dropdown-item';
+					link.href = item.url || '<?=BASE_URL?>';
+					link.textContent = item.name;
+
+					if (item.children && item.children.length > 0) {
+						const arrowIcon = document.createElement('i');
+						arrowIcon.className = 'fas fa-angle-down ms-2';
+						link.appendChild(arrowIcon);
+					}
+
+					menuItem.appendChild(link);
+
+					if (item.children && item.children.length > 0) {
+						const subMenu = document.createElement('ul');
+						subMenu.className = 'dropdown-menu';
+
+						item.children.forEach(child => {
+							const subMenuItem = document.createElement('li');
+							const subLink = document.createElement('a');
+							subLink.className = 'dropdown-item';
+							subLink.href = child.url || '<?=BASE_URL?>';
+							subLink.textContent = child.name;
+
+							subMenuItem.appendChild(subLink);
+							subMenu.appendChild(subMenuItem);
+						});
+
+						menuItem.appendChild(subMenu);
+					}
+
+					menu.appendChild(menuItem);
+				});
+			} else {
+				const noItems = document.createElement('li');
+				noItems.innerHTML = '<a class="dropdown-item" href="#">No menu items found</a>';
+				menu.appendChild(noItems);
+			}
+		}
+
 		const currentLanguage = loadLanguage();
 		setLanguage(currentLanguage);
+		loadMenu(currentLanguage);
 
-		document.querySelectorAll('.dropdown-item').forEach(item => {
+		document.querySelectorAll('.dropdown-item[data-lang]').forEach(item => {
 			item.addEventListener('click', function(event) {
 				event.preventDefault();
 				const selectedLang = this.getAttribute('data-lang');
 				saveLanguage(selectedLang);
 				setLanguage(selectedLang);
-				window.location.href = selectedLang === 'en' ? '<?=BASE_URL?>en' : '<?=BASE_URL?>de';
+				loadMenu(selectedLang);
 			});
 		});
 
@@ -168,6 +231,10 @@
 			});
 		});
 	});
+
+
+
+
 </script>
 
 </body>

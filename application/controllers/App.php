@@ -64,7 +64,19 @@ class App extends CI_Controller
 		$data = array();
 		load_menu_data($data, $lang);
 		$this->load->vars($data);
+		// Debugging: vypíše aktuálny jazyk a menu položky
+		log_message('debug', 'Global data loaded for lang: ' . $lang . ' - ' . json_encode($data['menuItems']));
 	}
+	public function get_menu($lang) {
+		$this->load->model('App_model');
+		$menuItems = $this->App_model->get_menu_items($lang);
+		echo json_encode(['menuItems' => $menuItems]);
+	}
+
+
+
+
+
 
 
 

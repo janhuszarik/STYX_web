@@ -13,11 +13,12 @@ if (!function_exists('load_menu_data')) {
 		$CI =& get_instance();
 		$CI->load->model('App_model');
 		$data['menuItems'] = $CI->App_model->get_menu_items($lang);
-
-		// Debugovací výpis
-		log_message('debug', 'Menu items data: ' . print_r($data['menuItems'], true));
+		// Debugging: vypíše načítané menu položky
+		log_message('debug', 'Loaded menu items for lang: ' . $lang . ' - ' . json_encode($data['menuItems']));
 	}
 }
+
+
 
 
 
