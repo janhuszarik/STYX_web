@@ -212,8 +212,7 @@
 				event.preventDefault();
 				const selectedLang = this.getAttribute('data-lang');
 				saveLanguage(selectedLang);
-				setLanguage(selectedLang);
-				loadMenu(selectedLang);
+				window.location.href = `<?=BASE_URL?>${selectedLang}/`; // Update URL and reload page
 			});
 		});
 
@@ -231,10 +230,7 @@
 			});
 		});
 	});
-
-
-
-
 </script>
+
 
 </body>

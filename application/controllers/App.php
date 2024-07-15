@@ -25,9 +25,8 @@ class App extends CI_Controller
 
 
 	public function index() {
+		$this->load_language_from_url();
 
-
-		// Prispôsobenie podľa cookies
 		if ($this->input->cookie('performance_cookies') === 'true') {
 			// Inicializuj analytický kód
 		}
@@ -49,15 +48,18 @@ class App extends CI_Controller
 		$data['page'] = 'home';
 		$this->load->view('layout/normal', $data);
 	}
+
 	protected function load_language_from_url() {
 		$uri_segment = $this->uri->segment(1);
 		$available_languages = ['en', 'de'];
 
 		if (in_array($uri_segment, $available_languages)) {
-			$this->load_global_data($uri_segment);
+			$lang = $uri_segment;
 		} else {
-			$this->load_global_data();
+			$lang = 'de';
 		}
+		$this->load_global_data($lang);
+		$this->config->set_item('language', $lang); // Update language in config
 	}
 
 	protected function load_global_data($lang = 'de') {
@@ -67,6 +69,7 @@ class App extends CI_Controller
 		// Debugging: vypíše aktuálny jazyk a menu položky
 		log_message('debug', 'Global data loaded for lang: ' . $lang . ' - ' . json_encode($data['menuItems']));
 	}
+
 	public function get_menu($lang) {
 		$this->load->model('App_model');
 		$menuItems = $this->App_model->get_menu_items($lang);
