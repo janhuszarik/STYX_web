@@ -92,35 +92,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/news/edit/:num'] 			= 'admin/newsSave';
 	$route['admin/news/del/:num']			= 'admin/newsSave';
 
-	$route['tagung-seminare'] 				= 'app/tagungSeminare';
-	$route['hochzeiten'] 					= 'app/hochzeiten';
-	$route['feste-feiern'] 					= 'app/festeFeiern';
-	$route['bier-wein-verkostung'] 			= 'app/bierWeinVerkostung';
-	$route['rahmenprogramm'] 				= 'app/rahmenprogramm';
-	$route['service-catering'] 				= 'app/serviceCatering';
-	$route['austattung'] 					= 'app/serviceRemise';
-	$route['downloads'] 					= 'app/downloads';
-	$route['kontakt'] 						= 'app/kontakt';
-	$route['impressum'] 					= 'app/impressum';
-	$route['gdpr'] 							= 'app/gdpr';
-	$route['cookies'] 						= 'app/cookies';
+
 
 	$route['set-cookie-consent'] 			= 'app/set_cookie_consent';
 	$route['decline-cookie-consent'] 		= 'app/decline_cookie_consent';
 
-//	$route[':any'] 							= 'app/routes';
-//	$route[':any/:any'] 					= 'app/routes';
-//	$route['search'] 						= 'app/routes';
-$route[':any'] = 'app/routes';
+	$route[':any'] = 'app/routes';
 
-$route[':any'] = 'app/routes';
-$route[':any/:any'] = 'app/routes';
-$route['search'] = 'app/routes';
+	$route[':any'] = 'app/routes';
+	$route[':any/:any'] = 'app/routes';
+	$route['search'] = 'app/routes';
 
-$route['^en/(.+)$'] = "$1";
-$route['^de/(.+)$'] = "$1";
+	$route['^en/(.+)$'] = "$1";
+	$route['^de/(.+)$'] = "$1";
 
-$route['^en$'] = $route['default_controller'];
-$route['^de$'] = $route['default_controller'];
+	$route['^en$'] = $route['default_controller'];
+	$route['^de$'] = $route['default_controller'];
 
 

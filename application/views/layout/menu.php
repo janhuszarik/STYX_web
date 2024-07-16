@@ -1,3 +1,49 @@
+<style>/* Základné štýly */
+	.nav-item .dropdown-menu {
+		display: none;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.nav-item:hover .dropdown-menu {
+		display: block;
+	}
+
+	.nav-item.active > a {
+		background-color: #007bff;
+		color: white;
+	}
+
+	/* Animácie a efekty */
+	.dropdown-toggle::after {
+		transition: transform 0.3s ease-in-out;
+	}
+
+	.nav-item:hover .dropdown-toggle::after {
+		transform: rotate(180deg);
+	}
+
+	/* Responzívne menu */
+	@media (max-width: 768px) {
+		.nav {
+			flex-direction: column;
+		}
+
+		.nav-item {
+			width: 100%;
+		}
+
+		.nav-item .dropdown-menu {
+			position: static;
+			float: none;
+		}
+
+		.dropdown-menu .dropdown-item {
+			width: 100%;
+		}
+	}
+
+</style>
+
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyStartAt': 45, 'stickySetTop': '-45px', 'stickyChangeLogo': true}">
@@ -91,17 +137,18 @@
 								<div class="header-nav-main header-nav-main-effect-1 header-nav-main-sub-effect-1">
 									<nav class="collapse">
 										<ul class="nav nav-pills" id="mainNav">
+											<?php $currentUrl = getCurrentUrl(); ?>
 											<?php foreach (getMenu() as $menu) { ?>
-												<li class="nav-item dropdown">
+												<li class="nav-item dropdown <?= $menu['url'] == $currentUrl ? 'active' : '' ?>">
 													<a class="nav-link dropdown-toggle" href="<?= BASE_URL . $menu['url'] ?>">
 														<?= $menu['name'] ?>
-														<?php if (isset($menu['parent'])){ ?>
+														<?php if ($menu['has_child']) { ?>
 															<i class="fa fa-angle-down"></i>
 														<?php } ?>
 													</a>
-													<?php if (isset($menu['parent'])){ ?>
+													<?php if ($menu['has_child']) { ?>
 														<ul class="dropdown-menu">
-															<?php foreach ($menu['parent'] as $subMenu) { ?>
+															<?php foreach ($menu['children'] as $subMenu) { ?>
 																<li><a class="dropdown-item" href="<?= BASE_URL . $subMenu['url'] ?>"><?= $subMenu['name'] ?></a></li>
 															<?php } ?>
 														</ul>
@@ -109,6 +156,10 @@
 												</li>
 											<?php } ?>
 										</ul>
+
+
+
+
 									</nav>
 								</div>
 								<ul class="header-social-icons social-icons d-none d-sm-block">
@@ -128,3 +179,22 @@
 	</header>
 </div>
 </body>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		var toggles = document.querySelectorAll(".dropdown-toggle");
+		toggles.forEach(function(toggle) {
+			toggle.addEventListener("click", function(e) {
+				if (window.innerWidth <= 768) {
+					e.preventDefault();
+					var menu = this.nextElementSibling;
+					if (menu.style.display === "block") {
+						menu.style.display = "none";
+					} else {
+						menu.style.display = "block";
+					}
+				}
+			});
+		});
+	});
+
+</script>
