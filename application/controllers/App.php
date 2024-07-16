@@ -129,7 +129,7 @@ class App extends CI_Controller
 	function error404(){
         
         header("HTTP/1.1 404 Not Found");
-        $data['title'] = 'Chyba 404 ';
+        $data['title'] = 'Fehler 404 ';
         $data['page'] = 'chyba';
         $data['description'] = '';
         $data['keywords'] = '';

@@ -53,7 +53,7 @@
 			return $info;
 
 		} else {
-			echo 'chyba';
+			echo 'fehler';
 		}
 
 	}
@@ -160,7 +160,7 @@ function getMenu() {
 
 
 
-function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = 'Chyba!'){
+function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = 'Fehler!'){
 
 		if (empty($data) || $data == NULL){
 
