@@ -113,3 +113,66 @@
 		display: inline-flex; /* or 'block' if 'inline-flex' is not suitable */
 	}
 }
+.container {
+	display: flex;
+	align-items: center;
+	padding: 0 0 10px 0;
+}
+
+.pulse-button {
+	background-color: #13814d;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 3px 40px;
+	font-size: 14px;
+	cursor: pointer;
+	outline: none;
+	animation: pulse 2s infinite;
+	display: flex;
+	align-items: center;
+	position: relative;
+	overflow: hidden;
+}
+
+.aroma-button {
+	background-color: #13814d;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 3px 20px;
+	font-size: 13px;
+	cursor: pointer;
+	outline: none;
+	display: flex;
+	align-items: center;
+	position: relative;
+	overflow: hidden;
+}
+
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgb(107, 188, 75);
+	}
+	70% {
+		transform: scale(1.1);
+		box-shadow: 0 0 10px 20px rgba(0, 123, 255, 0);
+	}
+	100% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+	}
+}
+
+.lang img {
+	vertical-align: middle;
+}
+.nav-item a {
+	text-decoration: none; /* Remove underline by default */
+}
+.nav-item a:hover {
+	text-decoration: none; /* Remove underline on hover */
+}
+

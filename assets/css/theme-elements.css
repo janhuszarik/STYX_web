@@ -14884,7 +14884,7 @@ html.boxed .slider-container {
 }
 
 .social-icons:not(.social-icons-opacity-light):not(.social-icons-transparent):not(.social-icons-clean):not(.social-icons-clean-with-border):not(.social-icons-dark):not(.social-icons-dark-2):not(.custom-social-icons) li {
-	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .social-icons:not(.social-icons-opacity-light):not(.social-icons-transparent):not(.social-icons-clean):not(.social-icons-clean-with-border):not(.social-icons-dark):not(.social-icons-dark-2):not(.custom-social-icons) li a {

@@ -1,86 +1,4 @@
-<style>
-	.container {
-		display: flex;
-		align-items: center;
-		padding: 0 0 10px 0;
-	}
 
-	.pulse-button {
-		background-color: #13814d;
-		color: white;
-		border: none;
-		border-radius: 5px;
-		padding: 5px 40px;
-		font-size: 16px;
-		cursor: pointer;
-		outline: none;
-		animation: pulse 2s infinite;
-		display: flex;
-		align-items: center;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.aroma-button {
-		background-color: #13814d;
-		color: white;
-		border: none;
-		border-radius: 5px;
-		padding: 5px 20px;
-		font-size: 16px;
-		cursor: pointer;
-		outline: none;
-		display: flex;
-		align-items: center;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.cart-icon {
-		margin-right: 10px;
-		font-size: 24px;
-		position: absolute;
-		z-index: -1;
-		animation: move-cart 6s infinite;
-	}
-
-	@keyframes pulse {
-		0% {
-			transform: scale(1);
-			box-shadow: 0 0 0 0 rgb(107, 188, 75);
-		}
-		70% {
-			transform: scale(1.1);
-			box-shadow: 0 0 10px 20px rgba(0, 123, 255, 0);
-		}
-		100% {
-			transform: scale(1);
-			box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
-		}
-	}
-
-	@keyframes move-cart {
-		0% {
-			transform: translateX(-250%);
-		}
-		25% {
-			transform: translateX(0);
-		}
-		50% {
-			transform: translateX(250%);
-		}
-		75% {
-			transform: translateX(100%);
-		}
-		100% {
-			transform: translateX(-250%);
-		}
-	}
-	.lang img {
-		vertical-align: middle;
-	}
-
-</style>
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyStartAt': 45, 'stickySetTop': '-45px', 'stickyChangeLogo': true}">
@@ -119,9 +37,10 @@
 
 									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
 										<div class="container">
-											<button class="pulse-button">
-												<span style="font-weight: bold" class="cart-icon">&#128722;</span> SHOP
-											</button>
+
+											<a href="https://shop.styx.at/"><button class="pulse-button">
+												<span style="font-weight: bold" </span> SHOP
+												</button></a>
 										</div>
 									</li>
 
@@ -172,9 +91,11 @@
 									</nav>
 								</div>
 								<ul class="header-social-icons social-icons d-none d-sm-block">
-									<li class="social-icons-facebook"><a href="http://www.facebook.com/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
-									<li class="social-icons-twitter"><a href="http://www.twitter.com/" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a></li>
-									<li class="social-icons-linkedin"><a href="http://www.linkedin.com/" target="_blank" title="Linkedin"><i class="fab fa-linkedin-in"></i></a></li>
+									<li class="social-icons-facebook"><a href="https://www.facebook.com/www.styx.at/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+									<li class="social-icons-instagram"><a href="https://www.instagram.com/styx.naturcosmetic/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a></li>
+									<li class="social-icons-pinterest"><a href="https://at.pinterest.com/styxnaturcosmetic/" target="_blank" title="Linkedin"><i class="fab fa-pinterest"></i></a></li>
+									<li class="social-icons-youtube"><a href="https://www.youtube.com/channel/UCxpLOYYahcENUfVnacBvagA" target="_blank" title="Linkedin"><i class="fab fa-youtube"></i></a></li>
+									<li class="social-icons-email"><a href="mailto:info@styx.at" target="_blank" title="email"><i class="fa fa-envelope"></i></a></li>
 								</ul>
 								<button class="btn header-btn-collapse-nav" data-bs-toggle="collapse" data-bs-target=".header-nav-main nav">
 									<i class="fas fa-bars"></i>
