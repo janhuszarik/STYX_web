@@ -132,7 +132,7 @@
 											<?php $currentUrl = getCurrentUrl(); ?>
 											<?php foreach (getMenu() as $menu) { ?>
 												<li class="nav-item dropdown <?= $menu['url'] == $currentUrl ? 'active' : '' ?>">
-													<a class="nav-link dropdown-toggle" href="<?= isExternalLink($menu['url']) ? $menu['url'] : BASE_URL . $menu['url'] ?>">
+													<a class="nav-link dropdown-toggle" href="<?= $menu['is_external'] ? $menu['url'] : BASE_URL . $menu['url'] ?>" target="<?= $menu['is_external'] ? '_blank' : '_self' ?>">
 														<?= $menu['name'] ?>
 														<?php if ($menu['has_child']) { ?>
 															<i class="fa fa-angle-down"></i>
@@ -141,22 +141,13 @@
 													<?php if ($menu['has_child']) { ?>
 														<ul class="dropdown-menu">
 															<?php foreach ($menu['children'] as $subMenu) { ?>
-																<li><a class="dropdown-item" href="<?= isExternalLink($subMenu['url']) ? $subMenu['url'] : BASE_URL . $subMenu['url'] ?>"><?= $subMenu['name'] ?></a></li>
+																<li><a class="dropdown-item" href="<?= $subMenu['is_external'] ? $subMenu['url'] : BASE_URL . $subMenu['url'] ?>" target="<?= $subMenu['is_external'] ? '_blank' : '_self' ?>"><?= $subMenu['name'] ?></a></li>
 															<?php } ?>
 														</ul>
 													<?php } ?>
 												</li>
 											<?php } ?>
 										</ul>
-
-										<?php
-										function isExternalLink($url) {
-											return preg_match('/^(http:\/\/|https:\/\/)/', $url);
-										}
-										?>
-
-
-
 
 
 									</nav>

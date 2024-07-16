@@ -88,54 +88,57 @@
 }
 
 	function getMenu() {
-	$ci = get_instance(); // Získanie inštancie CodeIgniter frameworku
+	$ci = get_instance();
 
-	// Získanie hlavného menu
-	$ci->db->select('*'); // Výber všetkých stĺpcov
-	$ci->db->where('active', '1'); // Podmienka, že položka menu musí byť aktívna
-	$ci->db->where('lang', language()); // Podmienka na filtrovanie podľa jazyka
-	$ci->db->order_by('orderBy', 'ASC'); // Triedenie podľa stĺpca 'orderBy' vzostupne
-	$mainMenuItems = $ci->db->get('menu')->result(); // Vykonanie dotazu a získanie výsledkov ako pole objektov
+	$ci->db->select('*');
+	$ci->db->where('active', '1');
+	$ci->db->where('lang', language());
+	$ci->db->order_by('orderBy', 'ASC');
+	$mainMenuItems = $ci->db->get('menu')->result();
 
-	// Získanie podmenu
-	$ci->db->select('*'); // Výber všetkých stĺpcov
-	$ci->db->where('parent !=', '0'); // Podmienka, že položka musí mať rodiča (nie je hlavné menu)
-	$ci->db->where('active', '1'); // Podmienka, že položka musí byť aktívna
-	$ci->db->where('lang', language()); // Podmienka na filtrovanie podľa jazyka
-	$ci->db->order_by('orderBy', 'ASC'); // Triedenie podľa stĺpca 'orderBy' vzostupne
-	$subMenuItems = $ci->db->get('menu')->result(); // Vykonanie dotazu a získanie výsledkov ako pole objektov
+	$ci->db->select('*');
+	$ci->db->where('parent !=', '0');
+	$ci->db->where('active', '1');
+	$ci->db->where('lang', language());
+	$ci->db->order_by('orderBy', 'ASC');
+	$subMenuItems = $ci->db->get('menu')->result();
 
-	$formattedMenu = array(); // Inicializácia prázdneho poľa pre výstupné menu
+	$formattedMenu = array();
 	foreach ($mainMenuItems as $mainKey => $mainItem) {
-		if ($mainItem->parent) continue; // Ak má položka rodiča, preskoč ju (nie je hlavné menu)
+		if ($mainItem->parent) continue;
 
-		$url = empty($mainItem->url) ? '' : $mainItem->url; // Nastavenie URL, ak je prázdne, nastav prázdny reťazec
+		$url = empty($mainItem->url) ? '' : $mainItem->url;
+		$isExternal = (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0);
 
 		$formattedMenu[$mainKey] = array(
-			'name' => $mainItem->name, // Nastavenie názvu položky menu
-			'url' => $url, // Nastavenie URL položky menu
-			'lang' => $mainItem->lang, // Nastavenie jazyka položky menu
-			'children' => array(), // Inicializácia prázdneho poľa pre podmenu
-			'has_child' => false // Predvolené nastavenie, že položka nemá podmenu
+			'name' => $mainItem->name,
+			'url' => $url,
+			'lang' => $mainItem->lang,
+			'children' => array(),
+			'has_child' => false,
+			'is_external' => $isExternal
 		);
 
 		foreach ($subMenuItems as $subKey => $subItem) {
-			if ($mainItem->id == $subItem->parent) { // Ak sa ID rodiča zhoduje s ID hlavného menu
-				$subUrl = empty($subItem->url) ? '' : $subItem->url; // Nastavenie URL podmenu, ak je prázdne, nastav prázdny reťazec
+			if ($mainItem->id == $subItem->parent) {
+				$subUrl = empty($subItem->url) ? '' : $subItem->url;
+				$isSubExternal = (strpos($subUrl, 'http://') === 0 || strpos($subUrl, 'https://') === 0);
 
 				$formattedMenu[$mainKey]['children'][$subKey] = array(
-					'name' => $subItem->name, // Nastavenie názvu podmenu
-					'url' => url_oprava($mainItem->name) . '/' . $subUrl, // Nastavenie URL podmenu
-					'lang' => $subItem->lang // Nastavenie jazyka podmenu
+					'name' => $subItem->name,
+					'url' => $isSubExternal ? $subUrl : url_oprava($mainItem->name) . '/' . $subUrl,
+					'lang' => $subItem->lang,
+					'is_external' => $isSubExternal
 				);
 
-				$formattedMenu[$mainKey]['has_child'] = true; // Nastavenie príznaku, že položka má podmenu
+				$formattedMenu[$mainKey]['has_child'] = true;
 			}
 		}
 	}
 
-	return $formattedMenu; // Vrátenie výsledného poľa menu
+	return $formattedMenu;
 }
+
 
 	function activeToIcon($value){
 
