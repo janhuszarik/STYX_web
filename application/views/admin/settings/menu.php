@@ -1,3 +1,17 @@
+<style>
+	/* Default table row style */
+	.menu-table tr {
+		background-color: white;
+	}
+
+	/* Hover effect only for main menu items (parent == 0) */
+	.menu-table tr.main-menu:hover {
+		background-color: #f5f5f5; /* Light gray background on hover */
+	}
+</style>
+
+
+
 <div class="col-xl-12">
 	<div class="row">
 		<div class="col-xl-6">
@@ -96,18 +110,16 @@
 				</header>
 				<div class="card-body">
 					<div class="table-responsive">
-						<table class="table table-responsive-lg table-bordered table-striped table-sm mb-0">
+						<table class="table table-responsive-lg table-bordered table-sm mb-0 menu-table">
 							<thead>
 							<tr>
-								<th>#</th>
-								<th>Sprache</th>
+								<th class="text-center">#</th>
+								<th></th>
 								<th>Menü</th>
-								<?php if ($showParentColumn) { ?>
-									<th>Übergeordnet</th>
-								<?php } ?>
-								<th>URL</th>
-								<th>Befehl</th>
-								<th>Aktiv</th>
+
+								<th class="text-center">URL</th>
+								<th class="text-center">Befehl</th>
+								<th class="text-center">Aktiv</th>
 								<th></th>
 								<th></th>
 							</tr>
@@ -123,23 +135,23 @@
 									$k++;
 									?>
 									<tr>
-										<td class="text-center" title="<?=$m->id?>"><?=$k?></td>
+										<td style="background-color: #d8d8d8" class="text-center" title="<?=$m->id?>"><?=$k?></td>
 										<?php if (count(getLanguages()) > 1){ ?>
-											<td class="text-center"><img src="<?=langInfo($m->lang)['flag']?>" width="20px" alt=""></td>
+											<td style="background-color: #d8d8d8" class="text-center"><img src="<?=langInfo($m->lang)['flag']?>" width="20px" alt=""></td>
 										<?php } ?>
-										<td><?php echo ($m->parent == 0 ? '<strong>' . $m->name . '</strong>' : ' - ' . $m->name); ?></td>
+										<td style="background-color: #d8d8d8"><?php echo ($m->parent == 0 ? '<strong>' . $m->name . '</strong>' : ' - ' . $m->name); ?></td>
 										<?php if ($showParentColumn) { ?>
 											<td class="text-center"><?php echo ($m->parent == 0 ? '' : $m->parentName); ?></td>
 										<?php } ?>
-										<td class="text-center">
-                    <span title="<?php echo $m->url; ?>">
-                        <?php echo substr($m->url, 0, 10); ?>
-                    </span>
+										<td style="background-color: #d8d8d8" class="text-center">
+                    						<span title="<?php echo $m->url; ?>">
+                        					<?php echo substr($m->url, 0, 10); ?>
+                    						</span>
 										</td>
-										<td class="text-center"><?php echo $m->orderBy; ?></td>
-										<td class="text-center"><?= active($m->active); ?></td>
-										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/menu/edit/'.$m->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
-										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/menu/del/'.$m->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
+										<td style="background-color: #d8d8d8" class="text-center"><?php echo $m->orderBy; ?></td>
+										<td style="background-color: #d8d8d8" class="text-center"><?= active($m->active); ?></td>
+										<td style="background-color: #d8d8d8" data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/menu/edit/'.$m->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
+										<td style="background-color: #d8d8d8" data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/menu/del/'.$m->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
 									</tr>
 									<?php
 									if (isset($m->submenu)) {
