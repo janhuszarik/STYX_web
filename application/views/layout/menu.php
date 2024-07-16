@@ -1,11 +1,85 @@
 <style>
-	.translucent-background {
-		background-color: rgba(209, 209, 209, 0.64); /* Semi-transparent gray */
-		backdrop-filter: blur(5px); /* Frosted glass effect */
-		-webkit-backdrop-filter: blur(5px); /* For Safari */
-		padding: 20px; /* Adding padding for better text readability */
-		border-radius: 10px; /* Optional: rounded corners for a softer look */
+	.container {
+		display: flex;
+		align-items: center;
+		padding: 0 0 10px 0;
 	}
+
+	.pulse-button {
+		background-color: #13814d;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		padding: 5px 40px;
+		font-size: 16px;
+		cursor: pointer;
+		outline: none;
+		animation: pulse 2s infinite;
+		display: flex;
+		align-items: center;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.aroma-button {
+		background-color: #13814d;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		padding: 5px 20px;
+		font-size: 16px;
+		cursor: pointer;
+		outline: none;
+		display: flex;
+		align-items: center;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.cart-icon {
+		margin-right: 10px;
+		font-size: 24px;
+		position: absolute;
+		z-index: -1;
+		animation: move-cart 6s infinite;
+	}
+
+	@keyframes pulse {
+		0% {
+			transform: scale(1);
+			box-shadow: 0 0 0 0 rgb(107, 188, 75);
+		}
+		70% {
+			transform: scale(1.1);
+			box-shadow: 0 0 10px 20px rgba(0, 123, 255, 0);
+		}
+		100% {
+			transform: scale(1);
+			box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+		}
+	}
+
+	@keyframes move-cart {
+		0% {
+			transform: translateX(-250%);
+		}
+		25% {
+			transform: translateX(0);
+		}
+		50% {
+			transform: translateX(250%);
+		}
+		75% {
+			transform: translateX(100%);
+		}
+		100% {
+			transform: translateX(-250%);
+		}
+	}
+	.lang img {
+		vertical-align: middle;
+	}
+
 </style>
 <body data-plugin-page-transition>
 <div class="body">
@@ -26,29 +100,35 @@
 						<div class="header-row pt-3">
 							<nav class="header-nav-top">
 								<ul class="nav nav-pills">
-									<li class="nav-item nav-item-anim-icon d-none d-md-block">
-										<a class="nav-link ps-0" href="<?=lang('HÄNDLER_URL')?>"><i class="fas fa-angle-right"></i> <?=lang('HÄNDLER_TEXT')?></a>
-									</li>
-									<li class="nav-item nav-item-anim-icon d-none d-md-block">
-										<a class="nav-link" href="<?=BASE_URL.'kontakt'?>"><i class="fas fa-angle-right"></i> <?=lang('CONTACT_US')?></a>
-									</li>
 									<li class="nav-item dropdown nav-item-left-border d-none d-sm-block nav-item-left-border-remove nav-item-left-border-md-show">
-										<div class="d-flex">
+										<div style="padding: 5px" class="d-flex">
 											<?php foreach (getLanguages() as $l){ ?>
 												<div class="active lang me-2">
-													<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="25px" alt=""></a>
+													<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="40px" alt=""></a>
 												</div>
 											<?php } ?>
 										</div>
 									</li>
 									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
-										<span class="ws-nowrap"><a href="<?=PHONE_HREF?>"><i class="fas fa-phone"></i> <?=PHONE?></a></span>
+										<div class="container">
+											<a href="<?=lang('HÄNDLER_URL')?>"><button class="aroma-button">
+												<?=lang('HÄNDLER_TEXT')?>
+											</button></a>
+										</div>
 									</li>
-								</ul>
 
+									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
+										<div class="container">
+											<button class="pulse-button">
+												<span style="font-weight: bold" class="cart-icon">&#128722;</span> SHOP
+											</button>
+										</div>
+									</li>
+
+								</ul>
 							</nav>
 							<div class="header-nav-features header-nav-hide">
-								<div class="header-nav-feature header-nav-features-search d-inline-flex ">
+								<div class="header-nav-feature header-nav-features-search d-inline-flex">
 									<a href="#" class="header-nav-features-toggle text-decoration-none" data-focus="headerSearch" aria-label="Search">
 										<i class="fas fa-search header-nav-top-icon"></i>
 									</a>
@@ -64,8 +144,6 @@
 									</div>
 								</div>
 							</div>
-
-
 						</div>
 						<div class="header-row">
 							<div class="header-nav pt-1">
@@ -91,8 +169,6 @@
 												</li>
 											<?php } ?>
 										</ul>
-
-
 									</nav>
 								</div>
 								<ul class="header-social-icons social-icons d-none d-sm-block">
@@ -112,11 +188,9 @@
 	</header>
 </div>
 </body>
-<?php
-// Assuming you have a variable or function to determine if it's the homepage
-$is_homepage = basename($_SERVER['PHP_SELF']) == 'index.php'; // Example check for homepage
-
-if (!$is_homepage):
+	<?php
+	$is_homepage = basename($_SERVER['PHP_SELF']) == 'index.php';
+	if (!$is_homepage):
 	?>
 	<div role="main" class="main">
 		<section class="page-header page-header-modern page-header-background page-header-background-md overlay overlay-color-primary overlay-show overlay-op-9 mb-0" style="background-image: url(<?=$image1?>);">
@@ -142,9 +216,9 @@ if (!$is_homepage):
 			</div>
 		</section>
 	</div>
-<?php
-endif;
-?>
+	<?php
+	endif;
+	?>
 
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
