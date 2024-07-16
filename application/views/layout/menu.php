@@ -1,69 +1,12 @@
-<style>/* Základné štýly */
-	.nav-item .dropdown-menu {
-		display: none;
-		transition: all 0.3s ease-in-out;
+<style>
+	.translucent-background {
+		background-color: rgba(209, 209, 209, 0.64); /* Semi-transparent gray */
+		backdrop-filter: blur(5px); /* Frosted glass effect */
+		-webkit-backdrop-filter: blur(5px); /* For Safari */
+		padding: 20px; /* Adding padding for better text readability */
+		border-radius: 10px; /* Optional: rounded corners for a softer look */
 	}
-
-	.nav-item:hover .dropdown-menu {
-		display: block;
-	}
-
-	.nav-item.active > a {
-		background-color: #007bff;
-		color: white;
-	}
-
-	/* Animácie a efekty */
-	.dropdown-toggle::after {
-		transition: transform 0.3s ease-in-out;
-	}
-
-	.nav-item:hover .dropdown-toggle::after {
-		transform: rotate(180deg);
-	}
-
-	/* Responzívne menu */
-	@media (max-width: 768px) {
-		.nav {
-			flex-direction: column;
-		}
-
-		.nav-item {
-			width: 100%;
-		}
-
-		.nav-item .dropdown-menu {
-			position: static;
-			float: none;
-		}
-
-		.dropdown-menu .dropdown-item {
-			width: 100%;
-		}
-	}
-	.nav-item-hide {
-		display: none;
-	}
-
-	/* Show the element only on screens larger than 768px (or any other breakpoint for desktop) */
-	@media (min-width: 768px) {
-		.nav-item-hide {
-			display: block;
-		}
-	}
-	.header-nav-hide {
-		display: none;
-	}
-
-	/* Show the element only on screens larger than 768px (or any other breakpoint for desktop) */
-	@media (min-width: 768px) {
-		.header-nav-hide {
-			display: inline-flex; /* or 'block' if 'inline-flex' is not suitable */
-		}
-	}
-
 </style>
-
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyStartAt': 45, 'stickySetTop': '-45px', 'stickyChangeLogo': true}">
@@ -169,6 +112,40 @@
 	</header>
 </div>
 </body>
+<?php
+// Assuming you have a variable or function to determine if it's the homepage
+$is_homepage = basename($_SERVER['PHP_SELF']) == 'index.php'; // Example check for homepage
+
+if (!$is_homepage):
+	?>
+	<div role="main" class="main">
+		<section class="page-header page-header-modern page-header-background page-header-background-md overlay overlay-color-primary overlay-show overlay-op-9 mb-0" style="background-image: url(<?=$image1?>);">
+			<div class="container translucent-background">
+				<div class="row">
+					<div class="col align-self-center p-static text-center">
+						<h1 style="color: #0a0a0a"><strong><?=$title?></strong></h1>
+						<span style="color: #0a0a0a" class="sub-title"><?=$description?></span>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="page-header bg-color-light border-bottom border-width-2 translucent-background">
+			<div class="container">
+				<div class="row">
+					<div class="col align-self-center p-static">
+						<ul class="breadcrumb d-block">
+							<li><a href="<?=BASE_URL?>">Home</a></li>
+							<li class="active"><?=$title?></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+<?php
+endif;
+?>
+
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 		var toggles = document.querySelectorAll(".dropdown-toggle");

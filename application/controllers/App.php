@@ -32,12 +32,11 @@ class App extends CI_Controller
 			$data['sliders'] = $this->App_model->getSliders(true);
 			$data['news'] = $this->App_model->getNews();
 
-
+			$data['page'] = 'home';
+			$data['title'] = lang('HOME_TITLE');
 			$data['description'] = lang('HOME_DESCRIPTION');
 			$data['keywords'] = lang('HOME_KEYWORDS');
-			$data['image'] = BASE_URL . 'img/metaOg1.jpg';
-			$data['page'] = 'home';
-			$data['title'] ='Minidoku';
+			$data['image'] = BASE_URL . LOGO;
 			$this->load->view('layout/normal', $data);
 
 		}else{
@@ -48,23 +47,14 @@ class App extends CI_Controller
 			$data['news'] = $this->App_model->getNews();
 
 			$data['page'] = 'home';
+			$data['title'] = lang('HOME_TITLE');
 			$data['description'] = lang('HOME_DESCRIPTION');
 			$data['keywords'] = lang('HOME_KEYWORDS');
-			$data['image'] = BASE_URL . 'img/metaOg1.jpg';
-			$data['title'] ='Minidoku';
+			$data['image'] = BASE_URL . LOGO;
 			$this->load->view('layout/normal', $data);
 		}
 
 	}
-
-
-
-
-
-
-
-
-
 
 	private function check_cookie_consent() {
 		if (!$this->input->cookie('cookie_consent', TRUE)) {
@@ -88,6 +78,17 @@ class App extends CI_Controller
 		echo json_encode(array("status" => "success"));
 	}
 
+	function aboutStyx(){
+
+		$data['page'] 				= 'app/aboutStyx';
+		$data['title'] 				= lang('ABOUT_STYX_TITLE');
+		$data['description'] 		= lang('ABOUT_STYX_DESCRIPTION');
+		$data['keywords'] 			= lang('ABOUT_STYX_KEYWORDS');
+		$data['image'] 				= BASE_URL . LOGO;
+		$data['image1'] 			= BASE_URL.'img/breadcrumb/aboutStyx.jpg';
+		$this->load->view('layout/normal', $data);
+
+	}
 
 
 	public function contact(){
@@ -136,16 +137,7 @@ class App extends CI_Controller
 
     }
 
-    function tagungSeminare(){
 
-		$data['title'] 			= 'Tagung & Seminare';
-		$data['page']			= 'app/tagung-seminare';
-		$data['description'] 	= 'Entdecken Sie unsere erstklassigen Tagungs- und Seminarräume. Perfekt ausgestattet für erfolgreiche Veranstaltungen und Meetings.';
-		$data['keywords'] 		= 'Tagungen, Seminare, Konferenzen, Meetingräume, Veranstaltungslocation, Business Events';
-
-		$this->load->view('layout/normal',$data);
-
-    }
 
 	function hochzeiten(){
 

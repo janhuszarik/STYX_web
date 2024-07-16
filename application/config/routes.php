@@ -93,8 +93,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/news/edit/:num'] 			= 'admin/newsSave';
 	$route['admin/news/del/:num']			= 'admin/newsSave';
 
-	$route['company/kontakt']						= 'App/contact';
-	$route['Company/About-Styx']					= 'App/contact';
+	$route['Unternehmen/AboutStyx']			= 'App/aboutStyx';
+	$route['Company/About-Styx']			= 'App/contact';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	$route['set-cookie-consent'] 			= 'app/set_cookie_consent';
 	$route['decline-cookie-consent'] 		= 'app/decline_cookie_consent';

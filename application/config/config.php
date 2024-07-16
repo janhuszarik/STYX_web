@@ -41,6 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     define ( 'DOMAIN','styx.at' );
     define ( 'NAME','STYX' );
     define ( 'DOMENA',' | STYX' );
+    define ( 'AUTHOR','Jan Huszarik | Marketing / Desing, Web-Developer' );
 
 
 //SMTP nastavenia

@@ -10,11 +10,11 @@
 
 	<meta name="keywords" content="<?=$keywords?>" />
 	<meta name="description" content="<?=$description?>">
-	<meta name="author" content="okler.net">
+	<meta name="author" content="<?=AUTHOR?>">
 
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="<?=BASE_URL?>assets/img/favicon.ico" type="image/x-icon" />
-	<link rel="apple-touch-icon" href="<?=BASE_URL?>assets/img/apple-touch-icon.png">
+	<link rel="shortcut icon" href="<?=BASE_URL?>img/icon/favicon.ico" type="image/x-icon" />
+	<link rel="apple-touch-icon" href="<?=BASE_URL?>img/icon/favicon.ico">
 
 	<!-- Mobile Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
