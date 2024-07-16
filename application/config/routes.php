@@ -53,6 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $route['404_override'] 					= 'app/error404';
     $route['404'] 							= 'app/error404';
     $route['error404'] 						= 'app/error404';
+	$route['generate_data'] 				= 'Generate_data/index';
 	$route['auth/login'] 					= 'auth/login';
     $route['login'] 						= 'auth/login';
 	$route['register'] 						= '/auth/register';
@@ -68,7 +69,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['error404only'] 					= 'app/error404only';
 	$route['sitemap'] 						= 'xml/sitemap';
     $route['sitemap.xml'] 					= 'xml/sitemap';
-	$route['translate_uri_dashes'] = FALSE;
+	$route['translate_uri_dashes'] 			= FALSE;
 
 // administrator
 
@@ -92,7 +93,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/news/edit/:num'] 			= 'admin/newsSave';
 	$route['admin/news/del/:num']			= 'admin/newsSave';
 
-
+	$route['kontakt']						= 'App/contact';
 
 	$route['set-cookie-consent'] 			= 'app/set_cookie_consent';
 	$route['decline-cookie-consent'] 		= 'app/decline_cookie_consent';
@@ -101,12 +102,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	$route[':any'] = 'app/routes';
 	$route[':any/:any'] = 'app/routes';
-	$route['search'] = 'app/routes';
+
 
 	$route['^en/(.+)$'] = "$1";
 	$route['^de/(.+)$'] = "$1";
 
 	$route['^en$'] = $route['default_controller'];
 	$route['^de$'] = $route['default_controller'];
+
 
 

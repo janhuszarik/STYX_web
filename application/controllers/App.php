@@ -117,10 +117,10 @@ class App extends CI_Controller
             }
             redirect(BASE_URL.'kontakt');
         }
-		$data['menu_items'] = $this->App_model->get_menu_items();
+
 
         $data['title'] = 'Kontakt ';
-        $data['page'] = 'app/contact';
+        $data['page'] = 'app/kontakt';
         $data['description'] = '';
         $data['keywords'] = '';
         $this->load->view('layout/normal',$data);
@@ -223,15 +223,7 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
-	function kontakt() {
 
-		$data['title'] 			= 'Kontakt';
-		$data['page'] 			= 'app/kontakt';
-		$data['description'] 	= 'Nehmen Sie Kontakt mit uns auf, um mehr über unsere Catering-Dienstleistungen und Angebote zu erfahren.';
-		$data['keywords'] 		= 'kontakt, anfrage, catering-dienstleistungen, catering-angebote, kundenservice, hilfe, unterstützung';
-
-		$this->load->view('layout/normal', $data);
-	}
 
 	function impressum() {
 

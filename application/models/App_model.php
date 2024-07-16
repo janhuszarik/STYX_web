@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class app_model extends CI_Model {
 
+
+
 	function routes($lang){
 
 		if ($this->uri->segment('2') == NULL){

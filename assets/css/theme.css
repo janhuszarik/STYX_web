@@ -348,10 +348,12 @@ pre {
 }
 
 #header .header-nav-top .nav > li > a, #header .header-nav-top .nav > li > span {
-	color: #999;
+	color: #000;
 	font-size: 0.9em;
-	padding: 6px 10px;
+	padding: 6px 15px;
 	display: inline-block;
+	font-weight: bolder;
+	text-transform: uppercase;
 	letter-spacing: 0,5;
 }
 

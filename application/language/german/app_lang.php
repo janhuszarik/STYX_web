@@ -7,14 +7,17 @@ $lang['PHONE_NUMBER']                                   = '+43 2747 3250';
 $lang['FAX_NUMBER']                                   	= '+43 2747 3250-10';
 $lang['LOCATION_ADDRESS']                               = 'Melk';
 $lang['EMAIL']                                          = 'marketing@styx.at';
-$lang['HÄNDLER_TEXT'] 									= 'Login für Händler';
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 
 //Text
 //----------------------------------------------------------------------------------------------------------------------
 
-
+$lang['HÄNDLER_TEXT'] 									= 'Login für Händler';
+$lang['HÄNDLER_URL'] 									= 'https://www.aroma-derm.com/login.php?language=de';
+$lang['CONTACT_US'] 									= 'Kontaktujte nás';
 
 
 

@@ -41,6 +41,26 @@
 			width: 100%;
 		}
 	}
+	.nav-item-hide {
+		display: none;
+	}
+
+	/* Show the element only on screens larger than 768px (or any other breakpoint for desktop) */
+	@media (min-width: 768px) {
+		.nav-item-hide {
+			display: block;
+		}
+	}
+	.header-nav-hide {
+		display: none;
+	}
+
+	/* Show the element only on screens larger than 768px (or any other breakpoint for desktop) */
+	@media (min-width: 768px) {
+		.header-nav-hide {
+			display: inline-flex; /* or 'block' if 'inline-flex' is not suitable */
+		}
+	}
 
 </style>
 
@@ -64,31 +84,33 @@
 							<nav class="header-nav-top">
 								<ul class="nav nav-pills">
 									<li class="nav-item nav-item-anim-icon d-none d-md-block">
-										<a class="nav-link ps-0" href="about-us.html"><i class="fas fa-angle-right"></i> About Us</a>
+										<a class="nav-link ps-0" href="<?=lang('HÄNDLER_URL')?>"><i class="fas fa-angle-right"></i> <?=lang('HÄNDLER_TEXT')?></a>
 									</li>
 									<li class="nav-item nav-item-anim-icon d-none d-md-block">
-										<a class="nav-link" href="contact-us.html"><i class="fas fa-angle-right"></i> Contact Us</a>
+										<a class="nav-link" href="<?=BASE_URL.'kontakt'?>"><i class="fas fa-angle-right"></i> <?=lang('CONTACT_US')?></a>
 									</li>
 									<li class="nav-item dropdown nav-item-left-border d-none d-sm-block nav-item-left-border-remove nav-item-left-border-md-show">
 										<div class="d-flex">
 											<?php foreach (getLanguages() as $l){ ?>
 												<div class="active lang me-2">
-													<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="30px" alt=""></a>
+													<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="25px" alt=""></a>
 												</div>
 											<?php } ?>
 										</div>
 									</li>
-									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show">
+									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
 										<span class="ws-nowrap"><a href="<?=PHONE_HREF?>"><i class="fas fa-phone"></i> <?=PHONE?></a></span>
 									</li>
 								</ul>
 
 							</nav>
-							<div class="header-nav-features">
-								<div class="header-nav-feature header-nav-features-search d-inline-flex">
-									<a href="#" class="header-nav-features-toggle text-decoration-none" data-focus="headerSearch" aria-label="Search"><i class="fas fa-search header-nav-top-icon"></i></a>
+							<div class="header-nav-features header-nav-hide">
+								<div class="header-nav-feature header-nav-features-search d-inline-flex ">
+									<a href="#" class="header-nav-features-toggle text-decoration-none" data-focus="headerSearch" aria-label="Search">
+										<i class="fas fa-search header-nav-top-icon"></i>
+									</a>
 									<div class="header-nav-features-dropdown" id="headerTopSearchDropdown">
-										<form role="search" action="page-search-results.html" method="get">
+										<form role="search" action="<?php echo base_url('search'); ?>" method="get">
 											<div class="simple-search input-group">
 												<input class="form-control text-1" id="headerSearch" name="q" type="search" value="" placeholder="Search...">
 												<button class="btn" type="submit" aria-label="Search">
@@ -98,39 +120,9 @@
 										</form>
 									</div>
 								</div>
-								<div class="header-nav-feature header-nav-features-cart d-inline-flex ms-2">
-									<a href="#" class="header-nav-features-toggle" aria-label="">
-										<img src="img/icons/icon-cart.svg" width="14" alt="" class="header-nav-top-icon-img">
-										<span class="cart-info d-none">
-                                                <span class="cart-qty">1</span>
-                                            </span>
-									</a>
-									<div class="header-nav-features-dropdown" id="headerTopCartDropdown">
-										<ol class="mini-products-list">
-											<li class="item">
-												<a href="#" title="Camera X1000" class="product-image"><img src="img/products/product-1.jpg" alt="Camera X1000"></a>
-												<div class="product-details">
-													<p class="product-name">
-														<a href="#">Camera X1000</a>
-													</p>
-													<p class="qty-price">
-														1X <span class="price">$890</span>
-													</p>
-													<a href="#" title="Remove This Item" class="btn-remove"><i class="fas fa-times"></i></a>
-												</div>
-											</li>
-										</ol>
-										<div class="totals">
-											<span class="label">Total:</span>
-											<span class="price-total"><span class="price">$890</span></span>
-										</div>
-										<div class="actions">
-											<a class="btn btn-dark" href="#">View Cart</a>
-											<a class="btn btn-primary" href="#">Checkout</a>
-										</div>
-									</div>
-								</div>
 							</div>
+
+
 						</div>
 						<div class="header-row">
 							<div class="header-nav pt-1">
