@@ -82,24 +82,32 @@
 		return $line;
 	}
 }
+	function active($option) {
+	if ($option == '1') {
+		return '<i style="color: green" class="fa fa-check color_green"></i>';
+	} else {
+		return '<i style="color: red" class="fa fa-times trash_icon_color"></i>';
+	}
+}
 
 	function getCurrentUrl() {
 	return current_url(); // Alebo iná metóda, ktorá získava aktuálnu URL
 }
 
-	function getMenu() {
+function getMenu() {
 	$ci = get_instance();
+	$language = language(); // Predpokladám, že language() vracia aktuálny jazyk
 
 	$ci->db->select('*');
 	$ci->db->where('active', '1');
-	$ci->db->where('lang', language());
+	$ci->db->where('lang', $language);
 	$ci->db->order_by('orderBy', 'ASC');
 	$mainMenuItems = $ci->db->get('menu')->result();
 
 	$ci->db->select('*');
 	$ci->db->where('parent !=', '0');
 	$ci->db->where('active', '1');
-	$ci->db->where('lang', language());
+	$ci->db->where('lang', $language);
 	$ci->db->order_by('orderBy', 'ASC');
 	$subMenuItems = $ci->db->get('menu')->result();
 
@@ -109,6 +117,11 @@
 
 		$url = empty($mainItem->url) ? '' : $mainItem->url;
 		$isExternal = (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0);
+
+		// Ak URL nie je externá, pridáme jazyk na začiatok
+		if (!$isExternal && strpos($url, $language . '/') === false) {
+			$url = $language . '/' . ltrim($url, '/');
+		}
 
 		$formattedMenu[$mainKey] = array(
 			'name' => $mainItem->name,
@@ -124,9 +137,14 @@
 				$subUrl = empty($subItem->url) ? '' : $subItem->url;
 				$isSubExternal = (strpos($subUrl, 'http://') === 0 || strpos($subUrl, 'https://') === 0);
 
+				// Ak URL nie je externá, pridáme jazyk na začiatok
+				if (!$isSubExternal && strpos($subUrl, $language . '/') === false) {
+					$subUrl = $language . '/' . url_oprava($mainItem->name) . '/' . ltrim($subUrl, '/');
+				}
+
 				$formattedMenu[$mainKey]['children'][$subKey] = array(
 					'name' => $subItem->name,
-					'url' => $isSubExternal ? $subUrl : url_oprava($mainItem->name) . '/' . $subUrl,
+					'url' => $subUrl,
 					'lang' => $subItem->lang,
 					'is_external' => $isSubExternal
 				);
@@ -140,18 +158,9 @@
 }
 
 
-	function activeToIcon($value){
 
 
-		if ($value == '0'){
-			return '<i class="fa fa-times trash_icon_color" title="Neaktívne"></i>';
-		} else {
-			return '<i class="fa fa-check color_green" title="Aktívne"></i>';
-		}
-
-	}
-
-	function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = 'Chyba!'){
+function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = 'Chyba!'){
 
 		if (empty($data) || $data == NULL){
 
@@ -161,6 +170,7 @@
 
 		}
 	}
+
 	function tage($datetime_in_DB){
 
 		$tage = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
@@ -430,13 +440,11 @@
 	}
 }
 
-	function active($option) {
-	if ($option == '0'){
-		return '<i style="color: red" class="fa fa-times trash_icon_color"></i>';
-	}else{
-		return '<i style="color: green" class="fa fa-check color_green"></i>';
-	}
-}
+
+
+
+
+
 
 
 

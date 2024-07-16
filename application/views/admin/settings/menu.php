@@ -102,7 +102,9 @@
 								<th>#</th>
 								<th>Sprache</th>
 								<th>Menü</th>
-								<th>Übergeordnet</th>
+								<?php if ($showParentColumn) { ?>
+									<th>Übergeordnet</th>
+								<?php } ?>
 								<th>URL</th>
 								<th>Befehl</th>
 								<th>Aktiv</th>
@@ -113,7 +115,7 @@
 							<tbody>
 							<?php if (count($menus) == 0) { ?>
 								<tr>
-									<td colspan="8" class="text-center"><h5>Keine data</h5></td>
+									<td colspan="<?php echo $showParentColumn ? '9' : '8'; ?>" class="text-center"><h5>Keine data</h5></td>
 								</tr>
 							<?php } else {
 								$k = 0;
@@ -121,13 +123,21 @@
 									$k++;
 									?>
 									<tr>
-										<td title="<?=$m->id?>"><?=$k?></td>
-										<td class="text-center"><?php echo $m->lang; ?></td>
+										<td class="text-center" title="<?=$m->id?>"><?=$k?></td>
+										<?php if (count(getLanguages()) > 1){ ?>
+											<td class="text-center"><img src="<?=langInfo($m->lang)['flag']?>" width="20px" alt=""></td>
+										<?php } ?>
 										<td><?php echo ($m->parent == 0 ? '<strong>' . $m->name . '</strong>' : ' - ' . $m->name); ?></td>
-										<td class="text-center"><?php echo ($m->parent == 0 ? '' : $m->parentName); ?></td>
-										<td class="text-center"><span title="<?php echo (empty($m->url) ? (is_numeric($m->article) ? $m->nameArticle . ' - článok' : '') : $m->url); ?>"><?php echo (empty($m->url) ? '<b>' . substr((is_numeric($m->article) ? $m->urlArticle : ''), 0, 10) . '</b>' : substr($m->url, 0, 10)); ?></span></td>
+										<?php if ($showParentColumn) { ?>
+											<td class="text-center"><?php echo ($m->parent == 0 ? '' : $m->parentName); ?></td>
+										<?php } ?>
+										<td class="text-center">
+                    <span title="<?php echo $m->url; ?>">
+                        <?php echo substr($m->url, 0, 10); ?>
+                    </span>
+										</td>
 										<td class="text-center"><?php echo $m->orderBy; ?></td>
-										<td class="text-center"><?php echo ($m->active ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>'); ?></td>
+										<td class="text-center"><?= active($m->active); ?></td>
 										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/menu/edit/'.$m->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
 										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/menu/del/'.$m->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
 									</tr>
@@ -136,13 +146,21 @@
 										foreach ($m->submenu as $s) {
 											?>
 											<tr>
-												<td title="<?=$s->id?>"><?=$k?></td>
-												<td class="text-center"><?php echo $s->lang; ?></td>
+												<td class="text-center" title="<?=$s->id?>"><?=$k?></td>
+												<?php if (count(getLanguages()) > 1){ ?>
+													<td class="text-center"><img src="<?=langInfo($s->lang)['flag']?>" width="20px" alt=""></td>
+												<?php } ?>
 												<td><?php echo ($s->parent == 0 ? '<strong>' . $s->name . '</strong>' : ' - ' . $s->name); ?></td>
-												<td class="text-center"><?php echo ($s->parent == 0 ? '' : $s->parentName); ?></td>
-												<td class="text-center"><span title="<?php echo (empty($s->url) ? (is_numeric($s->article) ? $s->nameArticle . ' - článok' : '') : $s->url); ?>"><?php echo (empty($s->url) ? '<b>' . substr((is_numeric($s->article) ? $s->urlArticle : ''), 0, 10) . '</b>' : substr($s->url, 0, 10)); ?></span></td>
+												<?php if ($showParentColumn) { ?>
+													<td class="text-center"><?php echo ($s->parent == 0 ? '' : $s->parentName); ?></td>
+												<?php } ?>
+												<td class="text-center">
+                            <span title="<?php echo $s->url; ?>">
+                                <?php echo substr($s->url, 0, 10); ?>
+                            </span>
+												</td>
 												<td class="text-center"><?php echo $s->orderBy; ?></td>
-												<td class="text-center"><?php echo ($s->active ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>'); ?></td>
+												<td class="text-center"><?= active($s->active); ?></td>
 												<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/menu/edit/'.$s->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
 												<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/menu/del/'.$s->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
 											</tr>
