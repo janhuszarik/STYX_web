@@ -15,8 +15,10 @@ function getNewsletters(){
 	function menuSave($post = false)
 	{
 		if ($post) {
+			// Nastavenie `orderBy` na `null` iba pre záznamy s rovnakým jazykom
 			$this->db->where('orderBy', $post['orderBy']);
 			$this->db->where('parent', $post['parent']);
+			$this->db->where('lang', $post['lang']);
 			$this->db->update('menu', array('orderBy' => null));
 
 			$data = array(
@@ -38,6 +40,7 @@ function getNewsletters(){
 		}
 		return false;
 	}
+
 
 	function getMenu($id = false, $parent = false)
 	{
