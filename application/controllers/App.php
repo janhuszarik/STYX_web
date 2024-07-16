@@ -18,43 +18,34 @@ class App extends CI_Controller
 
 	}
 
+
 	function index(){
+
 		$this->home();
 	}
 
-	function home(){
+
+	public function home()
+	{
 
 
-		if (empty($id)) {
 
+		// Načítanie dát
+		$data['user'] = $this->ion_auth->user()->row();
+		$data['sliders'] = $this->App_model->getSliders(true);
+		$data['news'] = $this->App_model->getNews();
 
-			$data['user'] = $this->ion_auth->user()->row();
-			$data['sliders'] = $this->App_model->getSliders(true);
-			$data['news'] = $this->App_model->getNews();
+		$data['page'] = 'home';
+		$data['title'] = lang('HOME_TITLE');
+		$data['description'] = lang('HOME_DESCRIPTION');
+		$data['keywords'] = lang('HOME_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
 
-			$data['page'] = 'home';
-			$data['title'] = lang('HOME_TITLE');
-			$data['description'] = lang('HOME_DESCRIPTION');
-			$data['keywords'] = lang('HOME_KEYWORDS');
-			$data['image'] = BASE_URL . LOGO;
-			$this->load->view('layout/normal', $data);
-
-		}else{
-
-
-			$data['user'] = $this->ion_auth->user()->row();
-			$data['sliders'] = $this->App_model->getSliders(true);
-			$data['news'] = $this->App_model->getNews();
-
-			$data['page'] = 'home';
-			$data['title'] = lang('HOME_TITLE');
-			$data['description'] = lang('HOME_DESCRIPTION');
-			$data['keywords'] = lang('HOME_KEYWORDS');
-			$data['image'] = BASE_URL . LOGO;
-			$this->load->view('layout/normal', $data);
-		}
-
+		// Načítanie view
+		$this->load->view('layout/normal', $data);
 	}
+
+
 
 	private function check_cookie_consent() {
 		if (!$this->input->cookie('cookie_consent', TRUE)) {

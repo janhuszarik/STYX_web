@@ -49,6 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+
     $route['default_controller'] 			= 'app';
     $route['404_override'] 					= 'app/error404';
     $route['404'] 							= 'app/error404';
@@ -70,7 +71,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['sitemap'] 						= 'xml/sitemap';
     $route['sitemap.xml'] 					= 'xml/sitemap';
 	$route['translate_uri_dashes'] 			= FALSE;
-
 // administrator
 
     
@@ -124,17 +124,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['set-cookie-consent'] 			= 'app/set_cookie_consent';
 	$route['decline-cookie-consent'] 		= 'app/decline_cookie_consent';
 
-	$route[':any'] = 'app/routes';
 
-	$route[':any'] = 'app/routes';
+
+
 	$route[':any/:any'] = 'app/routes';
 
 
-	$route['^en/(.+)$'] = "$1";
-	$route['^de/(.+)$'] = "$1";
-
-	$route['^en$'] = $route['default_controller'];
-	$route['^de$'] = $route['default_controller'];
+//	$route['^en/(.+)$'] = "$1";
+//	$route['^de/(.+)$'] = "$1";
+//
+//	$route['^en$'] = $route['default_controller'];
+//	$route['^de$'] = $route['default_controller'];
 
 
 
