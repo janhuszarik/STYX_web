@@ -1,4 +1,3 @@
-
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyStartAt': 45, 'stickySetTop': '-45px', 'stickyChangeLogo': true}">
@@ -30,8 +29,8 @@
 									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
 										<div class="container">
 											<a href="<?=lang('HÄNDLER_URL')?>"><button class="aroma-button">
-												<?=lang('HÄNDLER_TEXT')?>
-											</button></a>
+													<?=lang('HÄNDLER_TEXT')?>
+												</button></a>
 										</div>
 									</li>
 
@@ -39,7 +38,7 @@
 										<div class="container">
 
 											<a href="https://shop.styx.at/"><button class="pulse-button">
-												<span style="font-weight: bold" </span> SHOP
+													<span style="font-weight: bold" </span> SHOP
 												</button></a>
 										</div>
 									</li>
@@ -110,6 +109,13 @@
 </div>
 </body>
 
+<style>
+	.dropdown-menu {
+		z-index: 1000; /* Ensure dropdown menu appears above other content */
+		position: absolute;
+	}
+</style>
+
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 		var toggles = document.querySelectorAll(".dropdown-toggle");
@@ -127,5 +133,4 @@
 			});
 		});
 	});
-
 </script>
