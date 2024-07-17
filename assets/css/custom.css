@@ -60,9 +60,27 @@
 	padding: 20px; /* Adding padding for better text readability */
 	border-radius: 10px; /* Optional: rounded corners for a softer look */
 }
+/*---------------------------------------------------------------------------------------------------------------*/
+
+/*Nastavenie css pre menu:*/
 
 
-
+.dropdown-menu {
+	z-index: 1000;
+	position: absolute;
+}
+.no-link {
+	pointer-events: none;
+	cursor: default;
+	color: inherit; /* Optional: to maintain the same color */
+	text-decoration: none; /* Optional: to remove underline */
+}
+@media (max-width: 768px) {
+	.no-link {
+		pointer-events: auto;
+		cursor: pointer;
+	}
+}
 .nav-item .dropdown-menu {
 	display: none;
 	transition: all 0.3s ease-in-out;
@@ -125,6 +143,12 @@
 		display: inline-flex; /* or 'block' if 'inline-flex' is not suitable */
 	}
 }
+/*---------------------------------------------------------------------------------------------------------------*/
+
+/*Nastavenie css pre buttony:*/
+
+
+
 /*.container {*/
 /*	display: flex;*/
 /*	align-items: center;*/
@@ -187,14 +211,6 @@
 .nav-item a:hover {
 	text-decoration: none; /* Remove underline on hover */
 }
+/*---------------------------------------------------------------------------------------------------------------*/
+/*Nastavenie css pre :*/
 
-.dropdown-menu {
-	z-index: 1000;
-	position: absolute;
-}
-.no-link {
-	pointer-events: none;
-	cursor: default;
-	color: inherit; /* Optional: to maintain the same color */
-	text-decoration: none; /* Optional: to remove underline */
-}
