@@ -77,7 +77,7 @@
 	color: white;
 }
 
-/* Animácie a efekty */
+/* Animations and effects */
 .dropdown-toggle::after {
 	transition: transform 0.3s ease-in-out;
 }
@@ -86,7 +86,7 @@
 	transform: rotate(180deg);
 }
 
-/* Responzívne menu */
+/* Responsive menu */
 @media (max-width: 768px) {
 	.nav {
 		flex-direction: column;
@@ -99,9 +99,21 @@
 	.nav-item .dropdown-menu {
 		position: static;
 		float: none;
+		width: 100%;
+		display: none;
+		flex-direction: column;
 	}
 
 	.dropdown-menu .dropdown-item {
+		width: 100%;
+	}
+
+	.nav-item .nav-link {
+		width: 100%;
+		display: block;
+	}
+
+	.nav-item .dropdown-toggle {
 		width: 100%;
 	}
 }
