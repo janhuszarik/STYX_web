@@ -143,6 +143,14 @@
 		display: inline-flex; /* or 'block' if 'inline-flex' is not suitable */
 	}
 }
+@media not all and (min-resolution:.001dpcm) {
+	@supports (-webkit-appearance:none) {
+		.no-link {
+			pointer-events: auto;
+			cursor: pointer;
+		}
+	}
+}
 /*---------------------------------------------------------------------------------------------------------------*/
 
 /*Nastavenie css pre buttony:*/
