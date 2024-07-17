@@ -151,6 +151,16 @@
 		}
 	}
 }
+/* Display dropdown menu on hover for larger screens */
+@media (min-width: 769px) {
+	.nav-item:hover .dropdown-menu {
+		display: block !important;
+	}
+	.dropdown-menu {
+		display: none;
+	}
+}
+
 /*---------------------------------------------------------------------------------------------------------------*/
 
 /*Nastavenie css pre buttony:*/
