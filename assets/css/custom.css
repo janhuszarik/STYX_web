@@ -45,7 +45,6 @@
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	padding: 32px;
 	text-align: center;
-	width: 80%; /* Fixed width */
 	max-width: 800px; /* Optional: Maximum width */
 	height: 200px; /* Fixed height */
 	margin: 0 auto; /* Center the text container */

@@ -102,6 +102,7 @@ class Admin extends CI_Controller
 		if (!empty($post)) {
 			$post['active'] = isset($post['active']) ? $post['active'] : '0';
 			$post['orderBy'] = isset($post['orderBy']) ? $post['orderBy'] : '0';
+			$post['float'] = isset($post['float']) ? $post['float'] : '0';
 
 			if ($this->Admin_model->is_order_by_duplicate($post['orderBy'], $id)) {
 				$post['orderBy'] = $this->Admin_model->get_next_order_by();
@@ -130,6 +131,7 @@ class Admin extends CI_Controller
 		$data['page'] = 'admin/settings/sliders';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
 
 
 	public function delete_slider($id) {

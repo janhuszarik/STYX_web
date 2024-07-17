@@ -101,6 +101,7 @@ function getNewsletters(){
 		return $this->db->get_where('slider', array('id' => $id))->row_array();
 	}
 
+
 	public function save_slider($data, $id = null) {
 		if ($id) {
 			$this->db->where('id', $id);
@@ -113,6 +114,7 @@ function getNewsletters(){
 			return $result;
 		}
 	}
+
 	public function delete_slider($id) {
 		return $this->db->delete('slider', array('id' => $id));
 	}

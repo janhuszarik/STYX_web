@@ -94,12 +94,26 @@
 						</div>
 						<div class="col-lg-6">
 							<div class="form-group">
+								<label class="col-form-label" for="float">Text Alignment</label>
+								<select class="form-control" name="float" id="float">
+									<option value="left" <?php echo isset($slider['float']) && $slider['float'] == 'left' ? 'selected' : ''; ?>>Left</option>
+									<option value="center" <?php echo isset($slider['float']) && $slider['float'] == 'center' ? 'selected' : ''; ?>>Center</option>
+									<option value="right" <?php echo isset($slider['float']) && $slider['float'] == 'right' ? 'selected' : ''; ?>>Right</option>
+								</select>
+							</div>
+						</div>
+
+					</div>
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<div class="form-group">
 								<label class="col-form-label" for="active">Ist dieser Slider aktiv?</label>
 								<input type="hidden" name="active" value="0">
 								<input type="checkbox" name="active" value="1" id="active" <?php echo isset($slider['active']) && $slider['active'] ? 'checked' : ''; ?>>
 							</div>
 						</div>
 					</div>
+
 					<footer class="card-footer text-end">
 						<?php if (isset($slider) && !empty($slider['id'])): ?>
 							<input type="hidden" name="id" value="<?php echo $slider['id']; ?>">

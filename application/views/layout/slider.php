@@ -7,17 +7,15 @@
 				$hasText = !empty($s->name1) || !empty($s->name2) || !empty($s->name3);
 				?>
 				<section class="section border-0 m-0 slider-section <?php echo $index === 0 ? 'active' : ''; ?>" style="background-image: url('<?php echo base_url('uploads/sliders/' . $s->image); ?>'); background-size: auto; background-position: center; background-repeat: no-repeat;">
-					<div class="container h-100 d-flex align-items-center justify-content-center">
+					<div style="float:<?=$s->float?>" class="container h-100 d-flex align-items-center justify-content-center">
 						<?php if ($hasText): ?>
 							<div class="text-background">
 								<?php if (!empty($s->name1)): ?>
 									<h1 class="text-color-dark text-5 line-height-5 font-weight-semibold px-4 mb-2 appear-animation" data-appear-animation="fadeInDownShorterPlus" data-plugin-options="{'minWindowWidth': 0}">
                                     <span class="position-absolute right-100pct top-50pct transform3dy-n50">
-                                        <img src="<?=BASE_URL?>assets/img/slides/slide-title-border-light.png" class="w-auto appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="250" data-plugin-options="{'minWindowWidth': 0}" alt="" />
                                     </span>
 										<?php echo $s->name1; ?>
 										<span class="position-absolute left-100pct top-50pct transform3dy-n50">
-                                        <img src="<?=BASE_URL?>assets/img/slides/slide-title-border-light.png" class="w-auto appear-animation" data-appear-animation="fadeInLeftShorter" data-plugin-options="{'minWindowWidth': 0}" alt="" />
                                     </span>
 									</h1>
 								<?php endif; ?>
