@@ -28,6 +28,7 @@ function getNewsletters(){
 				'orderBy' => $post['orderBy'],
 				'active' => $post['active'],
 				'lang' => $post['lang'],
+				'base' => $post['base'], // pridali sme base
 				'userId' => $this->ion_auth->user()->row()->id
 			);
 

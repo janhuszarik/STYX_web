@@ -79,10 +79,19 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group pb-3">
-							<div class="checkbox-custom checkbox-primary">
-								<input type="checkbox" name="active" id="checkboxExample2" value="1" <?php echo ($menu->active) ? 'checked' : ''; ?>>
-								<label for="checkboxExample2">Aktiv?</label>
+						<div class="row form-group pb-3">
+							<div class="col-lg-6">
+								<div class="checkbox-custom checkbox-primary">
+									<input type="checkbox" name="active" id="checkboxExample2" value="1" <?php echo ($menu->active) ? 'checked' : ''; ?>>
+									<label for="checkboxExample2">Aktiv?</label>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="checkbox-custom checkbox-primary">
+									<input type="checkbox" name="base" id="checkboxExample2" value="1" <?php echo ($menu->base) ? 'checked' : ''; ?>>
+									<label for="checkboxExample2">Leere menü button</label>
+								</div>
+								<small> Wenn dieses Kontrollkästchen aktiviert ist, wird das Menüelement angezeigt, aber ist inaktiv.</small>
 							</div>
 						</div>
 						<footer class="card-footer text-end">

@@ -189,3 +189,13 @@
 	text-decoration: none; /* Remove underline on hover */
 }
 
+.dropdown-menu {
+	z-index: 1000;
+	position: absolute;
+}
+.no-link {
+	pointer-events: none;
+	cursor: default;
+	color: inherit; /* Optional: to maintain the same color */
+	text-decoration: none; /* Optional: to remove underline */
+}

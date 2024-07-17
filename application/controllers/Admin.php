@@ -41,6 +41,7 @@ class Admin extends CI_Controller
 		if (!empty($post)) {
 			$post['active'] = isset($post['active']) ? $post['active'] : '0';
 			$post['lang'] = isset($post['lang']) ? $post['lang'] : 'de';
+			$post['base'] = isset($post['base']) ? $post['base'] : '0'; // pridali sme base
 
 			if (!empty($id)) {
 				if ($this->Admin_model->menuSave($post)) {
@@ -77,6 +78,7 @@ class Admin extends CI_Controller
 		$data['page'] = 'admin/settings/menu';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
 
 
 	function getMenuParentName($menus, $parentId)

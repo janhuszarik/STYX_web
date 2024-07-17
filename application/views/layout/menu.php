@@ -1,3 +1,5 @@
+
+
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyStartAt': 45, 'stickySetTop': '-45px', 'stickyChangeLogo': true}">
@@ -71,12 +73,21 @@
 											<?php $currentUrl = getCurrentUrl(); ?>
 											<?php foreach (getMenu() as $menu) { ?>
 												<li class="nav-item dropdown <?= $menu['url'] == $currentUrl ? 'active' : '' ?>">
-													<a class="nav-link dropdown-toggle" href="<?= $menu['is_external'] ? $menu['url'] : BASE_URL . $menu['url'] ?>" target="<?= $menu['is_external'] ? '_blank' : '_self' ?>">
-														<?= $menu['name'] ?>
-														<?php if ($menu['has_child']) { ?>
-															<i class="fa fa-angle-down"></i>
-														<?php } ?>
-													</a>
+													<?php if ($menu['base'] !== 0) { ?>
+														<a class="nav-link dropdown-toggle no-link" href="javascript:void(0);">
+															<?= $menu['name'] ?>
+															<?php if ($menu['has_child']) { ?>
+																<i class="fa fa-angle-down"></i>
+															<?php } ?>
+														</a>
+													<?php } else { ?>
+														<a class="nav-link dropdown-toggle" href="<?= $menu['is_external'] ? $menu['url'] : BASE_URL . $menu['url'] ?>" target="<?= $menu['is_external'] ? '_blank' : '_self' ?>">
+															<?= $menu['name'] ?>
+															<?php if ($menu['has_child']) { ?>
+																<i class="fa fa-angle-down"></i>
+															<?php } ?>
+														</a>
+													<?php } ?>
 													<?php if ($menu['has_child']) { ?>
 														<ul class="dropdown-menu">
 															<?php foreach ($menu['children'] as $subMenu) { ?>
@@ -109,12 +120,7 @@
 </div>
 </body>
 
-<style>
-	.dropdown-menu {
-		z-index: 1000; /* Ensure dropdown menu appears above other content */
-		position: absolute;
-	}
-</style>
+
 
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
