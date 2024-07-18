@@ -1,6 +1,32 @@
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyStartAt': 45, 'stickySetTop': '-45px', 'stickyChangeLogo': true}">
+		<div class="contact-info d-none d-lg-block" style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<ul class="header-social-icons social-icons">
+							<li><a href="https://www.facebook.com/www.styx.at/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+							<li><a href="https://www.instagram.com/styx.naturcosmetic/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a></li>
+							<li><a href="https://at.pinterest.com/styxnaturcosmetic/" target="_blank" title="Pinterest"><i class="fab fa-pinterest"></i></a></li>
+							<li><a href="https://www.youtube.com/channel/UCxpLOYYahcENUfVnacBvagA" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a></li>
+							<li><a href="mailto:info@styx.at" target="_blank" title="Email"><i class="fa fa-envelope"></i></a></li>
+						</ul>
+					</div>
+					<div class="col">
+						<div class="nav-item nav-item-anim-icon d-none d-sm-block">
+							<div style="padding: 5px" class="d-flex">
+								<?php foreach (getLanguages() as $l){ ?>
+									<div class="active lang me-2">
+										<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="40px" alt=""></a>
+									</div>
+								<?php } ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="header-body">
 			<div class="header-container container">
 				<div class="header-row">

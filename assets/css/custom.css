@@ -70,10 +70,10 @@
 	position: absolute;
 }
 .no-link {
-	pointer-events: none;
+	
 	cursor: default;
-	color: inherit; /* Optional: to maintain the same color */
-	text-decoration: none; /* Optional: to remove underline */
+	color: inherit;
+	text-decoration: none;
 }
 @media (max-width: 768px) {
 	.no-link {
@@ -85,40 +85,31 @@
 	display: none;
 	transition: all 0.3s ease-in-out;
 }
-
-.nav-item:hover .dropdown-menu {
+.nav-item:hover .dropdown-menu,
+.nav-item:focus-within .dropdown-menu {
 	display: block;
 }
-
 .nav-item.active > a {
 	background-color: #007bff;
 	color: white;
 }
-
-/* Animácie a efekty */
 .dropdown-toggle::after {
 	transition: transform 0.3s ease-in-out;
 }
-
 .nav-item:hover .dropdown-toggle::after {
 	transform: rotate(180deg);
 }
-
-/* Responzívne menu */
 @media (max-width: 768px) {
 	.nav {
 		flex-direction: column;
 	}
-
 	.nav-item {
 		width: 100%;
 	}
-
 	.nav-item .dropdown-menu {
 		position: static;
 		float: none;
 	}
-
 	.dropdown-menu .dropdown-item {
 		width: 100%;
 	}
@@ -126,8 +117,6 @@
 .nav-item-hide {
 	display: none;
 }
-
-/* Show the element only on screens larger than 768px (or any other breakpoint for desktop) */
 @media (min-width: 768px) {
 	.nav-item-hide {
 		display: block;
@@ -136,11 +125,9 @@
 .header-nav-hide {
 	display: none;
 }
-
-/* Show the element only on screens larger than 768px (or any other breakpoint for desktop) */
 @media (min-width: 768px) {
 	.header-nav-hide {
-		display: inline-flex; /* or 'block' if 'inline-flex' is not suitable */
+		display: inline-flex;
 	}
 }
 @media not all and (min-resolution:.001dpcm) {
@@ -151,7 +138,6 @@
 		}
 	}
 }
-/* Display dropdown menu on hover for larger screens */
 @media (min-width: 769px) {
 	.nav-item:hover .dropdown-menu {
 		display: block !important;
@@ -160,6 +146,8 @@
 		display: none;
 	}
 }
+
+
 
 /*---------------------------------------------------------------------------------------------------------------*/
 
@@ -178,11 +166,11 @@
 	color: white;
 	border: none;
 	border-radius: 5px;
-	padding: 3px 40px;
-	font-size: 14px;
+	padding: 0px 73px;
+	font-size: 15px;
 	cursor: pointer;
 	outline: none;
-	animation: pulse 2s infinite;
+	animation: pulse 3s infinite;
 	display: flex;
 	align-items: center;
 	position: relative;
@@ -194,7 +182,7 @@
 	color: white;
 	border: none;
 	border-radius: 5px;
-	padding: 3px 20px;
+	padding: 0px 20px;
 	font-size: 13px;
 	cursor: pointer;
 	outline: none;

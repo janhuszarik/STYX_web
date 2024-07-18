@@ -1494,7 +1494,7 @@ html.sticky-header-enabled.sticky-header-active #header .header-logo-sticky-chan
 @media (min-width: 992px) {
 	#header .header-nav-main {
 		display: flex !important;
-		height: auto !important;
+		height: 28px !important;
 	}
 
 	#header .header-nav-main nav {
