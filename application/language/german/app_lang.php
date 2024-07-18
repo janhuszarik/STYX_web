@@ -36,6 +36,7 @@ $lang['ABOUT_STYX_KEYWORDS'] 							= 'Naturcosmetic, Naturkosmetik, Österreich
 $lang['HÄNDLER_TEXT'] 									= 'Login für Händler';
 $lang['HÄNDLER_URL'] 									= 'https://www.aroma-derm.com/login.php?language=de';
 $lang['CONTACT_US'] 									= 'Kontaktieren Sie uns';
+$lang['AKTUELL'] 										= 'AKTUELLES';
 
 
 

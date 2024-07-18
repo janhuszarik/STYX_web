@@ -1,26 +1,37 @@
+
 <div role="main" class="main">
-
-
-	<div class="home-intro light border border-bottom-0 mb-0">
-		<div class="container">
-
-			<div class="row align-items-center">
-				<div class="col-lg-8">
-					<p class="font-weight-bold text-color-dark">
-						The fastest way to grow your business with the leader in <span class="highlighted-word highlighted-word-animation-1 text-color-primary font-weight-semibold text-5">Technology</span>
-						<span>Check out our options and features included.</span>
-					</p>
+	<div role="main" class="main">
+		<div class="home-intro light border border-bottom-0 mb-0">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<h1 class="text-center"><?=lang('AKTUELL')?></h1>
+						<hr>
+						<br>
+						<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides" data-plugin-options="{'items': 4, 'margin': 10, 'loop': false, 'nav': true, 'dots': false}">
+							<div class="home-carousel-card">
+								<div class="home-carousel-img-container">
+									<img alt="" class="img-fluid rounded" src="<?=BASE_URL?>img/test.png">
+								</div>
+								<div class="home-carousel-card-content">
+									<h5>Ihr Geschenk zu Ihrem Einkauf</h5>
+									<p>Schon einmal fest statt flüssig geduscht?</p>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="col-lg-4">
-					<div class="get-started text-start text-lg-end">
-						<a href="#" class="btn btn-primary btn-lg text-3 font-weight-semibold btn-py-2 px-4">Get Started Now</a>
-						<div class="learn-more">or <a href="index.html" class="font-weight-bold">learn more.</a></div>
+				<div class="row">
+					<div class="col">
+						<hr class="solid my-5">
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
+
+
+
 
 	<div class="container py-5 my-4">
 		<div class="row text-center py-3">

@@ -35,7 +35,9 @@ $lang['ABOUT_STYX_KEYWORDS']                            = 'natural cosmetics, na
 
 $lang['HÄNDLER_TEXT']                                    = 'Dealer login';
 $lang['HÄNDLER_URL']                                     = 'https://www.aroma-derm.com/login.php?language=en';
-$lang['CONTACT_US']                                     = 'Contact us';
+$lang['CONTACT_US']                                      = 'Contact us';
+$lang['AKTUELL'] 										 = 'Current issues
+';
 
 
 
