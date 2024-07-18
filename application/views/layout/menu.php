@@ -160,8 +160,8 @@
 		var navItems = document.querySelectorAll('.nav-item.dropdown');
 		navItems.forEach(function(navItem) {
 			navItem.addEventListener('click', function(e) {
-				if (window.innerWidth > 768) {
-					e.stopPropagation();
+				if (window.innerWidth > 768 && window.innerWidth < 1025) {
+					e.preventDefault();
 					var dropdown = this.querySelector('.dropdown-menu');
 					if (dropdown.style.display === 'block') {
 						dropdown.style.display = 'none';
@@ -173,12 +173,13 @@
 		});
 
 		document.addEventListener('click', function(e) {
-			if (window.innerWidth > 768) {
+			if (window.innerWidth > 768 && window.innerWidth < 1025) {
 				dropdowns.forEach(function(dropdown) {
 					dropdown.style.display = 'none';
 				});
 			}
 		});
 	});
+
 </script>
 </body>
