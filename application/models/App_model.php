@@ -42,12 +42,13 @@ class app_model extends CI_Model {
 	}
 
 
-	function getNews(){
-
+	function getAllActiveNews()
+	{
 		$this->db->select('*');
 		$this->db->where('active', '1');
-		return $this->db->get('news')->row();
-
+		$this->db->where('start_date <=', date('Y-m-d H:i:s'));
+		$this->db->where('end_date >=', date('Y-m-d H:i:s'));
+		return $this->db->get('news')->result(); // upravené
 	}
 
 

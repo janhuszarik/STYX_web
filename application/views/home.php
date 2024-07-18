@@ -9,15 +9,17 @@
 						<hr>
 						<br>
 						<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides" data-plugin-options="{'items': 4, 'margin': 10, 'loop': false, 'nav': true, 'dots': false}">
-							<div class="home-carousel-card">
-								<div class="home-carousel-img-container">
-									<img alt="" class="img-fluid rounded" src="<?=BASE_URL?>img/test.png">
+							<?php foreach ($news as $news_item): ?>
+								<div class="home-carousel-card" onclick="location.href='<?=$news_item->buttonUrl?>';" style="cursor: pointer;">
+									<div class="home-carousel-img-container">
+										<img alt="" class="img-fluid rounded" src="<?=BASE_URL?>uploads/news/<?=$news_item->image?>">
+									</div>
+									<div class="home-carousel-card-content">
+										<h5><?=$news_item->name?></h5>
+										<p><?=$news_item->name1?></p>
+									</div>
 								</div>
-								<div class="home-carousel-card-content">
-									<h5>Ihr Geschenk zu Ihrem Einkauf</h5>
-									<p>Schon einmal fest statt flüssig geduscht?</p>
-								</div>
-							</div>
+							<?php endforeach; ?>
 						</div>
 					</div>
 				</div>
@@ -29,6 +31,7 @@
 			</div>
 		</div>
 	</div>
+
 
 
 

@@ -27,14 +27,13 @@ class App extends CI_Controller
 
 	public function home()
 	{
-
-
-
-		// Načítanie dát
+		// Načítanie a posielanie dát
 		$data['user'] = $this->ion_auth->user()->row();
 		$data['sliders'] = $this->App_model->getSliders(true);
-		$data['news'] = $this->App_model->getNews();
+		$data['news'] = $this->App_model->getAllActiveNews(); // upravené
 
+
+		// Načítanie dát kontrolera
 		$data['page'] = 'home';
 		$data['title'] = lang('HOME_TITLE');
 		$data['description'] = lang('HOME_DESCRIPTION');

@@ -181,11 +181,11 @@ class Admin extends CI_Controller
 		}
 	}
 
-	private function upload_image($field_name) {
+	private function upload_image($field_name, $path = 'uploads/sliders/') {
 		log_message('debug', 'FCPATH value: ' . FCPATH);
 		log_message('debug', 'Current working directory: ' . getcwd());
 
-		$upload_path = FCPATH . 'uploads/sliders/';
+		$upload_path = FCPATH . $path;
 		log_message('debug', 'Upload path: ' . $upload_path);
 
 		if (!is_dir($upload_path)) {
@@ -210,7 +210,6 @@ class Admin extends CI_Controller
 		$config['max_size'] = 3048;
 		$config['encrypt_name'] = TRUE;
 
-		// Ensure upload library is loaded with new config
 		$this->load->library('upload', $config);
 		$this->upload->initialize($config);
 
@@ -226,68 +225,38 @@ class Admin extends CI_Controller
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	function newsSave()
 	{
 		$post = $this->input->post();
 		$id = $this->uri->segment('4');
 		$segment2 = $this->uri->segment('3'); // edit alebo del
 
-
 		if (!empty($post)) {
+			$image = $this->upload_image('image', 'uploads/news/');
+			if (isset($image['error'])) {
+				$this->session->set_flashdata('error', $image['error']);
+				$data['edit'] = (object)$post;
+				$this->load->view('admin/layout/normal', $data);
+				return;
+			}
 
-			if (!empty($editId)) {
-				if ($this->Admin_model->newsSave($post)) {
+			if (!empty($id)) {
+				if ($this->Admin_model->newsSave($post, $image)) {
 					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
 					redirect(BASE_URL . 'admin/news/');
 				} else {
 					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
 					$data['edit'] = (object)$post;
 				}
-
 			} else {
-
-				if ($this->Admin_model->newsSave($post)) {
+				if ($this->Admin_model->newsSave($post, $image)) {
 					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
 					redirect(BASE_URL . 'admin/news');
 				} else {
 					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
 					$data['edit'] = (object)$post;
-//				redirect(BASE_URL . 'admin/profilCard/'.$id);
 				}
 			}
-
 		}
 		if ($segment2 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->newsDelete($id)) {
@@ -295,28 +264,59 @@ class Admin extends CI_Controller
 				redirect(BASE_URL . 'admin/news');
 			} else {
 				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
-
 			}
 		}
 
-		if (empty($id))
-		{
-
+		if (empty($id)) {
 			$data['newss'] = $this->Admin_model->getNews();
 			$data['news'] = $this->Admin_model->getNews($id);
 			$data['title'] = 'News';
 			$data['page'] = 'admin/settings/news';
 			$this->load->view('admin/layout/normal', $data);
-
 		} else {
 			$data['newss'] = $this->Admin_model->getNews();
 			$data['news'] = $this->Admin_model->getNews($id);
-
 			$data['title'] = 'News';
 			$data['page'] = 'admin/settings/news';
 			$this->load->view('admin/layout/normal', $data);
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

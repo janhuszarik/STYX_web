@@ -136,16 +136,20 @@ function getNewsletters(){
 
 
 
-	function newsSave($post = false)
+	function newsSave($post = false, $image = false)
 	{
-
 		$data = array(
-		'name' => $this->input->post('name'),
-		'name1' => $this->input->post('name1'),
-		'buttonName' => $this->input->post('buttonName'),
-		'buttonUrl' => $this->input->post('buttonUrl'),
-		'active' => $this->input->post('active'),
+			'lang'=> $this->input->post('lang'),
+			'name' => $this->input->post('name'),
+			'name1' => $this->input->post('name1'),
+			'buttonUrl' => $this->input->post('buttonUrl'),
+			'active' => $this->input->post('active'),
+			'start_date' => $this->input->post('start_date'),
+			'end_date' => $this->input->post('end_date')
 		);
+		if ($image && !isset($image['error'])) {
+			$data['image'] = $image['file_name'];
+		}
 
 		if (is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
@@ -154,6 +158,8 @@ function getNewsletters(){
 			return $this->db->insert('news', $data);
 		}
 	}
+
+
 	function getNews($id = false)
 	{
 
