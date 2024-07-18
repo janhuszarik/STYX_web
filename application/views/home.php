@@ -15,7 +15,7 @@
 										<img alt="" class="img-fluid rounded" src="<?=BASE_URL?>uploads/news/<?=$news_item->image?>">
 									</div>
 									<div class="home-carousel-card-content">
-										<h4><?=$news_item->name?></h4>
+										<h5><?=$news_item->name?></h5>
 										<p><?=$news_item->name1?></p>
 									</div>
 								</div>
