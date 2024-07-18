@@ -1,7 +1,7 @@
 <body data-plugin-page-transition>
 <div class="body">
 	<header id="header" data-plugin-options="{'stickyEnabled': true, 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyStartAt': 45, 'stickySetTop': '-45px', 'stickyChangeLogo': true}">
-		
+
 		<div class="header-body">
 			<div class="header-container container">
 				<div class="header-row">
@@ -19,7 +19,7 @@
 							<nav class="header-nav-top">
 								<ul class="nav nav-pills">
 									<li class="nav-item dropdown nav-item-left-border d-none d-sm-block nav-item-left-border-remove nav-item-left-border-md-show">
-										<div style="padding: 5px" class="d-flex">
+										<div style="padding: 0px" class="d-flex">
 											<?php foreach (getLanguages() as $l){ ?>
 												<div class="active lang me-2">
 													<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="40px" alt=""></a>
