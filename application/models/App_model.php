@@ -46,6 +46,7 @@ class app_model extends CI_Model {
 	{
 		$this->db->select('*');
 		$this->db->where('active', '1');
+		$this->db->where('lang', language());
 		$this->db->where('start_date <=', date('Y-m-d H:i:s'));
 		$this->db->where('end_date >=', date('Y-m-d H:i:s'));
 		return $this->db->get('news')->result(); // upravené

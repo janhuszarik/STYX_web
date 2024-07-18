@@ -94,7 +94,7 @@
 	return current_url(); // Alebo iná metóda, ktorá získava aktuálnu URL
 }
 
-function getMenu() {
+	function getMenu() {
 	$ci = get_instance();
 	$language = language(); // Predpokladám, že language() vracia aktuálny jazyk
 

@@ -1,3 +1,4 @@
+
 <div class="col-lg-12">
 	<div class="row">
 		<div class="col-lg-6">
@@ -15,7 +16,7 @@
 						<?php } ?>
 
 						<div class="row form-group pb-3">
-							<div class="col-lg-6">
+							<div class="col-lg-12">
 								<div class="form-group">
 									<label class="col-form-label" for="inputLang">Sprache</label>
 									<select class="form-control" name="lang" id="inputLang">
@@ -61,23 +62,27 @@
 							<div class="col-lg-6">
 								<div class="form-group">
 									<label class="col-form-label" for="start_date">Startdatum</label>
-									<input type="datetime-local" name="start_date" class="form-control" id="start_date" value="<?=!empty($news->start_date)?$news->start_date: ''?>">
+									<input type="date" name="start_date" class="form-control" id="start_date" value="<?=!empty($news->start_date)?$news->start_date: ''?>">
 								</div>
 							</div>
 							<div class="col-lg-6">
 								<div class="form-group">
 									<label class="col-form-label" for="end_date">Enddatum</label>
-									<input type="datetime-local" name="end_date" class="form-control" id="end_date" value="<?=!empty($news->end_date)?$news->end_date: ''?>">
+									<input type="date" name="end_date" class="form-control" id="end_date" value="<?=!empty($news->end_date)?$news->end_date: ''?>">
 								</div>
 							</div>
 						</div>
 
+
 						<div class="form-group pb-3">
 							<label class="col-form-label" for="active">Ist Aktiv?</label>
-							<input type="hidden" name="active" value="0">
-							<input type="checkbox" name="active" value="1" <?php echo isset($news->active) && $news->active ? 'checked' : ''; ?>><br>
+							<select name="active" class="form-control" id="activeSelect" onchange="updateBackgroundColor()">
+								<option value="1" <?php echo isset($news->active) && $news->active ? 'selected' : ''; ?>>Aktiv</option>
+								<option value="0" <?php echo isset($news->active) && !$news->active ? 'selected' : ''; ?>>Inaktiv</option>
+							</select>
 							<small>Wenn keine Nachrichten aktiv sind, wird der gesamte Abschnitt unter dem Banner deaktiviert!!!</small>
 						</div>
+
 						<footer class="card-footer text-end">
 							<?php if (!empty($news->id)){ ?>
 								<input type="hidden" name="id" value="<?=$news->id?>">
@@ -155,9 +160,21 @@
 			$(this).find(":input.error:first").focus();
 		}
 	});
-</script>
-<script>
+	function updateBackgroundColor() {
+		const selectElement = document.getElementById('activeSelect');
+		const selectedValue = selectElement.value;
+
+		if (selectedValue == '1') {
+			selectElement.style.backgroundColor = 'green';
+		} else {
+			selectElement.style.backgroundColor = 'red';
+		}
+	}
+
+	// Initial call to set the background color on page load
+	updateBackgroundColor();
 	$(document).ready(function() {
 		$('#Input5').summernote();
 	});
 </script>
+

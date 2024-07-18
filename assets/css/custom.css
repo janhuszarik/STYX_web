@@ -264,7 +264,8 @@
 
 .home-carousel-card-content p {
 	display: none;
-	margin-top: 8px;
+	margin-top: 25px;
+	font-size: 15px;
 }
 
 .home-carousel-card:hover img {
