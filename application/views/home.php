@@ -1,13 +1,14 @@
 
+
+
+</style>
 <div role="main" class="main">
 	<div role="main" class="main">
 		<div class="home-intro light border border-bottom-0 mb-0">
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<h1 class="text-center"><?=lang('AKTUELL')?></h1>
-						<hr>
-						<br>
+						<h1 style='font-weight: bolder' class="text-center"><?=lang('AKTUELL')?></h1>
 						<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides" data-plugin-options="{'items': 4, 'margin': 10, 'loop': false, 'nav': true, 'dots': false}">
 							<?php foreach ($news as $news_item): ?>
 								<div class="home-carousel-card" onclick="location.href='<?=$news_item->buttonUrl?>';" style="cursor: pointer;">
@@ -23,11 +24,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col">
-						<hr class="solid my-5">
-					</div>
-				</div>
+
 			</div>
 		</div>
 	</div>
