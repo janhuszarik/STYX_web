@@ -132,8 +132,6 @@ class Admin extends CI_Controller
 		$this->load->view('admin/layout/normal', $data);
 	}
 
-
-
 	public function delete_slider($id) {
 		if ($this->Admin_model->delete_slider($id)) {
 			$this->session->set_flashdata('message', 'Slider wurde erfolgreich gelöscht');

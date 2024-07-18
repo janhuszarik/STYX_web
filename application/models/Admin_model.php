@@ -93,14 +93,13 @@ function getNewsletters(){
 
 
 	public function get_all_sliders() {
-		$this->db->order_by('orderBy', 'ASC'); // Order by orderBy field
+		$this->db->order_by('orderBy', 'ASC');
 		return $this->db->get('slider')->result_array();
 	}
 
 	public function get_slider($id) {
 		return $this->db->get_where('slider', array('id' => $id))->row_array();
 	}
-
 
 	public function save_slider($data, $id = null) {
 		if ($id) {
@@ -118,6 +117,7 @@ function getNewsletters(){
 	public function delete_slider($id) {
 		return $this->db->delete('slider', array('id' => $id));
 	}
+
 
 
 	public function is_order_by_duplicate($orderBy, $id = null) {

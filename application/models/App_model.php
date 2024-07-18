@@ -30,13 +30,14 @@ class app_model extends CI_Model {
 	}
 
 
-	public function getSliders($onlyActive = false) {
+	public function getSliders($onlyActive = false,) {
 		$this->db->select('*');
 		if ($onlyActive) {
 			$this->db->where('active', '1');
-			$this->db->order_by('orderBy', 'ASC'); // Sort by orderBy
-
 		}
+		$this->db->where('lang', language());
+		$this->db->order_by('orderBy', 'ASC'); // Sort by orderBy
+
 		return $this->db->get('slider')->result();
 	}
 

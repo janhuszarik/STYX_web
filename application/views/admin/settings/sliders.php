@@ -23,6 +23,18 @@
 				</header>
 				<div class="card-body">
 					<?php echo form_open_multipart('admin/sliderSave/' . (isset($slider['id']) ? $slider['id'] : ''), ['id' => 'sliderForm']); ?>
+
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="col-form-label" for="inputLang">Sprache</label>
+								<select class="form-control" name="lang" id="inputLang">
+									<option value="de" <?php echo ($menu->lang == 'de') ? 'selected' : ''; ?>>Deutsch</option>
+									<option value="en" <?php echo ($menu->lang == 'en') ? 'selected' : ''; ?>>English</option>
+								</select>
+							</div>
+						</div>
+					</div>
 					<div class="row form-group pb-3">
 						<div class="col-lg-6">
 							<div class="form-group">
@@ -145,6 +157,7 @@
 							<thead>
 							<tr>
 								<th>#</th>
+								<th></th>
 								<th>Image</th>
 								<th>Haupttext</th>
 								<th>Button text</th>
@@ -159,6 +172,12 @@
 								<?php foreach ($sliders as $index => $slider): ?>
 									<tr class="text-center">
 										<td><?php echo $index + 1; ?></td>
+										<?php if (count(getLanguages()) > 1) { ?>
+											<td class="text-center">
+												<img src="<?php echo langInfo($slider['lang'])['flag']; ?>" width="30" alt="">
+											</td>
+										<?php } ?>
+
 										<td><img src="<?php echo base_url('uploads/sliders/' . $slider['image']); ?>" width="50"></td>
 										<td><?php echo $slider['name1']; ?></td>
 										<td><?php echo $slider['button_text']; ?></td>
