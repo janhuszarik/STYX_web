@@ -9,7 +9,7 @@
 						<div class="header-row">
 							<div class="header-logo">
 								<a href="<?=BASE_URL?>">
-									<img alt="STYX Logo" width="180" height="80" data-sticky-width="102" data-sticky-height="40" data-sticky-top="40" src="<?=BASE_URL.LOGO?>">
+									<img alt="STYX Logo" width="180" height="80" data-sticky-width="102" data-sticky-height="40" data-sticky-top="25" src="<?=BASE_URL.LOGO?>">
 								</a>
 							</div>
 						</div>
