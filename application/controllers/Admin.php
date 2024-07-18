@@ -225,15 +225,18 @@ class Admin extends CI_Controller
 	}
 
 
-	function newsSave()
-	{
+	function newsSave() {
 		$post = $this->input->post();
 		$id = $this->uri->segment('4');
 		$segment2 = $this->uri->segment('3'); // edit alebo del
 
 		if (!empty($post)) {
+			// Získanie starého obrázka, ak existuje
+			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
+
+			// Nahranie nového obrázka, ak bol nahraný
 			$image = $this->upload_image('image', 'uploads/news/');
-			if (isset($image['error'])) {
+			if (isset($image['error']) && !$image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['edit'] = (object)$post;
 				$this->load->view('admin/layout/normal', $data);
@@ -241,7 +244,13 @@ class Admin extends CI_Controller
 			}
 
 			if (!empty($id)) {
-				if ($this->Admin_model->newsSave($post, $image)) {
+				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
+					if ($image && !isset($image['error'])) {
+						// Odstránenie starého obrázka, ak bol nahradený novým
+						if ($old_image && file_exists(FCPATH . 'uploads/news/' . $old_image)) {
+							unlink(FCPATH . 'uploads/news/' . $old_image);
+						}
+					}
 					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
 					redirect(BASE_URL . 'admin/news/');
 				} else {
@@ -249,7 +258,7 @@ class Admin extends CI_Controller
 					$data['edit'] = (object)$post;
 				}
 			} else {
-				if ($this->Admin_model->newsSave($post, $image)) {
+				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
 					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
 					redirect(BASE_URL . 'admin/news');
 				} else {
@@ -258,6 +267,7 @@ class Admin extends CI_Controller
 				}
 			}
 		}
+
 		if ($segment2 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->newsDelete($id)) {
 				$this->session->set_flashdata('message', 'die Daten werden unwiederbringlich gelöscht');
@@ -281,6 +291,7 @@ class Admin extends CI_Controller
 			$this->load->view('admin/layout/normal', $data);
 		}
 	}
+
 
 
 

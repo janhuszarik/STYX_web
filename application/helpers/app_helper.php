@@ -84,9 +84,9 @@
 }
 	function active($option) {
 	if ($option == '1') {
-		return '<i style="color: green" class="fa fa-check color_green"></i>';
+		return '<i style="color: green; font-weight: bold; font-size: 17px" class="fa fa-check color_green"></i>';
 	} else {
-		return '<i style="color: red" class="fa fa-times trash_icon_color"></i>';
+		return '<i style="color: red; font-weight: bold; font-size: 17px" class="fa fa-times trash_icon_color"></i>';
 	}
 }
 

@@ -136,8 +136,7 @@ function getNewsletters(){
 
 
 
-	function newsSave($post = false, $image = false)
-	{
+	function newsSave($post = false, $image = false, $old_image = false) {
 		$data = array(
 			'lang'=> $this->input->post('lang'),
 			'name' => $this->input->post('name'),
@@ -147,8 +146,13 @@ function getNewsletters(){
 			'start_date' => $this->input->post('start_date'),
 			'end_date' => $this->input->post('end_date')
 		);
+
+		// Ak je nahraná nová fotka a neobsahuje chybu, nastavíme ju do dát
 		if ($image && !isset($image['error'])) {
 			$data['image'] = $image['file_name'];
+		} else if ($old_image) {
+			// Ak nie je nahraná nová fotka, ponecháme starú
+			$data['image'] = $old_image;
 		}
 
 		if (is_numeric($post['id'])) {
@@ -158,6 +162,7 @@ function getNewsletters(){
 			return $this->db->insert('news', $data);
 		}
 	}
+
 
 
 	function getNews($id = false)

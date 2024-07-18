@@ -16,7 +16,7 @@
 						<?php } ?>
 
 						<div class="row form-group pb-3">
-							<div class="col-lg-12">
+							<div class="col-lg-6">
 								<div class="form-group">
 									<label class="col-form-label" for="inputLang">Sprache</label>
 									<select class="form-control" name="lang" id="inputLang">
@@ -24,6 +24,13 @@
 										<option value="en" <?php echo ($menu->lang == 'en') ? 'selected' : ''; ?>>English</option>
 									</select>
 								</div>
+							</div>
+							<div class="col-lg-6">
+								<label class="col-form-label" for="active">Ist Aktiv?</label>
+								<select name="active" class="form-control" id="activeSelect">
+									<option value="1" <?php echo isset($news->active) && $news->active ? 'selected' : ''; ?>>Aktiv</option>
+									<option value="0" <?php echo isset($news->active) && !$news->active ? 'selected' : ''; ?>>Inaktiv</option>
+								</select>
 							</div>
 						</div>
 
@@ -61,29 +68,19 @@
 						<div class="row form-group pb-3">
 							<div class="col-lg-6">
 								<div class="form-group">
-									<label class="col-form-label" for="start_date">Startdatum</label>
+									<label class="col-form-label" for="start_date">Startdatum*</label>
 									<input type="date" name="start_date" class="form-control" id="start_date" value="<?=!empty($news->start_date)?$news->start_date: ''?>">
 								</div>
 							</div>
 							<div class="col-lg-6">
 								<div class="form-group">
-									<label class="col-form-label" for="end_date">Enddatum</label>
+									<label class="col-form-label" for="end_date">Enddatum*</label>
 									<input type="date" name="end_date" class="form-control" id="end_date" value="<?=!empty($news->end_date)?$news->end_date: ''?>">
 								</div>
 							</div>
 						</div>
-
-
-						<div class="form-group pb-3">
-							<label class="col-form-label" for="active">Ist Aktiv?</label>
-							<select name="active" class="form-control" id="activeSelect" onchange="updateBackgroundColor()">
-								<option value="1" <?php echo isset($news->active) && $news->active ? 'selected' : ''; ?>>Aktiv</option>
-								<option value="0" <?php echo isset($news->active) && !$news->active ? 'selected' : ''; ?>>Inaktiv</option>
-							</select>
-							<small>Wenn keine Nachrichten aktiv sind, wird der gesamte Abschnitt unter dem Banner deaktiviert!!!</small>
-						</div>
-
-						<footer class="card-footer text-end">
+						<br><br>
+							<footer class="card-footer text-end">
 							<?php if (!empty($news->id)){ ?>
 								<input type="hidden" name="id" value="<?=$news->id?>">
 								<button type="submit" class="btn btn-primary">Bearbeiten</button>
@@ -116,8 +113,9 @@
 								<th>#</th>
 								<th>Überschrift</th>
 								<th>Hauptüberschrift</th>
-								<th>Button text</th>
-								<th>Button link</th>
+								<th>URL</th>
+								<th>ab:</th>
+								<th>bis:</th>
 								<th>Aktiv</th>
 								<th></th>
 								<th></th>
@@ -135,10 +133,11 @@
 										<td data-title="#" class="text-end" title="<?=$r->id?>"><?=$k?></td>
 										<td data-title="Überschrift"><?=$r->name?></td>
 										<td data-title="Hauptüberschrift"><?=$r->name1?></td>
-										<td data-title="Button text"><?=$r->buttonName?></td>
-										<td data-title="Button link"><?=$r->buttonUrl?></td>
-										<td data-title="Aktiv" class="text-center"><?=activeToIcon($r->active)?></td>
-										<td data-title="Bild" class="text-center"><img src="<?=BASE_URL?>uploads/news/<?=$r->image?>" style="width: 100px;"></td>
+										<td data-title="Button text"><?=$r->buttonUrl?></td>
+										<td data-title="ab"><?= date('d.m.Y', strtotime($r->start_date)) ?></td>
+										<td data-title="bis"><?= date('d.m.Y', strtotime($r->end_date))?></td>
+										<td data-title="Aktiv" class="text-center"><?=active($r->active)?></td>
+										<td data-title="Bild" class="text-center"><img src="<?=BASE_URL?>uploads/news/<?=$r->image?>" style="width: 50px;"></td>
 										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/news/edit/'.$r->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
 										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/news/del/'.$r->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
 									</tr>
@@ -160,21 +159,12 @@
 			$(this).find(":input.error:first").focus();
 		}
 	});
-	function updateBackgroundColor() {
-		const selectElement = document.getElementById('activeSelect');
-		const selectedValue = selectElement.value;
-
-		if (selectedValue == '1') {
-			selectElement.style.backgroundColor = 'green';
-		} else {
-			selectElement.style.backgroundColor = 'red';
-		}
-	}
 
 	// Initial call to set the background color on page load
 	updateBackgroundColor();
 	$(document).ready(function() {
 		$('#Input5').summernote();
 	});
+
 </script>
 
