@@ -17,7 +17,7 @@
 									</h1>
 								<?php endif; ?>
 								<?php if (!empty($s->name2)): ?>
-									<h1 class="text-color-dark font-weight-extra-bold text-5 mb-3 appear-animation" data-appear-animation="blurIn" data-appear-animation-delay="1000" data-plugin-options="{'minWindowWidth': 0}"><?php echo $s->name2; ?></h1>
+									<h1 class="text-color-dark font-weight-extra-bold text-6 mb-3 appear-animation" data-appear-animation="blurIn" data-appear-animation-delay="1000" data-plugin-options="{'minWindowWidth': 0}"><?php echo $s->name2; ?></h1>
 								<?php endif; ?>
 								<?php if (!empty($s->name3)): ?>
 									<p class="text-5 text-color-dark font-weight-light mb-0" data-plugin-animated-letters data-plugin-options="{'startDelay': 2000, 'minWindowWidth': 0}"><?php echo $s->name3; ?></p>

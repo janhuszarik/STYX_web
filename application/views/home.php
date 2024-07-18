@@ -1,7 +1,6 @@
 
 
 
-</style>
 <div role="main" class="main">
 	<div role="main" class="main">
 		<div class="home-intro light border border-bottom-0 mb-0">
