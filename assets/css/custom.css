@@ -222,13 +222,15 @@
 /*Nastavenie css pre carussel-home-aktuelles :*/
 .home-carousel-card {
 	position: relative;
-	width: 270px;
+	width: 100%;
+	max-width: 270px;
 	overflow: hidden;
 	border: 1px solid #ccc;
 	border-radius: 8px;
 	transition: all 0.3s ease-in-out;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	background: white;
+	margin: 0 auto;
 }
 
 .home-carousel-card .home-carousel-img-container {
@@ -276,6 +278,54 @@
 .home-carousel-card:hover .home-carousel-card-content p {
 	display: block;
 }
+
+/* Responsive CSS */
+@media (max-width: 1200px) {
+	.home-carousel-card {
+		max-width: 220px;
+	}
+}
+
+@media (max-width: 992px) {
+	.home-carousel-card {
+		max-width: 200px;
+	}
+}
+
+@media (max-width: 768px) {
+	.home-carousel-card {
+		max-width: 180px;
+	}
+}
+
+@media (max-width: 576px) {
+	.home-carousel-card {
+		max-width: 150px;
+	}
+
+	.home-carousel-card-content {
+		padding: 12px;
+	}
+}
+
+@media (max-width: 400px) {
+	.home-carousel-card {
+		max-width: 130px;
+	}
+
+	.home-carousel-card-content {
+		padding: 8px;
+	}
+
+	.home-carousel-card-content h5 {
+		font-size: 14px;
+	}
+
+	.home-carousel-card-content p {
+		font-size: 12px;
+	}
+}
+
 
 
 
