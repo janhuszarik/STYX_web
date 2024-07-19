@@ -34,7 +34,7 @@
 				<div class="row">
 					<div class="col">
 						<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
-						<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides" data-plugin-options="{'items': 5, 'margin': 10, 'loop': false, 'nav': true, 'dots': false}">
+						<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides" data-plugin-options="{'items': 6, 'margin': 10, 'loop': false, 'nav': true, 'dots': false}">
 							<?php foreach ($product as $product_item): ?>
 								<div class="home-carousel-card" onclick="location.href='<?=$product_item->url?>';" style="cursor: pointer;">
 									<div class="home-carousel-img-container">
@@ -45,7 +45,7 @@
 									</div>
 									<?php if ($product_item->action == 1): ?>
 										<div class="aktion-ribbon">
-											<span>Aktion <?php if (!empty($product_item->price)) { ?> / <?=$product_item->price?><?php } else { echo ''; } ?></span>
+											<span>Rabatt <?php if (!empty($product_item->price)) { ?> / <?=$product_item->price?><?php } else { echo ''; } ?></span>
 										</div>
 									<?php endif; ?>
 
