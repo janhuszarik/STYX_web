@@ -27,36 +27,7 @@
 			</div>
 		</div>
 	</div>
-	<style>
-		.home-carousel-card {
-			position: relative;
-		}
 
-		.aktion-ribbon {
-			width: 150px;
-			height: 150px;
-			overflow: hidden;
-			position: absolute;
-			top: -10px;
-			right: -10px;
-		}
-
-		.aktion-ribbon span {
-			position: absolute;
-			display: block;
-			width: 200px;
-			padding: 1px 0 0 9px;
-			background-color: #75a575;
-			color: white;
-			font-weight: bold;
-			text-align: center;
-			transform: rotate(45deg);
-			top: 30px;
-			right: -50px;
-		}
-
-
-	</style>
 	<div role="main" class="main">
 		<div class="home-intro light border border-bottom-0 mb-0">
 			<div class="container">
@@ -72,9 +43,12 @@
 									<div class="home-carousel-card-content-product">
 										<h5><?=$product_item->name?></h5>
 									</div>
-									<div class="aktion-ribbon">
-										<span>Aktion / 35€</span>
-									</div>
+									<?php if ($product_item->action == 1): ?>
+										<div class="aktion-ribbon">
+											<span>Aktion <?php if (!empty($product_item->price)) { ?> / <?=$product_item->price?><?php } else { echo ''; } ?></span>
+										</div>
+									<?php endif; ?>
+
 								</div>
 							<?php endforeach; ?>
 						</div>

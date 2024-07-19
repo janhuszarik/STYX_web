@@ -81,6 +81,21 @@
 								</div>
 							</div>
 						</div>
+						<div class="row form-group pb-3">
+							<div class="col-lg-6">
+								<label class="col-form-label" for="active">Ist Aktion?</label>
+								<select name="action" class="form-control" id="activeSelect">
+									<option value="1" <?php echo isset($product->action) && $product->action ? 'selected' : ''; ?>>JA</option>
+									<option value="0" <?php echo isset($product->action) && !$product->action ? 'selected' : ''; ?>>Nein</option>
+								</select>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label class="col-form-label" for="Input1">Preis</label>
+									<input placeholder="In welcher Position?" type="text" name="price" class="form-control" id="Input1" value="<?=!empty($product->price)?$product->price: ''?>" required>
+								</div>
+							</div>
+						</div>
 						<br><br>
 							<footer class="card-footer text-end">
 							<?php if (!empty($product->id)){ ?>
@@ -119,6 +134,7 @@
 								<th>bis:</th>
 								<th>orderBy:</th>
 								<th>Aktiv</th>
+								<th>Aktion</th>
 								<th></th>
 								<th></th>
 							</tr>
@@ -139,6 +155,7 @@
 										<td data-title="bis"><?= date('d.m.Y', strtotime($r->end_date))?></td>
 										<td data-title="orderBy" class="text-center"><?=$r->orderBy?></td>
 										<td data-title="Aktiv" class="text-center"><?=active($r->active)?></td>
+										<td data-title="Aktiv" class="text-center"><?=active($r->action)?></td>
 										<td data-title="Bild" class="text-center"><img src="<?=BASE_URL?>uploads/product/<?=$r->image?>" style="width: 50px;"></td>
 										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/product/edit/'.$r->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
 										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/product/del/'.$r->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>

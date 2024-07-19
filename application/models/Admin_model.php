@@ -190,6 +190,8 @@ function getNewsletters(){
 			'name' => $this->input->post('name'),
 			'url' => $this->input->post('url'),
 			'active' => $this->input->post('active'),
+			'action' => $this->input->post('action'),
+			'price' => $this->input->post('price'),
 			'orderBy' => $this->input->post('orderBy'),
 			'start_date' => $this->input->post('start_date'),
 			'end_date' => $this->input->post('end_date')
