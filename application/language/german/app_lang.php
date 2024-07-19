@@ -38,6 +38,12 @@ $lang['HÄNDLER_URL'] 									= 'https://www.aroma-derm.com/login.php?language=
 $lang['CONTACT_US'] 									= 'Kontaktieren Sie uns';
 $lang['AKTUELL'] 										= 'AKTUELLES';
 $lang['PRODUCT_WEB'] 									= 'BELIEBTE PRODUKTE';
+$lang['FIRMA_LOGOS'] 									= 'UNSER UNTERNEHMEN';
+$lang['FIRMA_LOGOS_TEXT'] 								= 'Hand in Hand mit der Natur: Mit dieser Philosophie widmet sich das österreichische Familienunternehmen STYX Naturcosmetic 
+                             								der Herstellung von zertifizierter Naturkosmetik – und das bereits seit mehr als fünfzig Jahren! Höchste Qualität, 
+                             								pflanzliche Rohstoffe aus biologischem Anbau oder Wildwuchs stehen bei allen STYX Produkten im Mittelpunkt, 
+                             								sei es <a href="https://shop.styx.at/Naturkosmetik/Sport:::3_9.html">Chin Min Balsam</a>, <a href="https://shop.styx.at/Naturkosmetik/Hand-und-Fusspflege:::3_77.html">Kartoffel Handcreme</a> oder <a href="https://shop.styx.at/Naturkosmetik/Koerperpflege:::3_75.html">Aloe Vera Körpercreme</a>.';
+
 
 
 

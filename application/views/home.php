@@ -1,6 +1,3 @@
-
-
-
 <div role="main" class="main">
 	<div role="main" class="main">
 		<div class="home-intro light border border-bottom-0 mb-0">
@@ -59,118 +56,43 @@
 	</div>
 
 
-
-
-
 	<div class="container py-5 my-4">
 		<div class="row text-center py-3">
 			<div class="col-md-10 mx-md-auto">
-				<h1 class="word-rotator slide font-weight-bold text-8 mb-3 appear-animation" data-appear-animation="fadeInUpShorter">
-					<span>Porto is </span>
-					<span class="word-rotator-words bg-primary">
-									<b class="is-visible">incredibly</b>
-									<b>especially</b>
-									<b>extremely</b>
-								</span>
-					<span> beautiful and fully responsive.</span>
-				</h1>
-				<p class="lead appear-animation mb-0" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="300">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum, nulla vel pellentesque consequat, ante nulla hendrerit arcu, ac tincidunt mauris lacus sed leo.
-				</p>
+				<h5 class="text-uppercase mt-4"><?=lang('FIRMA_LOGOS')?></h5>
+				<div class="row"> <!-- Added row wrapper for list items -->
+					<ul class="list-unstyled d-flex flex-wrap justify-content-center"> <!-- Flexbox utility classes for layout -->
+						<li class="col-lg-2 col-md-4 col-sm-6 mb-4"> <!-- Adjusted column classes and margin for spacing -->
+							<a class="lightbox" data-plugin-options="{'type':'image'}">
+								<img class="img-fluid" src="<?=BASE_URL.'img/webImage/staat.png'?>" alt="Staatliche_Auszeichnung">
+							</a>
+						</li>
+						<li class="col-lg-2 col-md-4 col-sm-6 mb-4"> <!-- Adjusted column classes and margin for spacing -->
+							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
+								<img class="img-fluid" src="<?=BASE_URL.'img/webImage/eco-cert_start.png'?>" alt="Staatliche_Auszeichnung">
+							</a>
+						</li>
+						<li class="col-lg-2 col-md-4 col-sm-6 mb-4"> <!-- Adjusted column classes and margin for spacing -->
+							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
+								<img class="img-fluid" src="<?=BASE_URL.'img/webImage/Bio-Austria_start.png'?>" alt="Staatliche_Auszeichnung">
+							</a>
+						</li>
+						<li class="col-lg-2 col-md-4 col-sm-6 mb-4"> <!-- Adjusted column classes and margin for spacing -->
+							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
+								<img class="img-fluid" src="<?=BASE_URL.'img/webImage/top_rated_company_24.png'?>" alt="Staatliche_Auszeichnung">
+							</a>
+						</li>
+						<li class="col-lg-2 col-md-4 col-sm-6 mb-4"> <!-- Adjusted column classes and margin for spacing -->
+							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
+								<img class="img-fluid" src="<?=BASE_URL.'img/webImage/trusted-shop_start.png'?>" alt="Staatliche_Auszeichnung">
+							</a>
+						</li>
+					</ul>
+					<p><?=lang('FIRMA_LOGOS_TEXT')?></p>
+				</div>
 			</div>
 		</div>
 	</div>
-
-	<section class="section section-height-5 bg-primary border-0 pt-5 m-0 appear-animation" data-appear-animation="fadeIn">
-		<div class="container">
-			<div class="row mt-4 mt-lg-5">
-				<div class="col-lg-4 appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="200">
-					<div class="feature-box">
-						<div class="feature-box-icon feature-box-icon-large bg-light mt-1">
-							<i class="icons icon-support text-color-primary text-6"></i>
-						</div>
-						<div class="feature-box-info">
-							<h2 class="text-color-light font-weight-bold text-4 line-height-5 mb-1">CUSTOMER SUPPORT</h2>
-							<p class="text-color-light opacity-7">Lorem ipsum dolor sit <span class="alternative-font text-color-light">amet</span>, consectetur adipiscing elit. Praesent tincidunt pretium vulputate.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 appear-animation" data-appear-animation="fadeInUpShorter">
-					<div class="feature-box">
-						<div class="feature-box-icon feature-box-icon-large bg-light mt-1">
-							<i class="icons icon-layers text-color-primary text-6"></i>
-						</div>
-						<div class="feature-box-info">
-							<h2 class="font-weight-bold text-color-light text-4 line-height-5 mb-1">SLIDERS</h2>
-							<p class="text-color-light opacity-7">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget pretium purus.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="200">
-					<div class="feature-box">
-						<div class="feature-box-icon feature-box-icon-large bg-light mt-1">
-							<i class="icons icon-menu text-color-primary text-5"></i>
-						</div>
-						<div class="feature-box-info">
-							<h2 class="font-weight-bold text-color-light text-4 line-height-5 mb-1">BUTTONS</h2>
-							<p class="text-color-light opacity-7">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel magna fringilla.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row mt-lg-4">
-				<div class="col-lg-4 appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="200">
-					<div class="feature-box">
-						<div class="feature-box-icon feature-box-icon-large bg-light mt-1">
-							<i class="icons icon-doc text-color-primary text-5"></i>
-						</div>
-						<div class="feature-box-info">
-							<h2 class="font-weight-bold text-color-light text-4 line-height-5 mb-1">HTML5 / CSS3 / JS</h2>
-							<p class="text-color-light opacity-7">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dignissim ante eleifend.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 appear-animation" data-appear-animation="fadeInUpShorter">
-					<div class="feature-box">
-						<div class="feature-box-icon feature-box-icon-large bg-light mt-1">
-							<i class="icons icon-user text-color-primary text-5"></i>
-						</div>
-						<div class="feature-box-info">
-							<h2 class="font-weight-bold text-color-light text-4 line-height-5 mb-1">ICONS</h2>
-							<p class="text-color-light opacity-7">Lorem ipsum dolor sit <span class="alternative-font text-color-light">amet</span>, consectetur adipiscing elit. Praesent consequat pharetra massa.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="200">
-					<div class="feature-box">
-						<div class="feature-box-icon feature-box-icon-large bg-light mt-1">
-							<i class="icons icon-screen-desktop text-color-primary text-6"></i>
-						</div>
-						<div class="feature-box-info">
-							<h2 class="font-weight-bold text-color-light text-4 line-height-5 mb-1">LIGHTBOX</h2>
-							<p class="text-color-light opacity-7">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla condimentum aliquet erat.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section class="section bg-color-grey-scale-1 border-0 pt-0 pt-md-5 m-0">
-		<div class="container">
-			<div class="row align-items-center justify-content-center pb-4 pb-lg-0">
-				<div class="col-lg-6 order-2 order-lg-1 pe-5 pt-4 pt-lg-0 mt-md-5 mt-lg-0 appear-animation" data-appear-animation="fadeInRightShorter">
-					<h2 class="font-weight-normal text-6 mb-3"><strong class="font-weight-extra-bold">Who</strong> We Are</h2>
-					<p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit massa enim. Nullam id valorem ipsum dolor sit amet, consectetur adipiscinorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					<p class="pb-2 mb-4">Phasellus blandit massa enim. Nullam id varius elit. blandit massa enimariusius.</p>
-					<a href="#" class="btn btn-dark font-weight-semibold btn-py-2 px-5">Our History</a>
-				</div>
-				<div class="col-9 col-lg-6 order-1 order-lg-2 scale-6 pb-5 pb-lg-0 mt-0 mt-md-4 mb-5 mb-lg-0">
-					<img class="img-fluid appear-animation" src="img/desktop-device-1.png" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="300" data-plugin-options="{'accY': -400}" alt="">
-				</div>
-			</div>
-		</div>
-	</section>
 
 	<div class="container">
 		<div class="featured-boxes py-5 mt-5 mb-4">
