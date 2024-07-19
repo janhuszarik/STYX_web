@@ -28,17 +28,18 @@ class App extends CI_Controller
 	public function home()
 	{
 		// Načítanie a posielanie dát
-		$data['user'] = $this->ion_auth->user()->row();
-		$data['sliders'] = $this->App_model->getSliders(true);
-		$data['news'] = $this->App_model->getAllActiveNews(); // upravené
+		$data['user'] 			= $this->ion_auth->user()->row();
+		$data['sliders'] 		= $this->App_model->getSliders(true);
+		$data['news'] 			= $this->App_model->getAllActiveNews(); // upravené
+		$data['product'] 		= $this->App_model->getAllActiveProduct(); // upravené
 
 
 		// Načítanie dát kontrolera
-		$data['page'] = 'home';
-		$data['title'] = lang('HOME_TITLE');
-		$data['description'] = lang('HOME_DESCRIPTION');
-		$data['keywords'] = lang('HOME_KEYWORDS');
-		$data['image'] = BASE_URL . LOGO;
+		$data['page'] 			= 'home';
+		$data['title'] 			= lang('HOME_TITLE');
+		$data['description'] 	= lang('HOME_DESCRIPTION');
+		$data['keywords'] 		= lang('HOME_KEYWORDS');
+		$data['image'] 			= BASE_URL . LOGO;
 
 		// Načítanie view
 		$this->load->view('layout/normal', $data);
@@ -129,80 +130,7 @@ class App extends CI_Controller
 
 
 
-	function hochzeiten(){
 
-		$data['title'] 			= 'Hochzeiten';
-		$data['page'] 			= 'app/hochzeiten';
-		$data['description'] 	= 'Feiern Sie Ihre Traumhochzeit in unserer wunderschönen Location. Individuelle Gestaltungsmöglichkeiten für Ihren besonderen Tag.';
-		$data['keywords'] 		= 'Hochzeit, Hochzeitslocation, Trauung, Hochzeitsfeier, Brautpaar, Heiraten';
-
-		$this->load->view('layout/normal',$data);
-
-    }
-
-	function festeFeiern(){
-
-		$data['title'] 			= 'Feste Feiern';
-		$data['page'] 			= 'app/feste-feiern';
-		$data['description'] 	= 'Ob Geburtstag, Jubiläum oder Firmenevent – unsere Location bietet den perfekten Rahmen für jedes Fest.';
-		$data['keywords'] 		= 'Feiern, Partys, Geburtstagsfeier, Jubiläum, Firmenevent, Festlocation';
-
-		$this->load->view('layout/normal',$data);
-
-    }
-
-	function bierWeinVerkostung(){
-
-		$data['title'] 			= 'Bier- & Weinverkostung';
-		$data['page'] 			= 'app/bier-wein-verkostung';
-		$data['description'] 	= 'Genießen Sie exquisite Bier- und Weinverkostungen in angenehmer Atmosphäre. Perfekt für Kenner und Liebhaber.';
-		$data['keywords'] 		= 'Weinverkostung, Bierverkostung, Degustation, Weinliebhaber, Bierkenner, Weinevents';
-
-		$this->load->view('layout/normal',$data);
-
-	}
-
-	function rahmenprogramm(){
-
-		$data['title'] 			= 'Rahmenprogramm';
-		$data['page'] 			= 'app/rahmenprogramm';
-		$data['description'] 	= 'Unser vielseitiges Rahmenprogramm bietet abwechslungsreiche Unterhaltung und Aktivitäten für Ihre Veranstaltung.';
-		$data['keywords'] 		= 'Rahmenprogramm, Unterhaltung, Aktivitäten, Eventprogramm, Veranstaltungsideen';
-
-		$this->load->view('layout/normal',$data);
-
-	}
-
-	function serviceCatering(){
-
-		$data['title'] 			= 'Service & Catering';
-		$data['page'] 			= 'app/service-catering';
-		$data['description'] 	= 'Unser professionelles Catering sorgt für kulinarische Highlights und erstklassigen Service bei jedem Event.';
-		$data['keywords'] 		= 'Catering, Eventservice, kulinarische Highlights, Cateringservice, Event Catering, Gastronomie';
-
-		$this->load->view('layout/normal',$data);
-
-	}
-
-	function serviceRemise(){
-
-		$data['title'] 			= 'Austattung Remise';
-		$data['page'] 			= 'app/austattung';
-		$data['description'] 	= 'Unsere professionellen Catering-Dienstleistungen bieten kulinarische Spezialitäten und erstklassigen Service bei jeder Veranstaltung.';
-		$data['keywords'] 		= 'catering, veranstaltungsdienstleistungen, kulinarische spezialitäten, catering-dienstleistungen, event catering, gastronomie';
-
-		$this->load->view('layout/normal', $data);
-	}
-
-	function downloads(){
-
-		$data['title'] 			= 'Downloads | Remise';
-		$data['page'] 			= 'app/downloads';
-		$data['description'] 	= 'Laden Sie unsere Broschüren, Menüs und weitere Materialien herunter, um mehr über unsere Catering-Dienstleistungen und Angebote zu erfahren.';
-		$data['keywords'] 		= 'downloads, broschüren, menüs, catering-dienstleistungen, catering-angebote, catering-informationen, veranstaltungsbroschüren';
-
-		$this->load->view('layout/normal', $data);
-	}
 
 
 

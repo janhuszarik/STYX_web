@@ -163,8 +163,6 @@ function getNewsletters(){
 		}
 	}
 
-
-
 	function getNews($id = false)
 	{
 
@@ -183,6 +181,54 @@ function getNewsletters(){
 
 		$this->db->where('id', $id);
 		return $this->db->delete('news');
+
+	}
+
+	function bestProductSave($post = false, $image = false, $old_image = false) {
+		$data = array(
+			'lang'=> $this->input->post('lang'),
+			'name' => $this->input->post('name'),
+			'url' => $this->input->post('url'),
+			'active' => $this->input->post('active'),
+			'orderBy' => $this->input->post('orderBy'),
+			'start_date' => $this->input->post('start_date'),
+			'end_date' => $this->input->post('end_date')
+		);
+
+		// Ak je nahraná nová fotka a neobsahuje chybu, nastavíme ju do dát
+		if ($image && !isset($image['error'])) {
+			$data['image'] = $image['file_name'];
+		} else if ($old_image) {
+			// Ak nie je nahraná nová fotka, ponecháme starú
+			$data['image'] = $old_image;
+		}
+
+		if (is_numeric($post['id'])) {
+			$this->db->where('id', $post['id']);
+			return $this->db->update('bestProduct', $data);
+		} else {
+			return $this->db->insert('bestProduct', $data);
+		}
+	}
+
+	function getProduct($id = false)
+	{
+
+		if ($id == false) {
+			$this->db->select('*');
+			return $this->db->get('bestProduct')->result();
+
+		} else {
+			$this->db->select('*');
+			$this->db->where('id', $id);
+			return $this->db->get('bestProduct')->row();
+		}
+	}
+	function bestProductDelete($id)
+	{
+
+		$this->db->where('id', $id);
+		return $this->db->delete('bestProduct');
 
 	}
 }

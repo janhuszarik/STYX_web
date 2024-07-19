@@ -292,6 +292,73 @@ class Admin extends CI_Controller
 		}
 	}
 
+	function bestProductSave() {
+		$post = $this->input->post();
+		$id = $this->uri->segment('4');
+		$segment2 = $this->uri->segment('3');
+
+		if (!empty($post)) {
+			// Získanie starého obrázka, ak existuje
+			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
+
+			// Nahranie nového obrázka, ak bol nahraný
+			$image = $this->upload_image('image', 'uploads/product/');
+			if (isset($image['error']) && !$image['error']) {
+				$this->session->set_flashdata('error', $image['error']);
+				$data['edit'] = (object)$post;
+				$this->load->view('admin/layout/normal', $data);
+				return;
+			}
+
+			if (!empty($id)) {
+				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
+					if ($image && !isset($image['error'])) {
+						// Odstránenie starého obrázka, ak bol nahradený novým
+						if ($old_image && file_exists(FCPATH . 'uploads/product/' . $old_image)) {
+							unlink(FCPATH . 'uploads/product/' . $old_image);
+						}
+					}
+					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
+					redirect(BASE_URL . 'admin/bestProduct/');
+				} else {
+					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+					$data['edit'] = (object)$post;
+				}
+			} else {
+				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
+					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
+					redirect(BASE_URL . 'admin/bestProduct');
+				} else {
+					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+					$data['edit'] = (object)$post;
+				}
+			}
+		}
+
+		if ($segment2 == 'del' && is_numeric($id)) {
+			if ($this->Admin_model->bestProductDelete($id)) {
+				$this->session->set_flashdata('message', 'die Daten werden unwiederbringlich gelöscht');
+				redirect(BASE_URL . 'admin/bestProduct');
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+			}
+		}
+
+		if (empty($id)) {
+			$data['products'] = $this->Admin_model->getProduct();
+			$data['product'] = $this->Admin_model->getProduct($id);
+			$data['title'] = 'Beliebte produkte';
+			$data['page'] = 'admin/settings/bestProduct';
+			$this->load->view('admin/layout/normal', $data);
+		} else {
+			$data['products'] = $this->Admin_model->getProduct();
+			$data['product'] = $this->Admin_model->getProduct($id);
+			$data['title'] = 'Beliebte produkte';
+			$data['page'] = 'admin/settings/bestProduct';
+			$this->load->view('admin/layout/normal', $data);
+		}
+	}
+
 
 
 

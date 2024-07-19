@@ -257,6 +257,10 @@
 	transition: all 0.3s ease-in-out;
 	text-align: center;
 }
+.home-carousel-card-content-product {
+	padding: 16px;
+	text-align: center;
+}
 
 .home-carousel-card-content h5 {
 	margin: 0;

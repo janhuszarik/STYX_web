@@ -104,7 +104,13 @@
 									<span>Aktuell</span>
 								</a>
 							</li>
-
+							<li>
+								<a class="nav-link" href="<?=BASE_URL.'admin/bestProduct'?>">
+									<span class="float-end badge badge-primary">Produkte</span>
+									<i class="bx bx-history" aria-hidden="true"></i>
+									<span>Beliebte produkte</span>
+								</a>
+							</li>
 							<li>
 								<a class="nav-link" href="mailbox-folder.html">
 									<span class="float-end badge badge-primary"></span>

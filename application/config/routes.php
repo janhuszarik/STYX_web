@@ -93,6 +93,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/news/edit/:num'] 			= 'admin/newsSave';
 	$route['admin/news/del/:num']			= 'admin/newsSave';
 
+	$route['admin/bestProduct'] 			= 'admin/bestProductSave';
+	$route['admin/bestProductSave'] 		= 'admin/bestProductSave';
+	$route['admin/bestProduct/edit/:num'] 	= 'admin/bestProductSave';
+	$route['admin/bestProduct/del/:num']	= 'admin/bestProductSave';
+
 	$route['Unternehmen/AboutStyx']			= 'App/aboutStyx';
 	$route['Company/About-Styx']			= 'App/contact';
 
