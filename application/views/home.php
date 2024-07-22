@@ -1,6 +1,7 @@
 <div class="home-intro light border border-bottom-0 mb-0">
 	<div class="container">
 		<div class="row">
+			<div class="col">
 				<h1 style='font-weight: bolder' class="text-center"><?=lang('AKTUELL')?></h1>
 				<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides news-carousel" data-plugin-options="{'items': 4, 'margin': 10, 'loop': true, 'nav': true, 'dots': false, 'autoplay': false}">
 					<?php foreach ($news as $news_item): ?>
@@ -15,6 +16,7 @@
 						</div>
 					<?php endforeach; ?>
 				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -52,7 +54,21 @@
 		</a>
 	<?php endforeach; ?>
 </div>
-
+<script>
+	$(document).ready(function(){
+		$("#product-carousel").owlCarousel({
+			items: 6,
+			loop: true,
+			nav: true,
+			dots: false,
+			autoplay: true,
+			autoplayTimeout: 5000,
+			autoplayHoverPause: true,
+			autoplaySpeed: 1500,
+			slideTransition: 'linear',
+		});
+	});
+</script>
 
 
 <div class="container py-5 my-4">

@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		define('BASE_URL', 'https://styx.styxnatur.at/');
 		define( 'APP_PATH', realpath(__DIR__ .'/../../'));
     }
-    define ( 'VERSION','?v=1.013' );
+    define ( 'VERSION','?v=1.012' );
 
     define ( 'DOMAINSEO',' | styx.at' );
     define ( 'PHONE','+43 6648478034' );
