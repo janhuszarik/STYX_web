@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     
     define ( 'COMPANY','STYX Naturcosmetic' );
-    define ( 'ADRESS','Am Kräutergarten' );
+    define ( 'ADRESS','Am Kräutergarten 6,' );
     define ( 'ZIP','3200' );
     define ( 'CITY','Ober-Grafendorf' );
     define ( 'COUNTRY','Österreich' );

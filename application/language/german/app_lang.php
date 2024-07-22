@@ -5,8 +5,9 @@
 $lang['LOCATION']                                       = 'Standort';
 $lang['PHONE_NUMBER']                                   = '+43 2747 3250';
 $lang['FAX_NUMBER']                                   	= '+43 2747 3250-10';
-$lang['LOCATION_ADDRESS']                               = 'Melk';
+$lang['LOCATION_ADDRESS']                               = 'Ober-Grafendorf';
 $lang['EMAIL']                                          = 'marketing@styx.at';
+$lang['KONTAKT']                                        = 'Kontakt';
 
 
 
