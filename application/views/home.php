@@ -32,6 +32,7 @@
 	</div>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<br>
 	<div class="owl-carousel owl-theme full-width product-carousel">
 =======
@@ -40,6 +41,9 @@
 =======
 	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
 >>>>>>> parent of 075f683 (vb)
+=======
+	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 8, 'loop': true, 'nav': true, 'dots': false, 'responsive': {'0': {'items': 1}, '600': {'items': 1}, '1000': {'items': 6}}}">
+>>>>>>> parent of 7944a06 (f)
 		<?php foreach ($product as $product_item): ?>
 				<a href="<?=$product_item->url?>" aria-label="">
 					<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
