@@ -14,7 +14,7 @@
 <div id="customCookieConsentBanner" class="custom-banner">
 	<div class="custom-banner-content">
 		<div class="custom-banner-text-container">
-			<h2 class="custom-banner-heading">Hallo Remise-Webseitenbenutzer, es ist Zeit für Cookies!</h2>
+			<h2 class="custom-banner-heading">Hallo STYX-Webseitenbenutzer, es ist Zeit für Cookies!</h2>
 			<p class="custom-banner-text">Unsere Website verwendet notwendige Cookies, um die ordnungsgemäße Funktion sicherzustellen, und Tracking-Cookies, um zu verstehen, wie Sie mit ihnen interagieren. Cookies werden erst nach Ihrer Zustimmung gesetzt</p>
 			<a href="<?=BASE_URL.'cookies'?>" class="custom-banner-link">Mehr erfahren</a>
 		</div>

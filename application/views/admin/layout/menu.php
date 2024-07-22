@@ -5,7 +5,7 @@
 	<header class="header">
 		<div class="logo-container">
 			<a href="<?=BASE_URL.'admin'?>" class="logo">
-				<img src="<?=BASE_URL.LOGO?>" width="150" height="35" alt="Remise-Admin logo" />
+				<img src="<?=BASE_URL.LOGO?>" width="150" height="35" alt="STYX-Admin logo" />
 			</a>
 
 			<div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">

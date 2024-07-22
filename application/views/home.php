@@ -32,11 +32,11 @@
 	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
 		<?php foreach ($product as $product_item): ?>
 			<a href="<?= $product_item->url ?>" aria-label="">
-                <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-                    <span class="thumb-info-wrapper">
-                        <img src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>" class="img-fluid" alt="<?= $product_item->name ?>">
-                    </span>
-                </span>
+			<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+				<span class="thumb-info-wrapper">
+					<img src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>" class="img-fluid" alt="<?= $product_item->name ?>">
+				</span>
+			</span>
 				<?php if ($product_item->action == 1): ?>
 					<div class="ribbon">
 						<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
@@ -184,7 +184,7 @@
 </div>
 
 <script>
-	$(document).ready(function(){
+		$(window).on('load', function(){
 		$(".owl-carousel").owlCarousel();
 	});
 </script>
