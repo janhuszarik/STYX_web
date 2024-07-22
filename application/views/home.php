@@ -27,7 +27,7 @@
 </div>
 
 <br>
-<div id="product-carousel" class="owl-carousel owl-theme full-width" data-plugin-options='{"items": 6, "loop": true, "nav": true, "dots": false, "autoplay": true, "autoplayTimeout": 5000, "autoplayHoverPause": true}'>
+<div id="product-carousel" class="owl-carousel owl-theme full-width" data-plugin-options='{"items": 6, "loop": true, "nav": true, "dots": false, "autoplay": true, "autoplayTimeout": 1, "autoplayHoverPause": false}'>
 	<?php foreach ($product as $product_item): ?>
 		<a href="<?=$product_item->url?>" aria-label="">
             <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
@@ -52,6 +52,7 @@
 		</a>
 	<?php endforeach; ?>
 </div>
+
 
 
 <div class="container py-5 my-4">
