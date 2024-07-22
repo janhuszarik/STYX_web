@@ -58,8 +58,12 @@
 				</a>
 		<?php endforeach; ?>
 	</div>
+	<script>
+		$(document).ready(function(){
+			$(".owl-carousel").owlCarousel();
+		});
+	</script>
 
-	
 	<div class="container py-5 my-4">
 		<div class="row text-center py-3">
 			<div class="col-md-10 mx-md-auto">
