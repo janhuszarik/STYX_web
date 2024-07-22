@@ -82,17 +82,23 @@
 							</div>
 						</div>
 						<div class="row form-group pb-3">
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<label class="col-form-label" for="active">Ist Aktion?</label>
 								<select name="action" class="form-control" id="activeSelect">
 									<option value="1" <?php echo isset($product->action) && $product->action ? 'selected' : ''; ?>>JA</option>
 									<option value="0" <?php echo isset($product->action) && !$product->action ? 'selected' : ''; ?>>Nein</option>
 								</select>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label class="col-form-label" for="aktion_name">Aktion bezeichnungs</label>
+									<input placeholder="Rabatt, Aktion usw." type="text" name="aktion_name" class="form-control" id="Input1" value="<?=!empty($product->aktion_name)?$product->aktion_name: ''?>">
+								</div>
+							</div>
+							<div class="col-lg-4">
 								<div class="form-group">
 									<label class="col-form-label" for="Input1">Preis</label>
-									<input placeholder="In welcher Position?" type="text" name="price" class="form-control" id="Input1" value="<?=!empty($product->price)?$product->price: ''?>" required>
+									<input placeholder="In welcher Position?" type="text" name="price" class="form-control" id="Input1" value="<?=!empty($product->price)?$product->price: ''?>">
 								</div>
 							</div>
 						</div>

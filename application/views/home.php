@@ -44,13 +44,16 @@
 				</a>
 				<?php if ($product_item->action == 1): ?>
 					<div class="ribbon">
-						<?php if (!empty($product_item->price)): ?>
-							Rabatt / <?=$product_item->price?>
-						<?php else: ?>
-							Rabatt
+						<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
+							<?=$product_item->aktion_name?> / <?=$product_item->price?>
+						<?php elseif (!empty($product_item->aktion_name)): ?>
+							<?=$product_item->aktion_name?>
+						<?php elseif (!empty($product_item->price)): ?>
+							<?=$product_item->price?>
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
+
 
 				<div class="product-info">
 					<?= $product_item->name ?>
