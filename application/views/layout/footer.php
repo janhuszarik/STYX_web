@@ -57,5 +57,23 @@
 <!-- Theme Initialization Files -->
 <script src="<?=BASE_URL?>assets/js/theme.init.js"></script>
 
+
+<!--newDesign -->
+<script src="<?=BASE_URL?>/design/vendors/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="<?=BASE_URL?>/design/vendors/clipboard/clipboard.min.js"></script>
+<script src="<?=BASE_URL?>/design/vendors/vanilla-lazyload/lazyload.min.js"></script>
+<script src="<?=BASE_URL?>/design/vendors/waypoints/jquery.waypoints.min.js"></script>
+<!--<script src="--><?php //=BASE_URL?><!--/design/vendors/lightgallery/lightgallery.min.js"></script>-->
+<!--<script src="--><?php //=BASE_URL?><!--/design/vendors/lightgallery/plugins/zoom/lg-zoom.min.js"></script>-->
+<!--<script src="--><?php //=BASE_URL?><!--/design/vendors/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script>-->
+<!--<script src="--><?php //=BASE_URL?><!--/design/vendors/lightgallery/plugins/video/lg-video.min.js"></script>-->
+<!--<script src="--><?php //=BASE_URL?><!--/design/vendors/lightgallery/plugins/vimeoThumbnail/lg-vimeo-thumbnail.min.js"></script>-->
+<script src="<?=BASE_URL?>/design/vendors/isotope/isotope.pkgd.min.js"></script>
+<script src="<?=BASE_URL?>/design/vendors/slick/slick.min.js"></script>
+<script src="<?=BASE_URL?>/design/vendors/gsap/gsap.min.js"></script>
+<script src="<?=BASE_URL?>/design/vendors/gsap/ScrollToPlugin.min.js"></script>
+<script src="<?=BASE_URL?>/design/vendors/gsap/ScrollTrigger.min.js"></script>
+<script src="<?=BASE_URL?>/design/vendors/mapbox-gl/mapbox-gl.js"></script>
+<script src="<?=BASE_URL?>/design/js/theme.min.js"></script>
 </body>
 </html>
