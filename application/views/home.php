@@ -32,7 +32,7 @@
 			<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
 		</div>
 	</div>
-	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 8, 'loop': true, 'nav': true, 'dots': false, 'responsive': {'0': {'items': 1}, '600': {'items': 1}, '1000': {'items': 6}}}">
+	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false, 'responsive': {'0': {'items': 1}, '600': {'items': 1}, '1000': {'items': 6}}}">
 		<?php foreach ($product as $product_item): ?>
 				<a href="<?=$product_item->url?>" aria-label="">
 					<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
