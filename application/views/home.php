@@ -34,20 +34,37 @@
 	</div>
 	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 5, 'loop': true, 'nav': true, 'dots': false}">
 		<?php foreach ($product as $product_item): ?>
-			<div>
+			<div class="product-card">
 				<a href="<?=$product_item->url?>" aria-label="">
-                <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-                    <span class="thumb-info-wrapper">
-                        <img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
-                        <span class="thumb-info-title">
-                            <span class="thumb-info-inner"><?=$product_item->name?></span>
+                    <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                        <span class="thumb-info-wrapper">
+                            <img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
                         </span>
                     </span>
-                </span>
 				</a>
+				<?php if ($product_item->action == 1): ?>
+					<div class="ribbon">
+						<?php if (!empty($product_item->price)): ?>
+							Rabatt / <?=$product_item->price?>
+						<?php else: ?>
+							Rabatt
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+
+				<div class="product-info">
+					<?= $product_item->name ?>
+				</div>
 			</div>
 		<?php endforeach; ?>
 	</div>
+
+	<script>
+		$(document).ready(function(){
+			$(".owl-carousel").owlCarousel();
+		});
+	</script>
+
 
 
 	<div class="container py-5 my-4">

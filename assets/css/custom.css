@@ -340,6 +340,38 @@
 	height: 460px;
 	object-fit: cover; /* Ensure the image covers the area without distortion */
 }
+.product-card {
+	border-radius: 5px; /* Optional: Rounded corners */
+	overflow: hidden; /* Ensure child elements don't overflow the card */
+	text-align: center; /* Center align text */
+}
+.product-info {
+	padding: 10px; /* Add padding for better text spacing */
+	background-color: #ffffff; /* Optional: Background color for text area */
+}
+
+.product-card {
+	position: relative; /* Ensure the product card is a positioned element */
+}
+
+.ribbon {
+	position: absolute;
+	top: 35px;
+	right: -52px;
+	width: 203px;
+	background-color: green;
+	color: white;
+	text-align: center;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	z-index: 10;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 5px 0;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
 
 
 /*---------------------------------------------------------------------------------------------------------------*/
