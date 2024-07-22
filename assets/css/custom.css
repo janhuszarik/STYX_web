@@ -334,6 +334,30 @@
 }
 /*---------------------------------------------------------------------------------------------------------------*/
 /*Nastavenie css pre karty produkty :*/
+.owl-carousel {
+	display: flex;
+	overflow: hidden;
+	position: relative;
+}
+
+.owl-carousel .owl-stage {
+	display: flex;
+	animation: scroll 180s linear infinite;
+}
+
+@keyframes scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-100%);
+	}
+}
+
+.owl-carousel .owl-item {
+	flex: 0 0 auto;
+	width: 16.6667%; /* Adjust based on the number of items to display */
+}
 
 .owl-carousel .thumb-info-wrapper img {
 	width: 100%;

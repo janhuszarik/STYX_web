@@ -32,152 +32,48 @@
 			<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
 		</div>
 	</div>
-	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false, 'margin': 2, 'autoplay': true, 'autoplayTimeout': 4000}">
+	<br>
+	<div class="owl-carousel owl-theme full-width">
 		<?php foreach ($product as $product_item): ?>
-				<a href="<?=$product_item->url?>" aria-label="">
-					<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-						<span class="thumb-info-wrapper">
-							<img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
-						</span>
-					</span>
-					<?php if ($product_item->action == 1): ?>
-						<div class="ribbon">
-							<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
-								<?=$product_item->aktion_name?> / <?=$product_item->price?>
-							<?php elseif (!empty($product_item->aktion_name)): ?>
-								<?=$product_item->aktion_name?>
-							<?php elseif (!empty($product_item->price)): ?>
-								<?=$product_item->price?>
-							<?php endif; ?>
-						</div>
-					<?php endif; ?>
-					<div class="product-info">
-						<?= $product_item->name ?>
+			<a href="<?=$product_item->url?>" aria-label="">
+            <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                <span class="thumb-info-wrapper">
+                    <img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
+                </span>
+            </span>
+				<?php if ($product_item->action == 1): ?>
+					<div class="ribbon">
+						<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
+							<?=$product_item->aktion_name?> / <?=$product_item->price?>
+						<?php elseif (!empty($product_item->aktion_name)): ?>
+							<?=$product_item->aktion_name?>
+						<?php elseif (!empty($product_item->price)): ?>
+							<?=$product_item->price?>
+						<?php endif; ?>
 					</div>
-				</a>
+				<?php endif; ?>
+				<div class="product-info">
+					<?= $product_item->name ?>
+				</div>
+			</a>
 		<?php endforeach; ?>
 	</div>
-<!--	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': false, 'nav': true, 'dots': false}">-->
-<!--		--><?php //foreach ($product as $product_item): ?>
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-2.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-4.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-5.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-6.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-4.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--	</div>-->
+
+
 
 
 	<script>
 		$(document).ready(function(){
-			$(".owl-carousel").owlCarousel();
+			$('.owl-carousel').owlCarousel({
+				items: 6,
+				loop: true,
+				nav: true,
+				dots: false,
+				margin: 2,
+				autoplay: false
+			});
 		});
+
 	</script>
 
 
@@ -327,3 +223,4 @@
 
 
 </div>
+
