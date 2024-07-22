@@ -92,8 +92,8 @@ html.lightbox-beforeclose .quick-view {
 .product-info {
 	transition: all 0.2s;
 	padding: 0;
-	/* position: relative; */
-	/*border: 1px solid #f3f3f3;*/
+	position: relative;
+	border: 1px solid #DDD;
 	background: #F7F9FC;
 	display: block;
 	overflow: hidden;

@@ -30,6 +30,7 @@
 			<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
 		</div>
 	</div>
+<<<<<<< HEAD
 
 	<br>
 	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
@@ -63,6 +64,25 @@
 			$(".owl-carousel").owlCarousel();
 		});
 	</script>
+=======
+	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 5, 'loop': true, 'nav': true, 'dots': false}">
+		<?php foreach ($product as $product_item): ?>
+			<div>
+				<a href="<?=$product_item->url?>" aria-label="">
+                <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                    <span class="thumb-info-wrapper">
+                        <img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
+                        <span class="thumb-info-title">
+                            <span class="thumb-info-inner"><?=$product_item->name?></span>
+                        </span>
+                    </span>
+                </span>
+				</a>
+			</div>
+		<?php endforeach; ?>
+	</div>
+
+>>>>>>> parent of 0f83516 (gh)
 
 	<div class="container py-5 my-4">
 		<div class="row text-center py-3">

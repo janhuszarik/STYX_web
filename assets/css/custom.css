@@ -362,6 +362,7 @@
 	height: 460px;
 	object-fit: cover; /* Ensure the image covers the area without distortion */
 }
+<<<<<<< HEAD
 .product-card {
 	border-radius: 5px; /* Optional: Rounded corners */
 	overflow: hidden; /* Ensure child elements don't overflow the card */
@@ -393,6 +394,8 @@
 	box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
+=======
+>>>>>>> parent of 0f83516 (gh)
 
 
 /*---------------------------------------------------------------------------------------------------------------*/
