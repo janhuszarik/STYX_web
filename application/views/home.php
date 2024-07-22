@@ -25,7 +25,14 @@
 		</div>
 	</div>
 
-	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 7, 'loop': true, 'nav': true, 'dots': false}">
+
+	<div class="row">
+		<div class="col">
+			<hr class="solid my-5 ">
+			<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
+		</div>
+	</div>
+	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 5, 'loop': true, 'nav': true, 'dots': false}">
 		<?php foreach ($product as $product_item): ?>
 			<div>
 				<a href="<?=$product_item->url?>" aria-label="">
@@ -40,36 +47,6 @@
 				</a>
 			</div>
 		<?php endforeach; ?>
-	</div>
-
-	<div role="main" class="main">
-		<div class="home-intro light border border-bottom-0 mb-0">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
-						<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides" data-plugin-options="{'items': 6, 'margin': 10, 'loop': false, 'nav': true, 'dots': false}">
-							<?php foreach ($product as $product_item): ?>
-								<div class="home-carousel-card" onclick="location.href='<?=$product_item->url?>';" style="cursor: pointer;">
-									<div class="home-carousel-img-container">
-										<img alt="" class="img-fluid rounded" src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>">
-									</div>
-									<div class="home-carousel-card-content-product">
-										<h5><?=$product_item->name?></h5>
-									</div>
-									<?php if ($product_item->action == 1): ?>
-										<div class="aktion-ribbon">
-											<span>Rabatt <?php if (!empty($product_item->price)) { ?> / <?=$product_item->price?><?php } else { echo ''; } ?></span>
-										</div>
-									<?php endif; ?>
-
-								</div>
-							<?php endforeach; ?>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 
 
