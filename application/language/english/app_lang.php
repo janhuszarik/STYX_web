@@ -33,18 +33,26 @@ $lang['ABOUT_STYX_KEYWORDS']                            = 'natural cosmetics, na
 //Text
 //----------------------------------------------------------------------------------------------------------------------
 
-$lang['HÄNDLER_TEXT']                                   = 'Dealer login';
-$lang['HÄNDLER_URL']                                    = 'https://www.aroma-derm.com/login.php?language=en';
-$lang['CONTACT_US']                                     = 'Contact us';
-$lang['AKTUELL'] 										= 'Current issues';
-$lang['PRODUCT_WEB'] 									= 'Bestseller';
-$lang['FIRMA_LOGOS'] 									= 'Our Company';
-$lang['FIRMA_LOGOS_TEXT'] 								= 'Hand in hand with nature: With this philosophy, the Austrian
- 															family company STYX Naturcosmetic has been dedicated to the production of certified natural cosmetics for more than 
- 															fifty years! The highest quality, plant-based raw materials from organic farming or wild collection are the focus
-  															of all STYX products, whether it is <a href="https://shop.styx.at/Natural-Cosmetics/Sports:::3_9.html?language=en">Chin Min Balm</a>,
-   															<a href="https://shop.styx.at/Natural-Cosmetics/Hand-and-foot-care:::3_77.html">Potato Hand Cream</a> or 
-   															<a href="https://shop.styx.at/Natural-Cosmetics/Body-care:::3_75.html">Aloe Vera Body Cream</a>.';
+$lang['READ_MORE'] 										= 'More info';
+$lang['HÄNDLER_TEXT'] 									= 'Login for dealers';
+$lang['HÄNDLER_URL'] 									= 'https://www.aroma-derm.com/login.php?language=de';
+$lang['CONTACT_US'] 									= 'Contact us';
+$lang['AKTUELL'] 										= 'CURRENT';
+$lang['PRODUCT_WEB'] 									= 'POPULAR PRODUCTS';
+$lang['FIRMA_LOGOS'] 									= 'OUR COMPANY';
+$lang['FIRMA_LOGOS_TEXT'] 								= 'Hand in hand with nature: With this philosophy, the Austrian family company STYX Naturcosmetic
+                             								dedicates itself to the production of certified natural cosmetics – and has been doing so for more than fifty years! Highest quality,
+                             								plant raw materials from organic farming or wild growth are the focus of all STYX products,
+                             								be it <a href="https://shop.styx.at/Naturkosmetik/Sport:::3_9.html">Chin Min Balsam</a>, <a href="https://shop.styx.at/Naturkosmetik/Hand-und-Fusspflege:::3_77.html">Potato Hand Cream</a> or <a href="https://shop.styx.at/Naturkosmetik/Koerperpflege:::3_75.html">Aloe Vera Body Cream</a>.';
+$lang['STYX_NATURKOSMETIK_TEXT_HEADER'] 				= 'Natural Cosmetics';
+$lang['STYX_NATURKOSMETIK_TEXT'] 						= 'Natural cosmetics from Austria. <br> Many certified and vegan products';
+$lang['AROMA_DERM_TEXT_HEADER'] 						= 'Aroma Derm';
+$lang['AROMA_DERM_TEXT'] 								= 'Professional natural cosmetics products with support and seminars for your studio institute or spa';
+$lang['SCHOKOLADE_TEXT_HEADER'] 						= 'Chocolates';
+$lang['SCHOKOLADE_TEXT'] 								= 'Handcrafted organic chocolate - excellent raw materials and loving processing.';
+$lang['WORLD_OF_STYX_TEXT_HEADER'] 						= 'World of STYX';
+$lang['WORLD_OF_STYX_TEXT'] 							= 'Visit us in <br>Ober-Grafendorf and experience natural cosmetics, chocolates, and much more.';
+
 
 
 

@@ -32,7 +32,7 @@ $lang['ABOUT_STYX_KEYWORDS'] 							= 'Naturcosmetic, Naturkosmetik, Österreich
 //----------------------------------------------------------------------------------------------------------------------
 //Text
 //----------------------------------------------------------------------------------------------------------------------
-
+$lang['READ_MORE'] 										= 'Mehr info ';
 $lang['HÄNDLER_TEXT'] 									= 'Login für Händler';
 $lang['HÄNDLER_URL'] 									= 'https://www.aroma-derm.com/login.php?language=de';
 $lang['CONTACT_US'] 									= 'Kontaktieren Sie uns';
@@ -43,8 +43,14 @@ $lang['FIRMA_LOGOS_TEXT'] 								= 'Hand in Hand mit der Natur: Mit dieser Phil
                              								der Herstellung von zertifizierter Naturkosmetik – und das bereits seit mehr als fünfzig Jahren! Höchste Qualität, 
                              								pflanzliche Rohstoffe aus biologischem Anbau oder Wildwuchs stehen bei allen STYX Produkten im Mittelpunkt, 
                              								sei es <a href="https://shop.styx.at/Naturkosmetik/Sport:::3_9.html">Chin Min Balsam</a>, <a href="https://shop.styx.at/Naturkosmetik/Hand-und-Fusspflege:::3_77.html">Kartoffel Handcreme</a> oder <a href="https://shop.styx.at/Naturkosmetik/Koerperpflege:::3_75.html">Aloe Vera Körpercreme</a>.';
-
-
+$lang['STYX_NATURKOSMETIK_TEXT_HEADER'] 				= 'Naturkosmetik';
+$lang['STYX_NATURKOSMETIK_TEXT'] 						= 'Naturkosmetik aus Osterreich. <br> Viele zertifizierte und vegane Produkte';
+$lang['AROMA_DERM_TEXT_HEADER'] 						= 'Aroma Derm';
+$lang['AROMA_DERM_TEXT'] 								= 'Profi Naturkosmetik produkte mit Beetreuung und Seminaren für Ihr Studio Institut oder Spa';
+$lang['SCHOKOLADE_TEXT_HEADER'] 						= 'Schokoladen';
+$lang['SCHOKOLADE_TEXT'] 								= 'Handgeschöpfte BIO Schokolade - exzellente Rohstoffe und liebevolle Verarbeitung.';
+$lang['WORLD_OF_STYX_TEXT_HEADER'] 						= 'World of STYX';
+$lang['WORLD_OF_STYX_TEXT'] 							= 'Besuchen Sie uns in <br>Ober-Grafendorf und erleben Sie Naturkosmetik, Schokoladen und vieles mehr.';
 
 
 

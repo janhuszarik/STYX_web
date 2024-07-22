@@ -93,6 +93,51 @@
 		</div>
 	</div>
 </div>
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+			<div class="card">
+				<img class="card-img-top" src="<?=BASE_URL?>img/logo/Styx-Naturcosmetic.jpg" alt="Logo">
+				<div class="card-body">
+					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('STYX_NATURKOSMETIK_TEXT_HEADER')?></h4>
+					<p class="card-text mb-2 pb-1"><?=lang('STYX_NATURKOSMETIK_TEXT')?></p>
+					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+			<div class="card">
+				<img class="card-img-top" src="<?=BASE_URL?>img/logo/Aroma-Derm.jpg" alt="Aroma-Derm.jpg">
+				<div class="card-body">
+					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('AROMA_DERM_TEXT_HEADER')?></h4>
+					<p class="card-text mb-2 pb-1"><?=lang('AROMA_DERM_TEXT')?></p>
+					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+			<div class="card">
+				<img class="card-img-top" src="<?=BASE_URL?>img/logo/Styx-Schokoladenmanufaktur.jpg" alt="Styx-Schokoladenmanufaktur.jpg">
+				<div class="card-body">
+					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('SCHOKOLADE_TEXT_HEADER')?></h4>
+					<p class="card-text mb-2 pb-1"><?=lang('SCHOKOLADE_TEXT')?></p>
+					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+			<div class="card">
+				<img class="card-img-top" src="<?=BASE_URL?>img/logo/World-of-Styx.jpg" alt="World-of-Styx.jpg">
+				<div class="card-body">
+					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('WORLD_OF_STYX_TEXT_HEADER')?></h4>
+					<p class="card-text mb-2 pb-1"><?=lang('WORLD_OF_STYX_TEXT')?></p>
+					<a href="https://www.styx.at/de/Betriebsfuehrungen" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
 
 <script>
 	$(document).ready(function(){
