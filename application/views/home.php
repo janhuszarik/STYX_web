@@ -32,7 +32,7 @@
 			<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
 		</div>
 	</div>
-	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 5, 'loop': true, 'nav': true, 'dots': false}">
+	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
 		<?php foreach ($product as $product_item): ?>
 			<div class="product-card">
 				<a href="<?=$product_item->url?>" aria-label="">
@@ -41,18 +41,19 @@
                         <img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
                     </span>
                 </span>
+					<?php if ($product_item->action == 1): ?>
+						<div class="ribbon">
+							<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
+								<?=$product_item->aktion_name?> / <?=$product_item->price?>
+							<?php elseif (!empty($product_item->aktion_name)): ?>
+								<?=$product_item->aktion_name?>
+							<?php elseif (!empty($product_item->price)): ?>
+								<?=$product_item->price?>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
 				</a>
-				<?php if ($product_item->action == 1): ?>
-					<div class="ribbon">
-						<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
-							<?=$product_item->aktion_name?> / <?=$product_item->price?>
-						<?php elseif (!empty($product_item->aktion_name)): ?>
-							<?=$product_item->aktion_name?>
-						<?php elseif (!empty($product_item->price)): ?>
-							<?=$product_item->price?>
-						<?php endif; ?>
-					</div>
-				<?php endif; ?>
+
 				<div class="product-info">
 					<?= $product_item->name ?>
 				</div>
