@@ -32,7 +32,7 @@
 			<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
 		</div>
 	</div>
-	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': false, 'nav': true, 'dots': false}">
+	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
 		<?php foreach ($product as $product_item): ?>
 			<div class="product-card">
 				<a href="<?=$product_item->url?>" aria-label="">
