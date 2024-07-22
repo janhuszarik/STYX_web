@@ -137,6 +137,50 @@
 		</div>
 
 	</div>
+	<br>
+	<div class="row justify-content-center">
+		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+			<div class="card">
+				<img class="card-img-top" src="<?=BASE_URL?>img/logo/PL.jpg" alt="Private Labeling logo">
+				<div class="card-body">
+					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('PRIVATE_LABELING_TEXT_HEADER')?></h4>
+					<p class="card-text mb-2 pb-1"><?=lang('PRIVATE_LABELING_TEXT')?></p>
+					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+			<div class="card">
+				<img class="card-img-top" src="<?=BASE_URL?>img/logo/Werbegeschenke.jpg" alt="Werbegeschenke.jpg">
+				<div class="card-body">
+					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('WERBE_TEXT_HEADER')?></h4>
+					<p class="card-text mb-2 pb-1"><?=lang('WERBE_TEXT')?></p>
+					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+			<div class="card">
+				<img class="card-img-top" src="<?=BASE_URL?>img/logo/STYX-Remise.jpg" alt="STYX-Remise.jpg">
+				<div class="card-body">
+					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('STYX_REMISE_TEXT_HEADER')?></h4>
+					<p class="card-text mb-2 pb-1"><?=lang('STYX_REMISE_TEXT')?></p>
+					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+			<div class="card">
+				<img class="card-img-top" src="<?=BASE_URL?>img/logo/STYX-Academy.jpg" alt="STYX-Academy.jpg">
+				<div class="card-body">
+					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('ACADEMY_TEXT_HEADER')?></h4>
+					<p class="card-text mb-2 pb-1"><?=lang('ACADEMY_TEXT')?></p>
+					<a href="https://www.styx.at/de/Betriebsfuehrungen" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
+			</div>
+		</div>
+
+	</div>
 </div>
 
 <script>

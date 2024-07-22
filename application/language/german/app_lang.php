@@ -51,10 +51,14 @@ $lang['SCHOKOLADE_TEXT_HEADER'] 						= 'Schokoladen';
 $lang['SCHOKOLADE_TEXT'] 								= 'Handgeschöpfte BIO Schokolade - exzellente Rohstoffe und liebevolle Verarbeitung.';
 $lang['WORLD_OF_STYX_TEXT_HEADER'] 						= 'World of STYX';
 $lang['WORLD_OF_STYX_TEXT'] 							= 'Besuchen Sie uns in <br>Ober-Grafendorf und erleben Sie Naturkosmetik, Schokoladen und vieles mehr.';
-
-
-
-
+$lang['PRIVATE_LABELING_TEXT_HEADER'] 					= 'Private Labeling';
+$lang['PRIVATE_LABELING_TEXT'] 							= 'Die Entwicklung Ihrer ganz eigenen Naturkosmetikmarke.';
+$lang['WERBE_TEXT_HEADER'] 								= 'Werbegeschenke';
+$lang['WERBE_TEXT'] 									= 'Personalisierte Geschenke sind immer noch die einzigartigsten.';
+$lang['STYX_REMISE_TEXT_HEADER'] 						= 'STYX Remise';
+$lang['STYX_REMISE_TEXT'] 								= 'Die neue, außergewöhnliche Eventlocation im Herzen Ober-Grafendorfs.';
+$lang['ACADEMY_TEXT_HEADER'] 							= 'STYX Workshops';
+$lang['ACADEMY_TEXT'] 									= 'Anwendungen und Hintergrundwissen praxis- und hautnah erlernen.';
 
 
 

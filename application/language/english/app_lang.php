@@ -52,6 +52,14 @@ $lang['SCHOKOLADE_TEXT_HEADER'] 						= 'Chocolates';
 $lang['SCHOKOLADE_TEXT'] 								= 'Handcrafted organic chocolate - excellent raw materials and loving processing.';
 $lang['WORLD_OF_STYX_TEXT_HEADER'] 						= 'World of STYX';
 $lang['WORLD_OF_STYX_TEXT'] 							= 'Visit us in <br>Ober-Grafendorf and experience natural cosmetics, chocolates, and much more.';
+$lang['PRIVATE_LABELING_TEXT_HEADER'] 					= 'Private Labeling';
+$lang['PRIVATE_LABELING_TEXT'] 							= 'The development of your very own natural cosmetics brand.';
+$lang['WERBE_TEXT_HEADER'] 								= 'Promotional Gifts';
+$lang['WERBE_TEXT'] 									= 'Personalized gifts are still the most unique.';
+$lang['STYX_REMISE_TEXT_HEADER'] 						= 'STYX Remise';
+$lang['STYX_REMISE_TEXT'] 								= 'The new, extraordinary event location in the heart of Ober-Grafendorf.';
+$lang['ACADEMY_TEXT_HEADER'] 							= 'STYX Workshops';
+$lang['ACADEMY_TEXT'] 									= 'Learn applications and background knowledge in a practical and close-up manner.';
 
 
 
