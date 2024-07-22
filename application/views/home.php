@@ -36,11 +36,11 @@
 		<?php foreach ($product as $product_item): ?>
 			<div class="product-card">
 				<a href="<?=$product_item->url?>" aria-label="">
-                    <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-                        <span class="thumb-info-wrapper">
-                            <img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
-                        </span>
+                <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                    <span class="thumb-info-wrapper">
+                        <img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
                     </span>
+                </span>
 				</a>
 				<?php if ($product_item->action == 1): ?>
 					<div class="ribbon">
@@ -53,14 +53,13 @@
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
-
-
 				<div class="product-info">
 					<?= $product_item->name ?>
 				</div>
 			</div>
 		<?php endforeach; ?>
 	</div>
+
 
 	<script>
 		$(document).ready(function(){
