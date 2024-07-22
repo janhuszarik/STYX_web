@@ -30,20 +30,10 @@
 			<h1 style='font-weight: bolder' class="text-center"><?=lang('PRODUCT_WEB')?></h1>
 		</div>
 	</div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 	<br>
-	<div class="owl-carousel owl-theme full-width product-carousel">
-=======
-	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false, 'margin': 2, 'autoplay': true, 'autoplayTimeout': 4000}">
->>>>>>> parent of ea2f33b (fg)
-=======
 	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
->>>>>>> parent of 075f683 (vb)
-=======
-	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 8, 'loop': true, 'nav': true, 'dots': false, 'responsive': {'0': {'items': 1}, '600': {'items': 1}, '1000': {'items': 6}}}">
->>>>>>> parent of 7944a06 (f)
+
 		<?php foreach ($product as $product_item): ?>
 				<a href="<?=$product_item->url?>" aria-label="">
 					<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
@@ -68,155 +58,8 @@
 				</a>
 		<?php endforeach; ?>
 	</div>
-<!--	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': false, 'nav': true, 'dots': false}">-->
-<!--		--><?php //foreach ($product as $product_item): ?>
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-2.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-4.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-5.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-6.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--		<div>-->
-<!--			<a href="portfolio-single-wide-slider.html" aria-label="">-->
-<!--							<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">-->
-<!--								<span class="thumb-info-wrapper">-->
-<!--									<img src="img/projects/project-4.jpg" class="img-fluid" alt="">-->
-<!--									<span class="thumb-info-title">-->
-<!--										<span class="thumb-info-inner">Project Title</span>-->
-<!--										<span class="thumb-info-type">Project Type</span>-->
-<!--									</span>-->
-<!--									<span class="thumb-info-action">-->
-<!--										<span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>-->
-<!--									</span>-->
-<!--								</span>-->
-<!--							</span>-->
-<!--			</a>-->
-<!--		</div>-->
-<!--	</div>-->
 
-
-
-	<script>
-		$(document).ready(function(){
-<<<<<<< HEAD
-			$('.news-carousel').owlCarousel({
-				items: 4,
-				loop: false,
-				nav: true,
-				dots: false,
-				margin: 10,
-				autoplay: true
-			});
-
-			$('.product-carousel').owlCarousel({
-				items: 6,
-				loop: true,
-				nav: true,
-				dots: false,
-				margin: 2,
-				autoplay: false
-			});
-		});
-
-
-=======
-			$(".owl-carousel").owlCarousel();
-		});
->>>>>>> parent of ea2f33b (fg)
-	</script>
-
-
-
+	
 	<div class="container py-5 my-4">
 		<div class="row text-center py-3">
 			<div class="col-md-10 mx-md-auto">
