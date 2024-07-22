@@ -335,16 +335,16 @@
 /*---------------------------------------------------------------------------------------------------------------*/
 /*Nastavenie css pre karty produkty :*/
 
-/*.owl-carousel .thumb-info-wrapper img {*/
-/*	width: 100%;*/
-/*	height: 460px;*/
-/*	object-fit: cover; !* Ensure the image covers the area without distortion *!*/
-/*}*/
-/*.product-card {*/
-/*	border-radius: 5px; !* Optional: Rounded corners *!*/
-/*	overflow: hidden; !* Ensure child elements don't overflow the card *!*/
-/*	text-align: center; !* Center align text *!*/
-/*}*/
+.owl-carousel .thumb-info-wrapper img {
+	width: 100%;
+	height: 460px;
+	object-fit: cover; /* Ensure the image covers the area without distortion */
+}
+.product-card {
+	border-radius: 5px; /* Optional: Rounded corners */
+	overflow: hidden; /* Ensure child elements don't overflow the card */
+	text-align: center; /* Center align text */
+}
 .product-info {
 	padding: 10px; /* Add padding for better text spacing */
 	background-color: #ffffff; /* Optional: Background color for text area */
