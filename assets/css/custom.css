@@ -334,6 +334,7 @@
 }
 /*---------------------------------------------------------------------------------------------------------------*/
 /*Nastavenie css pre karty produkty :*/
+<<<<<<< HEAD
 .product-carousel .owl-stage {
 	display: flex;
 	animation: scroll 180s linear infinite;
@@ -352,6 +353,8 @@
 	flex: 0 0 auto;
 	width: 16.6667%; /* Adjust based on the number of items to display */
 }
+=======
+>>>>>>> parent of ea2f33b (fg)
 
 
 .owl-carousel .thumb-info-wrapper img {
