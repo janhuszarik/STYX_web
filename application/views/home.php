@@ -5,7 +5,7 @@
 				<div class="row">
 					<div class="col">
 						<h1 style='font-weight: bolder' class="text-center"><?=lang('AKTUELL')?></h1>
-						<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides" data-plugin-options="{'items': 4, 'margin': 10, 'loop': false, 'nav': true, 'dots': false}">
+						<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides news-carousel" data-plugin-options="{'items': 4, 'margin': 10, 'loop': false, 'nav': true, 'dots': false, 'autoplay':true}">
 							<?php foreach ($news as $news_item): ?>
 								<div class="home-carousel-card" onclick="location.href='<?=$news_item->buttonUrl?>';" style="cursor: pointer;">
 									<div class="home-carousel-img-container">
@@ -20,11 +20,9 @@
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
-
 
 	<div class="row">
 		<div class="col">
@@ -33,7 +31,7 @@
 		</div>
 	</div>
 	<br>
-	<div class="owl-carousel owl-theme full-width">
+	<div class="owl-carousel owl-theme full-width product-carousel">
 		<?php foreach ($product as $product_item): ?>
 			<a href="<?=$product_item->url?>" aria-label="">
             <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
@@ -62,9 +60,19 @@
 
 
 
+
 	<script>
 		$(document).ready(function(){
-			$('.owl-carousel').owlCarousel({
+			$('.news-carousel').owlCarousel({
+				items: 4,
+				loop: false,
+				nav: true,
+				dots: false,
+				margin: 10,
+				autoplay: true
+			});
+
+			$('.product-carousel').owlCarousel({
 				items: 6,
 				loop: true,
 				nav: true,
@@ -73,6 +81,7 @@
 				autoplay: false
 			});
 		});
+
 
 	</script>
 
