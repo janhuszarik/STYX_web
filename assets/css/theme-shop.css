@@ -93,8 +93,8 @@ html.lightbox-beforeclose .quick-view {
 	transition: all 0.2s;
 	padding: 0;
 	position: relative;
-	border: 1px solid #DDD;
-	background: #F7F9FC;
+	/*border: 1px solid #DDD;*/
+	background: #ffffff;
 	display: block;
 	overflow: hidden;
 	position: relative;
