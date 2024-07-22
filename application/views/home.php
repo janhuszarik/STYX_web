@@ -31,11 +31,15 @@
 		</div>
 	</div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<br>
 	<div class="owl-carousel owl-theme full-width product-carousel">
 =======
 	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false, 'margin': 2, 'autoplay': true, 'autoplayTimeout': 4000}">
 >>>>>>> parent of ea2f33b (fg)
+=======
+	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
+>>>>>>> parent of 075f683 (vb)
 		<?php foreach ($product as $product_item): ?>
 				<a href="<?=$product_item->url?>" aria-label="">
 					<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
