@@ -92,47 +92,8 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="container">
-		<div class="d-flex justify-content-between">
-			<div class="card-wrapper col-md-6 col-lg-5 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
-				<div class="outer-card card">
-					<div class="inner-card">
-						<div class="card mb-3">
-							<div class="row g-0">
-								<div class="col-lg-4 d-flex align-items-center justify-content-center">
-									<img src="<?= BASE_URL . 'img/webImage/naturcosmeticImage.jpg' ?>" class="img-fluid rounded-start" alt="...">
-								</div>
-								<div class="col-lg-8">
-									<div class="card-body">
-										<h4 class="card-title mb-1 text-7 font-weight-bold">NATURCOSMETIC</h4>
-										<a href="/" class="read-more text-color-primary font-weight-semibold text-2">Read More <i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="card mb-3">
-							<div class="row g-0">
-								<div class="col-lg-8">
-									<div class="card-body">
-										<h4 class="card-title mb-1 text-4 font-weight-bold"></h4>
-										<p class="card-text mb-2">Naturkosmetik aus Österreich. Viele zertifizierte und vegane Produkte.</p>
-									</div>
-								</div>
-								<div class="col-lg-4 d-flex align-items-center justify-content-center">
-									<img src="<?= BASE_URL . 'img/webImage/greenLogo.jpg' ?>" class="img-fluid rounded-start" alt="...">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Removed duplicated card-wrapper -->
-		</div>
-	</div>
 </div>
+
 <script>
 	$(document).ready(function(){
 		$(".owl-carousel").owlCarousel();
