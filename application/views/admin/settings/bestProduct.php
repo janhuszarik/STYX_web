@@ -157,8 +157,8 @@
 										<td data-title="Aktiv" class="text-center"><?=active($r->active)?></td>
 										<td data-title="Aktiv" class="text-center"><?=active($r->action)?></td>
 										<td data-title="Bild" class="text-center"><img src="<?=BASE_URL?>uploads/product/<?=$r->image?>" style="width: 50px;"></td>
-										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/product/edit/'.$r->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
-										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/product/del/'.$r->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
+										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/bestProduct/edit/'.$r->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
+										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/bestProduct/del/'.$r->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
 									</tr>
 								<?php }} ?>
 							</tbody>

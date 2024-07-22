@@ -24,8 +24,8 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 5, 'loop': false, 'nav': true, 'dots': false}">
+
+	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 7, 'loop': true, 'nav': true, 'dots': false}">
 		<?php foreach ($product as $product_item): ?>
 			<div>
 				<a href="<?=$product_item->url?>" aria-label="">
@@ -34,10 +34,6 @@
                         <img src="<?=BASE_URL?>uploads/product/<?=$product_item->image?>" class="img-fluid" alt="<?=$product_item->name?>">
                         <span class="thumb-info-title">
                             <span class="thumb-info-inner"><?=$product_item->name?></span>
-                            <span class="thumb-info-type">Project Type</span>
-                        </span>
-                        <span class="thumb-info-action">
-                            <span class="thumb-info-action-icon"><i class="fas fa-plus"></i></span>
                         </span>
                     </span>
                 </span>
