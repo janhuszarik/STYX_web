@@ -118,7 +118,7 @@
 												<a href="<?=BASE_URL.'kontakt'?>">E-Mail kontaktieren.</a>
 												Wir akzeptieren Änderungs- oder Löschungsanfragen nur von der ursprünglichen E-Mail-Adresse,
 												mit der das Formular ausgefüllt wurde, und die Kommentar-ID muss angegeben werden.
-												Die Kommentar-ID befindet sich direkt neben dem Datum und der Uhrzeit, z.B.: (8|1).
+												Die Kommentar-ID befindet sich direkt neben dem Datum und der Uhrzeit, z.B.: ( 8 | Naturkosmetik).
 												Wenn Sie mit dem Inhalt eines anderen Kommentars nicht einverstanden sind,
 												können Sie ihn <a href="<?=BASE_URL.'kontakt'?>"> melden</a> und wir werden den Inhalt überprüfen.
 											</p>
@@ -159,7 +159,8 @@
 									</div>
 									<div class="row">
 										<div class="form-group col mb-0">
-											<input type="hidden" name="section_id" value="1">
+											<input type="hidden" name="section_id" value="Naturkosmetik">
+											<input type="hidden" name="active" value="1">
 											<input type="submit" value="Kommentar absenden" class="btn btn-primary btn-modern" data-loading-text="Loading...">
 										</div>
 									</div>

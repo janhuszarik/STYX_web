@@ -234,7 +234,8 @@ function getNewsletters(){
 		return $this->db->delete('bestProduct');
 
 	}
-	public function naturkosmetikSave()
+
+	public function naturkosmetikSave($post = false)
 	{
 		$data = array(
 			'lang' => language(),
@@ -243,9 +244,15 @@ function getNewsletters(){
 			'comment' => $this->input->post('comment'),
 			'section_id' => $this->input->post('section_id'),
 			'consent' => $this->input->post('consent'),
+			'active' => $this->input->post('active'),
 		);
 
-		return $this->db->insert('comments', $data);
+		if (is_numeric($post['id'])) {
+			$this->db->where('id', $post['id']);
+			return $this->db->update('comments', $data);
+		} else {
+			return $this->db->insert('comments', $data);
+		}
 	}
 	function getKomentar($id = false)
 	{

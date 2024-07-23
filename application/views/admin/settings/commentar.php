@@ -49,16 +49,24 @@
 							</div>
 						</div>
 						<div class="row form-group pb-3">
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label class="col-form-label" for="Input1">Section_id</label>
+									<input placeholder="Hauptüberschrift/Kurztext" type="text" name="section_id" class="form-control" id="Input1" value="<?=!empty($komentar->section_id)?$komentar->section_id: ''?>" required>
+								</div>
+							</div>
+						</div>
+						<div class="row form-group pb-3">
 							<div class="col-lg-12">
 								<div class="form-group">
 									<label class="col-form-label" for="Input1">Komentar</label>
-									<input type="text" name="comment" class="form-control" id="Input1" value="<?=!empty($komentar->comment)?$komentar->comment: ''?>" required>
+									<textarea name="comment" class="form-control" id="Input1" rows="3" required oninput="autoResize(this)"><?= !empty($komentar->comment) ? $komentar->comment : '' ?></textarea>
 								</div>
 							</div>
-
 						</div>
 
-							<footer class="card-footer text-end">
+
+						<footer class="card-footer text-end">
 							<?php if (!empty($komentar->id)){ ?>
 								<input type="hidden" name="id" value="<?=$komentar->id?>">
 								<button type="submit" class="btn btn-primary">Bearbeiten</button>
@@ -119,8 +127,8 @@
 										<td data-title="Button text"><?=$r->consent?></td>
 										<td data-title="Button text"><?=$r->section_id?></td>
 										<td data-title="Aktiv" class="text-center"><?=active($r->active)?></td>
-										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/bestProduct/edit/'.$r->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
-										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/bestProduct/del/'.$r->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
+										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/commentar/edit/'.$r->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
+										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/commentar/del/'.$r->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
 									</tr>
 								<?php }} ?>
 							</tbody>
@@ -146,6 +154,9 @@
 	$(document).ready(function() {
 		$('#Input5').summernote();
 	});
-
+	function autoResize(textarea) {
+		textarea.style.height = 'auto';
+		textarea.style.height = (textarea.scrollHeight) + 'px';
+	}
 </script>
 

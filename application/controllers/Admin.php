@@ -367,17 +367,17 @@ class Admin extends CI_Controller
 		if (!empty($post)) {
 
 			if (!empty($id)) {
-				if ($this->Admin_model->naturkosmetikSave()) {
+				if ($this->Admin_model->naturkosmetikSave($post)) {
 					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
-					redirect(BASE_URL . 'admin/kommentar/');
+					redirect(BASE_URL . 'admin/commentar/');
 				} else {
 					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
 					$data['edit'] = (object)$post;
 				}
 			} else {
-				if ($this->Admin_model->naturkosmetikSave()) {
+				if ($this->Admin_model->naturkosmetikSave($post)) {
 					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
-					redirect(BASE_URL . 'admin/kommentar');
+					redirect(BASE_URL . 'admin/commentar');
 				} else {
 					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
 					$data['edit'] = (object)$post;
@@ -388,7 +388,7 @@ class Admin extends CI_Controller
 		if ($segment2 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->naturkosmetikDelete($id)) {
 				$this->session->set_flashdata('message', 'die Daten werden unwiederbringlich gelöscht');
-				redirect(BASE_URL . 'admin/kommentar');
+				redirect(BASE_URL . 'admin/commentar');
 			} else {
 				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
 			}

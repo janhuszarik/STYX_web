@@ -69,7 +69,8 @@ class app_model extends CI_Model
 	public function getCommentKosmetic()
 	{
 		$this->db->select('*');
-		$this->db->where('section_id', '1');
+		$this->db->where('section_id', 'Naturkosmetik');
+		$this->db->where('active', '1');
 		$this->db->where('lang', language());
 		return $this->db->get('comments')->result();
 	}
@@ -90,6 +91,7 @@ class app_model extends CI_Model
 			'comment' => $this->input->post('comment'),
 			'section_id' => $this->input->post('section_id'),
 			'consent' => $this->input->post('consent'),
+			'active' => $this->input->post('active'),
 		);
 
 		return $this->db->insert('comments', $data);
