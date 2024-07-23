@@ -8,6 +8,12 @@ $lang['FAX_NUMBER']                                   	= '+43 2747 3250-10';
 $lang['LOCATION_ADDRESS']                               = 'Ober-Grafendorf';
 $lang['EMAIL']                                          = 'marketing@styx.at';
 $lang['KONTAKT']                                        = 'Kontakt';
+$lang['ALL_NAME']                                       = 'Vollständiger Name';
+$lang['NAME']                                       	= 'Name';
+$lang['EMAIL']                                       	= 'E-mail Adresse';
+$lang['COMMENT']                                       	= 'Kommentar';
+$lang['GDPR_TEXT']                                      = 'Ich stimme der Verarbeitung meiner persönlichen Daten zu. ';
+$lang['GDPR_FOR_LINK']                                  = 'Datenschutzerklärung. ';
 
 
 
@@ -63,7 +69,29 @@ $lang['STYX_REMISE_TEXT_HEADER'] 						= 'STYX Remise';
 $lang['STYX_REMISE_TEXT'] 								= 'Die neue, außergewöhnliche Eventlocation im Herzen Ober-Grafendorfs.';
 $lang['ACADEMY_TEXT_HEADER'] 							= 'STYX Workshops';
 $lang['ACADEMY_TEXT'] 									= 'Anwendungen und Hintergrundwissen praxis- und hautnah erlernen.';
+$lang['AROMA_DERM_HEADING'] 							= 'AROMA DERM';
+$lang['AROMA_DERM_SUBHEADING'] 							= 'AROMAtherapie in Kombination mit der DERMAtologie';
+$lang['AROMA_DERM_SUBHEADING'] 							= 'AROMAtherapie in Kombination mit der DERMAtologie';
+$lang['AROMA_DERM_LONGTEXT'] 							= 'Die wirkungsvollen, kosmetischen Pflegelinien von AROMA DERM wurden von uns für den professionellen Einsatz im Institut und SPA-Bereich konzipiert. 
+														   Der Behandlungserfolg wird durch eine passende Pflege zu Hause abgerundet.Als begeisterte Entwicklerin von AROMA DERM steht für mich der achtsame 
+														   Umgang mit der Haut und das individuelle Wohlbefinden im Vordergrund. Wertvolle, reine Naturessenzen verleihen unseren Produkten die gewünschte Wirkung.
+														   Der unvergleichliche Duft echter ätherischer Öle schafft ein harmonisches Gleichgewicht zwischen Mensch und Natur. Die heilende, schützende und erneuernde
+														   Kraft der Natur ist die Basis unserer ganzheitlichen, naturkosmetischen Pflege AROMA DERM. Vertrauen auch Sie dem Wissen der AROMAtherapie in Kombination
+														   mit der DERMAtologie und werden Sie unser Partner. Ich stehe Ihnen mit meinem Team gerne für Beratungen und Schulungen für Ihr Kosmetikstudio sehr gerne zur Verfügung.
+														   Für das Profisegment der Branche bieten wir im Rahmen der "STYX Academy" spezialisierte Aus- und Weiterbildungen in Form von Seminaren an, 
+														   die im internen Bereich von aroma-derm.com zu finden sind. Der Fokus liegt hier auf Produktschulungen, Treatments sowie Basis- und Aufbauseminaren.';
 
+$lang['ZUR_HOMA_PAGE'] 									= 'Zur Homepage ';
+$lang['SUM_COMMENT'] 									= 'Anzahl der Kommentare ';
+$lang['COMMENT_REPLY'] 									= 'Kommentar melden ';
+$lang['COMMENT_NEW'] 									= 'Hinterlassen Sie uns einen Kommentar ';
+$lang['COMMENT_REPLY_INFO'] 							= 'Bedingungen für die Änderung / Löschung (Meldung eines Kommentars) ';
+$lang['COMMENT_REPLY_TEXT'] 							= 'Falls der Autor seinen Kommentar ändern möchte, muss er uns per
+														   <a href="<?=BASE_URL?>kontakt">E-Mail kontaktieren.</a> Wir akzeptieren Änderungs- oder Löschungsanfragen nur von der ursprünglichen E-Mail-Adresse,
+														   mit der das Formular ausgefüllt wurde, und die Kommentar-ID muss angegeben werden.
+														   Die Kommentar-ID befindet sich direkt neben dem Datum und der Uhrzeit, z.B.: ( 8 | Naturkosmetik).
+														   Wenn Sie mit dem Inhalt eines anderen Kommentars nicht einverstanden sind,können Sie ihn <a href="<?=BASE_URL?>kontakt"> melden</a>
+ 														   und wir werden den Inhalt überprüfen.';
 
 
 //----------------------------------------------------------------------------------------------------------------------

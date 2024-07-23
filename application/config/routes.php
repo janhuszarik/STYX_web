@@ -98,16 +98,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/bestProduct/edit/:num'] 	= 'admin/bestProductSave';
 	$route['admin/bestProduct/del/:num']	= 'admin/bestProductSave';
 
+	$route['admin/commentar'] 					= 'admin/commentarSave';
+	$route['admin/commentarSave'] 				= 'admin/commentarSave';
+	$route['admin/commentar/edit/:num'] 		= 'admin/commentarSave';
+	$route['admin/commentar/del/:num']			= 'admin/commentarSave';
+
 	$route['Unternehmen/AboutStyx']			= 'App/aboutStyx';
 	$route['Naturkosmetik']					= 'App/naturkosmetik';
 	$route['app/naturkosmetik']				= 'App/naturkosmetik';
+	$route['Aroma-Derm']					= 'App/aromaDerm';
+	$route['app/aromaDerm']					= 'App/aromaDerm';
 
-$route['admin/commentar'] 					= 'admin/commentarSave';
-$route['admin/commentarSave'] 				= 'admin/commentarSave';
-$route['admin/commentar/edit/:num'] 		= 'admin/commentarSave';
-$route['admin/commentar/del/:num']			= 'admin/commentarSave';
 
-$route['Company/About-Styx']				= 'App/contact';
+	$route['Company/About-Styx']				= 'App/contact';
 
 
 

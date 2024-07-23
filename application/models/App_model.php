@@ -96,7 +96,20 @@ class app_model extends CI_Model
 
 		return $this->db->insert('comments', $data);
 	}
-
+	public function getCommentAromaDerm()
+	{
+		$this->db->select('*');
+		$this->db->where('section_id', 'Aroma-Derm');
+		$this->db->where('active', '1');
+		$this->db->where('lang', language());
+		return $this->db->get('comments')->result();
+	}
+	public function sumCommentAromaDerm()
+	{
+		$this->db->where('section_id', 'Aroma-Derm');
+		$this->db->where('lang', language());
+		return $this->db->count_all_results('comments');
+	}
 
 
 

@@ -81,6 +81,33 @@ class App extends CI_Controller
 
 	}
 
+
+
+	public function aromaDerm() {
+		$post = $this->input->post();
+		if (!empty($post)) {
+			if ($this->App_model->naturkosmetik($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect(BASE_URL . 'Aroma-Derm');
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect(BASE_URL . 'Aroma-Derm');
+			}
+		}
+
+		$data['comment'] = $this->App_model->getCommentAromaDerm();
+		$data['sumComment'] = $this->App_model->sumCommentAromaDerm();
+		$data['page'] = 'app/Aroma-Derm';
+		$data['title'] = lang('NATURKOSMdETIK_TITLE');
+		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
+		$data['keywords'] = lang('NATURKOSMETIK_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/naturkosmetic.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
+
+
 	public function naturkosmetik() {
 		$post = $this->input->post();
 		if (!empty($post)) {
@@ -106,42 +133,6 @@ class App extends CI_Controller
 	}
 
 
-
-
-	public function contact(){
-        
-        $this->load->library('session');
-        
-        $post = $this->input->post();
-        if (isset($post) && !empty($post)){
-            
-            
-            $ip = $this->input->ip_address();
-            $r = validate_recaptcha_response($this->input->post('g-recaptcha-response'),$ip);
-
-            if ($r['success'] == true){
-                
-                $this->session->set_flashdata('success', 'Výborne, email bol odoslaný.');
-                if ($this->Mail_model->send_contact()) {
-                    echo 'Správa bola odoslaná...  Ďakujeme.';
-                }
-                else {
-                    echo 'Oj! Niečo sa pokazilo';
-                }
-            } else {
-                $this->session->set_flashdata('error', 'Overenie ReCaptcha neprešlo! ...Skúste znovu');
-                
-            }
-            redirect(BASE_URL.'kontakt');
-        }
-
-
-        $data['title'] = 'Kontakt ';
-        $data['page'] = 'app/kontakt';
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $this->load->view('layout/normal',$data);
-    }
 
 	function error404(){
         
