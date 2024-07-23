@@ -83,29 +83,7 @@ class App extends CI_Controller
 
 
 
-	public function aromaDerm() {
-		$post = $this->input->post();
-		if (!empty($post)) {
-			if ($this->App_model->naturkosmetik($post)) {
-				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
-				redirect(BASE_URL . 'Aroma-Derm');
-			} else {
-				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
-				redirect(BASE_URL . 'Aroma-Derm');
-			}
-		}
 
-		$data['comment'] = $this->App_model->getCommentAromaDerm();
-		$data['sumComment'] = $this->App_model->sumCommentAromaDerm();
-		$data['page'] = 'app/Aroma-Derm';
-		$data['title'] = lang('NATURKOSMdETIK_TITLE');
-		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
-		$data['keywords'] = lang('NATURKOSMETIK_KEYWORDS');
-		$data['image'] = BASE_URL . LOGO;
-		$data['image1'] = BASE_URL . 'img/breadcrumb/naturkosmetic.jpg';
-
-		$this->load->view('layout/normal', $data);
-	}
 
 
 	public function naturkosmetik() {
@@ -132,6 +110,29 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
+	public function aromaDerm() {
+		$post = $this->input->post();
+		if (!empty($post)) {
+			if ($this->App_model->naturkosmetik($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect(BASE_URL . 'Aroma-Derm');
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect(BASE_URL . 'Aroma-Derm');
+			}
+		}
+
+		$data['comment'] = $this->App_model->getCommentAromaDerm();
+		$data['sumComment'] = $this->App_model->sumCommentAromaDerm();
+		$data['page'] = 'app/Aroma-Derm';
+		$data['title'] = lang('NATURKOSMdETIK_TITLE');
+		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
+		$data['keywords'] = lang('NATURKOSMETIK_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/naturkosmetic.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
 
 
 	function error404(){
