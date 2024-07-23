@@ -101,7 +101,7 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('STYX_NATURKOSMETIK_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('STYX_NATURKOSMETIK_TEXT')?></p>
-					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<a href="<?=BASE_URL.'Naturkosmetik'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 				</div>
 			</div>
 		</div>
