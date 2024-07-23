@@ -89,6 +89,7 @@ class app_model extends CI_Model
 			'email' => $this->input->post('email'),
 			'comment' => $this->input->post('comment'),
 			'section_id' => $this->input->post('section_id'),
+			'consent' => $this->input->post('consent'),
 		);
 
 		return $this->db->insert('comments', $data);

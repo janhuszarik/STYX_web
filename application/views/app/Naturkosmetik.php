@@ -131,28 +131,39 @@
 								<div class="p-2">
 									<div class="row">
 										<div class="form-group col-lg-6">
-											<label class="form-label required font-weight-bold text-dark">Full Name</label>
+											<label class="form-label required font-weight-bold text-dark">Vollständiger Name</label>
 											<input type="text" value="" data-msg-required="Please enter your name." maxlength="100" class="form-control" name="name" required>
 										</div>
 										<div class="form-group col-lg-6">
-											<label class="form-label required font-weight-bold text-dark">Email Address</label>
+											<label class="form-label required font-weight-bold text-dark">E-Mail-Adresse</label>
 											<input type="email" value="" data-msg-required="Please enter your email address." data-msg-email="Please enter a valid email address." maxlength="100" class="form-control" name="email" required>
 										</div>
 									</div>
 									<div class="row">
 										<div class="form-group col">
-											<label class="form-label required font-weight-bold text-dark">Comment</label>
+											<label class="form-label required font-weight-bold text-dark">Kommentar</label>
 											<textarea maxlength="5000" data-msg-required="Please enter your message." rows="8" class="form-control" name="comment" required></textarea>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col">
+											<div class="form-check">
+												<input type="checkbox" class="form-check-input" id="consent" name="consent" required>
+												<label class="form-check-label font-weight-bold text-dark" for="consent">
+													Ich stimme der Verarbeitung meiner persönlichen Daten zu
+												</label>
+											</div>
 										</div>
 									</div>
 									<div class="row">
 										<div class="form-group col mb-0">
 											<input type="hidden" name="section_id" value="1">
-											<input type="submit" value="Post Comment" class="btn btn-primary btn-modern" data-loading-text="Loading...">
+											<input type="submit" value="Kommentar absenden" class="btn btn-primary btn-modern" data-loading-text="Loading...">
 										</div>
 									</div>
 								</div>
 							</form>
+
 						</div>
 					</div>
 				</article>
