@@ -94,4 +94,31 @@ $lang['COMMENT_REPLY_TEXT'] 							= 'Falls der Autor seinen Kommentar ändern m
  														   und wir werden den Inhalt überprüfen.';
 
 
+$lang['NATURKOSMETIK_HEADING'] 							= 'NATURKOSMETIK';
+$lang['NATURKOSMETIK_SUBHEADING'] 						= 'Viele vegane und zertifizierte Naturprodukte, klimaneutral produziert – das Beste was die Natur zu bieten hat';
+$lang['NATURKOSMETIK_LONGTEXT'] 						= 'Erfahrung macht den Meister. Seit mehr als 55 Jahren schon verarbeiten wir das Beste, was die Natur zu bieten hat und erzeugen auf diese Weise Naturkosmetik, 
+														   die in über 40 Ländern der Welt für ihre Qualität geschätzt wird.Tradition trifft bei uns auf Moderne und der Erfahrungsschatz unserer Ahnen auf wissenschaftliche
+														   Erkenntnis. Dies ist bei STYX Naturcosmetic kein Widerspruch, sondern die Grundlage unseres
+														   erfolgreichen Schaffens. Laufend werden im hauseigenen Labor neue Verfahren angewendet, um die Effektivität unserer natürlichen Wirkstoffe weiter zu optimieren. 
+														   In unserem Webshop können Sie zum Portokostenbeitrag Produktproben anfordern und sich unmittelbar von der Natürlichkeit und Qualität der Produkte überzeugen.
+														   Der Begriff Naturkosmetik bedeutet allerdings mehr als das. Gleichberechtigt neben der Produkte muss deren ökologisch nachhaltige Herstellung stehen. Deshalb haben 
+														   wir uns entschlossen im Hause STYX auf erneuerbare Energien zu setzen. Eine werkseigene Hackschnitzelheizanlage in Verbindung mit planvoller Wiederaufforstung durch 
+														   unsere regionalen Holzlieferanten sowie die ausschließliche Verwendung von Ökostrom lassen uns klimaneutral produzieren.
+														   Die Regionalität spielt für uns überhaupt eine wichtige Rolle. Einen Großteil der Rohstoffe beziehen wir deshalb aus unserem direkten Umland. Dabei sind langjährige 
+														   Partnerschaften mit den ansässigen Bio-Bauern  entstanden, auf deren Qualität Verlass ist. Dass die notwendigen Transportwege dadurch auf ein Minimum reduziert  
+														   werden können ist  ein weiterer Pluspunkt für unseren ökologischen Anspruch.';
+
+$lang['ZUR_HOMA_PAGE'] 									= 'Zur Homepage ';
+$lang['SUM_COMMENT'] 									= 'Anzahl der Kommentare ';
+$lang['COMMENT_REPLY'] 									= 'Kommentar melden ';
+$lang['COMMENT_NEW'] 									= 'Hinterlassen Sie uns einen Kommentar ';
+$lang['COMMENT_REPLY_INFO'] 							= 'Bedingungen für die Änderung / Löschung (Meldung eines Kommentars) ';
+$lang['COMMENT_REPLY_TEXT'] 							= 'Falls der Autor seinen Kommentar ändern möchte, muss er uns per
+														   <a href="<?=BASE_URL?>kontakt">E-Mail kontaktieren.</a> Wir akzeptieren Änderungs- oder Löschungsanfragen nur von der ursprünglichen E-Mail-Adresse,
+														   mit der das Formular ausgefüllt wurde, und die Kommentar-ID muss angegeben werden.
+														   Die Kommentar-ID befindet sich direkt neben dem Datum und der Uhrzeit, z.B.: ( 8 | Naturkosmetik).
+														   Wenn Sie mit dem Inhalt eines anderen Kommentars nicht einverstanden sind,können Sie ihn <a href="<?=BASE_URL?>kontakt"> melden</a>
+ 														   und wir werden den Inhalt überprüfen.';
+
+
 //----------------------------------------------------------------------------------------------------------------------

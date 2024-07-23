@@ -35,28 +35,20 @@
 
 					<div class="post-content ms-0">
 
-						<h2 class="font-weight-semi-bold"><a href="blog-post.html">NATURKOSMETIK</a></h2>
+						<h2 class="font-weight-semi-bold"><?=lang('NATURKOSMETIK_HEADING')?></a></h2>
 
 						<div class="post-meta">
-							<h4 class="text-color-black">Viele vegane und zertifizierte Naturprodukte, klimaneutral produziert – das Beste was die Natur zu bieten hat</h4>
+							<h4 class="text-color-black"><?=lang('NATURKOSMETIK_SUBHEADING')?></h4>
 
 							<span><i class="far fa-comments"></i>
 								<a href="#">12 Comments</a></span>
 						</div>
 						<img src="<?=BASE_URL?>img/image/naturcosmetic.jpg" class="img-fluid float-start me-4 mt-2" alt="" />
-						<p>Erfahrung macht den Meister. Seit mehr als 55 Jahren schon verarbeiten wir das Beste, was die Natur zu bieten hat und erzeugen auf diese Weise Naturkosmetik, die in über 40 Ländern der Welt für ihre Qualität geschätzt wird.
-
-							Tradition trifft bei uns auf Moderne und der Erfahrungsschatz unserer Ahnen auf wissenschaftliche
-							Erkenntnis. Dies ist bei STYX Naturcosmetic kein Widerspruch, sondern die Grundlage unseres
-							erfolgreichen Schaffens. Laufend werden im hauseigenen Labor neue Verfahren angewendet, um die Effektivität unserer natürlichen Wirkstoffe weiter zu optimieren. In unserem Webshop können Sie zum Portokostenbeitrag Produktproben anfordern und sich unmittelbar von der Natürlichkeit und Qualität der Produkte überzeugen.
-
-							Der Begriff Naturkosmetik bedeutet allerdings mehr als das. Gleichberechtigt neben der Produkte muss deren ökologisch nachhaltige Herstellung stehen. Deshalb haben wir uns entschlossen im Hause STYX auf erneuerbare Energien zu setzen. Eine werkseigene Hackschnitzelheizanlage in Verbindung mit planvoller Wiederaufforstung durch unsere regionalen Holzlieferanten sowie die ausschließliche Verwendung von Ökostrom lassen uns klimaneutral produzieren.
-
-							Die Regionalität spielt für uns überhaupt eine wichtige Rolle. Einen Großteil der Rohstoffe beziehen wir deshalb aus unserem direkten Umland. Dabei sind langjährige Partnerschaften mit den ansässigen Bio-Bauern  entstanden, auf deren Qualität Verlass ist. Dass die notwendigen Transportwege dadurch auf ein Minimum reduziert  werden können ist  ein weiterer Pluspunkt für unseren ökologischen Anspruch.</p>
-
+						<h4><?=lang('NATURKOSMETIK_SUBHEADING_TEXT')?></h4>
+						<p><?=lang('NATURKOSMETIK_LONGTEXT')?></p>
 
 						<div class="post-block mt-5 post-share">
-							<a href="https://shop.styx.at/" class="btn btn-primary w-50 mb-2">Zum Online-Shop</a>
+							<a href="https://shop.styx.at/" class="btn btn-primary w-50 mb-2"><?=lang('ZUR_HOMA_PAGE')?></a>
 
 							<!-- Go to www.addthis.com/dashboard to customize your tools -->
 							<div class="addthis_inline_share_toolbox"></div>
@@ -66,61 +58,54 @@
 
 
 						<div id="comments" class="post-block mt-5 post-comments">
-							<h4 class="mb-3">Anzahl der Kommentare | <?=$sumComment?></h4>
+							<h4 class="mb-3"><?=lang('SUM_COMMENT')?> | <?=$sumComment?></h4>
 
 
 							<ul class="comments">
 								<?php foreach ($comment as $comment): ?>
-									<li>
-										<div class="comment">
-											<div class="img-thumbnail img-thumbnail-no-borders d-none d-sm-block">
-												<img class="avatar" alt="Avatar" src="data:image/svg+xml;base64,
+								<li>
+									<div class="comment">
+										<div class="img-thumbnail img-thumbnail-no-borders d-none d-sm-block">
+											<img class="avatar" alt="Avatar" src="data:image/svg+xml;base64,
 												PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDI0IDI0Ii
 												BmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo
 												gICAgPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTIiIGZpbGw9IiNCMEJFQzUi
 												Lz4KICAgIDxjaXJjbGUgY3g9IjEyIiBjeT0iOCIgcj0iNCIgZmlsbD0id2hpdGUiL
 												z4KICAgIDxwYXRoIGQ9Ik0xMiAxNEM5LjMzIDE0IDYuOTMgMTUuMzQgNS41IDE3Lj
 												M1QzUuMTggMTcuOCA1LjM5IDE4LjQyIDUuOTMgMTguNDJIMTguMDdDMTguNjEgMTguNDIgMTguODIgMTcuOCAxOC41IDE3LjM1QzE3LjA3IDE1LjM0IDE0LjY3IDE0IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+"/>
-											</div>
-											<div class="comment-block">
-												<div class="comment-arrow"></div>
-												<span class="comment-by">
+										</div>
+										<div class="comment-block">
+											<div class="comment-arrow"></div>
+											<span class="comment-by">
                         							<strong><?=$comment->name?> </strong>
                         								<span class="float-end">
-                          									  <span> <a href="#"><i class="fas fa-reply"></i> Kommentar melden</a></span></span>
+                          									  <span> <a href="#"><i class="fas fa-reply"></i> <?=lang('COMMENT_REPLY')?></a></span></span>
 														</span>
-												<p><?=$comment->comment?></p>
+											<p><?=$comment->comment?></p>
 
-												<span class="date float-end"><?= date('j.n.Y H:i', strtotime($comment->created)) ?> / <b class="text-color-black"><?=$comment->id.' | '.$comment->section_id?></b></span>
+											<span class="date float-end"><?= date('j.n.Y H:i', strtotime($comment->created)) ?> / <b class="text-color-black"><?=$comment->id.' | '.$comment->section_id?></b></span>
 
-											</div>
 										</div>
-								<?php endforeach; ?>
+									</div>
+									<?php endforeach; ?>
 							</ul>
 
 
 						</div>
 
 						<div class="post-block mt-5 post-leave-comment">
-							<h4 class="mb-3">Hinterlassen Sie uns einen Kommentar</h4>
+							<h4 class="mb-3"><?=lang('COMMENT_NEW')?></h4>
 							<div class="accordion" id="accordion1">
 								<div class="card card-default">
 									<div class="card-header" id="collapse1HeadingOne">
 										<h4 class="card-title m-0">
 											<a class="accordion-toggle" data-bs-toggle="collapse" data-bs-target="#collapse1One" aria-expanded="true" aria-controls="collapse1One">
-												Bedingungen für die Änderung / Löschung (Meldung eines Kommentars)
-											</a>
+												<?=lang('COMMENT_REPLY_INFO')?>											</a>
 										</h4>
 									</div>
 									<div id="collapse1One" class="collapse" aria-labelledby="collapse1HeadingOne">
 										<div class="card-body">
-											<p class="mb-0">Falls der Autor seinen Kommentar ändern möchte, muss er uns per
-												<a href="<?=BASE_URL.'kontakt'?>">E-Mail kontaktieren.</a>
-												Wir akzeptieren Änderungs- oder Löschungsanfragen nur von der ursprünglichen E-Mail-Adresse,
-												mit der das Formular ausgefüllt wurde, und die Kommentar-ID muss angegeben werden.
-												Die Kommentar-ID befindet sich direkt neben dem Datum und der Uhrzeit, z.B.: ( 8 | Naturkosmetik).
-												Wenn Sie mit dem Inhalt eines anderen Kommentars nicht einverstanden sind,
-												können Sie ihn <a href="<?=BASE_URL.'kontakt'?>"> melden</a> und wir werden den Inhalt überprüfen.
+											<p class="mb-0"><?=lang('COMMENT_REPLY_TEXT')?>
 											</p>
 										</div>
 									</div>
@@ -128,21 +113,21 @@
 								</div>
 							</div>
 							<br>
-							<form class="contact-form p-4 rounded bg-color-grey" action="<?=BASE_URL?>app/naturkosmetik" method="POST">
+							<form class="contact-form p-4 rounded bg-color-grey" action="<?=BASE_URL?>app/aromaDerm" method="POST">
 								<div class="p-2">
 									<div class="row">
 										<div class="form-group col-lg-6">
-											<label class="form-label required font-weight-bold text-dark">Vollständiger Name</label>
+											<label class="form-label required font-weight-bold text-dark"><?=lang('ALL_NAME')?></label>
 											<input type="text" value="" data-msg-required="Please enter your name." maxlength="100" class="form-control" name="name" required>
 										</div>
 										<div class="form-group col-lg-6">
-											<label class="form-label required font-weight-bold text-dark">E-Mail-Adresse</label>
+											<label class="form-label required font-weight-bold text-dark"><?=lang('EMAIL')?></label>
 											<input type="email" value="" data-msg-required="Please enter your email address." data-msg-email="Please enter a valid email address." maxlength="100" class="form-control" name="email" required>
 										</div>
 									</div>
 									<div class="row">
 										<div class="form-group col">
-											<label class="form-label required font-weight-bold text-dark">Kommentar</label>
+											<label class="form-label required font-weight-bold text-dark"><?=lang('COMMENT')?></label>
 											<textarea maxlength="5000" data-msg-required="Please enter your message." rows="8" class="form-control" name="comment" required></textarea>
 										</div>
 									</div>
@@ -151,8 +136,8 @@
 											<div class="form-check">
 												<input type="checkbox" class="form-check-input" id="consent" name="consent" value="1" required>
 												<label class="form-check-label font-weight-bold text-dark"  for="consent">
-													Ich stimme der Verarbeitung meiner persönlichen Daten zu. <a
-														href="https://shop.styx.at/Datenschutz:_:2.html">Datenschutzerklärung</a>
+													<?=lang('GDPR_TEXT')?><a
+														href="https://shop.styx.at/Datenschutz:_:2.html"><?=lang('GDPR_FOR_LINK')?></a>
 												</label>
 											</div>
 										</div>

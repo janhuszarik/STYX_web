@@ -101,7 +101,17 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('STYX_NATURKOSMETIK_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('STYX_NATURKOSMETIK_TEXT')?></p>
-					<a href="<?=BASE_URL.'Naturkosmetik'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<?php if (language() === 'en'): ?>
+						<a href="<?= BASE_URL . 'en/Naturkosmetik' ?>" class="read-more text-color-primary font-weight-semibold text-2">
+							<?= lang('READ_MORE') ?>
+							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
+						</a>
+					<?php else: ?>
+						<a href="<?= BASE_URL . 'Naturkosmetik' ?>" class="read-more text-color-primary font-weight-semibold text-2">
+							<?= lang('READ_MORE') ?>
+							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
+						</a>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
@@ -111,8 +121,17 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('AROMA_DERM_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('AROMA_DERM_TEXT')?></p>
-					<a href="<?=BASE_URL.'Aroma-Derm'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
-				</div>
+					<?php if (language() === 'en'): ?>
+						<a href="<?= BASE_URL . 'en/Aroma-Derm' ?>" class="read-more text-color-primary font-weight-semibold text-2">
+							<?= lang('READ_MORE') ?>
+							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
+						</a>
+					<?php else: ?>
+						<a href="<?= BASE_URL . 'Aroma-Derm' ?>" class="read-more text-color-primary font-weight-semibold text-2">
+							<?= lang('READ_MORE') ?>
+							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
+						</a>
+					<?php endif; ?>				</div>
 			</div>
 		</div>
 		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
