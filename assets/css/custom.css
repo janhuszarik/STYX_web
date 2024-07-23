@@ -146,6 +146,19 @@
 	}
 }
 
+/* Pre mobilné zariadenia zobrazí vlajky v mobile menu */
+@media (max-width: 768px) {
+	.mobile-lang-flags {
+		display: flex;
+		justify-content: center;
+		padding: 10px 0;
+	}
+	.mobile-lang-flags .lang {
+		display: inline-block;
+	}
+}
+
+
 
 
 

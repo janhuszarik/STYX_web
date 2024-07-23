@@ -1,3 +1,7 @@
+
+// -----------------------------------------------------------------------------------------------------------------------
+// js nastavenie pre slider:
+
 $(document).ready(function() {
 	var slides = $('.slider-section');
 	var currentIndex = 0;
@@ -27,3 +31,91 @@ $(document).ready(function() {
 		slideInterval = setInterval(showNextSlide, 6000);
 	});
 });
+// -----------------------------------------------------------------------------------------------------------------------
+// js nastavenie pre menu:
+
+document.addEventListener("DOMContentLoaded", function() {
+	var toggles = document.querySelectorAll(".dropdown-toggle");
+	toggles.forEach(function(toggle) {
+		toggle.addEventListener("click", function(e) {
+			if (window.innerWidth <= 768) {
+				e.preventDefault();
+				var menu = this.nextElementSibling;
+				if (menu.style.display === "block") {
+					menu.style.display = "none";
+				} else {
+					menu.style.display = "block";
+				}
+			}
+		});
+	});
+
+	// Ensure the dropdown stays open on hover and click for larger screens
+	var dropdowns = document.querySelectorAll('.dropdown-menu');
+	dropdowns.forEach(function(dropdown) {
+		dropdown.addEventListener('mouseenter', function() {
+			this.style.display = 'block';
+		});
+		dropdown.addEventListener('mouseleave', function() {
+			if (window.innerWidth > 768) {
+				this.style.display = 'none';
+			}
+		});
+		dropdown.addEventListener('click', function(e) {
+			e.stopPropagation();
+		});
+	});
+
+	var navItems = document.querySelectorAll('.nav-item.dropdown');
+	navItems.forEach(function(navItem) {
+		navItem.addEventListener('click', function(e) {
+			if (window.innerWidth > 768 && window.innerWidth < 1025) {
+				e.preventDefault();
+				var dropdown = this.querySelector('.dropdown-menu');
+				if (dropdown.style.display === 'block') {
+					dropdown.style.display = 'none';
+				} else {
+					dropdown.style.display = 'block';
+				}
+			}
+		});
+	});
+
+	document.addEventListener('click', function(e) {
+		if (window.innerWidth > 768 && window.innerWidth < 1025) {
+			dropdowns.forEach(function(dropdown) {
+				dropdown.style.display = 'none';
+			});
+		}
+	});
+
+	// Added script to ensure language flags are clickable and change language
+	var langLinks = document.querySelectorAll('.lang a');
+	langLinks.forEach(function(link) {
+		link.addEventListener('click', function(event) {
+			event.preventDefault();
+			window.location.href = link.getAttribute('href');
+		});
+	});
+
+	// New script to move language flags to the bottom or top of the menu on mobile
+	function moveLanguageFlags() {
+		var flagsContainer = document.querySelector('.mobile-lang-flags');
+		if (window.innerWidth <= 768) {
+			var nav = document.querySelector('.header-nav-main nav');
+			if (flagsContainer) {
+				// Move flags to the bottom of the menu
+				nav.appendChild(flagsContainer);
+				// Or move flags to the top of the menu
+				// nav.insertBefore(flagsContainer, nav.firstChild);
+			}
+		}
+	}
+
+	moveLanguageFlags();
+	window.addEventListener('resize', moveLanguageFlags);
+});
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+// koniec js pre menu:
