@@ -100,7 +100,7 @@ class App extends CI_Controller
 		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
 		$data['keywords'] = lang('NATURKOSMETIK_KEYWORDS');
 		$data['image'] = BASE_URL . LOGO;
-		$data['image1'] = BASE_URL . 'img/breadcrumb/aboutStyx.jpg';
+		$data['image1'] = BASE_URL . 'img/breadcrumb/naturkosmetic.jpg';
 
 		$this->load->view('layout/normal', $data);
 	}
