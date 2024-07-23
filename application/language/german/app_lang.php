@@ -23,6 +23,9 @@ $lang['ABOUT_STYX_TITLE'] 								= 'Naturcosmetic - Über STYX';
 $lang['ABOUT_STYX_DESCRIPTION'] 						= 'Traditionelles Familienunternehmen seit 1965 – im Herzen Niederösterreichs';
 $lang['ABOUT_STYX_KEYWORDS'] 							= 'Naturcosmetic, Naturkosmetik, Österreich, Bio-Schokolade, vegane Kosmetik, zertifizierte Naturkosmetik, handgemacht, Bio, nachhaltige Kosmetik';
 
+$lang['NATURKOSMETIK_TITLE'] 							= 'Naturkosmetik';
+$lang['NATURKOSMETIK_DESCRIPTION'] 						= 'Traditionelles Familienunternehmen seit 1965 – im Herzen Niederösterreichs';
+$lang['NATURKOSMETIK_KEYWORDS'] 						= 'Naturcosmetic, Naturkosmetik, Österreich, Bio-Schokolade, vegane Kosmetik, zertifizierte Naturkosmetik, handgemacht, Bio, nachhaltige Kosmetik';
 
 
 

@@ -130,10 +130,10 @@
 				</header>
 				<div class="card-body">
 					<div class="table-responsive">
-						<table class="table table-responsive-lg table-bordered table-striped table-sm mb-0">
+						<table class="table table-responsive-md table-hover mb-0 table-bordered mb-0" >
 							<thead>
 							<tr>
-								<th>#</th>
+								<th></th>
 								<th>Hauptüberschrift</th>
 								<th>URL</th>
 								<th>ab:</th>

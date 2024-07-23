@@ -99,7 +99,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/bestProduct/del/:num']	= 'admin/bestProductSave';
 
 	$route['Unternehmen/AboutStyx']			= 'App/aboutStyx';
-	$route['Company/About-Styx']			= 'App/contact';
+	$route['Naturkosmetik']					= 'App/naturkosmetik';
+	$route['app/naturkosmetik']					= 'App/naturkosmetik';
+
+
+
+$route['Company/About-Styx']			= 'App/contact';
 
 
 

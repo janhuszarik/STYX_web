@@ -81,6 +81,32 @@ class App extends CI_Controller
 
 	}
 
+	public function naturkosmetik() {
+		$post = $this->input->post();
+		if (!empty($post)) {
+			if ($this->App_model->naturkosmetik($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect(BASE_URL . 'Naturkosmetik');
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect(BASE_URL . 'Naturkosmetik');
+			}
+		}
+
+		$data['comment'] = $this->App_model->getCommentKosmetic();
+		$data['sumComment'] = $this->App_model->sumCommentKosmetic();
+		$data['page'] = 'app/Naturkosmetik';
+		$data['title'] = lang('NATURKOSMETIK_TITLE');
+		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
+		$data['keywords'] = lang('NATURKOSMETIK_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/aboutStyx.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
+
+
+
 
 	public function contact(){
         

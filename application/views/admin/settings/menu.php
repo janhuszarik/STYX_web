@@ -119,7 +119,7 @@
 				</header>
 				<div class="card-body">
 					<div class="table-responsive">
-						<table class="table table-responsive-lg table-bordered table-sm mb-0 menu-table">
+						<table class="table table-responsive-md table-hover mb-0 table-bordered mb-0" >
 							<thead>
 							<tr>
 								<th class="text-center">#</th>

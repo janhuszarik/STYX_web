@@ -1,1 +1,10 @@
-/* Add here all your CSS customizations */
+.wrapped-text {
+  display: inline-block;
+  width: 8ch; /* 'ch' jednotka nastaví šírku podľa šírky znaku '0' v aktuálnom fonte */
+  word-wrap: break-word; /* zalamuje slová na konci riadku */
+}/* Add here all your CSS customizations */
+.button-container {
+  display: flex;
+  justify-content: center; /* zarovná tlačidlá do stredu, ak je to potrebné */
+  gap: 10px; /* nastaví medzeru medzi tlačidlami */
+}

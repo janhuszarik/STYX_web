@@ -107,7 +107,7 @@
 				</header>
 				<div class="card-body">
 					<div class="table-responsive">
-						<table class="table table-responsive-lg table-bordered table-striped table-sm mb-0">
+						<table class="table table-responsive-md table-hover mb-0 table-bordered mb-0" >
 							<thead>
 							<tr>
 								<th>#</th>
@@ -133,8 +133,7 @@
 										<td data-title="#" class="text-end" title="<?=$r->id?>"><?=$k?></td>
 										<td data-title="Überschrift"><?=$r->name?></td>
 										<td data-title="Hauptüberschrift"><?=$r->name1?></td>
-										<td data-title="Button text"><?=$r->buttonUrl?></td>
-										<td data-title="ab"><?= date('d.m.Y', strtotime($r->start_date)) ?></td>
+										<td data-title="Button text"><span class="wrapped-text"><?= $r->buttonUrl ?></span></td>										<td data-title="ab"><?= date('d.m.Y', strtotime($r->start_date)) ?></td>
 										<td data-title="bis"><?= date('d.m.Y', strtotime($r->end_date))?></td>
 										<td data-title="Aktiv" class="text-center"><?=active($r->active)?></td>
 										<td data-title="Bild" class="text-center"><img src="<?=BASE_URL?>uploads/news/<?=$r->image?>" style="width: 50px;"></td>

@@ -78,35 +78,31 @@
 							<li>
 								<a class="nav-link" href="<?=BASE_URL?>">
 									<i class="bx bx-home-alt" aria-hidden="true"></i>
-									<span class="float-end badge badge-primary">Hauptmenü</span>
-
+<!--									<span class="float-end badge badge-primary">Hauptmenü</span>-->
 									<span>Dashboard</span>
 								</a>
 							</li>
+
 							<li>
 								<a class="nav-link" href="<?=BASE_URL.'admin/menu'?>">
-									<span class="float-end badge badge-primary">Menü web</span>
 									<i class="bx bx-menu" aria-hidden="true"></i>
 									<span>Menü</span>
 								</a>
 							</li>
 							<li>
 								<a class="nav-link" href="<?=BASE_URL.'admin/slider'?>">
-									<span class="float-end badge badge-primary">Slider web</span>
 									<i class="bx bx-slider" aria-hidden="true"></i>
 									<span>Slider</span>
 								</a>
 							</li>
 							<li>
 								<a class="nav-link" href="<?=BASE_URL.'admin/news'?>">
-									<span class="float-end badge badge-primary">Aktualität sektion</span>
 									<i class="bx bx-carousel" aria-hidden="true"></i>
 									<span>Aktuell</span>
 								</a>
 							</li>
 							<li>
 								<a class="nav-link" href="<?=BASE_URL.'admin/bestProduct'?>">
-									<span class="float-end badge badge-primary">Produkte</span>
 									<i class="bx bx-history" aria-hidden="true"></i>
 									<span>Beliebte produkte</span>
 								</a>
