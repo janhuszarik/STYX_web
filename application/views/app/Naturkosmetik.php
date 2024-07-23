@@ -114,12 +114,13 @@
 									</div>
 									<div id="collapse1One" class="collapse" aria-labelledby="collapse1HeadingOne">
 										<div class="card-body">
-											<p class="mb-0">Falls der Autor seinen Kommentar ändern möchte, muss er uns per E-Mail kontaktieren.
+											<p class="mb-0">Falls der Autor seinen Kommentar ändern möchte, muss er uns per
+												<a href="<?=BASE_URL.'kontakt'?>">E-Mail kontaktieren.</a>
 												Wir akzeptieren Änderungs- oder Löschungsanfragen nur von der ursprünglichen E-Mail-Adresse,
 												mit der das Formular ausgefüllt wurde, und die Kommentar-ID muss angegeben werden.
 												Die Kommentar-ID befindet sich direkt neben dem Datum und der Uhrzeit, z.B.: (8|1).
 												Wenn Sie mit dem Inhalt eines anderen Kommentars nicht einverstanden sind,
-												können Sie ihn melden und wir werden den Inhalt überprüfen.
+												können Sie ihn <a href="<?=BASE_URL.'kontakt'?>"> melden</a> und wir werden den Inhalt überprüfen.
 											</p>
 										</div>
 									</div>
