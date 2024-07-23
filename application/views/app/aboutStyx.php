@@ -4,7 +4,7 @@
 		<div class="container translucent-background">
 			<div class="row">
 				<div class="col align-self-center p-static text-center">
-					<h1 style="color:#000;"><strong><?=$title?></strong></h1>
+					<h1 style="color:#000;"><?=$title?></h1>
 					<span style="color: #0a0a0a" class="sub-title"><?=$description?></span>
 				</div>
 			</div>

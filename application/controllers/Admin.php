@@ -359,6 +359,56 @@ class Admin extends CI_Controller
 		}
 	}
 
+	function commentarSave() {
+		$post = $this->input->post();
+		$id = $this->uri->segment('4');
+		$segment2 = $this->uri->segment('3');
+
+		if (!empty($post)) {
+
+			if (!empty($id)) {
+				if ($this->Admin_model->naturkosmetikSave()) {
+					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
+					redirect(BASE_URL . 'admin/kommentar/');
+				} else {
+					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+					$data['edit'] = (object)$post;
+				}
+			} else {
+				if ($this->Admin_model->naturkosmetikSave()) {
+					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
+					redirect(BASE_URL . 'admin/kommentar');
+				} else {
+					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+					$data['edit'] = (object)$post;
+				}
+			}
+		}
+
+		if ($segment2 == 'del' && is_numeric($id)) {
+			if ($this->Admin_model->naturkosmetikDelete($id)) {
+				$this->session->set_flashdata('message', 'die Daten werden unwiederbringlich gelöscht');
+				redirect(BASE_URL . 'admin/kommentar');
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+			}
+		}
+
+		if (empty($id)) {
+			$data['komentars'] = $this->Admin_model->getKomentar();
+			$data['komentar'] = $this->Admin_model->getKomentar($id);
+			$data['title'] = 'Beliebte produkte';
+			$data['page'] = 'admin/settings/commentar';
+			$this->load->view('admin/layout/normal', $data);
+		} else {
+			$data['komentars'] = $this->Admin_model->getKomentar();
+			$data['komentar'] = $this->Admin_model->getKomentar($id);
+			$data['title'] = 'Beliebte produkte';
+			$data['page'] = 'admin/settings/commentar';
+			$this->load->view('admin/layout/normal', $data);
+		}
+	}
+
 
 
 

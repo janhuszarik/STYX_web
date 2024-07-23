@@ -4,7 +4,7 @@
 		<div class="container translucent-background">
 			<div class="row">
 				<div class="col align-self-center p-static text-center">
-					<h1 style="color:#000;"><strong><?=$title?></strong></h1>
+					<h1 style="color:#000;"><?=$title?></h1>
 					<span style="color: #0a0a0a" class="sub-title"><?=$description?></span>
 				</div>
 			</div>
@@ -149,8 +149,8 @@
 									<div class="row">
 										<div class="form-group col">
 											<div class="form-check">
-												<input type="checkbox" class="form-check-input" id="consent" name="consent" required>
-												<label class="form-check-label font-weight-bold text-dark" for="consent">
+												<input type="checkbox" class="form-check-input" id="consent" name="consent" value="1" required>
+												<label class="form-check-label font-weight-bold text-dark"  for="consent">
 													Ich stimme der Verarbeitung meiner persönlichen Daten zu. <a
 														href="https://shop.styx.at/Datenschutz:_:2.html">Datenschutzerklärung</a>
 												</label>

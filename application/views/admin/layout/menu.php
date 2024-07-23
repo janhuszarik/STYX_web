@@ -108,6 +108,12 @@
 								</a>
 							</li>
 							<li>
+								<a class="nav-link" href="<?=BASE_URL.'admin/commentar'?>">
+									<i class="bx bx-history" aria-hidden="true"></i>
+									<span>Kommentar</span>
+								</a>
+							</li>
+							<li>
 								<a class="nav-link" href="mailbox-folder.html">
 									<span class="float-end badge badge-primary"></span>
 									<i class="bx bx-envelope" aria-hidden="true"></i>
