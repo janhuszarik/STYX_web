@@ -151,7 +151,8 @@
 											<div class="form-check">
 												<input type="checkbox" class="form-check-input" id="consent" name="consent" required>
 												<label class="form-check-label font-weight-bold text-dark" for="consent">
-													Ich stimme der Verarbeitung meiner persönlichen Daten zu
+													Ich stimme der Verarbeitung meiner persönlichen Daten zu. <a
+														href="https://shop.styx.at/Datenschutz:_:2.html">Datenschutzerklärung</a>
 												</label>
 											</div>
 										</div>
