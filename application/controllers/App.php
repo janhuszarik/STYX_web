@@ -190,6 +190,32 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
+	public function werbegeschenke() {
+
+		$post = $this->input->post();
+		if (!empty($post)) {
+			if ($this->App_model->naturkosmetik($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect($this->refresh);
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect($this->refresh);
+			}
+		}
+
+		$data['comment'] = $this->App_model->getCommentWerbegeschenke();
+		$data['sumComment'] = $this->App_model->sumCommentWerbegeschenke();
+
+		$data['page'] = 'app/werbegeschenke';
+		$data['title'] = lang('WERBEGESCHENKE_TITLE');
+		$data['description'] = lang('WERBEGESCHENKE_DESCRIPTION');
+		$data['keywords'] = lang('WERBEGESCHENKE_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/werbegeschenke.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
+
 	function error404(){
         
         header("HTTP/1.1 404 Not Found");

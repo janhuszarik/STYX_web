@@ -33,15 +33,19 @@ $lang['NATURKOSMETIK_TITLE'] 							= 'NATURKOSMETIK';
 $lang['NATURKOSMETIK_DESCRIPTION'] 						= 'Traditionelles Familienunternehmen seit 1965 – im Herzen Niederösterreichs';
 $lang['NATURKOSMETIK_KEYWORDS'] 						= 'Naturcosmetic, Naturkosmetik, Österreich, Bio-Schokolade, vegane Kosmetik, zertifizierte Naturkosmetik, handgemacht, Bio, nachhaltige Kosmetik';
 $lang['AROMA-DERM_TITLE'] 								= 'AROMA DERM';
+
 $lang['SCHOKOLADE_TITLE'] 								= 'Schokoladenmanufaktur';
 $lang['SCHOKOLADE_DESCRIPTION'] 						= 'Hier finden Sie handgemachte Bio-Schokoladen mit ausschließlicher, klimaneutraler Produktion in Österreich';
 $lang['SCHOKOLADE_KEYWORDS'] 							= 'Schokolade, Bio Schokolade, BIO';
 $lang['FIGURTEN_TITLE'] 								= 'Schokoladenfiguren';
+
 $lang['PRIVATE_LABELING_TITLE'] 						= 'Private Labeling';
 $lang['PRIVATE_LABELING_DESCRIPTION'] 					= 'Wir unterstützen Sie bei der Entwicklung Ihrer eigenen Kosmetik- oder Schokolademarke!';
 $lang['PRIVATE_LABELING_KEYWORDS'] 						= 'Private Labeling';
 
-
+$lang['WERBEGESCHENKE_TITLE'] 							= 'Werbegeschenke';
+$lang['WERBEGESCHENKE_DESCRIPTION'] 					= 'Ihr Logo, Ihr Design, Ihre Botschaft!';
+$lang['WERBEGESCHENKE_KEYWORDS'] 						= 'Werbgeschenk, Werbegeschenke, Giveaway, personalisiert, Geschenk, Geschenke, Marke, Geburtstag, Fest, Gift';
 
 //----------------------------------------------------------------------------------------------------------------------
 //Text
@@ -166,5 +170,38 @@ $lang['PRIVATE_LABELING_SUBHEADING_TEXT_HEADING'] 				= 'Wir helfen Ihnen bei de
  																   ';
 $lang['PRIVATE_LABELING_TEXT_FOOTER'] 							='Holen Sie sich Ihr unverbindliches Angebot unter: <a href="mailto:renate.lobinger@styx.at">renate.lobinger@styx.at</a> renate.lobinger@styx.at <br>
 																   <strong>Wir freuen uns auf Ihre Anfrage!</strong>';
+
+$lang['WERBEGESCHENKE_HEADING'] 								= 'Personalisierte Geschenke';
+$lang['WERBEGESCHENKE_SUBHEADING'] 								= 'Wenn es ein einzigartiges Geschenk mit Ihrer Handschrift sein soll';
+$lang['WERBEGESCHENKE_SUBHEADING_TEXT'] 						= 'Ihr Logo – Ihr Design – Ihre Botschaft!';
+$lang['WERBEGESCHENKE_LONGTEXT'] 								= '<strong>Personalisierung:</strong><br> Wir drucken Ihr Unternehmenslogo, Ihr individuelles Design sowie Ihre Message auf unsere Produkte.<br><br>
+																   <strong>Individuell:</strong><br> Stellen Sie sich Ihr individuelles Präsent zusammen. Wir beraten Sie gerne bei den Möglichkeiten. <br><br>
+																   <strong>Einfach für jeden:</strong><br> Das perfekte Geschenk, sowohl als Unternehmens-Giveaway sowie als Mitbringsel für private Feiern.';
+$lang['WERBEGESCHENKE_SUBHEADING_TEXT_HEADING'] 				= 'Wählen Sie aus einer großen Produktpalette von über 700 Naturkosmetikprodukten und über 20 handgeschöpften BIO Schokoladen. Hochwertige Metalletuis, 
+																   attraktive Set-Lösungen und individuelle Geschenkboxen runden Ihren Marktauftritt ab – vom personalisierten Karton bis hin zu auffallenden Etiketten
+																   mit Ihrem Unternehmenslogo und in Ihrem Corporate Design. Wir bieten Ihnen ein außergewönliches Geschenk, Giveaway zu besonderen Anlässen... 
+																   und vieles mehr – so überraschen Sie Ihre KundInnen, GeschäftspartnerInnen und MitarbeiterInnen & verleihen Ihrer Marke eine besondere Note.
+																   Machen Sie auch Ihre private Feiern, wie zum Beispiel Hochzeiten oder Jubiläen mit personalisierten Geschenken zu einem ganz besonderen und
+																   und unvergesslichen Erlebnis. Die hochwertigen Geschenkboxen mit zertifizierter Naturkosmetik sowie die personalisierten Bio-Schokoladen
+																   verleihen Ihren Andenken einen ganz besonderen Touch. <br><br>
+																   <strong>	Unser Tipp:</strong><br>
+Besonders zu Weihnachten zeigen Sie mit einem personalisierten Weihnachtsgeschenk wie wichtig Ihnen Ihre Mitarbeiter und Freunde sind.';
+$lang['WERBEGESCHENKE_TEXT_FOOTER'] 							='Nutzen Sie das breite STYX-Sortiment für Ihre ganz spezifische Botschaft. Holen Sie sich Ihr unverbindliches Angebot unter: +43 (0) 2747 - 3250 27 <br> oder werbegeschenke@styx.at <br><br>
+																   <strong>Wir freuen uns auf Ihre Anfrage!</strong>';
+$lang['ZUR_PDF_BUTTON'] 												= 'Folder Personalisierte Geschenke 2024';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
