@@ -232,130 +232,19 @@
 	text-decoration: none; /* Remove underline on hover */
 }
 /*---------------------------------------------------------------------------------------------------------------*/
-/*Nastavenie css pre carussel-home-aktuelles :*/
 .home-carousel-card-custom {
 	line-height: 18px;
 	font-size: 14px;
 	font-weight: lighter;
 }
+
 .thumb-info-hr {
 	border: none;
 	height: 1px;
 	background-color: #ccc; /* Prispôsobenie farby podľa potreby */
 	margin: 10px 0; /* Prispôsobenie vertikálneho odsadenia podľa potreby */
 }
-.home-carousel-card {
-	position: relative;
-	width: 100%;
-	max-width: 270px;
-	overflow: hidden;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	transition: all 0.3s ease-in-out;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	background: white;
-	margin: 0 auto;
-}
 
-.home-carousel-card .home-carousel-img-container {
-	position: relative;
-	width: 100%;
-	padding-top: 75%; /* Aspect ratio */
-	overflow: hidden;
-	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-	background: #fff;
-}
-
-.home-carousel-card img {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 80%;
-	height: auto;
-	transform: translate(-50%, -50%);
-	transition: all 0.3s ease-in-out;
-}
-
-.home-carousel-card-content {
-	padding: 16px;
-	transition: all 0.3s ease-in-out;
-	text-align: center;
-}
-.home-carousel-card-content-product {
-	padding: 16px;
-	text-align: center;
-}
-
-.home-carousel-card-content h5 {
-	margin: 0;
-}
-
-.home-carousel-card-content p {
-	display: none;
-	margin-top: 25px;
-	font-size: 15px;
-}
-
-.home-carousel-card:hover img {
-	transform: translate(-50%, -50%) scale(0.9);
-}
-
-.home-carousel-card:hover .home-carousel-card-content {
-	padding-bottom: 48px;
-}
-
-.home-carousel-card:hover .home-carousel-card-content p {
-	display: block;
-}
-
-/* Responsive CSS */
-@media (max-width: 1200px) {
-	.home-carousel-card {
-		max-width: 220px;
-	}
-}
-
-@media (max-width: 992px) {
-	.home-carousel-card {
-		max-width: 200px;
-	}
-}
-
-@media (max-width: 768px) {
-	.home-carousel-card {
-		max-width: 230px;
-	}
-}
-
-@media (max-width: 576px) {
-	.home-carousel-card {
-		max-width: 90%;
-		margin: 10px auto; /* Add some margin to center the card */
-	}
-
-	.home-carousel-card-content {
-		padding: 12px;
-	}
-}
-
-@media (max-width: 400px) {
-	.home-carousel-card {
-		max-width: 90%;
-		margin: 10px auto; /* Add some margin to center the card */
-	}
-
-	.home-carousel-card-content {
-		padding: 8px;
-	}
-
-	.home-carousel-card-content h5 {
-		font-size: 14px;
-	}
-
-	.home-carousel-card-content p {
-		font-size: 12px;
-	}
-}
 /*---------------------------------------------------------------------------------------------------------------*/
 /*Nastavenie css pre karty produkty :*/
 
