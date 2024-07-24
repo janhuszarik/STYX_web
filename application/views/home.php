@@ -9,7 +9,7 @@
 						<?php foreach ($news as $news_item): ?>
 							<span class="thumb-info thumb-info-no-borders thumb-info-no-borders-rounded thumb-info-lighten thumb-info-bottom-info thumb-info-bottom-info-custom thumb-info-bottom-info-show-more thumb-info-no-zoom" onclick="location.href='<?= $news_item->buttonUrl ?>';" style="cursor: pointer;">
 								<span class="thumb-info-wrapper">
-									<img src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>" class="img-fluid" alt="<?= $news_item->name ?>">
+									<img src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>" class="img-fluid small-image" alt="<?= $news_item->name ?>">
 									<span class="thumb-info-title">
 										<span class="thumb-info-inner line-height-5 text-4"><?= $news_item->name ?></span>
 										<hr class="thumb-info-hr">
