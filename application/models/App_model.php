@@ -125,7 +125,20 @@ class app_model extends CI_Model
 		return $this->db->count_all_results('comments');
 	}
 
-
+	public function getCommentPrivateLabeling()
+	{
+		$this->db->select('*');
+		$this->db->where('section_id', 'Private-Labeling');
+		$this->db->where('active', '1');
+		$this->db->where('lang', language());
+		return $this->db->get('comments')->result();
+	}
+	public function sumCommentPrivateLabeling()
+	{
+		$this->db->where('section_id', 'Private-Labeling');
+		$this->db->where('lang', language());
+		return $this->db->count_all_results('comments');
+	}
 
 
 

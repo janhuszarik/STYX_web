@@ -40,8 +40,7 @@
 						<div class="post-meta">
 							<h4 class="text-color-black"><?=lang('AROMA_DERM_SUBHEADING')?></h4>
 
-							<span><i class="far fa-comments"></i>
-								<a href="#">12 Comments</a></span>
+							<span><i class="far fa-comments"></i><?=$sumComment?> Comments</span>
 						</div>
 						<img src="<?=BASE_URL?>img/image/MichaellaStix.jpg" class="img-fluid float-start me-4 mt-2" alt="" />
 						<h4><?=lang('AROMA_DERM_SUBHEADING_TEXT')?></h4>

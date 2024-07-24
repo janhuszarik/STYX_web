@@ -35,26 +35,26 @@
 
 					<div class="post-content ms-0">
 
-						<h2 class="font-weight-semi-bold"><?=lang('NATURKOSMETIK_HEADING')?></a></h2>
+						<h2 style="color: #aad998" class="font-weight-semi-bold"><?=lang('PRIVATE_LABELING_HEADING')?></h2>
 
 						<div class="post-meta">
-							<h4 class="text-color-black"><?=lang('NATURKOSMETIK_SUBHEADING')?></h4>
-
-							<span><i class="far fa-comments"></i><?=$sumComment?> Comments</span>
+							<h4 class="text-color-black"><?=lang('PRIVATE_LABELING_SUBHEADING')?></h4>
 						</div>
-						<img src="<?=BASE_URL?>img/image/naturcosmetic.jpg" class="img-fluid float-start me-4 mt-2" alt="" />
-						<h4><?=lang('NATURKOSMETIK_SUBHEADING_TEXT')?></h4>
-						<p><?=lang('NATURKOSMETIK_LONGTEXT')?></p>
+						<img src="<?=BASE_URL?>img/image/privateLabeling.jpg" class="img-fluid float-start me-4 mt-2" alt="" />
+						<h4><?=lang('PRIVATE_LABELING_SUBHEADING_TEXT')?></h4>
+						<p><?=lang('PRIVATE_LABELING_LONGTEXT')?></p>
+						<p><?=lang('PRIVATE_LABELING_SUBHEADING_TEXT_HEADING')?></p>
 
 						<div class="post-block mt-5 post-share">
-							<a href="https://shop.styx.at/" class="btn btn-primary w-50 mb-2"><?=lang('ZUR_HOMA_PAGE')?></a>
+							<a href="<?=BASE_URL?>img/pdf/Infoblatt STYX Private Labeling.pdf" class="btn btn-primary w-50 mb-2"><?=lang('ZUR_PDF')?></a>
 
 							<!-- Go to www.addthis.com/dashboard to customize your tools -->
 							<div class="addthis_inline_share_toolbox"></div>
 							<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-60ba220dbab331b0"></script>
 
 						</div>
-
+						br
+						<p><?=lang('PRIVATE_LABELING_TEXT_FOOTER')?></p>
 
 						<div id="comments" class="post-block mt-5 post-comments">
 							<h4 class="mb-3"><?=lang('SUM_COMMENT')?> | <?=$sumComment?></h4>
@@ -62,31 +62,31 @@
 
 							<ul class="comments">
 								<?php foreach ($comment as $comment): ?>
-								<li>
-									<div class="comment">
-										<div class="img-thumbnail img-thumbnail-no-borders d-none d-sm-block">
-											<img class="avatar" alt="Avatar" src="data:image/svg+xml;base64,
+									<li>
+										<div class="comment">
+											<div class="img-thumbnail img-thumbnail-no-borders d-none d-sm-block">
+												<img class="avatar" alt="Avatar" src="data:image/svg+xml;base64,
 												PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDI0IDI0Ii
 												BmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo
 												gICAgPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTIiIGZpbGw9IiNCMEJFQzUi
 												Lz4KICAgIDxjaXJjbGUgY3g9IjEyIiBjeT0iOCIgcj0iNCIgZmlsbD0id2hpdGUiL
 												z4KICAgIDxwYXRoIGQ9Ik0xMiAxNEM5LjMzIDE0IDYuOTMgMTUuMzQgNS41IDE3Lj
 												M1QzUuMTggMTcuOCA1LjM5IDE4LjQyIDUuOTMgMTguNDJIMTguMDdDMTguNjEgMTguNDIgMTguODIgMTcuOCAxOC41IDE3LjM1QzE3LjA3IDE1LjM0IDE0LjY3IDE0IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+"/>
-										</div>
-										<div class="comment-block">
-											<div class="comment-arrow"></div>
-											<span class="comment-by">
+											</div>
+											<div class="comment-block">
+												<div class="comment-arrow"></div>
+												<span class="comment-by">
                         							<strong><?=$comment->name?> </strong>
                         								<span class="float-end">
                           									  <span> <a href="#"><i class="fas fa-reply"></i> <?=lang('COMMENT_REPLY')?></a></span></span>
 														</span>
-											<p><?=$comment->comment?></p>
+												<p><?=$comment->comment?></p>
 
-											<span class="date float-end"><?= date('j.n.Y H:i', strtotime($comment->created)) ?> / <b class="text-color-black"><?=$comment->id.' | '.$comment->section_id?></b></span>
+												<span class="date float-end"><?= date('j.n.Y H:i', strtotime($comment->created)) ?> / <b class="text-color-black"><?=$comment->id.' | '.$comment->section_id?></b></span>
 
+											</div>
 										</div>
-									</div>
-									<?php endforeach; ?>
+								<?php endforeach; ?>
 							</ul>
 
 
@@ -112,7 +112,7 @@
 								</div>
 							</div>
 							<br>
-							<form class="contact-form p-4 rounded bg-color-grey" action="<?=BASE_URL?>app/aromaDerm" method="POST">
+							<form class="contact-form p-4 rounded bg-color-grey" action="<?=BASE_URL?>app/Private-labeling" method="POST">
 								<div class="p-2">
 									<div class="row">
 										<div class="form-group col-lg-6">
@@ -143,7 +143,8 @@
 									</div>
 									<div class="row">
 										<div class="form-group col mb-0">
-											<input type="hidden" name="section_id" value="Naturkosmetik">
+											<input type="hidden" name="section_id" value="Private-Labeling">
+											<input type="hidden" name="lang" value="<?=language()?>">
 											<input type="hidden" name="active" value="1">
 											<input type="submit" value="Kommentar absenden" class="btn btn-primary btn-modern" data-loading-text="Loading...">
 										</div>

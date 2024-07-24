@@ -37,7 +37,9 @@ $lang['SCHOKOLADE_TITLE'] 								= 'Schokoladenmanufaktur';
 $lang['SCHOKOLADE_DESCRIPTION'] 						= 'Hier finden Sie handgemachte Bio-Schokoladen mit ausschließlicher, klimaneutraler Produktion in Österreich';
 $lang['SCHOKOLADE_KEYWORDS'] 							= 'Schokolade, Bio Schokolade, BIO';
 $lang['FIGURTEN_TITLE'] 								= 'Schokoladenfiguren';
-
+$lang['PRIVATE_LABELING_TITLE'] 						= 'Private Labeling';
+$lang['PRIVATE_LABELING_DESCRIPTION'] 					= 'Wir unterstützen Sie bei der Entwicklung Ihrer eigenen Kosmetik- oder Schokolademarke!';
+$lang['PRIVATE_LABELING_KEYWORDS'] 						= 'Private Labeling';
 
 
 
@@ -84,6 +86,7 @@ $lang['AROMA_DERM_LONGTEXT'] 							= 'Die wirkungsvollen, kosmetischen Pflegeli
 														   die im internen Bereich von aroma-derm.com zu finden sind. Der Fokus liegt hier auf Produktschulungen, Treatments sowie Basis- und Aufbauseminaren.';
 
 $lang['ZUR_HOMA_PAGE'] 									= 'Zur Homepage ';
+$lang['ZUR_PDF'] 										= 'Infoblatt | PDF Datei ';
 $lang['SUM_COMMENT'] 									= 'Anzahl der Kommentare ';
 $lang['COMMENT_REPLY'] 									= 'Kommentar melden ';
 $lang['COMMENT_NEW'] 									= 'Hinterlassen Sie uns einen Kommentar ';
@@ -150,5 +153,18 @@ $lang['FIGUREN_LONGTEXT'] 								= 'Die Schokoladen-Kreationen sind ausschließ
 														   <h4>Vorbestellung unter manufaktur01@styx.at, +43 2747 3250-27</h4>';
 $lang['FIGUREN_SUBHEADING_TEXT_HEADING'] 				= 'Figuren ganzjährig';
 
+$lang['PRIVATE_LABELING_HEADING'] 								= 'Private Labeling';
+$lang['PRIVATE_LABELING_SUBHEADING'] 							= 'Mit unserer langjährigen Erfahrung sind wir der richtige Partner!';
+$lang['PRIVATE_LABELING_SUBHEADING_TEXT'] 						= 'Machen Sie Ihr Produkt zur Marke';
+$lang['PRIVATE_LABELING_LONGTEXT'] 								= '<strong>Formulierungen:</strong><br> Wir entwickeln für Sie Cremen, Shampoos, Badezusätze, Parfumes, Massageöle und vieles mehr.<br><br>
+																   <strong>Qualität:</strong><br> Wir bieten GMP, mikrobiologische Analysen, Stabilitätstests, BIO-Wirkstoffe, Zertifizierungen und vegane Rohstoffe. <br><br>
+																   <strong>Abfüllung & Verpackung:</strong><br> Wir füllen Ihr Produkt in Tuben, Tiegel oder Sachets ab.';
+$lang['PRIVATE_LABELING_SUBHEADING_TEXT_HEADING'] 				= 'Wir helfen Ihnen bei der Entwicklung und Positionierung Ihrer eigenen Kosmetik. Private Labeling bedeutet mehr als nur Ihren Firmennamen und
+ 																   das Logo auf das Produkt zu drucken. Unterstreichen Sie ihre persönliche Marke mit repräsentativen und innovativen Rezepturen, die wir für Sie herstellen.
+ 																   Nützen Sie unser Wissen für Ihre individuellen Rezepturen und qualitativ hochwertige Hautpflegeprodukte „Made in Austria“ für einen gemeinsamen Erfolg. <br>	
+ 																   <strong> Den groben Ablauf können Sie sich auf unserem Infoblatt für personalisierte Naturkosmetik ansehen:</strong> <br>
+ 																   ';
+$lang['PRIVATE_LABELING_TEXT_FOOTER'] 							='Holen Sie sich Ihr unverbindliches Angebot unter: <a href="mailto:renate.lobinger@styx.at">renate.lobinger@styx.at</a> renate.lobinger@styx.at <br>
+																   <strong>Wir freuen uns auf Ihre Anfrage!</strong>';
 
 //----------------------------------------------------------------------------------------------------------------------

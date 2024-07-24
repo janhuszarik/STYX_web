@@ -111,8 +111,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['Schokoladen']					= 'App/schokoladen';
 	$route['app/schokoladen']				= 'App/schokoladen';
 	$route['Schokolade/figuren']			= 'App/figuren';
+	$route['Private-labeling']				= 'App/privateLabeling';
+	$route['app/Private-labeling']			= 'App/privateLabeling';
 
-	$route['Company/About-Styx']				= 'App/contact';
+	$route['Company/About-Styx']			= 'App/contact';
 
 
 
