@@ -32,11 +32,11 @@
 	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
 		<?php foreach ($product as $product_item): ?>
 			<a href="<?= $product_item->url ?>" aria-label="">
-			<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-				<span class="thumb-info-wrapper">
-					<img src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>" class="img-fluid" alt="<?= $product_item->name ?>">
-				</span>
-			</span>
+                <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                    <span class="thumb-info-wrapper">
+                        <img loading="lazy" src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>" class="img-fluid" alt="<?= $product_item->name ?>">
+                    </span>
+                </span>
 				<?php if ($product_item->action == 1): ?>
 					<div class="ribbon">
 						<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
@@ -63,27 +63,27 @@
 					<ul class="list-unstyled d-flex flex-wrap justify-content-center">
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
 							<a class="lightbox" data-plugin-options="{'type':'image'}">
-								<img class="img-fluid" src="<?= BASE_URL . 'img/webImage/staat.png' ?>" alt="Staatliche_Auszeichnung">
+								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/staat.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
 							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
-								<img class="img-fluid" src="<?= BASE_URL . 'img/webImage/eco-cert_start.png' ?>" alt="Staatliche_Auszeichnung">
+								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/eco-cert_start.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
 							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
-								<img class="img-fluid" src="<?= BASE_URL . 'img/webImage/Bio-Austria_start.png' ?>" alt="Staatliche_Auszeichnung">
+								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/Bio-Austria_start.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
 							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
-								<img class="img-fluid" src="<?= BASE_URL . 'img/webImage/top_rated_company_24.png' ?>" alt="Staatliche_Auszeichnung">
+								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/top_rated_company_24.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
 							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
-								<img class="img-fluid" src="<?= BASE_URL . 'img/webImage/trusted-shop_start.png' ?>" alt="Staatliche_Auszeichnung">
+								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/trusted-shop_start.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
 					</ul>
@@ -202,8 +202,4 @@
 	</div>
 </div>
 
-<script>
-		$(window).on('load', function(){
-		$(".owl-carousel").owlCarousel();
-	});
-</script>
+

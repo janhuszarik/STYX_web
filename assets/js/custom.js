@@ -1,8 +1,10 @@
-
 // -----------------------------------------------------------------------------------------------------------------------
 // js nastavenie pre slider:
+$(window).on('load', function () {
+	$(".owl-carousel").owlCarousel();
+});
 
-$(document).ready(function() {
+$(document).ready(function () {
 	var slides = $('.slider-section');
 	var currentIndex = 0;
 	var slideInterval = setInterval(showNextSlide, 6000); // Change slide every 6 seconds
@@ -19,13 +21,13 @@ $(document).ready(function() {
 		slides.eq(currentIndex).addClass('active');
 	}
 
-	$('.next').click(function() {
+	$('.next').click(function () {
 		clearInterval(slideInterval);
 		showNextSlide();
 		slideInterval = setInterval(showNextSlide, 6000);
 	});
 
-	$('.prev').click(function() {
+	$('.prev').click(function () {
 		clearInterval(slideInterval);
 		showPrevSlide();
 		slideInterval = setInterval(showNextSlide, 6000);
@@ -34,10 +36,10 @@ $(document).ready(function() {
 // -----------------------------------------------------------------------------------------------------------------------
 // js nastavenie pre menu:
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 	var toggles = document.querySelectorAll(".dropdown-toggle");
-	toggles.forEach(function(toggle) {
-		toggle.addEventListener("click", function(e) {
+	toggles.forEach(function (toggle) {
+		toggle.addEventListener("click", function (e) {
 			if (window.innerWidth <= 768) {
 				e.preventDefault();
 				var menu = this.nextElementSibling;
@@ -52,23 +54,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// Ensure the dropdown stays open on hover and click for larger screens
 	var dropdowns = document.querySelectorAll('.dropdown-menu');
-	dropdowns.forEach(function(dropdown) {
-		dropdown.addEventListener('mouseenter', function() {
+	dropdowns.forEach(function (dropdown) {
+		dropdown.addEventListener('mouseenter', function () {
 			this.style.display = 'block';
 		});
-		dropdown.addEventListener('mouseleave', function() {
+		dropdown.addEventListener('mouseleave', function () {
 			if (window.innerWidth > 768) {
 				this.style.display = 'none';
 			}
 		});
-		dropdown.addEventListener('click', function(e) {
+		dropdown.addEventListener('click', function (e) {
 			e.stopPropagation();
 		});
 	});
 
 	var navItems = document.querySelectorAll('.nav-item.dropdown');
-	navItems.forEach(function(navItem) {
-		navItem.addEventListener('click', function(e) {
+	navItems.forEach(function (navItem) {
+		navItem.addEventListener('click', function (e) {
 			if (window.innerWidth > 768 && window.innerWidth < 1025) {
 				e.preventDefault();
 				var dropdown = this.querySelector('.dropdown-menu');
@@ -81,9 +83,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	});
 
-	document.addEventListener('click', function(e) {
+	document.addEventListener('click', function (e) {
 		if (window.innerWidth > 768 && window.innerWidth < 1025) {
-			dropdowns.forEach(function(dropdown) {
+			dropdowns.forEach(function (dropdown) {
 				dropdown.style.display = 'none';
 			});
 		}
@@ -91,8 +93,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// Added script to ensure language flags are clickable and change language
 	var langLinks = document.querySelectorAll('.lang a');
-	langLinks.forEach(function(link) {
-		link.addEventListener('click', function(event) {
+	langLinks.forEach(function (link) {
+		link.addEventListener('click', function (event) {
 			event.preventDefault();
 			window.location.href = link.getAttribute('href');
 		});
