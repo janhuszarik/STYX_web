@@ -16791,6 +16791,10 @@ html.gecko .sort-destination.sort-destination-margin > [class*="col-"] {
 	background: #212529;
 	color: #FFF;
 }
+.thumb-info.thumb-info-bottom-info-custom .thumb-info-title {
+	background: #71ad2c;
+	color: #FFF;
+}
 
 .thumb-info.thumb-info-bottom-info-dark-linear .thumb-info-title {
 	background: linear-gradient(to top, rgba(33, 37, 41, 0.8) 0, transparent 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);

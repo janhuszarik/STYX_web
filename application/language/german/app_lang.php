@@ -36,7 +36,7 @@ $lang['AROMA-DERM_TITLE'] 								= 'AROMA DERM';
 $lang['SCHOKOLADE_TITLE'] 								= 'Schokoladenmanufaktur';
 $lang['SCHOKOLADE_DESCRIPTION'] 						= 'Hier finden Sie handgemachte Bio-Schokoladen mit ausschließlicher, klimaneutraler Produktion in Österreich';
 $lang['SCHOKOLADE_KEYWORDS'] 							= 'Schokolade, Bio Schokolade, BIO';
-
+$lang['FIGURTEN_TITLE'] 								= 'Schokoladenfiguren';
 
 
 
@@ -143,6 +143,12 @@ $lang['SCHOKOLADE_LONGTEXT'] 							= 'Leidenschaft zeichnet sich bei uns verant
 														   verwöhnen möchten, unsere Figuren sind die perfekte Wahl für jeden Anlass.<br>
 														   Jede Figur ist ein Unikat!<br>
 														   Entdecken Sie alle handgemachten Schokoladenfiguren von STYX: <a href="Schokolade/figuren">Figuren</a>';
+$lang['FIGUREN_HEADING'] 								= 'Schokoladenmanufaktur';
+$lang['FIGUREN_SUBHEADING'] 							= 'Handgeschöpfte Schokolade aus dem Hause STYX';
+$lang['FIGUREN_SUBHEADING_TEXT'] 						= 'Schokoladenfiguren für jeden Anlass';
+$lang['FIGUREN_LONGTEXT'] 								= 'Die Schokoladen-Kreationen sind ausschließlich in unserem Shop in Ober-Grafendorf erhältlich!<br>
+														   <h4>Vorbestellung unter manufaktur01@styx.at, +43 2747 3250-27</h4>';
+$lang['FIGUREN_SUBHEADING_TEXT_HEADING'] 				= 'Figuren ganzjährig';
 
 
 //----------------------------------------------------------------------------------------------------------------------

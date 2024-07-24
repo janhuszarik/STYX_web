@@ -140,7 +140,17 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('SCHOKOLADE_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('SCHOKOLADE_TEXT')?></p>
-					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<?php if (language() === 'en'): ?>
+						<a href="<?= BASE_URL . 'en/Schokoladen' ?>" class="read-more text-color-primary font-weight-semibold text-2">
+							<?= lang('READ_MORE') ?>
+							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
+						</a>
+					<?php else: ?>
+						<a href="<?= BASE_URL . 'Schokoladen' ?>" class="read-more text-color-primary font-weight-semibold text-2">
+							<?= lang('READ_MORE') ?>
+							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
+						</a>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>

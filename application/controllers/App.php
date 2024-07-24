@@ -153,6 +153,17 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+	public function figuren() {
+
+		$data['page'] = 'app/Figuren';
+		$data['title'] = lang('FIGURTEN_TITLE');
+		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
+		$data['keywords'] = lang('NATURKOSMETIK_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/schokolade.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
 
 
 	function error404(){
