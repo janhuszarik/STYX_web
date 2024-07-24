@@ -13,6 +13,7 @@ class App extends CI_Controller
 		parent::__construct();
 		$this->load->model(array('App_model','Mail_model'));
 		$this->load->language('app_lang');
+		$this->refresh = get_http_referer(); // Uloženie referera do vlastnosti kontroléra / použijem redirect($this->refresh);
 		setlocale(LC_ALL,'de_DE');
 
 
@@ -20,7 +21,6 @@ class App extends CI_Controller
 
 
 	function index(){
-
 		$this->home();
 	}
 
@@ -44,7 +44,6 @@ class App extends CI_Controller
 		// Načítanie view
 		$this->load->view('layout/normal', $data);
 	}
-
 
 
 	private function check_cookie_consent() {
@@ -81,20 +80,15 @@ class App extends CI_Controller
 
 	}
 
-
-
-
-
-
 	public function naturkosmetik() {
 		$post = $this->input->post();
 		if (!empty($post)) {
 			if ($this->App_model->naturkosmetik($post)) {
 				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
-				redirect(BASE_URL . 'Naturkosmetik');
+				redirect($this->refresh);
 			} else {
 				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
-				redirect(BASE_URL . 'Naturkosmetik');
+				redirect($this->refresh);
 			}
 		}
 
@@ -115,21 +109,47 @@ class App extends CI_Controller
 		if (!empty($post)) {
 			if ($this->App_model->naturkosmetik($post)) {
 				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
-				redirect(BASE_URL . 'Aroma-Derm');
+				redirect($this->refresh);
 			} else {
 				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
-				redirect(BASE_URL . 'Aroma-Derm');
+				redirect($this->refresh);
 			}
 		}
 
 		$data['comment'] = $this->App_model->getCommentAromaDerm();
 		$data['sumComment'] = $this->App_model->sumCommentAromaDerm();
 		$data['page'] = 'app/Aroma-Derm';
-		$data['title'] = lang('NATURKOSMdETIK_TITLE');
+		$data['title'] = lang('AROMA-DERM_TITLE');
 		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
 		$data['keywords'] = lang('NATURKOSMETIK_KEYWORDS');
 		$data['image'] = BASE_URL . LOGO;
 		$data['image1'] = BASE_URL . 'img/breadcrumb/naturkosmetic.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
+
+	public function schokoladen() {
+		$post = $this->input->post();
+
+		if (!empty($post)) {
+			if ($this->App_model->naturkosmetik($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect($this->refresh); // Presmerujte späť na pôvodnú URL adresu
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect($this->refresh); // Presmerujte späť na pôvodnú URL adresu
+			}
+		}
+
+
+		$data['comment'] = $this->App_model->getCommentSchokoladen();
+		$data['sumComment'] = $this->App_model->sumCommentSchokoladen();
+		$data['page'] = 'app/Schokoladen';
+		$data['title'] = lang('SCHOKOLADE_TITLE');
+		$data['description'] = lang('SCHOKOLADE_DESCRIPTION');
+		$data['keywords'] = lang('SCHOKOLADE_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/schokolade.jpg';
 
 		$this->load->view('layout/normal', $data);
 	}

@@ -82,10 +82,10 @@ class app_model extends CI_Model
 	}
 
 
-	public function naturkosmetik($data)
+	public function naturkosmetik()
 	{
 		$data = array(
-			'lang' => language(),
+			'lang' => $this->input->post('lang'),
 			'name' => $this->input->post('name'),
 			'email' => $this->input->post('email'),
 			'comment' => $this->input->post('comment'),
@@ -107,6 +107,20 @@ class app_model extends CI_Model
 	public function sumCommentAromaDerm()
 	{
 		$this->db->where('section_id', 'Aroma-Derm');
+		$this->db->where('lang', language());
+		return $this->db->count_all_results('comments');
+	}
+	public function getCommentSchokoladen()
+	{
+		$this->db->select('*');
+		$this->db->where('section_id', 'Schokolade');
+		$this->db->where('active', '1');
+		$this->db->where('lang', language());
+		return $this->db->get('comments')->result();
+	}
+	public function sumCommentSchokoladen()
+	{
+		$this->db->where('section_id', 'Schokolade');
 		$this->db->where('lang', language());
 		return $this->db->count_all_results('comments');
 	}

@@ -29,11 +29,13 @@ $lang['ABOUT_STYX_TITLE'] 								= 'Naturcosmetic - Über STYX';
 $lang['ABOUT_STYX_DESCRIPTION'] 						= 'Traditionelles Familienunternehmen seit 1965 – im Herzen Niederösterreichs';
 $lang['ABOUT_STYX_KEYWORDS'] 							= 'Naturcosmetic, Naturkosmetik, Österreich, Bio-Schokolade, vegane Kosmetik, zertifizierte Naturkosmetik, handgemacht, Bio, nachhaltige Kosmetik';
 
-$lang['NATURKOSMETIK_TITLE'] 							= 'Naturkosmetik';
+$lang['NATURKOSMETIK_TITLE'] 							= 'NATURKOSMETIK';
 $lang['NATURKOSMETIK_DESCRIPTION'] 						= 'Traditionelles Familienunternehmen seit 1965 – im Herzen Niederösterreichs';
 $lang['NATURKOSMETIK_KEYWORDS'] 						= 'Naturcosmetic, Naturkosmetik, Österreich, Bio-Schokolade, vegane Kosmetik, zertifizierte Naturkosmetik, handgemacht, Bio, nachhaltige Kosmetik';
-
-
+$lang['AROMA-DERM_TITLE'] 								= 'AROMA DERM';
+$lang['SCHOKOLADE_TITLE'] 								= 'Schokoladenmanufaktur';
+$lang['SCHOKOLADE_DESCRIPTION'] 						= 'Hier finden Sie handgemachte Bio-Schokoladen mit ausschließlicher, klimaneutraler Produktion in Österreich';
+$lang['SCHOKOLADE_KEYWORDS'] 							= 'Schokolade, Bio Schokolade, BIO';
 
 
 
@@ -119,6 +121,28 @@ $lang['COMMENT_REPLY_TEXT'] 							= 'Falls der Autor seinen Kommentar ändern m
 														   Die Kommentar-ID befindet sich direkt neben dem Datum und der Uhrzeit, z.B.: ( 8 | Naturkosmetik).
 														   Wenn Sie mit dem Inhalt eines anderen Kommentars nicht einverstanden sind,können Sie ihn <a href="<?=BASE_URL?>kontakt"> melden</a>
  														   und wir werden den Inhalt überprüfen.';
+
+$lang['SCHOKOLADE_HEADING'] 							= 'Schokoladenmanufaktur';
+$lang['SCHOKOLADE_SUBHEADING'] 							= 'Handgeschöpfte Schokolade aus dem Hause STYX';
+$lang['SCHOKOLADE_SUBHEADING'] 							= 'Wahrer Schokoladengenuss aus Österreich';
+$lang['SCHOKOLADE_LONGTEXT'] 							= 'Leidenschaft zeichnet sich bei uns verantwortlich für eine Fülle von erlesenen Kreationen, die den Gaumen verwöhnen und alle Sinne ansprechen.
+														   Ergeben Sie sich der zarten Versuchung mit frischen Früchten, knackigen Nüssen und edler Schokolade.
+														   Seit 2010 leitet Wolfgang Stix die Schokoladenmanufaktur im niederösterreichischen Ober-Grafendorf bei St. Pölten. Begonnen hat das Projekt mit einem Experiment,
+														   in dem er hochwertiges ätherisches Rosenöl mit köstlicher Bitterschokolade kombinierte. Das Ergebnis war atemberaubend!
+														   Versuche mit regionalen Rohstoffen sorgten schließlich für die Entstehung der äußert beliebten Dirndlschokolade und dem Marillenpralinenriegel.
+														   Heute ist die STYX Schokoladenmanufaktur als hochmoderne und ökologisch nachhaltige Produktionsstätte bekannt.
+														   <h4>Schokoladengenuss aus Österreich</h4>
+														   Unsere Mitarbeiter haben sich mit Leib und Seele dem süßen Leben verschrieben. Sie lassen sich von den regionalen Spezialitäten inspirieren und kreieren eine Vielfalt
+														   an verschiedenen Geschmäckern durch intuitive Kombinationen.
+														   Ob Zartbitter- oder Vollmilchschokolade, knackige Nüsse oder süßes Marzipan, weiße Schokolade oder frische Früchte, etwa als köstliche Erdbeer-Füllung: Mit den
+														   vielfältigen Schokolade-Kreationen von STYX kommt jeder „Schokoholic“ auf den Geschmack! Stöbern Sie durch die süße Vielfalt unserer handgeschöpften Schokoladentafeln,
+														   gefüllten Schokoladen und dragierten Früchte! In unserem STYX Shop finden Sie viele köstliche Geschenkideen für jeden Anlass.
+														   <h4>Handgemachte Schokoladenfiguren für jeden Anlass</h4>
+														   Von eleganten Handtaschen über schicke Schuhe bis hin zu bezaubernden Einhörnern bieten wir eine breite Palette an Figuren, die nicht nur Ihre Sinne verwöhnen, 
+														   sondern auch Ihre Persönlichkeit zum Ausdruck bringen. Egal, ob Sie ein einzigartiges Geschenk für einen geliebten Menschen suchen oder einfach nur sich selbst 
+														   verwöhnen möchten, unsere Figuren sind die perfekte Wahl für jeden Anlass.<br>
+														   Jede Figur ist ein Unikat!<br>
+														   Entdecken Sie alle handgemachten Schokoladenfiguren von STYX: <a href="Schokolade/figuren">Figuren</a>';
 
 
 //----------------------------------------------------------------------------------------------------------------------

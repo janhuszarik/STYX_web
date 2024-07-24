@@ -58,30 +58,51 @@
 
 	}
 
+
+	// Skontroluje, či neexistuje funkcia s názvom 'lang'
 	if ( ! function_exists('lang'))
+
+		// Ak neexistuje, definuje funkciu 'lang'
 {
-	/**
+		/**
 	 * Lang
 	 *
-	 * Fetches a language variable and optionally outputs a form label
+	 * Načítava jazykovú premennú a voliteľne vypisuje štítok formulára
 	 *
-	 * @param	string	$line		The language line
-	 * @param	string	$for		The "for" value (id of the form element)
-	 * @param	array	$attributes	Any additional HTML attributes
+	 * @param	string	$line		Jazyková hodnota
+	 * @param	string	$for		Hodnota atribútu "for" (id prvku formulára)
+	 * @param	array	$attributes	Ďalšie HTML atribúty
 	 * @return	string
 	 */
 	function lang($line, $for = '', $attributes = array())
 	{
+		// Načíta jazykovú hodnotu z frameworku
 		$line = get_instance()->lang->line($line);
 
+		// Ak je 'for' zadané, vygeneruje HTML štítok
 		if ($for !== '')
 		{
 			$line = '<label for="'.$for.'"'._stringify_attributes($attributes).'>'.$line.'</label>';
 		}
 
+		// Vráti jazykovú hodnotu alebo vygenerovaný HTML štítok
 		return $line;
 	}
 }
+	//--------------------------------------------------------
+
+	// Skontroluje, či neexistuje funkcia s názvom 'get_http_referer'
+	if (!function_exists('get_http_referer')) {
+			// Ak neexistuje, definuje funkciu 'get_http_referer'
+			function get_http_referer() {
+				// Načíta inštanciu frameworku
+				$CI =& get_instance();
+				// Vráti hodnotu HTTP_REFERER zo serverových premenných
+				return $CI->input->server('HTTP_REFERER');
+			}
+		}
+	//--------------------------------------------------------
+
 	function active($option) {
 	if ($option == '1') {
 		return '<i style="color: green; font-weight: bold; font-size: 17px" class="fa fa-check color_green"></i>';
@@ -156,6 +177,8 @@
 
 	return $formattedMenu;
 }
+
+
 
 
 

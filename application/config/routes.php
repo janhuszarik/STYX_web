@@ -108,6 +108,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['app/naturkosmetik']				= 'App/naturkosmetik';
 	$route['Aroma-Derm']					= 'App/aromaDerm';
 	$route['app/aromaDerm']					= 'App/aromaDerm';
+	$route['Schokoladen']					= 'App/schokoladen';
+	$route['app/schokoladen']				= 'App/schokoladen';
 
 
 	$route['Company/About-Styx']				= 'App/contact';
