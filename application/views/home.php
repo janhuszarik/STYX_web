@@ -1,3 +1,4 @@
+
 <div role="main" class="main">
 	<div class="home-intro light border border-bottom-0 mb-0">
 		<div class="container">
@@ -6,15 +7,16 @@
 					<h1 style='font-weight: bolder' class="text-center"><?= lang('AKTUELL') ?></h1>
 					<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides news-carousel" data-plugin-options="{'items': 4, 'margin': 10, 'loop': true, 'nav': true, 'dots': false, 'autoplay': false}">
 						<?php foreach ($news as $news_item): ?>
-							<div class="home-carousel-card" onclick="location.href='<?= $news_item->buttonUrl ?>';" style="cursor: pointer;">
-								<div class="home-carousel-img-container">
-									<img alt="" class="img-fluid rounded" src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>">
-								</div>
-								<div class="home-carousel-card-content">
-									<h5><?= $news_item->name ?></h5>
-									<p><?= $news_item->name1 ?></p>
-								</div>
-							</div>
+							<span class="thumb-info thumb-info-no-borders thumb-info-no-borders-rounded thumb-info-lighten thumb-info-bottom-info thumb-info-bottom-info-custom thumb-info-bottom-info-show-more thumb-info-no-zoom" onclick="location.href='<?= $news_item->buttonUrl ?>';" style="cursor: pointer;">
+								<span class="thumb-info-wrapper">
+									<img src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>" class="img-fluid" alt="<?= $news_item->name ?>">
+									<span class="thumb-info-title">
+										<span class="thumb-info-inner line-height-5 text-4"><?= $news_item->name ?></span>
+										<hr class="thumb-info-hr">
+										<span class="thumb-info-inner home-carousel-card-custom"><?= $news_item->name1 ?></span>
+									</span>
+								</span>
+							</span>
 						<?php endforeach; ?>
 					</div>
 				</div>

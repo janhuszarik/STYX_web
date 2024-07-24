@@ -16792,8 +16792,9 @@ html.gecko .sort-destination.sort-destination-margin > [class*="col-"] {
 	color: #FFF;
 }
 .thumb-info.thumb-info-bottom-info-custom .thumb-info-title {
-	background: #71ad2c;
+	background: #70ab2ce0;
 	color: #FFF;
+	height: 115px;
 }
 
 .thumb-info.thumb-info-bottom-info-dark-linear .thumb-info-title {

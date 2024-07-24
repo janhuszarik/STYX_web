@@ -233,6 +233,17 @@
 }
 /*---------------------------------------------------------------------------------------------------------------*/
 /*Nastavenie css pre carussel-home-aktuelles :*/
+.home-carousel-card-custom {
+	line-height: 18px;
+	font-size: 14px;
+	font-weight: lighter;
+}
+.thumb-info-hr {
+	border: none;
+	height: 1px;
+	background-color: #ccc; /* Prispôsobenie farby podľa potreby */
+	margin: 10px 0; /* Prispôsobenie vertikálneho odsadenia podľa potreby */
+}
 .home-carousel-card {
 	position: relative;
 	width: 100%;
