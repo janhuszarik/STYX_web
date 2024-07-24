@@ -244,6 +244,35 @@
 	background-color: #ccc; /* Prispôsobenie farby podľa potreby */
 	margin: 10px 0; /* Prispôsobenie vertikálneho odsadenia podľa potreby */
 }
+/* Set a fixed height for the thumb-info-wrapper */
+.thumb-info-wrapper {
+	height: 200px; /* Adjust this value to your desired height */
+	overflow: hidden;
+	position: relative;
+}
+
+/* Ensure the image fits within the wrapper */
+.thumb-info-wrapper img {
+	width: 100%;
+	height: auto;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+}
+
+/* Adjust the positioning and styling of the text part */
+.thumb-info-title {
+	position: relative;
+	z-index: 1;
+	background-color: rgba(0, 128, 0, 0.8); /* Add a green background with some transparency */
+	padding: 10px;
+	color: #fff; /* Ensure text is visible against the background */
+}
+
 
 /*---------------------------------------------------------------------------------------------------------------*/
 /*Nastavenie css pre karty produkty :*/
