@@ -201,7 +201,7 @@ class App extends CI_Controller
 
 		$data['comment'] = $this->App_model->getComments('Werbegeschenke');
 		$data['sumComment'] = $this->App_model->countComments('Werbegeschenke');
-		$data['page'] = 'app/werbegeschenke';
+		$data['page'] = 'app/Werbegeschenke';
 		$data['title'] = lang('WERBEGESCHENKE_TITLE');
 		$data['description'] = lang('WERBEGESCHENKE_DESCRIPTION');
 		$data['keywords'] = lang('WERBEGESCHENKE_KEYWORDS');
@@ -254,7 +254,7 @@ class App extends CI_Controller
 		$data['description'] = lang('WORDOFSTYX_DESCRIPTION');
 		$data['keywords'] = lang('WORDOFSTYX_KEYWORDS');
 		$data['image'] = BASE_URL . LOGO;
-		$data['image1'] = BASE_URL . 'img/breadcrumb/wordofstyx.jpg';
+		$data['image1'] = BASE_URL . 'img/breadcrumb/worldOfStyx.jpg';
 
 		$this->load->view('layout/normal', $data);
 	}
