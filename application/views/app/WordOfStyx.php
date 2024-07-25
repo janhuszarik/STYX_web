@@ -109,7 +109,6 @@
 										</div>
 										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
 											<div class="flip-content my-4">
-												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
 												<p class="font-weight-light text-color-black">
 													<?=lang('WORLD_OF_STYX_TEXT_CARD')?></p>
 <!--												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold">LEARN MORE</a>-->
@@ -128,7 +127,6 @@
 										</div>
 										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
 											<div class="flip-content my-4">
-												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
 												<p class="font-weight-light text-color-black">
 													<?=lang('BIER_TEXT_CARD')?></p>
 												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
@@ -147,7 +145,6 @@
 										</div>
 										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
 											<div class="flip-content my-4">
-												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
 												<p class="font-weight-light text-color-black">
 													<?=lang('BAHN_TEXT_CARD')?></p>
 												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
@@ -158,41 +155,19 @@
 							</div>
 							<br><br>
 
-							<h2 style="color: #aad998" class="font-weight-semi-bold"><?=lang('ERLEBNISWELT')?></h2>
-							<br>
 							<div class="row">
 								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
 									<div class="card flip-card flip-card-3d text-center rounded-0">
 										<div class="flip-front p-6">
 											<div class="flip-content">
-												<img src="<?=BASE_URL?>img/image/worldOfStyxCard.jpg" alt="worldOfStyxCard.jpg" class="img-fluid">
-												<h2 class="font-weight-bold text-color-primary text-5">World of STYX</h2>
+												<img src="<?=BASE_URL?>img/image/kreutergarten.jpg" alt="kreutergarten.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('KREAUTERGARTEN_HEAD_CARD')?></h2>
 											</div>
 										</div>
 										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
 											<div class="flip-content my-4">
-												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
 												<p class="font-weight-light text-color-black">
-													<?=lang('WORLD_OF_STYX_TEXT_CARD')?></p>
-												<!--												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold">LEARN MORE</a>-->
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
-									<div class="card flip-card flip-card-3d text-center rounded-0">
-										<div class="flip-front p-6">
-											<div class="flip-content">
-												<img src="<?=BASE_URL?>img/image/bahnhofsbrau.jpg" alt="bahnhofsbrau.jpg" class="img-fluid">
-												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('BIER_HEAD_CARD')?></h2>
-											</div>
-										</div>
-										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
-											<div class="flip-content my-4">
-												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
-												<p class="font-weight-light text-color-black">
-													<?=lang('BIER_TEXT_CARD')?></p>
+													<?=lang('KREAUTERGARTEN_TEXT_CARD')?></p>
 												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
 											</div>
 										</div>
@@ -203,15 +178,32 @@
 									<div class="card flip-card flip-card-3d text-center rounded-0">
 										<div class="flip-front p-6">
 											<div class="flip-content">
-												<img src="<?=BASE_URL?>img/image/bahnerlebnis.jpg" alt="bahnerlebnis.jpg" class="img-fluid">
-												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('BAHN_HEAD_CARD')?></h2>
+												<img src="<?=BASE_URL?>img/image/kulinarik.jpg" alt="kulinarik.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('KULINARIK_HEAD_CARD')?></h2>
 											</div>
 										</div>
 										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
 											<div class="flip-content my-4">
-												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
 												<p class="font-weight-light text-color-black">
-													<?=lang('BAHN_TEXT_CARD')?></p>
+													<?=lang('KULINARIK_TEXT_CARD')?></p>
+												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/ermassigungen.jpg" alt="ermassigungen.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('ERMASSIGUNGEN_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<p class="font-weight-light text-color-black">
+													<?=lang('ERMASSIGUNGEN_TEXT_CARD')?></p>
 												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
 											</div>
 										</div>
@@ -219,7 +211,187 @@
 								</div>
 							</div>
 						</div>
+						<div class="container mt-5">
+							<h2 style="color: #aad998" class="font-weight-semi-bold"><?=lang('PRICECARDHEAD')?></h2>
+							<br>
+							<div class="row">
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/individeullbesuch.jpg" alt="individeullbesuch.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('INDIVIDUELLBESUCH_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<p class="font-weight-light text-color-black">
+													<?=lang('INDIVIDUELLBESUCH_TEXT_CARD')?></p>
+													<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
 
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/gruppenaktion.jpg" alt="gruppenaktion.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('GRUPPENAKTION_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<p class="font-weight-light text-color-black">
+													<?=lang('GRUPPENAKTION_TEXT_CARD')?></p>
+												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/englischTour.jpg" alt="englischTour.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('ENGLISCHTOUR_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
+												<p class="font-weight-light text-color-black">
+													<?=lang('ENGLISCHTOUR_TEXT_CARD')?></p>
+												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br><br>
+
+							<h2 style="color: #aad998" class="font-weight-semi-bold"><?=lang('CHILDHEAD')?></h2>
+							<br>
+							<div class="row">
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/kinderFuhrungen.jpg" alt="kinderFuhrungen.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('CHILDTOUR_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<p class="font-weight-light text-color-black">
+													<?=lang('CHILDTOUR_TEXT_CARD')?></p>
+													<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/schoolaktion.jpg" alt="schoolaktion.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('SCHOOLAKTION_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
+												<p class="font-weight-light text-color-black">
+													<?=lang('SCHOOLAKTION_TEXT_CARD')?></p>
+												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/kinderparty.jpg" alt="kinderparty.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('CHILDHAPPY_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
+												<p class="font-weight-light text-color-black">
+													<?=lang('CHILDHAPPY_TEXT_CARD')?></p>
+												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br><br>
+
+							<h2 style="color: #aad998" class="font-weight-semi-bold"><?=lang('KONTAKTCARDS')?></h2>
+							<br>
+							<div class="row">
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/styxcard.jpg" alt="styxcard.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('KONTAKT_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<p class="font-weight-light text-color-black">
+													<?=lang('KONTAKT_TEXT_CARD')?></p>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/routeCard.jpg" alt="routeCard.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('ROUTTE_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
+												<p class="font-weight-light text-color-black">
+													<?=lang('ROUTTE_TEXT_CARD')?></p>
+												<a href="<?=BASE_URL.'kontakt'?>" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('ROUTTE_BUTTON')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="100">
+									<div class="card flip-card flip-card-3d text-center rounded-0">
+										<div class="flip-front p-6">
+											<div class="flip-content">
+												<img src="<?=BASE_URL?>img/image/infocard.jpg" alt="infocard.jpg" class="img-fluid">
+												<h2 class="font-weight-bold text-color-primary text-5"><?=lang('INFOCARD_HEAD_CARD')?></h2>
+											</div>
+										</div>
+										<div class="flip-back d-flex align-items-center p-5" style="background-image: url('img/generic/generic-corporate-17-1.jpg'); background-size: cover; background-position: center;">
+											<div class="flip-content my-4">
+												<h4 class="font-weight-bold text-color-light">World of STYX</h4>
+												<p class="font-weight-light text-color-black">
+													<?=lang('INFOCARD_TEXT_CARD')?></p>
+												<a href="#" class="btn btn-light btn-modern text-color-dark font-weight-bold"><?=lang('MORE_INFO')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
 
 

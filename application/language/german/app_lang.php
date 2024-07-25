@@ -284,15 +284,53 @@ $lang['WORLD_OF_STYX_TEXT_CARD'] 								= 'Blicken Sie mit uns hinter die Kulis
 																   verkosten Sie handgemachte BIO-Schokolade und entdecken Sie beim entspannten Shoppen einzigartige Produkte, die unter die Haut gehen!';
 $lang['BIER_HEAD_CARD']											= 'Biererlebnis';
 $lang['BIER_TEXT_CARD'] 										= 'Verkosten Sie unser hauseigenes Bier im Bistro, oder im Bahnhofsbräu in Kombitation mit einem unser Speisenangebote für Gruppen.';
+
 $lang['BAHN_HEAD_CARD']											= 'Bahnerlebnis';
 $lang['BAHN_TEXT_CARD'] 										= 'Erleben Sie die Faszination der Dampflokomotiven und tauchen Sie ein in die Geschichte der längsten Schmalspurbahn Österreichs!';
 
+$lang['KREAUTERGARTEN_HEAD_CARD']								= 'Kräutergarten';
+$lang['KREAUTERGARTEN_TEXT_CARD'] 								= 'Natur im Garten Schaugarten <br> Unser Kräutergarten ist ein Schaugarten mit Einblick in die Welt der Kräuter und Blüten.';
 
+$lang['KULINARIK_HEAD_CARD']									= 'Kulinarik für Gruppen';
+$lang['KULINARIK_TEXT_CARD'] 									= 'Verkosten Sie unser hauseigenes Bier im Bistro, oder im Bahnhofsbräu in Kombitation mit einem unser Speisenangebote für Gruppen.';
 
+$lang['ERMASSIGUNGEN_HEAD_CARD']								= 'Ermäßigungen';
+$lang['ERMASSIGUNGEN_TEXT_CARD'] 								= 'NÖ Card, Familienpass, Wilde Wunder Card';
 
+$lang['INDIVIDUELLBESUCH_HEAD_CARD']							= 'Individualbesucher';
+$lang['INDIVIDUELLBESUCH_TEXT_CARD'] 							= 'Wir haben für Individualbesucher/innen <br> vom 1. April bis zum 31. Oktober ' . date('Y') . ' geöffnet.';
 
+$lang['GRUPPENAKTION_HEAD_CARD']								= 'Gruppenangebote';
+$lang['GRUPPENAKTION_TEXT_CARD'] 								= 'Für Gruppen haben wir das ganze Jahr geöffnet. Individuelle Termine auf Anfrage möglich!';
 
+$lang['ENGLISCHTOUR_HEAD_CARD']									= 'Touren auf Englisch';
+$lang['ENGLISCHTOUR_TEXT_CARD'] 								= 'Englischsprachige Führungen für Gruppen und Individualbesucher/innen auf Anfrage möglich.';
 
+$lang['CHILDHEAD'] 												= 'Angebote für Kinder';
+$lang['CHILDTOUR_HEAD_CARD']									= 'Kinderführungen';
+$lang['CHILDTOUR_TEXT_CARD'] 									= 'Angebote in den Sommerferien <br>Hast du Lust selbst zum Entdecker oder Naturkosmetikhersteller zu werden? Oder sogar zum Schokoladentester? Dann freuen wir uns dich bei uns zu einer Erlebnisführung begrüßen zu dürfen.';
+
+$lang['SCHOOLAKTION_HEAD_CARD']									= 'Angebote für Schulen';
+$lang['SCHOOLAKTION_TEXT_CARD'] 								= 'Klassenzimmer in der World of STYX';
+
+$lang['CHILDHAPPY_HEAD_CARD']									= 'Kindergeburtstage';
+$lang['CHILDHAPPY_TEXT_CARD'] 									= 'Das besondere Geburtstagserlebnis für Schokoladenfreunde oder junge Naturkosmetikhersteller!';
+
+$lang['KONTAKTCARDS'] 											= 'Kontakt & Anfahrt';
+$lang['KONTAKT_HEAD_CARD']										= 'Kontakt';
+$lang['KONTAKT_TEXT_CARD'] 										= 'STYX Welcome Center <br > | Touren | Shop <br>
+																   Ritzersdorfer Straße 11<br>
+																   3200 Ober-Grafendorf<br>
+																   Telefon: <a href="tel:+43 2747 3250 51">+43 2747 3250 51</a> <br>
+																   <a href="mailto:firmenbesichtigung@styx.at">firmenbesichtigung@styx.at</a> firmenbesichtigung@styx.at';
+
+$lang['ROUTTE_HEAD_CARD']										= 'Anfahrt';
+$lang['ROUTTE_TEXT_CARD'] 										= 'Wir freuen uns auf Ihren Besuch!<br>
+																   Tipp: Sie können umweltfreundlich mit der Mariazellerbahn bis zum Bahnhof Ober-Grafendorf fahren. Von dort sind es 150m bis zur World of STYX.';
+$lang['ROUTTE_BUTTON']											= 'Anfahrt mit Auto';
+
+$lang['INFOCARD_HEAD_CARD']										= 'Gut zu wissen';
+$lang['INFOCARD_TEXT_CARD'] 									= 'Barrierefreiheit';
 
 
 
