@@ -46,11 +46,24 @@
 	padding: 32px;
 	text-align: center;
 	max-width: 800px; /* Optional: Maximum width */
-	height: 200px; /* Fixed height */
 	margin: 0 auto; /* Center the text container */
 	position: relative; /* Ensure position-relative for the absolute children */
+	/* Remove fixed height */
 }
-
+@media (max-width: 768px) {
+	.text-background {
+		padding: 16px; /* Reduce padding for smaller screens */
+	}
+	h1.text-color-dark {
+		font-size: 24px; /* Reduce font size for smaller screens */
+	}
+	p.text-color-dark {
+		font-size: 18px; /* Reduce font size for smaller screens */
+	}
+	.btn-success {
+		font-size: 14px; /* Adjust button text size for smaller screens */
+	}
+}
 /*slider css- end*/
 
 .translucent-background {
