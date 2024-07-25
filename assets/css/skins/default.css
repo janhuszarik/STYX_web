@@ -83,7 +83,7 @@ html .text-hover-dark:hover {
 
 html .text-color-light,
 html .text-light {
-	color: #FFF !important;
+	color: #000 !important;
 }
 
 html .text-color-hover-light:hover,

@@ -14,6 +14,7 @@ $lang['EMAIL']                                       	= 'E-mail Adresse';
 $lang['COMMENT']                                       	= 'Kommentar';
 $lang['GDPR_TEXT']                                      = 'Ich stimme der Verarbeitung meiner persönlichen Daten zu. ';
 $lang['GDPR_FOR_LINK']                                  = 'Datenschutzerklärung. ';
+$lang['MORE_INFO']                                  	= 'Mehr Informationen ';
 
 
 
@@ -52,7 +53,7 @@ $lang['WORKSHOPS_DESCRIPTION'] 							= 'Die Investition in Wissen bringt noch i
 $lang['WORKSHOPS_KEYWORDS'] 							= 'Workshops,Seminare, STYX Naturcosmetic, Naturkosmetik, selber machen, Ober-Grafendorf, St. Pölten Umgebung';
 
 $lang['WORDOFSTYX_TITLE'] 								= 'Betriebsführungen';
-$lang['WORDOFSTYX_DESCRIPTION'] 						= 'Traditionelles Familienunternehmen seit 1965 – im Herzen Niederösterreichs';
+$lang['WORDOFSTYX_DESCRIPTION'] 						= 'Besuchen Sie uns in Ober-Grafendorf NÖ – Naturkosmetik, BIO Schokolade & vieles mehr';
 $lang['WORDOFSTYX_KEYWORDS'] 							= 'Tauchen Sie ein in die Welt der Naturkosmetik- und Schokoladeherstellung  ganz gleich ob alleine, zu zweit oder in Gruppen. Auch perfekt für Schulausflüge!';
 
 
@@ -272,6 +273,19 @@ $lang['CHILD_SCHOLL_WORKSHOP_TEXT_PRICE'] 						= ' <strong>Paket „Shampoo/Bad
               														 Im Anschluss gibt es eine Fragestunde. Nach Möglichkeit bitten wir vor dem Besuch um die Zusendung des Fragenkataloges. <br>
 																	<strong>Kosten:</strong> <br> 22,50 € pro Person ohne Bierverkostung´<br> EUR 26,50 pro Person mit Bierverkostung <br>';
 
+$lang['WORLD_OF_STYX_HEADING'] 									= 'WORLD OF STYX – Ihr Ausflugsziel im Mostviertel';
+$lang['WORLD_OF_STYX_SUBHEADING'] 								= 'Eine Reise durch die faszinierende Welt von STYX bietet unvergessliche Erlebnisse für alle Sinne. Tauchen Sie ein in die Produktion von duftender Naturkosmetik, 
+																   verkosten Sie handgemachte BIO-Schokolade und entdecken Sie beim entspannten Shoppen einzigartige Produkte, die unter die Haut gehen!';
+$lang['WORLD_OF_STYX_SUBHEADING_BOOKING'] 						= '<strong>Onlinebuchung</strong><br> Hier können Sie bequem online Ihre nächste Betriebsführung buchen.';
+$lang['TICKET'] 												= 'Tickets kaufen';
+$lang['ERLEBNISWELT'] 											= 'Erlebniswelt';
+$lang['WORLD_OF_STYX_TEXT_CARD'] 								= 'Blicken Sie mit uns hinter die Kulissen!
+																   Eine Reise durch die faszinierende Welt von STYX bietet unvergessliche Erlebnisse für alle Sinne. Tauchen Sie ein in die Produktion von duftender Naturkosmetik,
+																   verkosten Sie handgemachte BIO-Schokolade und entdecken Sie beim entspannten Shoppen einzigartige Produkte, die unter die Haut gehen!';
+$lang['BIER_HEAD_CARD']											= 'Biererlebnis';
+$lang['BIER_TEXT_CARD'] 										= 'Verkosten Sie unser hauseigenes Bier im Bistro, oder im Bahnhofsbräu in Kombitation mit einem unser Speisenangebote für Gruppen.';
+$lang['BAHN_HEAD_CARD']											= 'Bahnerlebnis';
+$lang['BAHN_TEXT_CARD'] 										= 'Erleben Sie die Faszination der Dampflokomotiven und tauchen Sie ein in die Geschichte der längsten Schmalspurbahn Österreichs!';
 
 
 

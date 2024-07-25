@@ -118,6 +118,35 @@ document.addEventListener("DOMContentLoaded", function () {
 	window.addEventListener('resize', moveLanguageFlags);
 });
 
-
-// ------------------------------------------------------------------------------------------------------------------------
 // koniec js pre menu:
+// ------------------------------------------------------------------------------------------------------------------------
+
+
+
+document.addEventListener('DOMContentLoaded', (event) => {
+	var modal = document.getElementById("wordOfStyx-myModal");
+	var btn = document.getElementById("wordOfStyx-openModalBtn");
+	var span = document.getElementsByClassName("wordOfStyx-close")[0];
+	var iframe = document.getElementById("wordOfStyx-modalFrame");
+
+	btn.onclick = function() {
+		iframe.src = "https://styx.regiondo.de/bookingwidget/vendor/34660/id/167063";
+		modal.style.display = "block";
+	}
+
+	span.onclick = function() {
+		modal.style.display = "none";
+		iframe.src = ""; // Clear the iframe source to stop loading
+	}
+
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+			iframe.src = ""; // Clear the iframe source to stop loading
+		}
+	}
+});
+
+// koniec js pre modal okno kupovania lístkov:
+// ------------------------------------------------------------------------------------------------------------------------
+
