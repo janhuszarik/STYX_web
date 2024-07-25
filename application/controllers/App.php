@@ -216,6 +216,32 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
+	public function workshops() {
+
+		$post = $this->input->post();
+		if (!empty($post)) {
+			if ($this->App_model->naturkosmetik($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect($this->refresh);
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect($this->refresh);
+			}
+		}
+
+		$data['comment'] = $this->App_model->getCommentWorkshops();
+		$data['sumComment'] = $this->App_model->sumCommentWorkshops();
+
+		$data['page'] = 'app/Workshops';
+		$data['title'] = lang('WORKSHOPS_TITLE');
+		$data['description'] = lang('WORKSHOPS_DESCRIPTION');
+		$data['keywords'] = lang('WORKSHOPS_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/workshops.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
+
 	function error404(){
         
         header("HTTP/1.1 404 Not Found");

@@ -154,6 +154,20 @@ class app_model extends CI_Model
 		$this->db->where('lang', language());
 		return $this->db->count_all_results('comments');
 	}
+	public function getCommentWorkshops()
+	{
+		$this->db->select('*');
+		$this->db->where('section_id', 'Workshops');
+		$this->db->where('active', '1');
+		$this->db->where('lang', language());
+		return $this->db->get('comments')->result();
+	}
+	public function sumCommentWorkshops()
+	{
+		$this->db->where('section_id', 'Workshops');
+		$this->db->where('lang', language());
+		return $this->db->count_all_results('comments');
+	}
 
 
 

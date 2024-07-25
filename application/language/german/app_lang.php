@@ -47,6 +47,11 @@ $lang['WERBEGESCHENKE_TITLE'] 							= 'Werbegeschenke';
 $lang['WERBEGESCHENKE_DESCRIPTION'] 					= 'Ihr Logo, Ihr Design, Ihre Botschaft!';
 $lang['WERBEGESCHENKE_KEYWORDS'] 						= 'Werbgeschenk, Werbegeschenke, Giveaway, personalisiert, Geschenk, Geschenke, Marke, Geburtstag, Fest, Gift';
 
+$lang['WORKSHOPS_TITLE'] 								= 'Workshops';
+$lang['WORKSHOPS_DESCRIPTION'] 							= 'Die Investition in Wissen bringt noch immer die besten Zinsen';
+$lang['WORKSHOPS_KEYWORDS'] 							= 'Workshops,Seminare, STYX Naturcosmetic, Naturkosmetik, selber machen, Ober-Grafendorf, St. Pölten Umgebung';
+
+
 //----------------------------------------------------------------------------------------------------------------------
 //Text
 //----------------------------------------------------------------------------------------------------------------------
@@ -190,6 +195,78 @@ $lang['WERBEGESCHENKE_TEXT_FOOTER'] 							='Nutzen Sie das breite STYX-Sortimen
 																   <strong>Wir freuen uns auf Ihre Anfrage!</strong>';
 $lang['ZUR_PDF_BUTTON'] 												= 'Folder Personalisierte Geschenke 2024';
 
+$lang['WORKSHOPS_HEADING'] 										= 'STYX Workshops';
+$lang['WORKSHOPS_SUBHEADING'] 									= 'Die Investition in Wissen bringt noch immer die besten Zinsen';
+$lang['WORKSHOPS_SUBHEADING_TEXT'] 								= 'STYX Workshops';
+$lang['WORKSHOPS_LONGTEXT'] 									= 'Durch unsere Workshops im Rahmen der World of STYX geben wir spannende und interessante Einblicke zu verschiedensten Themen wie Herstellung von Naturkosmetik,
+ 																   Schokolade oder Bier sowie in unsere Philosophie - den bewussten Umgang mit unseren Ressourcen und unserer Umwelt und den Ursprung unserer Rohstoffe.
+																   Interessierte Erwachsene, Kinder und Schulgruppen sind herzlich dazu eingeladen, sich einschlägiges Know-How anzueignen und durch unsere Workshop-Angebote
+																   weiter auszubauen. Damit wird nicht nur praktisches Hintergrundwissen vermittelt, sondern auch ein bewussterer Umgang mit unseren Ressourcen und unserer Umwelt gefördert.
+																   Aber nicht nur für Privatpersonen möchten wir mit den STYX Workshops wertvolles Wissen weitergeben. Für das Profisegment der Branche bieten wir im Rahmen der "STYX Academy"
+																   spezialisierte Aus- und Weiterbildungen in Form von Seminaren an, die im internen Bereich von aroma-derm.com zu finden sind. Hier liegt der Fokus auf Produktschulungen,
+																   Treatments, Basis- und Aufbauseminaren und vielem mehr.';
+$lang['PRALINEN_WORKSHOP_TITLE'] 								= 'Pralinenworkshop für Erwachsene';
+$lang['PRALINEN_WORKSHOP_TEXT'] 								= 'Wollten Sie schon immer einmal wissen, wie man Pralinen am Besten füllt und wie eine Ganache hergestellt wird? Oder wie man ganz einfach leckere Marzipan oder Nougatkugeln zaubert? <br><br>
+																   Dann freuen wir uns, Sie bei einem unserer beliebten Pralinenworkshops willkommen zu heißen! Tauchen Sie ein in die Welt unserer Chocolatiers und erfahren Sie Wissenswertes 
+																   rund um die Schokoladenherstellung. Wir verraten Ihnen Tipps und Tricks und zeigen Ihnen verschiedene Methoden der Verzierung.';
+$lang['PRALINEN_WORKSHOP_TEXT_PRICE'] 							= ' <strong>Dauer:</strong> ca. 2,5 Stunden <br>
+																	<strong>Preis bei 5 bis 9 Personen:</strong> 40,00 € pro Person <br>
+																	<strong>Preis ab 10 Personen:</strong> 36,00 € pro Person <br>
+																	<strong>Termine:</strong> auf Anfrage <br>
+																	Der Kurs findet ab 5 Personen statt. <br><br>
+																	Eine Betriebsführung ist optional dazu buchbar. (Preis nach aktueller Preisliste)<br>
+																	Anmeldungen erforderlich unter: firmenbesichtigung@styx.at <br> 
+																	Der Workshop ist auf Anfrage für Gruppen an individuellen Terminen buchbar.';
+
+$lang['CHILD_WORKSHOP_TITLE'] 									= 'Workshop Naturkosmetik für Kinder';
+$lang['CHILD_WORKSHOP_TEXT'] 									= 'Herstellung eines Shampoos/eines Badesalzes: <br> Workshop „Shampoo/Badesalz“ beginnt im Welcome Center und beinhaltet eine altergerechte Betriebsführung 
+																   für Kinder durch die World of STYX, Herstellung eines Shampoos und eines Badesalzes sowie eine Schokoladeverkostung.	';
+$lang['CHILD_WORKSHOP_TEXT_PRICE'] 								= ' <strong>Dauer:</strong> ca. 1,5 Stunden <br>
+																	<strong>Zielgruppe: </strong>Kinder 6-12 Jahre <br>
+																	<strong>Kosten:</strong> 10,00 € pro Kind <br>
+																	<strong>Termine:</strong> auf Anfrage <br>
+																	Der Workshop findet ab 10 Personen statt. <br><br>
+																	Anmeldungen unter: <a href="mailto:firmenbesichtigung@styx.at">firmenbesichtigung@styx.at</a> ';
+
+$lang['CHILD_SCHOKOLADE_WORKSHOP_TITLE'] 						= 'Schokoladenworkshop für Kinder';
+$lang['CHILD_SCHOKOLADE_WORKSHOP_TEXT'] 						= '<strong>Schokoladenworkshop </strong> <br>
+																   „Selbst hergestellte Schokolade schmeckt am süßesten“';
+$lang['CHILD_SCHOKOLADE_WORKSHOP_TEXT_PRICE'] 					= ' <strong>Dauer:</strong> ca. 2 Stunden <br>
+																	<strong>Zielgruppe: </strong>Kinder ab 7 Jahren <br>
+																	<strong>Inhalt:</strong>
+																	<ul>
+																	<li>Einführung zur Gewinnung der Schokolade & Verarbeitungsmöglichkeiten </li>
+																	<li>Schokoverkostung </li>
+																	<li>Marzipankugeln selbst gestalten</li>
+																	<li>Schokoladeriegel herstellen und verzieren</li>
+																	</ul> 
+																	<br>
+																	<strong>Kosten:</strong> 18,00 € pro Kind <br>
+																	<strong>Termine:</strong> wird bekannt gegeben <br>
+																	Der Workshop findet ab 10 Personen statt. <br><br>
+																	Anmeldungen unter: <a href="mailto:firmenbesichtigung@styx.at">firmenbesichtigung@styx.at</a> <br>
+																	Eine Betriebsführung ist optional dazu buchbar. (Preis nach aktueller Preisliste)
+																	Der Workshop ist auf Anfrage für Gruppen auch an individuellen Terminen buchbar. ';
+$lang['CHILD_SCHOLL_WORKSHOP_TITLE'] 							= 'Workshops für Schulen und Schulklassen';
+$lang['CHILD_SCHOLL_WORKSHOP_TEXT'] 							= '<strong>Individuelle Termine auf Anfrage möglich: <a href="mailto:firmenbesichtigung@styx.at">firmenbesichtigung@styx.at</a> </strong> <br>';
+$lang['CHILD_SCHOLL_WORKSHOP_TEXT_PRICE'] 						= ' <strong>Paket „Shampoo/Badesalz“</strong> <br>Der Workshop beginnt im Welcome Center und beinhaltet eine altersgerechte Betriebsführung 
+ 																	durch die World of STYX mit einer Schokoladenverkostung. Anschließend werden ein Shampoo und ein Badesalz selbst hergestellt.
+ 																	<strong>Dauer:</strong> ca. 2 Stunden <br>															
+																	<strong>Kosten:</strong> <br> VS 8,00 € pro Schüler/innen´<br>
+              																				 NMS 10,00 €  pro Schüler/innen <br><br>
+              														<strong>Paket „Schokolade“</strong> <br>Der Workshop beinhaltet eine kurze Schokoführung, Schokoladeriegel und Marzipankugel 
+              														am Spieß selbst herstellen und verzieren sowie eine Schokoladeverkostung.
+ 																	<strong>Dauer:</strong> ca. 2,5 Stunden <br>															
+																	<strong>Kosten:</strong> <br> 18,00 € pro Schüler/innen ohne Betriebsführung´<br>
+              																				 	  23,00 € pro Schüler/innen mit Betriebsführung <br><br>
+              														 <strong>"Pralinenworkshop für Kinder/Schüler/innen"</strong> <br>Der Workshop beinhaltet eine kurze Schokoführung, 
+              														 dann geht es mit Schürze und Haarnetz in den Produktionsbereich wo erlesene Pralinen selbst gefüllt und verziert werden..
+ 																	<strong>Dauer:</strong> ca. 2,5 Stunden <br>															
+																	<strong>Kosten:</strong> <br> 36,00 € pro Schüler/innen´<br> Eine Betriebsführung ist optional dazu buchbar. (Preis nach aktueller Preisliste) <br><br>
+              														<strong>Workshop Wirtschaft</strong> <br>Der Workshop beinhaltet eine klassische Betriebsführung bei der besonders auf wirtschaftliche Themen,
+              														 Nachhaltigkeit und den Arbeitsalltag eingegangen wird um ein umfassendes Bild eines produzierenden Betriebes vermitteln zu können.
+              														 Im Anschluss gibt es eine Fragestunde. Nach Möglichkeit bitten wir vor dem Besuch um die Zusendung des Fragenkataloges. <br>
+																	<strong>Kosten:</strong> <br> 22,50 € pro Person ohne Bierverkostung´<br> EUR 26,50 pro Person mit Bierverkostung <br>';
 
 
 

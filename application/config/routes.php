@@ -115,6 +115,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['app/Private-labeling']			= 'App/privateLabeling';
 	$route['Werbegeschenke']				= 'App/werbegeschenke';
 	$route['app/werbegeschenke']			= 'App/werbegeschenke';
+	$route['Workshops']						= 'App/workshops';
+	$route['app/workshops']					= 'App/workshops';
 	$route['Company/About-Styx']			= 'App/contact';
 
 
