@@ -78,7 +78,7 @@
 												<span class="comment-by">
                         							<strong><?=$comment->name?> </strong>
                         								<span class="float-end">
-                          									  <span> <a href="#"><i class="fas fa-reply"></i> <?=lang('COMMENT_REPLY')?></a></span></span>
+                          									  <span> <a href="<?=BASE_URL.'kontakt'?>"><i class="fas fa-reply"></i> <?=lang('COMMENT_REPLY')?></a></span></span>
 														</span>
 												<p><?=$comment->comment?></p>
 
@@ -144,6 +144,7 @@
 									<div class="row">
 										<div class="form-group col mb-0">
 											<input type="hidden" name="section_id" value="Aroma-Derm">
+											<input type="hidden" name="lang" value="<?=language()?>">
 											<input type="hidden" name="active" value="1">
 											<input type="submit" value="Kommentar absenden" class="btn btn-primary btn-modern" data-loading-text="Loading...">
 										</div>

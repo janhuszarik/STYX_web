@@ -162,7 +162,7 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('WORLD_OF_STYX_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('WORLD_OF_STYX_TEXT')?></p>
-					<a href="https://www.styx.at/de/Betriebsfuehrungen" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<a href="<?=BASE_URL.'Betriebsfuehrungen'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 				</div>
 			</div>
 		</div>
@@ -186,7 +186,7 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('WERBE_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('WERBE_TEXT')?></p>
-					<a href="/" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<a href="<?=BASE_URL.'Werbegeschenke'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 				</div>
 			</div>
 		</div>

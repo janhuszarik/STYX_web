@@ -92,8 +92,8 @@ class App extends CI_Controller
 			}
 		}
 
-		$data['comment'] = $this->App_model->getCommentKosmetic();
-		$data['sumComment'] = $this->App_model->sumCommentKosmetic();
+		$data['comment'] = $this->App_model->getComments('Naturkosmetik');
+		$data['sumComment'] = $this->App_model->countComments('Naturkosmetik');
 		$data['page'] = 'app/Naturkosmetik';
 		$data['title'] = lang('NATURKOSMETIK_TITLE');
 		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
@@ -116,8 +116,8 @@ class App extends CI_Controller
 			}
 		}
 
-		$data['comment'] = $this->App_model->getCommentAromaDerm();
-		$data['sumComment'] = $this->App_model->sumCommentAromaDerm();
+		$data['comment'] = $this->App_model->getComments('Aroma-Derm');
+		$data['sumComment'] = $this->App_model->countComments('Aroma-Derm');
 		$data['page'] = 'app/Aroma-Derm';
 		$data['title'] = lang('AROMA-DERM_TITLE');
 		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
@@ -130,20 +130,18 @@ class App extends CI_Controller
 
 	public function schokoladen() {
 		$post = $this->input->post();
-
 		if (!empty($post)) {
 			if ($this->App_model->naturkosmetik($post)) {
 				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
-				redirect($this->refresh); // Presmerujte späť na pôvodnú URL adresu
+				redirect($this->refresh);
 			} else {
 				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
-				redirect($this->refresh); // Presmerujte späť na pôvodnú URL adresu
+				redirect($this->refresh);
 			}
 		}
 
-
-		$data['comment'] = $this->App_model->getCommentSchokoladen();
-		$data['sumComment'] = $this->App_model->sumCommentSchokoladen();
+		$data['comment'] = $this->App_model->getComments('Schokolade');
+		$data['sumComment'] = $this->App_model->countComments('Schokolade');
 		$data['page'] = 'app/Schokoladen';
 		$data['title'] = lang('SCHOKOLADE_TITLE');
 		$data['description'] = lang('SCHOKOLADE_DESCRIPTION');
@@ -153,8 +151,8 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
-	public function figuren() {
 
+	public function figuren() {
 		$data['page'] = 'app/Figuren';
 		$data['title'] = lang('FIGURTEN_TITLE');
 		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
@@ -164,8 +162,8 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
-	public function privateLabeling() {
 
+	public function privateLabeling() {
 		$post = $this->input->post();
 		if (!empty($post)) {
 			if ($this->App_model->naturkosmetik($post)) {
@@ -177,9 +175,8 @@ class App extends CI_Controller
 			}
 		}
 
-		$data['comment'] = $this->App_model->getCommentPrivateLabeling();
-		$data['sumComment'] = $this->App_model->sumCommentPrivateLabeling();
-
+		$data['comment'] = $this->App_model->getComments('Private-Labeling');
+		$data['sumComment'] = $this->App_model->countComments('Private-Labeling');
 		$data['page'] = 'app/privateLabeling';
 		$data['title'] = lang('PRIVATE_LABELING_TITLE');
 		$data['description'] = lang('PRIVATE_LABELING_DESCRIPTION');
@@ -191,7 +188,6 @@ class App extends CI_Controller
 	}
 
 	public function werbegeschenke() {
-
 		$post = $this->input->post();
 		if (!empty($post)) {
 			if ($this->App_model->naturkosmetik($post)) {
@@ -203,9 +199,8 @@ class App extends CI_Controller
 			}
 		}
 
-		$data['comment'] = $this->App_model->getCommentWerbegeschenke();
-		$data['sumComment'] = $this->App_model->sumCommentWerbegeschenke();
-
+		$data['comment'] = $this->App_model->getComments('Werbegeschenke');
+		$data['sumComment'] = $this->App_model->countComments('Werbegeschenke');
 		$data['page'] = 'app/werbegeschenke';
 		$data['title'] = lang('WERBEGESCHENKE_TITLE');
 		$data['description'] = lang('WERBEGESCHENKE_DESCRIPTION');
@@ -217,7 +212,6 @@ class App extends CI_Controller
 	}
 
 	public function workshops() {
-
 		$post = $this->input->post();
 		if (!empty($post)) {
 			if ($this->App_model->naturkosmetik($post)) {
@@ -229,15 +223,38 @@ class App extends CI_Controller
 			}
 		}
 
-		$data['comment'] = $this->App_model->getCommentWorkshops();
-		$data['sumComment'] = $this->App_model->sumCommentWorkshops();
-
+		$data['comment'] = $this->App_model->getComments('Workshops');
+		$data['sumComment'] = $this->App_model->countComments('Workshops');
 		$data['page'] = 'app/Workshops';
 		$data['title'] = lang('WORKSHOPS_TITLE');
 		$data['description'] = lang('WORKSHOPS_DESCRIPTION');
 		$data['keywords'] = lang('WORKSHOPS_KEYWORDS');
 		$data['image'] = BASE_URL . LOGO;
 		$data['image1'] = BASE_URL . 'img/breadcrumb/workshops.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
+
+	public function wordOfStyx() {
+		$post = $this->input->post();
+		if (!empty($post)) {
+			if ($this->App_model->naturkosmetik($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect($this->refresh);
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect($this->refresh);
+			}
+		}
+
+		$data['comment'] = $this->App_model->getComments('WordOfStyx');
+		$data['sumComment'] = $this->App_model->countComments('WordOfStyx');
+		$data['page'] = 'app/WordOfStyx';
+		$data['title'] = lang('WORDOFSTYX_TITLE');
+		$data['description'] = lang('WORDOFSTYX_DESCRIPTION');
+		$data['keywords'] = lang('WORDOFSTYX_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/wordofstyx.jpg';
 
 		$this->load->view('layout/normal', $data);
 	}

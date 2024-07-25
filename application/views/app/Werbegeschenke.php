@@ -78,7 +78,7 @@
 												<span class="comment-by">
                         							<strong><?=$comment->name?> </strong>
                         								<span class="float-end">
-                          									  <span> <a href="#"><i class="fas fa-reply"></i> <?=lang('COMMENT_REPLY')?></a></span></span>
+                          									  <span> <a href="<?=BASE_URL.'kontakt'?>"><i class="fas fa-reply"></i> <?=lang('COMMENT_REPLY')?></a></span></span>
 														</span>
 												<p><?=$comment->comment?></p>
 

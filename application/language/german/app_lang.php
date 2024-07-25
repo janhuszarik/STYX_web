@@ -51,6 +51,10 @@ $lang['WORKSHOPS_TITLE'] 								= 'Workshops';
 $lang['WORKSHOPS_DESCRIPTION'] 							= 'Die Investition in Wissen bringt noch immer die besten Zinsen';
 $lang['WORKSHOPS_KEYWORDS'] 							= 'Workshops,Seminare, STYX Naturcosmetic, Naturkosmetik, selber machen, Ober-Grafendorf, St. Pölten Umgebung';
 
+$lang['WORDOFSTYX_TITLE'] 								= 'Betriebsführungen';
+$lang['WORDOFSTYX_DESCRIPTION'] 						= 'STYX Naturcosmetic, STYX, Naturkosmetik, Betriebsführung, Kinder, World of STYX, Bahnhofsbräu, Biererlebnis, Verkostung, Bier, Ober-Grafendorf, Bahnerlebnis, Produktion, Rätselrally, Ausflug, Familienausflug';
+$lang['WORDOFSTYX_KEYWORDS'] 							= 'Tauchen Sie ein in die Welt der Naturkosmetik- und Schokoladeherstellung  ganz gleich ob alleine, zu zweit oder in Gruppen. Auch perfekt für Schulausflüge!';
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //Text

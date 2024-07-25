@@ -96,75 +96,16 @@ class app_model extends CI_Model
 
 		return $this->db->insert('comments', $data);
 	}
-	public function getCommentAromaDerm()
-	{
+	public function getComments($section_id) {
 		$this->db->select('*');
-		$this->db->where('section_id', 'Aroma-Derm');
+		$this->db->where('section_id', $section_id);
 		$this->db->where('active', '1');
 		$this->db->where('lang', language());
 		return $this->db->get('comments')->result();
-	}
-	public function sumCommentAromaDerm()
-	{
-		$this->db->where('section_id', 'Aroma-Derm');
-		$this->db->where('lang', language());
-		return $this->db->count_all_results('comments');
-	}
-	public function getCommentSchokoladen()
-	{
-		$this->db->select('*');
-		$this->db->where('section_id', 'Schokolade');
-		$this->db->where('active', '1');
-		$this->db->where('lang', language());
-		return $this->db->get('comments')->result();
-	}
-	public function sumCommentSchokoladen()
-	{
-		$this->db->where('section_id', 'Schokolade');
-		$this->db->where('lang', language());
-		return $this->db->count_all_results('comments');
 	}
 
-	public function getCommentPrivateLabeling()
-	{
-		$this->db->select('*');
-		$this->db->where('section_id', 'Private-Labeling');
-		$this->db->where('active', '1');
-		$this->db->where('lang', language());
-		return $this->db->get('comments')->result();
-	}
-	public function sumCommentPrivateLabeling()
-	{
-		$this->db->where('section_id', 'Private-Labeling');
-		$this->db->where('lang', language());
-		return $this->db->count_all_results('comments');
-	}
-
-	public function getCommentWerbegeschenke()
-	{
-		$this->db->select('*');
-		$this->db->where('section_id', 'Werbegeschenke');
-		$this->db->where('active', '1');
-		$this->db->where('lang', language());
-		return $this->db->get('comments')->result();
-	}
-	public function sumCommentWerbegeschenke()
-	{
-		$this->db->where('section_id', 'Werbegeschenke');
-		$this->db->where('lang', language());
-		return $this->db->count_all_results('comments');
-	}
-	public function getCommentWorkshops()
-	{
-		$this->db->select('*');
-		$this->db->where('section_id', 'Workshops');
-		$this->db->where('active', '1');
-		$this->db->where('lang', language());
-		return $this->db->get('comments')->result();
-	}
-	public function sumCommentWorkshops()
-	{
-		$this->db->where('section_id', 'Workshops');
+	public function countComments($section_id) {
+		$this->db->where('section_id', $section_id);
 		$this->db->where('lang', language());
 		return $this->db->count_all_results('comments');
 	}
