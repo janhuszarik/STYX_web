@@ -331,7 +331,8 @@ $lang['ROUTTE_BUTTON']											= 'Anfahrt mit Auto';
 
 $lang['INFOCARD_HEAD_CARD']										= 'Gut zu wissen';
 $lang['INFOCARD_TEXT_CARD'] 									= 'Barrierefreiheit';
-
+//----------------------------------------------------------------------------------------------------------------------
+//Preklad po tento riadok hotový
 
 
 
