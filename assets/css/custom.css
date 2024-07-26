@@ -262,6 +262,7 @@
 /*---------------------------------------------------------------------------------------------------------------*/
 /*Nastavenie css pre karty produkty :*/
 
+
 /* Základný štýl */
 .outer-card {
 	padding: 5px;
@@ -310,9 +311,9 @@
 .product-carousel .owl-item {
 	flex: 0 0 auto;
 	width: 16.6667%; /* Štandardne 6 položiek na riadok */
-	margin: 0 5px; /* Odstup medzi kartami 5px */
 	display: flex;
 	justify-content: center;
+}
 
 .owl-carousel .thumb-info-wrapper img {
 	width: 100%;
@@ -390,6 +391,7 @@
 
 
 
+
 /*---------------------------------------------------------------------------------------------------------------*/
 
 /*Nastavenie css pre modal okno kupenia lístkov:*/
@@ -426,4 +428,5 @@
 	color: black;
 	text-decoration: none;
 	cursor: pointer;
+}
 }
