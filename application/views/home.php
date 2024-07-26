@@ -71,22 +71,22 @@
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
-							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
+							<a class="lightbox" data-plugin-options="{'type':'image'}">
 								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/eco-cert_start.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
-							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
+							<a class="lightbox" data-plugin-options="{'type':'image'}">
 								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/Bio-Austria_start.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
-							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
+							<a class="lightbox" data-plugin-options="{'type':'image'}">
 								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/top_rated_company_24.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4">
-							<a class="lightbox" href="img/projects/project.jpg" data-plugin-options="{'type':'image'}">
+							<a class="lightbox" data-plugin-options="{'type':'image'}">
 								<img loading="lazy" class="img-fluid" src="<?= BASE_URL . 'img/webImage/trusted-shop_start.png' ?>" alt="Staatliche_Auszeichnung">
 							</a>
 						</li>
@@ -125,17 +125,8 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('AROMA_DERM_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('AROMA_DERM_TEXT')?></p>
-					<?php if (language() === 'en'): ?>
-						<a href="<?= BASE_URL . 'en/Aroma-Derm' ?>" class="read-more text-color-primary font-weight-semibold text-2">
-							<?= lang('READ_MORE') ?>
-							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
-						</a>
-					<?php else: ?>
-						<a href="<?= BASE_URL . 'Aroma-Derm' ?>" class="read-more text-color-primary font-weight-semibold text-2">
-							<?= lang('READ_MORE') ?>
-							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
-						</a>
-					<?php endif; ?>				</div>
+					<a href="<?= BASE_URL .language().'/'.'Aroma-Derm' ?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+				</div>
 			</div>
 		</div>
 		<div class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
@@ -144,17 +135,7 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('SCHOKOLADE_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('SCHOKOLADE_TEXT')?></p>
-					<?php if (language() === 'en'): ?>
-						<a href="<?= BASE_URL . 'en/Schokoladen' ?>" class="read-more text-color-primary font-weight-semibold text-2">
-							<?= lang('READ_MORE') ?>
-							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
-						</a>
-					<?php else: ?>
-						<a href="<?= BASE_URL . 'Schokoladen' ?>" class="read-more text-color-primary font-weight-semibold text-2">
-							<?= lang('READ_MORE') ?>
-							<i class="fas fa-angle-right position-relative top-1 ms-1"></i>
-						</a>
-					<?php endif; ?>
+					<a href="<?= BASE_URL .language().'/'.'Schokoladen' ?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 				</div>
 			</div>
 		</div>
@@ -164,7 +145,7 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('WORLD_OF_STYX_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('WORLD_OF_STYX_TEXT')?></p>
-					<a href="<?=BASE_URL.'Betriebsfuehrungen'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<a href="<?=BASE_URL.language().'/'.'Betriebsfuehrungen'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 				</div>
 			</div>
 		</div>
@@ -178,7 +159,7 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('PRIVATE_LABELING_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('PRIVATE_LABELING_TEXT')?></p>
-					<a href="<?=BASE_URL.'Private-labeling'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<a href="<?=BASE_URL.language().'/'.'Private-labeling'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 				</div>
 			</div>
 		</div>
@@ -188,7 +169,7 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('WERBE_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('WERBE_TEXT')?></p>
-					<a href="<?=BASE_URL.'Werbegeschenke'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<a href="<?=BASE_URL.language().'/'.'Werbegeschenke'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 				</div>
 			</div>
 		</div>
@@ -208,7 +189,7 @@
 				<div class="card-body">
 					<h4 class="card-title mb-1 text-4 font-weight-bold"><?=lang('ACADEMY_TEXT_HEADER')?></h4>
 					<p class="card-text mb-2 pb-1"><?=lang('ACADEMY_TEXT')?></p>
-					<a href="<?=BASE_URL.'Workshops'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
+					<a href="<?=BASE_URL.language().'/'.'Workshops'?>" class="read-more text-color-primary font-weight-semibold text-2"><?=lang('READ_MORE')?><i class="fas fa-angle-right position-relative top-1 ms-1"></i></a>
 				</div>
 			</div>
 		</div>
