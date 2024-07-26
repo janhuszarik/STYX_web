@@ -1,3 +1,5 @@
+/*---------------------------------------------------------------------------------------------------------------*/
+/* Štýly pre slider */
 .slider-container {
 	position: relative;
 	overflow: hidden;
@@ -50,6 +52,7 @@
 	position: relative; /* Ensure position-relative for the absolute children */
 	/* Remove fixed height */
 }
+
 @media (max-width: 768px) {
 	.text-background {
 		padding: 16px; /* Reduce padding for smaller screens */
@@ -73,44 +76,51 @@
 	padding: 20px; /* Adding padding for better text readability */
 	border-radius: 10px; /* Optional: rounded corners for a softer look */
 }
+
 /*---------------------------------------------------------------------------------------------------------------*/
-
-/*Nastavenie css pre menu:*/
-
+/* Nastavenie css pre menu */
 
 .dropdown-menu {
 	z-index: 1050; /* Increase z-index to ensure it is above other content */
 	position: absolute;
 }
+
 .no-link {
 	cursor: default;
 	color: inherit;
 	text-decoration: none;
 }
+
 @media (max-width: 768px) {
 	.no-link {
 		pointer-events: auto;
 		cursor: pointer;
 	}
 }
+
 .nav-item .dropdown-menu {
 	display: none;
 	transition: all 0.3s ease-in-out;
 }
+
 .nav-item:hover .dropdown-menu,
 .nav-item:focus-within .dropdown-menu {
 	display: block;
 }
+
 .nav-item.active > a {
 	background-color: #007bff;
 	color: white;
 }
+
 .dropdown-toggle::after {
 	transition: transform 0.3s ease-in-out;
 }
+
 .nav-item:hover .dropdown-toggle::after {
 	transform: rotate(180deg);
 }
+
 @media (max-width: 768px) {
 	.nav {
 		flex-direction: column;
@@ -126,22 +136,27 @@
 		width: 100%;
 	}
 }
+
 .nav-item-hide {
 	display: none;
 }
+
 @media (min-width: 768px) {
 	.nav-item-hide {
 		display: block;
 	}
 }
+
 .header-nav-hide {
 	display: none;
 }
+
 @media (min-width: 768px) {
 	.header-nav-hide {
 		display: inline-flex;
 	}
 }
+
 @media not all and (min-resolution:.001dpcm) {
 	@supports (-webkit-appearance:none) {
 		.no-link {
@@ -150,6 +165,7 @@
 		}
 	}
 }
+
 @media (min-width: 769px) {
 	.nav-item:hover .dropdown-menu {
 		display: block !important;
@@ -171,22 +187,8 @@
 	}
 }
 
-
-
-
-
-
 /*---------------------------------------------------------------------------------------------------------------*/
-
-/*Nastavenie css pre buttony:*/
-
-
-
-/*.container {*/
-/*	display: flex;*/
-/*	align-items: center;*/
-/*	padding: 0 0 10px 0;*/
-/*}*/
+/* Nastavenie css pre buttony */
 
 .pulse-button {
 	background-color: #13814d;
@@ -219,7 +221,6 @@
 	overflow: hidden;
 }
 
-
 @keyframes pulse {
 	0% {
 		transform: scale(1);
@@ -238,13 +239,18 @@
 .lang img {
 	vertical-align: middle;
 }
+
 .nav-item a {
 	text-decoration: none; /* Remove underline by default */
 }
+
 .nav-item a:hover {
 	text-decoration: none; /* Remove underline on hover */
 }
+
 /*---------------------------------------------------------------------------------------------------------------*/
+/* Štýly pre home carousel */
+
 .home-carousel-card-custom {
 	line-height: 18px;
 	font-size: 14px;
@@ -258,12 +264,9 @@
 	margin: 10px 0; /* Prispôsobenie vertikálneho odsadenia podľa potreby */
 }
 
-
 /*---------------------------------------------------------------------------------------------------------------*/
-/*Nastavenie css pre karty produkty :*/
+/* Nastavenie css pre karty produkty */
 
-
-/* Základný štýl */
 .outer-card {
 	padding: 5px;
 	border-radius: 8px;
@@ -313,12 +316,21 @@
 	width: 16.6667%; /* Štandardne 6 položiek na riadok */
 	display: flex;
 	justify-content: center;
+	align-items: center; /* Vertikálne centrovanie */
+}
+
+.owl-carousel .thumb-info-wrapper {
+	display: flex;
+	justify-content: center; /* Horizontálne centrovanie */
+	align-items: center; /* Vertikálne centrovanie */
+	height: 350px; /* Výška môže byť upravená podľa potreby */
+	overflow: hidden; /* Skrytie prebytočného obsahu */
 }
 
 .owl-carousel .thumb-info-wrapper img {
-	width: 100%;
-	height: 350px;
-	object-fit: cover;
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: cover; /* Udržanie pomeru strán a prispôsobenie veľkosti */
 }
 
 .product-card {
@@ -385,16 +397,9 @@
 	}
 }
 
-
-
-
-
-
-
-
 /*---------------------------------------------------------------------------------------------------------------*/
+/* Nastavenie css pre modal okno kupenia lístkov */
 
-/*Nastavenie css pre modal okno kupenia lístkov:*/
 .wordOfStyx-modal {
 	display: none;
 	position: fixed;
@@ -408,6 +413,7 @@
 	background-color: rgba(0,0,0,0.4);
 	padding-top: 60px;
 }
+
 /* Modal content */
 .wordOfStyx-modal-content {
 	background-color: #d3dfe1;
@@ -416,6 +422,7 @@
 	border: 1px solid #888;
 	width: 40%;
 }
+
 /* Close button */
 .wordOfStyx-close {
 	color: #aaa;
@@ -423,10 +430,10 @@
 	font-size: 28px;
 	font-weight: bold;
 }
+
 .wordOfStyx-close:hover,
 .wordOfStyx-close:focus {
 	color: black;
 	text-decoration: none;
 	cursor: pointer;
-}
 }

@@ -1,29 +1,24 @@
 // -----------------------------------------------------------------------------------------------------------------------
 // Nastavenie karuselu s lazy loading
 // Tento kód inicializuje dva karusely s rôznymi počtami kariet pri načítaní okna
-$(window).on('load', function () {
-	// Inicializácia karuselu s 4 kartami
-	$(".news-carousel").owlCarousel({
-		items: 4, // počet položiek
+$(document).ready(function(){
+	$('.news-carousel').owlCarousel({
+		items: 4,
 		margin: 10,
 		loop: true,
-		nav: true,
-		dots: false,
-		autoplay: false,
-		lazyLoad: true // Lazy loading obrázkov
+		autoplayHoverPause: true
 	});
 
-	// Inicializácia karuselu s 6 kartami
-	$(".full-width").owlCarousel({
-		items: 6, // počet položiek
-		margin: 10,
+	$('.product-carousel').owlCarousel({
+		items: 6,
 		loop: true,
 		nav: true,
 		dots: false,
-		autoplay: false,
-		lazyLoad: true // Lazy loading obrázkov
+		autoplay: true,
+		autoplayHoverPause: true
 	});
 });
+
 // Koniec nastavenia karuselu
 // -----------------------------------------------------------------------------------------------------------------------
 
