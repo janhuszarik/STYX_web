@@ -263,7 +263,6 @@
 /*Nastavenie css pre karty produkty :*/
 
 /* Základný štýl */
-/* Základný štýl */
 .outer-card {
 	padding: 5px;
 	border-radius: 8px;
@@ -310,11 +309,10 @@
 
 .product-carousel .owl-item {
 	flex: 0 0 auto;
-	width: calc(16.6667% - 10px); /* Štandardne 6 položiek na riadok, mínus odstup */
-	margin: 0 2px; /* Odstup medzi kartami 5px */
+	width: 16.6667%; /* Štandardne 6 položiek na riadok */
+	margin: 0 5px; /* Odstup medzi kartami 5px */
 	display: flex;
 	justify-content: center;
-}
 
 .owl-carousel .thumb-info-wrapper img {
 	width: 100%;
@@ -356,36 +354,35 @@
 /* Responzívne štýly */
 @media (max-width: 1200px) {
 	.product-carousel .owl-item {
-		width: calc(20% - 10px); /* 5 položiek na riadok, mínus odstup */
+		width: 20%; /* 5 položiek na riadok */
 	}
 }
 
 @media (max-width: 992px) {
 	.product-carousel .owl-item {
-		width: calc(25% - 10px); /* 4 položky na riadok, mínus odstup */
+		width: 25%; /* 4 položky na riadok */
 	}
 }
 
 @media (max-width: 768px) {
 	.product-carousel .owl-item {
-		width: calc(33.3333% - 10px); /* 3 položky na riadok, mínus odstup */
+		width: 33.3333%; /* 3 položky na riadok */
 	}
 }
 
 @media (max-width: 576px) {
 	.product-carousel .owl-item {
-		width: calc(50% - 10px); /* 2 položky na riadok, mínus odstup */
+		width: 50%; /* 2 položky na riadok */
 	}
 }
 
 @media (max-width: 400px) {
 	.product-carousel .owl-item {
-		width: calc(100% - 10px); /* 1 položka na riadok, mínus odstup */
+		width: 100%; /* 1 položka na riadok */
 		display: flex;
 		justify-content: center;
 	}
 }
-
 
 
 
