@@ -1,5 +1,6 @@
 // -----------------------------------------------------------------------------------------------------------------------
-// js nastavenie pre slider:
+// Nastavenie karuselu s lazy loading
+// Tento kód inicializuje dva karusely s rôznymi počtami kariet pri načítaní okna
 $(window).on('load', function () {
 	// Inicializácia karuselu s 4 kartami
 	$(".news-carousel").owlCarousel({
@@ -8,7 +9,8 @@ $(window).on('load', function () {
 		loop: true,
 		nav: true,
 		dots: false,
-		autoplay: false
+		autoplay: false,
+		lazyLoad: true // Lazy loading obrázkov
 	});
 
 	// Inicializácia karuselu s 6 kartami
@@ -18,17 +20,20 @@ $(window).on('load', function () {
 		loop: true,
 		nav: true,
 		dots: false,
-		autoplay: false
+		autoplay: false,
+		lazyLoad: true // Lazy loading obrázkov
 	});
 });
+// Koniec nastavenia karuselu
+// -----------------------------------------------------------------------------------------------------------------------
 
-
-
-
+// -----------------------------------------------------------------------------------------------------------------------
+// Automatický posun snímok
+// Tento kód nastavuje automatický posun snímok každých 6 sekúnd a umožňuje manuálny posun snímok kliknutím na tlačidlá
 $(document).ready(function () {
 	var slides = $('.slider-section');
 	var currentIndex = 0;
-	var slideInterval = setInterval(showNextSlide, 6000); // Change slide every 6 seconds
+	var slideInterval = setInterval(showNextSlide, 6000); // Zmena snímky každých 6 sekúnd
 
 	function showNextSlide() {
 		slides.eq(currentIndex).removeClass('active');
@@ -54,9 +59,13 @@ $(document).ready(function () {
 		slideInterval = setInterval(showNextSlide, 6000);
 	});
 });
+// Koniec automatického posunu snímok
 // -----------------------------------------------------------------------------------------------------------------------
-// js nastavenie pre menu:
 
+
+// -----------------------------------------------------------------------------------------------------------------------
+// Nastavenie rozbaľovacieho menu
+// Tento kód zabezpečuje správne správanie rozbaľovacích menu na rôznych veľkostiach obrazovky a umožňuje klikateľnosť jazykových vlajok
 document.addEventListener("DOMContentLoaded", function () {
 	var toggles = document.querySelectorAll(".dropdown-toggle");
 	toggles.forEach(function (toggle) {
@@ -73,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	});
 
-	// Ensure the dropdown stays open on hover and click for larger screens
+	// Uistite sa, že rozbaľovacie menu zostane otvorené pri hover a kliknutí na väčších obrazovkách
 	var dropdowns = document.querySelectorAll('.dropdown-menu');
 	dropdowns.forEach(function (dropdown) {
 		dropdown.addEventListener('mouseenter', function () {
@@ -112,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	});
 
-	// Added script to ensure language flags are clickable and change language
+	// Pridanie skriptu na zabezpečenie klikateľnosti jazykových vlajok a zmenu jazyka
 	var langLinks = document.querySelectorAll('.lang a');
 	langLinks.forEach(function (link) {
 		link.addEventListener('click', function (event) {
@@ -121,15 +130,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	});
 
-	// New script to move language flags to the bottom or top of the menu on mobile
+	// Skript na presun jazykových vlajok na spodok alebo vrch menu na mobilných zariadeniach
 	function moveLanguageFlags() {
 		var flagsContainer = document.querySelector('.mobile-lang-flags');
 		if (window.innerWidth <= 768) {
 			var nav = document.querySelector('.header-nav-main nav');
 			if (flagsContainer) {
-				// Move flags to the bottom of the menu
+				// Presun vlajok na spodok menu
 				nav.appendChild(flagsContainer);
-				// Or move flags to the top of the menu
+				// Alebo presun vlajok na vrch menu
 				// nav.insertBefore(flagsContainer, nav.firstChild);
 			}
 		}
@@ -138,12 +147,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	moveLanguageFlags();
 	window.addEventListener('resize', moveLanguageFlags);
 });
-
-// koniec js pre menu:
+// Koniec nastavenia rozbaľovacieho menu
 // ------------------------------------------------------------------------------------------------------------------------
 
-
-
+// -----------------------------------------------------------------------------------------------------------------------
+// Modal okno pre kupovanie lístkov
+// Tento kód zabezpečuje otváranie a zatváranie modal okna pre kupovanie lístkov
 document.addEventListener('DOMContentLoaded', (event) => {
 	var modal = document.getElementById("wordOfStyx-myModal");
 	var btn = document.getElementById("wordOfStyx-openModalBtn");
@@ -157,17 +166,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	span.onclick = function() {
 		modal.style.display = "none";
-		iframe.src = ""; // Clear the iframe source to stop loading
+		iframe.src = ""; // Vyčistenie zdroja iframe, aby sa zastavilo načítavanie
 	}
 
 	window.onclick = function(event) {
 		if (event.target == modal) {
 			modal.style.display = "none";
-			iframe.src = ""; // Clear the iframe source to stop loading
+			iframe.src = ""; // Vyčistenie zdroja iframe, aby sa zastavilo načítavanie
 		}
 	}
 });
-
-// koniec js pre modal okno kupovania lístkov:
+// Koniec modal okna pre kupovanie lístkov
 // ------------------------------------------------------------------------------------------------------------------------
-
