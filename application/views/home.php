@@ -8,15 +8,15 @@
 					<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides news-carousel" data-plugin-options="{'items': 4, 'margin': 10, 'loop': true, 'nav': true, 'dots': false, 'autoplay': false}">
 						<?php foreach ($news as $news_item): ?>
 							<span class="thumb-info thumb-info-no-borders thumb-info-no-borders-rounded thumb-info-lighten thumb-info-bottom-info thumb-info-bottom-info-custom thumb-info-bottom-info-show-more thumb-info-no-zoom" onclick="location.href='<?= $news_item->buttonUrl ?>';" style="cursor: pointer;">
-								<span class="thumb-info-wrapper">
-									<img style="padding: 0 0 114px 0" src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>" class="img-fluid" alt="<?= $news_item->name ?>">
-									<span class="thumb-info-title">
-										<span class="thumb-info-inner line-height-5 text-4"><?= $news_item->name ?></span>
-										<hr class="thumb-info-hr">
-										<span class="thumb-info-inner home-carousel-card-custom"><?= $news_item->name1 ?></span>
-									</span>
-								</span>
-							</span>
+                            <span class="thumb-info-wrapper">
+                                <img style="padding: 0 0 114px 0" src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>" class="img-fluid" alt="<?= $news_item->name ?>">
+                                <span class="thumb-info-title">
+                                    <span class="thumb-info-inner line-height-5 text-4"><?= $news_item->name ?></span>
+                                    <hr class="thumb-info-hr">
+                                    <span class="thumb-info-inner home-carousel-card-custom"><?= $news_item->name1 ?></span>
+                                </span>
+                            </span>
+                        </span>
 						<?php endforeach; ?>
 					</div>
 				</div>
@@ -34,11 +34,11 @@
 	<div class="owl-carousel owl-theme full-width" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false}">
 		<?php foreach ($product as $product_item): ?>
 			<a href="<?= $product_item->url ?>" aria-label="">
-                <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-                    <span class="thumb-info-wrapper">
-                        <img loading="lazy" src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>" class="img-fluid" alt="<?= $product_item->name ?>">
-                    </span>
+            <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                <span class="thumb-info-wrapper">
+                    <img loading="lazy" src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>" class="img-fluid" alt="<?= $product_item->name ?>">
                 </span>
+            </span>
 				<?php if ($product_item->action == 1): ?>
 					<div class="ribbon">
 						<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
@@ -56,6 +56,7 @@
 			</a>
 		<?php endforeach; ?>
 	</div>
+
 
 	<div class="container py-5 my-4">
 		<div class="row text-center py-3">

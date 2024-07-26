@@ -1,8 +1,29 @@
 // -----------------------------------------------------------------------------------------------------------------------
 // js nastavenie pre slider:
 $(window).on('load', function () {
-	$(".owl-carousel").owlCarousel();
+	// Inicializácia karuselu s 4 kartami
+	$(".news-carousel").owlCarousel({
+		items: 4, // počet položiek
+		margin: 10,
+		loop: true,
+		nav: true,
+		dots: false,
+		autoplay: false
+	});
+
+	// Inicializácia karuselu s 6 kartami
+	$(".full-width").owlCarousel({
+		items: 6, // počet položiek
+		margin: 10,
+		loop: true,
+		nav: true,
+		dots: false,
+		autoplay: false
+	});
 });
+
+
+
 
 $(document).ready(function () {
 	var slides = $('.slider-section');
