@@ -294,7 +294,7 @@
 
 .product-carousel .owl-stage {
 	display: flex;
-	animation: scroll 180s linear infinite;
+	animation: scroll 310s linear infinite;
 }
 
 @keyframes scroll {
@@ -347,6 +347,7 @@
 	padding: 5px 0;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
 
 
 
