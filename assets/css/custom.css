@@ -377,6 +377,8 @@
 @media (max-width: 400px) {
 	.product-carousel .owl-item {
 		width: 100%; /* 1 položka na riadok */
+		display: flex;
+		justify-content: center;
 	}
 }
 
