@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class app_model extends CI_Model
 {
 
-
 	function routes($lang)
 	{
 
@@ -31,7 +30,6 @@ class app_model extends CI_Model
 
 	}
 
-
 	public function getSliders($onlyActive = false)
 	{
 		$this->db->select('*');
@@ -43,7 +41,6 @@ class app_model extends CI_Model
 
 		return $this->db->get('slider')->result();
 	}
-
 
 	function getAllActiveNews()
 	{
@@ -74,13 +71,13 @@ class app_model extends CI_Model
 		$this->db->where('lang', language());
 		return $this->db->get('comments')->result();
 	}
+
 	public function sumCommentKosmetic()
 	{
 		$this->db->where('section_id', '1');
 		$this->db->where('lang', language());
 		return $this->db->count_all_results('comments');
 	}
-
 
 	public function naturkosmetik()
 	{
