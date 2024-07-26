@@ -299,7 +299,7 @@
 
 .product-carousel .owl-stage {
 	display: flex;
-	animation: scroll 180s linear infinite;
+	/*animation: scroll 180s linear infinite;*/
 }
 
 @keyframes scroll {
