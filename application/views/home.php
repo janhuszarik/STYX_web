@@ -31,32 +31,39 @@
 		</div>
 	</div>
 
-	<div class="owl-carousel owl-theme full-width product-carousel" data-plugin-options="{'items': 6, 'loop': true, 'nav': true, 'dots': false, 'autoplay': true, 'autoplayTimeout': 5000, 'autoplayHoverPause': true}">
-		<?php foreach ($product as $product_item): ?>
-			<a href="<?= $product_item->url ?>" aria-label="">
-			<span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-				<span class="thumb-info-wrapper">
-					<img loading="lazy" src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>" class="img-fluid" alt="<?= $product_item->name ?>">
-				</span>
-			</span>
-				<?php if ($product_item->action == 1): ?>
-					<div class="ribbon">
-						<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
-							<?= $product_item->aktion_name ?> / <?= $product_item->price ?>
-						<?php elseif (!empty($product_item->aktion_name)): ?>
-							<?= $product_item->aktion_name ?>
-						<?php elseif (!empty($product_item->price)): ?>
-							<?= $product_item->price ?>
-						<?php endif; ?>
+	<div class="carousel-container">
+		<div class="owl-carousel owl-theme full-width product-carousel" data-plugin-options="{'items': 6, 'loop': true, 'dots': false, 'autoplay': true, 'autoplayTimeout': 5000, 'autoplayHoverPause': true}">
+			<?php foreach ($product as $product_item): ?>
+				<a href="<?= $product_item->url ?>" aria-label="">
+                <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                    <span class="thumb-info-wrapper">
+                        <img loading="lazy" src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>" class="img-fluid" alt="<?= $product_item->name ?>">
+                    </span>
+                </span>
+					<?php if ($product_item->action == 1): ?>
+						<div class="ribbon">
+							<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
+								<?= $product_item->aktion_name ?> / <?= $product_item->price ?>
+							<?php elseif (!empty($product_item->aktion_name)): ?>
+								<?= $product_item->aktion_name ?>
+							<?php elseif (!empty($product_item->price)): ?>
+								<?= $product_item->price ?>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
+					<div class="product-info">
+						<?= $product_item->name ?>
 					</div>
-				<?php endif; ?>
-				<div class="product-info">
-					<?= $product_item->name ?>
-				</div>
-			</a>
-		<?php endforeach; ?>
-	</div>
+				</a>
+			<?php endforeach; ?>
+		</div>
 
+		<!-- Vlastné šípky -->
+		<div class="custom-nav">
+			<button class="custom-prev">‹</button>
+			<button class="custom-next">›</button>
+		</div>
+	</div>
 
 
 	<div class="container py-5 my-4">

@@ -266,6 +266,30 @@
 
 /*---------------------------------------------------------------------------------------------------------------*/
 /* Nastavenie css pre karty produkty */
+.carousel-container {
+	position: relative;
+}
+
+.custom-nav {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	transform: translateY(-50%);
+	z-index: 1000;
+}
+
+.custom-prev, .custom-next {
+	background-color: rgb(126, 179, 80);
+	color: white;
+	border: none;
+	padding: 10px;
+	cursor: pointer;
+	font-size: 24px;
+	z-index: 1001;
+}
+
 
 .outer-card {
 	padding: 5px;

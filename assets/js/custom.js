@@ -4,17 +4,33 @@
 $(document).ready(function(){
 	$('.news-carousel').owlCarousel({
 		items: 4,
+		margin: 10,
+		loop: true,
+		nav: false, // Nepoužívame vstavané navigačné šípky
+		dots: false,
+		autoplay: true,
+		autoplayTimeout: 5000, // 5 sekúnd
+		autoplayHoverPause: true
 	});
 
-	$('.product-carousel').owlCarousel({
+	var productCarousel = $('.product-carousel').owlCarousel({
 		items: 6,
 		loop: true,
+		nav: false, // Nepoužívame vstavané navigačné šípky
 		dots: false,
 		autoplay: true,
 		autoplayTimeout: 5000, // 5 sekúnd
 		autoplayHoverPause: true,
 		smartSpeed: 1000, // Rýchlosť animácie
-		fluidSpeed: true, // Plynulý prechod
+		fluidSpeed: true // Plynulý prechod
+	});
+
+	// Priradenie funkcie na vlastné šípky
+	$('.custom-next').click(function() {
+		productCarousel.trigger('next.owl.carousel');
+	});
+	$('.custom-prev').click(function() {
+		productCarousel.trigger('prev.owl.carousel');
 	});
 });
 
