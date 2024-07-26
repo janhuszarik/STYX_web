@@ -8,6 +8,10 @@ $(document).ready(function(){
 
 	$('.product-carousel').owlCarousel({
 		items: 6,
+		loop: true,
+		nav: true,
+		dots: false,
+		autoplay: true,
 		autoplayTimeout: 5000, // 5 sekúnd
 		autoplayHoverPause: true,
 		smartSpeed: 1000, // Rýchlosť animácie
