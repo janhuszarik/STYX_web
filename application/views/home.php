@@ -7,7 +7,16 @@
 					<h1 style='font-weight: bolder' class="text-center"><?= lang('AKTUELL') ?></h1>
 					<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides news-carousel" data-plugin-options="{'items': 4, 'margin': 10, 'loop': true, 'nav': true, 'dots': false, 'autoplay': false}">
 						<?php foreach ($news as $news_item): ?>
-							<a href="<?= language() ?>/news_article/<?= $news_item->id ?>" class="thumb-info thumb-info-no-borders thumb-info-no-borders-rounded thumb-info-lighten thumb-info-bottom-info thumb-info-bottom-info-custom thumb-info-bottom-info-show-more thumb-info-no-zoom" style="cursor: pointer;">
+
+							<?php $href = "";
+							if (isset($news_item->buttonUrl)) {
+								$href = $news_item->buttonUrl;
+							} elseif (!empty($news_item->id)) {
+								$href = language() . "/news_article/" . $news_item->id;
+							}
+							?>
+							<?php if (!empty($href)): ?>
+								<a href="<?= $href ?>" class="thumb-info thumb-info-no-borders thumb-info-no-borders-rounded thumb-info-lighten thumb-info-bottom-info thumb-info-bottom-info-custom thumb-info-bottom-info-show-more thumb-info-no-zoom" style="cursor: pointer;">
             <span class="thumb-info-wrapper">
                 <img style="padding: 0 0 114px 0" src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>" class="img-fluid" alt="<?= $news_item->name ?>">
                 <span class="thumb-info-title">
@@ -16,8 +25,21 @@
                     <span class="thumb-info-inner home-carousel-card-custom"><?= $news_item->name1 ?></span>
                 </span>
             </span>
-							</a>
+								</a>
+							<?php else: ?>
+								<div class="thumb-info thumb-info-no-borders thumb-info-no-borders-rounded thumb-info-lighten thumb-info-bottom-info thumb-info-bottom-info-custom thumb-info-bottom-info-show-more thumb-info-no-zoom" style="cursor: pointer;">
+            <span class="thumb-info-wrapper">
+                <img style="padding: 0 0 114px 0" src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>" class="img-fluid" alt="<?= $news_item->name ?>">
+                <span class="thumb-info-title">
+                    <span class="thumb-info-inner line-height-5 text-4"><?= $news_item->name ?></span>
+                    <hr class="thumb-info-hr">
+                    <span class="thumb-info-inner home-carousel-card-custom"><?= $news_item->name1 ?></span>
+                </span>
+            </span>
+								</div>
+							<?php endif; ?>
 						<?php endforeach; ?>
+
 					</div>
 
 				</div>

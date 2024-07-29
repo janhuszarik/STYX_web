@@ -51,7 +51,7 @@
 							<div class="col-lg-6">
 								<div class="form-group">
 									<label class="col-form-label" for="Input1">URL link</label>
-									<input placeholder="Internetverbindung" type="text" name="buttonUrl" class="form-control" id="Input1" value="<?=!empty($news->buttonUrl)?$news->buttonUrl: ''?>" required>
+									<input placeholder="Internetverbindung" type="text" name="buttonUrl" class="form-control" id="Input1" value="<?=!empty($news->buttonUrl)?$news->buttonUrl: ''?>">
 								</div>
 							</div>
 							<div class="col-lg-6">
@@ -81,9 +81,9 @@
 						<div class="row form-group pb-3">
 							<div class="col-lg-12">
 								<div class="form-group">
-									<label for="layoutSelect">Vyberte dizajn</label>
+									<label for="layoutSelect">Wählen Sie ein Design</label>
 									<select class="form-control" id="layoutSelect">
-										<option selected>Vyber si typ predlohy</option>
+										<option selected>Auswählen eines Vorlagentyps</option>
 										<option value="layout1">Dizajn 1</option>
 										<option value="layout2">Dizajn 2</option>
 										<option value="layout3">Dizajn 3</option>
