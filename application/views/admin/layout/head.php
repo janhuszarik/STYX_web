@@ -1,13 +1,10 @@
 <!doctype html>
 <html class="fixed sidebar-light">
-
 <head>
 
 	<!-- Basic -->
 	<meta charset="UTF-8">
-
 	<title>STYX</title>
-
 	<meta name="keywords" content="STYX REMISE | ADMIN" />
 	<meta name="description" content="STYX REMISE | ADMIN">
 	<meta name="author" content="Jan Huszarik">
@@ -21,6 +18,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
 
 	<!-- Vendor CSS -->
+
 	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/bootstrap/css/bootstrap.css" />
 	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/animate/animate.compat.css">
 	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/font-awesome/css/all.min.css" />
@@ -48,9 +46,12 @@
 	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/css/custom.css">
 
 	<!-- Head Libs -->
-	<script src="<?=BASE_URL?>adm/assets/vendor/modernizr/modernizr.js"></script>
-
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 </head>
+
 <body>
 <section class="body">
 

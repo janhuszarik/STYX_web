@@ -258,7 +258,32 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+	public function news_article($id = false) {
 
+		$id = $this->uri->segment(3);
+
+		$news_article = $this->App_model->getAllNews_article($id);
+
+		// Priradenie údajov do poľa $data
+		$data['news_article'] = $news_article;
+
+		// Ak $news_article obsahuje 'name', nastavíme ho ako title
+		if (!empty($news_article) && isset($news_article->name)) {
+			$data['title'] ='AKTUELLES' .' | '.$news_article->name;
+		} else {
+			// Pôvodný title ako fallback
+			$data['title'] = lang('FIGURTEN_TITLE');
+		}
+
+		$data['page'] = 'app/news_article';
+		$data['description'] = lang('NATURKOSMETIK_DESCRIPTION');
+		$data['keywords'] = lang('NATURKOSMETIK_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/schokolade.jpg';
+
+		// Načítanie view s údajmi
+		$this->load->view('layout/normal', $data);
+	}
 	function error404(){
         
         header("HTTP/1.1 404 Not Found");

@@ -51,6 +51,14 @@ class app_model extends CI_Model
 		$this->db->where('end_date >=', date('Y-m-d H:i:s'));
 		return $this->db->get('news')->result(); // upravené
 	}
+	function getAllNews_article($id)
+{
+	$this->db->select('*');
+	$this->db->where('active', '1');
+	$this->db->where('id', $id);
+	$this->db->where('lang', language());
+	return $this->db->get('news')->row(); // upravené
+}
 
 	function getAllActiveProduct()
 	{

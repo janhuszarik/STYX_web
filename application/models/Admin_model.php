@@ -144,7 +144,8 @@ function getNewsletters(){
 			'buttonUrl' => $this->input->post('buttonUrl'),
 			'active' => $this->input->post('active'),
 			'start_date' => $this->input->post('start_date'),
-			'end_date' => $this->input->post('end_date')
+			'end_date' => $this->input->post('end_date'),
+			'content' => $this->input->post('content'),
 		);
 
 		// Ak je nahraná nová fotka a neobsahuje chybu, nastavíme ju do dát
@@ -162,6 +163,7 @@ function getNewsletters(){
 			return $this->db->insert('news', $data);
 		}
 	}
+
 
 	function getNews($id = false)
 	{

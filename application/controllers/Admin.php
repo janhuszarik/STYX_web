@@ -292,6 +292,7 @@ class Admin extends CI_Controller
 		}
 	}
 
+
 	function bestProductSave() {
 		$post = $this->input->post();
 		$id = $this->uri->segment('4');

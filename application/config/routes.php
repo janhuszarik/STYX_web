@@ -120,6 +120,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['Betriebsfuehrungen']			= 'App/wordOfStyx';
 	$route['app/wordOfStyx']				= 'App/wordOfStyx';
 	$route['Company/About-Styx']			= 'App/contact';
+	$route['news_article/:num']		= 'App/news_article';
+	$route['news_article/:num'] 		= 'App/news_article/$1/$2';
 
 
 
@@ -146,7 +148,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-	$route['set-cookie-consent'] 			= 'app/set_cookie_consent';
+
+$route['set-cookie-consent'] 			= 'app/set_cookie_consent';
 	$route['decline-cookie-consent'] 		= 'app/decline_cookie_consent';
 
 
