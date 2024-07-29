@@ -21,25 +21,34 @@
 	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
 
 	<!-- Vendor CSS -->
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/bootstrap/css/bootstrap.css<?= VERSION ?>" />
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/animate/animate.compat.css<?= VERSION ?>">
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/font-awesome/css/all.min.css<?= VERSION ?>" />
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/boxicons/css/boxicons.min.css<?= VERSION ?>" />
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/magnific-popup/magnific-popup.css<?= VERSION ?>" />
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css<?= VERSION ?>" />
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/jquery-ui/jquery-ui.css<?= VERSION ?>" />
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/jquery-ui/jquery-ui.theme.css<?= VERSION ?>" />
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/bootstrap-multiselect/css/bootstrap-multiselect.css<?= VERSION ?>" />
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/vendor/morris/morris.css<?= VERSION ?>" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/animate/animate.compat.css">
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/font-awesome/css/all.min.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/boxicons/css/boxicons.min.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/magnific-popup/magnific-popup.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/jquery-ui/jquery-ui.theme.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/select2/css/select2.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/select2-bootstrap-theme/select2-bootstrap.min.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/bootstrap-multiselect/css/bootstrap-multiselect.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/bootstrap-timepicker/css/bootstrap-timepicker.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/dropzone/basic.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/dropzone/dropzone.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/bootstrap-markdown/css/bootstrap-markdown.min.css" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/vendor/summernote/summernote-bs4.css" />
 
-	<!-- Theme CSS -->
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/css/theme.css<?= VERSION ?>" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/css/theme.css" />
 
 	<!-- Skin CSS -->
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/css/skins/default.css<?= VERSION ?>" />
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/css/skins/default.css" />
 
 	<!-- Theme Custom CSS -->
-	<link rel="stylesheet" href="<?= BASE_URL ?>adm/assets/css/custom.css<?= VERSION ?>">
+	<link rel="stylesheet" href="<?=BASE_URL?>adm/assets/css/custom.css">
+
+	<!-- Head Libs -->
+	<script src="<?=BASE_URL?>adm/assets/vendor/modernizr/modernizr.js"></script>
 
 </head>
 <body>

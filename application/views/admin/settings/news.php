@@ -79,6 +79,14 @@
 								</div>
 							</div>
 						</div>
+						<div class="row form-group pb-3">
+
+							<div class="form-group row pb-3">
+								<div class="col-lg-12">
+									<div class="summernote" data-plugin-summernote data-plugin-options='{ "height": 180 }'><p>Start typing...</p></div>
+								</div>
+							</div>
+						</div>
 						<br><br>
 							<footer class="card-footer text-end">
 							<?php if (!empty($news->id)){ ?>
