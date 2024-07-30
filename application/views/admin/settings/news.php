@@ -94,8 +94,8 @@
 
 						<div class="row form-group pb-3">
 							<div class="col-lg-12">
-								<div id="summernote"><?=!empty($news->content) ? htmlspecialchars($news->content) : ''?></div>
-								<input type="hidden" name="content" id="content">
+								<div id="summernote"></div>
+								<input type="hidden" name="content" id="content" value="<?=!empty($news->content) ? htmlspecialchars($news->content) : ''?>">
 							</div>
 						</div>
 
@@ -175,43 +175,106 @@
 
 <script>
 	$(document).ready(function() {
+		// Získanie obsahu z hidden input
+		var content = $('#content').val();
+
+		// Debugovanie obsahu
+		console.log("Loaded content:", content);
+
+		// Inicializácia Summernote s obsahom
 		$('#summernote').summernote({
 			height: 300,
-			callbacks: {
-				onImageUpload: function(files) {
-					var data = new FormData();
-					data.append("file", files[0]);
-					$.ajax({
-						url: '<?= base_url("admin/uploadImage") ?>',
-						method: 'POST',
-						data: data,
-						processData: false,
-						contentType: false,
-						success: function(response) {
-							var res = JSON.parse(response);
-							if (res.url) {
-								$('#summernote').summernote('insertImage', res.url, function ($image) {
-									$image.attr('style', 'width: 100%;'); // Príklad nastavenia štýlu
-								});
-							} else {
-								console.log('Upload error:', res.error);
-							}
-						},
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log('AJAX error:', textStatus, errorThrown);
-						}
-					});
-				}
+			toolbar: [
+				['style', ['style']],
+				['font', ['bold', 'italic', 'underline', 'clear']],
+				['fontname', ['fontname']],
+				['fontsize', ['fontsize']],
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['height', ['height']],
+				['insert', ['link', 'picture', 'video', 'table', 'hr']],
+				['view', ['fullscreen', 'codeview', 'help']]
+			],
+			popover: {
+				image: [
+					['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+					['float', ['floatLeft', 'floatRight', 'floatNone']],
+					['remove', ['removeMedia']]
+				],
+				link: [
+					['link', ['linkDialogShow', 'unlink']]
+				],
+				air: [
+					['color', ['color']],
+					['font', ['bold', 'underline', 'clear']],
+					['para', ['ul', 'paragraph']],
+					['insert', ['link', 'picture']]
+				]
 			}
 		});
 
+		// Nastavenie obsahu po inicializácii
+		$('#summernote').summernote('code', content);
+
+		// Aktualizácia hidden input pri odoslaní formulára
 		$('#form').on('submit', function() {
 			var content = $('#summernote').summernote('code');
 			$('#content').val(content);
 		});
-	});
-</script>
 
+		// Aktualizácia hidden input pri zmene layoutu
+		$('#layoutSelect').change(function() {
+			var layout = $(this).val();
+			var content = '';
+			switch (layout) {
+				case 'layout1':
+					content = `
+                    <div class="article-layout">
+                        <h1 style="text-align: center;">Artikelüberschrift</h1>
+                        <h2 style="text-align: center;">Artikelunterüberschrift</h2>
+                        <p style="text-align: justify;">Einleitungstext des Artikels. Dieser Abschnitt bietet grundlegende Informationen und führt den Leser in das Thema des Artikels ein. Dieser Text sollte in mehrere Absätze unterteilt werden, um die Lesbarkeit zu verbessern.</p>
+                        <img src="https://via.placeholder.com/800x400" alt="Platzhalterbild" style="display: block; margin: 20px auto;">
+                        <p style="text-align: justify;">Der Haupttext des Artikels geht hier weiter. Dies ist der Ort, an dem Sie weitere Bilder und detailliertere Informationen hinzufügen können.</p>
+                        <img src="https://via.placeholder.com/400x300" alt="Platzhalterbild" style="float: left; margin: 10px 20px 10px 0;">
+                        <p style="text-align: justify;">Fortsetzung des Textes, der weitere Details und erweiterte Informationen enthält.</p>
+                        <img src="https://via.placeholder.com/400x300" alt="Platzhalterbild" style="float: right; margin: 10px 0 10px 20px;">
+                        <p style="text-align: justify;">Schluss des Artikels. Dieser Text schließt das Thema ab und bietet abschließende Gedanken und Informationen.</p>
+                    </div>`;
+					break;
+				case 'layout2':
+					content = `
+                    <div class="article-layout">
+                        <h1 style="font-size: 36px; color: #333;">Artikelüberschrift</h1>
+                        <p style="font-size: 18px; color: #666;">Einleitungstext des Artikels. Dieser Abschnitt bietet einen kurzen Überblick über den Inhalt des Artikels.</p>
+                        <img src="https://via.placeholder.com/600x300" alt="Platzhalterbild" style="width: 100%; margin: 20px 0;">
+                        <p style="font-size: 16px; color: #444;">Haupttext des Artikels. Dies ist der Ort, an dem Sie detailliertere Informationen und Inhalte hinzufügen können. Der Text kann in mehrere Absätze unterteilt werden, um die Lesbarkeit zu verbessern.</p>
+                        <img src="https://via.placeholder.com/600x300" alt="Platzhalterbild" style="width: 100%; margin: 20px 0;">
+                        <p style="font-size: 16px; color: #444;">Fortsetzung des Haupttextes des Artikels. Sie können weitere Bilder und Grafikelemente nach Bedarf hinzufügen.</p>
+                    </div>`;
+					break;
+				case 'layout3':
+					content = `
+                    <div class="article-layout">
+                        <h1 style="text-align: left;">Artikelüberschrift</h1>
+                        <h2 style="text-align: left;">Artikelunterüberschrift</h2>
+                        <p style="text-align: justify;">Einleitungstext des Artikels. Dieser Abschnitt dient der Vorstellung des Hauptthemas und der Einstimmung des Lesers.</p>
+                        <img src="https://via.placeholder.com/800x400" alt="Platzhalterbild" style="display: block; margin: 20px auto;">
+                        <p style="text-align: justify;">Der Haupttext des Artikels enthält detailliertere Informationen, die in mehrere Absätze unterteilt sind. Dies ermöglicht ein leichteres Lesen und Verstehen des Inhalts.</p>
+                        <p style="text-align: justify;">Weiterer Text des Artikels mit Hinzufügung von Bildern.</p>
+                        <img src="https://via.placeholder.com/400x300" alt="Platzhalterbild" style="float: left; margin: 10px 20px 10px 0;">
+                        <p style="text-align: justify;">Ergänzende Informationen und erweiterter Text des Artikels.</p>
+                        <img src="https://via.placeholder.com/400x300" alt="Platzhalterbild" style="float: right; margin: 10px 0 10px 20px;">
+                        <p style="text-align: justify;">Schluss des Artikels. Bietet eine Zusammenfassung der Informationen und abschließende Gedanken.</p>
+                    </div>`;
+					break;
+			}
+			$('#summernote').summernote('code', content);
+			$('#content').val(content);
+		});
+	});
+
+
+</script>
 
 
 
