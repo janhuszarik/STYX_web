@@ -224,6 +224,62 @@ class Admin extends CI_Controller
 		}
 	}
 
+	private function uploadImageToPath($field_name, $path = 'uploads/news/') {
+		log_message('debug', 'FCPATH value: ' . FCPATH);
+		log_message('debug', 'Current working directory: ' . getcwd());
+
+		// Použitie DIRECTORY_SEPARATOR pre správne cesty naprieč platformami
+		$upload_path = FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $path);
+		log_message('debug', 'Upload path: ' . $upload_path);
+
+		if (!is_dir($upload_path)) {
+			log_message('debug', 'Directory does not exist: ' . $upload_path);
+			if (!mkdir($upload_path, 0777, true)) {
+				log_message('error', 'Failed to create directory: ' . $upload_path);
+				return array('error' => 'Failed to create directory: ' . $upload_path);
+			} else {
+				chmod($upload_path, 0777); // Nastavenie prístupových práv
+				log_message('debug', 'Directory created: ' . $upload_path);
+			}
+		} else {
+			log_message('debug', 'Directory already exists: ' . $upload_path);
+		}
+
+		if (!is_writable($upload_path)) {
+			log_message('error', 'Upload path is not writable: ' . $upload_path);
+			return array('error' => 'Upload path is not writable: ' . $upload_path);
+		}
+
+		$config['upload_path'] = $upload_path;
+		$config['allowed_types'] = 'jpg|jpeg|png|gif';
+		$config['max_size'] = '';
+		$config['encrypt_name'] = TRUE;
+
+		$this->load->library('upload', $config);
+		$this->upload->initialize($config);
+
+		log_message('debug', 'Upload config: ' . print_r($config, true));
+
+		if (!$this->upload->do_upload($field_name)) {
+			$error = $this->upload->display_errors();
+			log_message('error', 'Upload error for ' . $field_name . ': ' . $error);
+			return array('error' => $error);
+		} else {
+			$data = $this->upload->data();
+			return array('url' => base_url($path . $data['file_name']));
+		}
+	}
+
+	public function uploadImage() {
+		$response = $this->uploadImageToPath('file', 'uploads/news/');
+		log_message('debug', 'Upload response: ' . json_encode($response)); // Logovanie odpovede
+		echo json_encode($response);
+	}
+
+
+
+
+
 
 	function newsSave() {
 		$post = $this->input->post();
@@ -291,6 +347,9 @@ class Admin extends CI_Controller
 			$this->load->view('admin/layout/normal', $data);
 		}
 	}
+
+
+
 
 
 	function bestProductSave() {
