@@ -9,7 +9,7 @@
 						<?php foreach ($news as $news_item): ?>
 
 							<?php $href = "";
-							if (!empty($news_item->buttonUrl)) {
+							if (isset($news_item->buttonUrl)) {
 								$href = $news_item->buttonUrl;
 							} elseif (!empty($news_item->id)) {
 								$href = language() . "/news_article/" . $news_item->id;

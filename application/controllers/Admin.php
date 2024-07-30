@@ -273,7 +273,7 @@ class Admin extends CI_Controller
 		}
 	}
 
-	public function newsSave() {
+	function newsSave() {
 		$post = $this->input->post();
 		$id = $this->uri->segment('4');
 		$segment2 = $this->uri->segment('3'); // edit alebo del
@@ -283,7 +283,7 @@ class Admin extends CI_Controller
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
 
 			// Nahranie nového obrázka, ak bol nahraný
-			$image = $this->uploadImageToPath('image', 'uploads/news/');
+			$image = $this->upload_image('image', 'uploads/news/');
 			if (isset($image['error']) && !$image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['edit'] = (object)$post;
@@ -291,20 +291,7 @@ class Admin extends CI_Controller
 				return;
 			}
 
-			// Sanitizácia obsahu Summernote pomocou HTMLPurifier
-			require_once APPPATH . 'third_party/htmlpurifier/library/HTMLPurifier.auto.php';
-			$config = HTMLPurifier_Config::createDefault();
-			$config->set('HTML.Allowed', 'div,b,strong,i,em,a[href|title],ul,ol,li,p[style],br,span[style],img[width|height|alt|src|style]');
-			$config->set('CSS.AllowedProperties', 'font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align');
-			$config->set('AutoFormat.AutoParagraph', true);
-			$config->set('AutoFormat.RemoveEmpty', true);
-			$purifier = new HTMLPurifier($config);
-			$clean_html = $purifier->purify($this->input->post('content'));
-
-			$post['content'] = $clean_html;
-
 			if (!empty($id)) {
-				$post['id'] = $id; // Pridaj id do $post
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
 					if ($image && !isset($image['error'])) {
 						// Odstránenie starého obrázka, ak bol nahradený novým
@@ -312,18 +299,18 @@ class Admin extends CI_Controller
 							unlink(FCPATH . 'uploads/news/' . $old_image);
 						}
 					}
-					$this->session->set_flashdata('success', 'Alle daten sind gespeichert');
+					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
 					redirect(BASE_URL . 'admin/news/');
 				} else {
-					$this->session->set_flashdata('error', 'Fehler, versuchen noch einmal');
+					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
 					$data['edit'] = (object)$post;
 				}
 			} else {
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
-					$this->session->set_flashdata('success', 'Alle daten sind gespeichert');
+					$this->session->set_flashdata('success', 'alle daten ist gespeichert');
 					redirect(BASE_URL . 'admin/news');
 				} else {
-					$this->session->set_flashdata('error', 'Fehler, versuchen noch einmal');
+					$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
 					$data['edit'] = (object)$post;
 				}
 			}
@@ -331,10 +318,10 @@ class Admin extends CI_Controller
 
 		if ($segment2 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->newsDelete($id)) {
-				$this->session->set_flashdata('message', 'Die Daten werden unwiederbringlich gelöscht');
+				$this->session->set_flashdata('message', 'die Daten werden unwiederbringlich gelöscht');
 				redirect(BASE_URL . 'admin/news');
 			} else {
-				$this->session->set_flashdata('error', 'Fehler, versuchen noch einmal');
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
 			}
 		}
 
@@ -352,7 +339,6 @@ class Admin extends CI_Controller
 			$this->load->view('admin/layout/normal', $data);
 		}
 	}
-
 
 
 	function bestProductSave() {
