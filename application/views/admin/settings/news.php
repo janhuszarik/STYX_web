@@ -3,17 +3,16 @@
 		<div class="col-lg-6">
 			<section class="card">
 				<header class="card-header">
-					<h2 class="card-title"><?php if (!empty($news->id)) { echo "News bearbeiten"; } else { echo "News hinzufügen"; } ?></h2>
-					<p class="card-subtitle">
-						Erstellen Sie Text für News im Abschnitt unter dem Banner
-					</p>
+					<h2 class="card-title">
+						<?php if (!empty($news->id)) { echo "News bearbeiten"; } else { echo "News hinzufügen"; } ?>
+					</h2>
+					<p class="card-subtitle">Erstellen Sie Text für News im Abschnitt unter dem Banner</p>
 				</header>
 				<div class="card-body">
 					<form action="<?=BASE_URL?>admin/newsSave" method="post" id="form" enctype="multipart/form-data">
 						<?php if (!empty($news->id)) { ?>
 							<input type="hidden" name="id" value="<?=$news->id?>">
 						<?php } ?>
-
 						<div class="row form-group pb-3">
 							<div class="col-lg-6">
 								<div class="form-group">
@@ -32,7 +31,6 @@
 								</select>
 							</div>
 						</div>
-
 						<div class="row form-group pb-3">
 							<div class="col-lg-6">
 								<div class="form-group">
@@ -59,9 +57,7 @@
 								<input type="file" name="image" class="form-control" id="image">
 							</div>
 						</div>
-
 						<!-- Pridanie nahrávania obrázkov -->
-
 						<!-- Pridanie dátumu a času -->
 						<div class="row form-group pb-3">
 							<div class="col-lg-6">
@@ -77,7 +73,6 @@
 								</div>
 							</div>
 						</div>
-
 						<div class="row form-group pb-3">
 							<div class="col-lg-12">
 								<div class="form-group">
@@ -91,18 +86,12 @@
 								</div>
 							</div>
 						</div>
-
 						<div class="row form-group pb-3">
 							<div class="col-lg-12">
-								<div id="summernote"><?=!empty($news->content) ? htmlspecialchars($news->content) : ''?></div>
+								<div id="summernote"><?=!empty($news->content) ? htmlspecialchars_decode($news->content) : ''?></div>
 								<input type="hidden" name="content" id="content">
 							</div>
 						</div>
-
-
-
-
-
 						<footer class="card-footer text-end">
 							<?php if (!empty($news->id)) { ?>
 								<input type="hidden" name="id" value="<?=$news->id?>">
@@ -115,8 +104,6 @@
 				</div>
 			</section>
 		</div>
-
-
 		<div class="col-lg-6">
 			<section class="card card-yellow">
 				<header class="card-header">
@@ -192,9 +179,25 @@
 							try {
 								var res = JSON.parse(response);
 								if (res.url) {
-									$('#summernote').summernote('insertImage', res.url, function ($image) {
-										$image.attr('style', 'width: 100%;'); // Príklad nastavenia štýlu
-									});
+									// Skontrolujeme, či už obrázok existuje pred pridaním
+									var existingImages = $('#summernote').summernote('code').match(/<img [^>]*src="[^"]*"[^>]*>/gm);
+									var isDuplicate = false;
+
+									if (existingImages) {
+										existingImages.forEach(function(img) {
+											if (img.includes(res.url)) {
+												isDuplicate = true;
+											}
+										});
+									}
+
+									if (!isDuplicate) {
+										$('#summernote').summernote('insertImage', res.url, function ($image) {
+											$image.attr('style', 'width: 100%;'); // Príklad nastavenia štýlu
+										});
+									} else {
+										console.log('Duplicate image detected:', res.url);
+									}
 								} else {
 									console.log('Upload error:', res.error);
 								}
@@ -215,21 +218,5 @@
 			$('#content').val(content);
 		});
 	});
+
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
