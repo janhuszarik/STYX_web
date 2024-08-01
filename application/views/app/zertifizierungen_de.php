@@ -56,8 +56,8 @@
 							<br>
 							Diesen hohen Anspruch möchten wir aber nicht nur in unseren Produkten erfahrbar machen. Wer sich für die Herstellung von Naturkosmetik interessiert ist herzlich eingeladen uns im Pielachtal zu besuchen. Täglich bieten wir unseren Besuchern die Möglichkeit vieles rund ums Thema Naturkosmetik authentisch und hautnah zu erfahren. Unsere hellen und verglasten Produktionshallen gewähren trotz strenger Hygieneauflagen interessante Einblicke in unsere tägliche Arbeit. Der hauseigene Naturkosmetik-Shop und ein gemütliches Bistro laden zum längeren Verweilen ein.</a>
 						</p>
-						<div class="video-container">
-							<iframe width="560" height="315" src="https://www.youtube.com/embed/atSpOLLMDEY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<div class="ratio ratio-16x9">
+							<iframe frameborder="0" allowfullscreen="" src="https://www.youtube.com/embed/atSpOLLMDEY"></iframe>
 						</div>
 
 						<br><br>
