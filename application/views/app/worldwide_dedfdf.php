@@ -1,67 +1,49 @@
-<!DOCTYPE html>
-<html lang="sk">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Mapa sveta</title>
-	<style>
-		/*body {*/
-		/*	margin: 0;*/
-		/*	display: flex;*/
-		/*	justify-content: center;*/
-		/*	align-items: center;*/
-		/*	height: 100vh;*/
-		/*	background-color: #f4f4f4;*/
-		/*}*/
 
-		.wrap {
-			width: 100%;
-			max-width: 1050px;
-			height: auto;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			position: relative;
-		}
+<style>
 
-		svg {
-			width: 100%;
-			height: auto;
-			padding: 110px;
+	.wrap {
+		width: 100vw;
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
 
-		}
+	svg {
+		padding: 20px;
+	}
 
-		#tooltip {
-			padding: 15px;
-			background-color: transparent;
-			color: black;
-			width: 100%;
-			text-align: center;
-			position: absolute;
-			top: 10px;
-		}
+	#tooltip {
+		padding: 15px;
+		background-color: #eee;
+		color: #9c9c9c;
+		width: 100%;
+		text-align: center;
+		position: absolute;
+		top: 10px;
+	}
 
-		.land {
-			fill: #ccc;
-			fill-opacity: 1;
-			stroke: white;
-			stroke-opacity: 1;
-			stroke-width: 0.5;
-			transition: 0.2s ease-out;
-		}
+	.land {
+		fill: #ccc;
+		fill-opacity: 1;
+		stroke: white;
+		stroke-opacity: 1;
+		stroke-width: 0.5;
+		transition: 0.2s ease-out;
+	}
 
-		.land:hover {
-			fill: #a9a9a9;
-		}
+	.land:hover {
+		fill: #a9a9a9;
+	}
 
-		.tooltip {
-			background-color: #333;
-			color: #fff;
-			padding: 1em;
-		}
-	</style>
-</head>
-<body>
+	.tooltip {
+		background-color: #333;
+		color: #fff;
+		padding: 1em;
+	}
+
+</style>
 <div role="main" class="main">
 	<section class="page-header page-header-modern page-header-background page-header-background-md overlay overlay-color-primary overlay-show overlay-op-9 mb-0" style="background-image: url(<?=$image1?>);">
 		<div class="container translucent-background">
@@ -88,12 +70,17 @@
 </div>
 
 <div class="container py-4">
+
 	<div class="row">
 		<div class="col">
 			<div class="blog-posts single-post">
+
 				<article class="post post-large blog-single-post border-0 m-0 p-0">
+
 					<div class="post-content ms-0">
+
 						<h2 style="color: #aad998" class="font-weight-semi-bold">Ihr zuverlässiger Partner</h2>
+
 						<div class="post-meta">
 							<h4 class="text-color-black">Hier finden Sie alle Kontaktadressen unserer weltweiten Vertriebspartner.
 								<br> Bitte wenden Sie sich an die untenstehenden Kontakte Ihres Landes. <br>
@@ -101,8 +88,16 @@
 							</h4>
 						</div>
 						<div class="wrap">
-							<div id="tooltip">Select a Country</div>
-							<svg id="map" viewBox="0 0 1050 650" xmlns="http://www.w3.org/2000/svg">
+
+							<!-- (c) ammap.com | SVG map of World - Low -->
+							<svg id="map" width="1050" height="650" viewBox="0 0 1050 650" xmlns="http://www.w3.org/2000/svg" xmlns:amcharts="https://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+								<defs>
+									<amcharts:ammap projection="mercator" leftLongitude="-169.6" topLatitude="83.68" rightLongitude="190.25" bottomLatitude="-55.55"></amcharts:ammap>
+
+									<!-- All areas are listed in the line below. You can use this list in your script. -->
+									<!--{id:"AE"},{id:"AF"},{id:"AL"},{id:"AM"},{id:"AO"},{id:"AR"},{id:"AT"},{id:"AU"},{id:"AZ"},{id:"BA"},{id:"BD"},{id:"BE"},{id:"BF"},{id:"BG"},{id:"BI"},{id:"BJ"},{id:"BN"},{id:"BO"},{id:"BR"},{id:"BS"},{id:"BT"},{id:"BW"},{id:"BY"},{id:"BZ"},{id:"CA"},{id:"CD"},{id:"CF"},{id:"CG"},{id:"CH"},{id:"CI"},{id:"CL"},{id:"CM"},{id:"CN"},{id:"CO"},{id:"CR"},{id:"CU"},{id:"CY"},{id:"CZ"},{id:"DE"},{id:"DJ"},{id:"DK"},{id:"DO"},{id:"DZ"},{id:"EC"},{id:"EE"},{id:"EG"},{id:"EH"},{id:"ER"},{id:"ES"},{id:"ET"},{id:"FK"},{id:"FI"},{id:"FJ"},{id:"FR"},{id:"GA"},{id:"GB"},{id:"GE"},{id:"GF"},{id:"GH"},{id:"GL"},{id:"GM"},{id:"GN"},{id:"GQ"},{id:"GR"},{id:"GT"},{id:"GW"},{id:"GY"},{id:"HN"},{id:"HR"},{id:"HT"},{id:"HU"},{id:"ID"},{id:"IE"},{id:"IL"},{id:"IN"},{id:"IQ"},{id:"IR"},{id:"IS"},{id:"IT"},{id:"JM"},{id:"JO"},{id:"JP"},{id:"KE"},{id:"KG"},{id:"KH"},{id:"KP"},{id:"KR"},{id:"XK"},{id:"KW"},{id:"KZ"},{id:"LA"},{id:"LB"},{id:"LK"},{id:"LR"},{id:"LS"},{id:"LT"},{id:"LU"},{id:"LV"},{id:"LY"},{id:"MA"},{id:"MD"},{id:"ME"},{id:"MG"},{id:"MK"},{id:"ML"},{id:"MM"},{id:"MN"},{id:"MR"},{id:"MW"},{id:"MX"},{id:"MY"},{id:"MZ"},{id:"NA"},{id:"NC"},{id:"NE"},{id:"NG"},{id:"NI"},{id:"NL"},{id:"NO"},{id:"NP"},{id:"NZ"},{id:"OM"},{id:"PA"},{id:"PE"},{id:"PG"},{id:"PH"},{id:"PL"},{id:"PK"},{id:"PR"},{id:"PS"},{id:"PT"},{id:"PY"},{id:"QA"},{id:"RO"},{id:"RS"},{id:"RU"},{id:"RW"},{id:"SA"},{id:"SB"},{id:"SD"},{id:"SE"},{id:"SI"},{id:"SJ"},{id:"SK"},{id:"SL"},{id:"SN"},{id:"SO"},{id:"SR"},{id:"SS"},{id:"SV"},{id:"SY"},{id:"SZ"},{id:"TD"},{id:"TF"},{id:"TG"},{id:"TH"},{id:"TJ"},{id:"TL"},{id:"TM"},{id:"TN"},{id:"TR"},{id:"TT"},{id:"TW"},{id:"TZ"},{id:"UA"},{id:"UG"},{id:"US"},{id:"UY"},{id:"UZ"},{id:"VE"},{id:"VN"},{id:"VU"},{id:"YE"},{id:"ZA"},{id:"ZM"},{id:"ZW"}-->
+
+								</defs>
 								<g>
 									<path id="AE" title="United Arab Emirates" class="land" d="M619.87,393.72L620.37,393.57L620.48,394.41L622.67,393.93L624.99,394.01L626.68,394.1L628.6,392.03L630.7,390.05L632.47,388.15L633,389.2L633.38,391.64L631.95,391.65L631.72,393.65L632.22,394.07L630.95,394.67L630.94,395.92L630.12,397.18L630.05,398.39L629.48,399.03L621.06,397.51L619.98,394.43z"/>
 									<path id="AF" title="Afghanistan" class="land" d="M646.88,356.9L649.74,358.2L651.85,357.74L652.44,356.19L654.65,355.67L656.23,354.62L656.79,351.83L659.15,351.15L659.59,349.9L660.92,350.84L661.76,350.95L663.32,350.98L665.44,351.72L666.29,352.14L668.32,351.02L669.27,351.69L670.17,350.09L671.85,350.16L672.28,349.64L672.58,348.21L673.79,346.98L675.3,347.78L675,348.87L675.85,349.04L675.58,351.99L676.69,353.14L677.67,352.4L678.92,352.06L680.66,350.49L682.59,350.75L685.49,350.75L685.99,351.76L684.35,352.15L682.93,352.8L679.71,353.2L676.7,353.93L675.06,355.44L675.72,356.9L676.05,358.6L674.65,360.03L674.77,361.33L674,362.55L671.33,362.44L672.43,364.66L670.65,365.51L669.46,367.51L669.61,369.49L668.51,370.41L667.48,370.11L665.33,370.54L665.03,371.45L662.94,371.45L661.38,373.29L661.28,376.04L657.63,377.37L655.68,377.09L655.11,377.79L653.44,377.39L650.63,377.87L645.94,376.23L648.48,373.3L648.25,371.2L646.13,370.65L645.91,368.56L644.99,365.92L646.19,364.09L644.97,363.6L645.74,361.15z"/>
@@ -282,51 +277,40 @@
 									<path id="ZW" title="Zimbabwe" class="land" d="M562.71,527L561.22,526.7L560.27,527.06L558.92,526.55L557.78,526.52L555.99,525.16L553.82,524.7L553,522.8L552.99,521.75L551.79,521.43L548.62,518.18L547.73,516.47L547.17,515.95L546.09,513.6L549.22,513.92L550.13,514.26L551.08,514.19L552.63,512.3L555.07,509.9L556.08,509.68L556.42,508.67L558.01,507.52L560.14,507.12L560.32,508.2L562.66,508.14L563.96,508.75L564.56,509.47L565.9,509.68L567.35,510.62L567.36,514.31L566.81,516.35L566.69,518.55L567.14,519.43L566.83,521.17L566.4,521.44L565.66,523.59z"/>
 								</g>
 							</svg>
+							<div id="tooltip">Select a Country</div>
 						</div>
-						<div id="tooltip">Select a Country</div>
-					</div>
 
+					</div>
 				</article>
 
 			</div>
 		</div>
 	</div>
+	<script>document.addEventListener('DOMContentLoaded', (event) => {
+			const map = document.getElementById('map');
+			const toolTip = document.getElementById('tooltip');
+			const message = toolTip.innerHTML;
+
+			// grab the country name and display
+			function showCountryName(event) {
+				let countryName = event.target.getAttribute('title');
+				toolTip.innerHTML = countryName;
+			}
+
+			// show the default text
+			function hideCountryName() {
+				toolTip.innerHTML = message;
+			}
+
+			// set event listener on the map
+			map.addEventListener('mouseover', function(event){
+				// if the mouse hovers over a country
+				if (event.target.classList.contains('land')) {
+					showCountryName(event);
+				} else {
+					hideCountryName();
+				}
+			});
+		});
+	</script>
 </div>
-<script>
-	document.addEventListener('DOMContentLoaded', (event) => {
-		const map = document.getElementById('map');
-		const toolTip = document.getElementById('tooltip');
-		const message = toolTip.innerHTML;
-
-		// grab the country name and display
-		function showCountryName(event) {
-			let countryName = event.target.getAttribute('title');
-			toolTip.innerHTML = countryName;
-		}
-
-		// show the default text
-		function hideCountryName() {
-			toolTip.innerHTML = message;
-		}
-
-		// set event listener on the map
-		map.addEventListener('mouseover', function(event){
-			// if the mouse hovers over a country
-			if (event.target.classList.contains('land')) {
-				showCountryName(event);
-			} else {
-				hideCountryName();
-			}
-		});
-
-		// set event listener on click for showing country name
-		map.addEventListener('click', function(event){
-			// if the country is clicked
-			if (event.target.classList.contains('land')) {
-				showCountryName(event);
-			}
-		});
-	});
-</script>
-</body>
-</html>
