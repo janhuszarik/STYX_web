@@ -60,6 +60,14 @@ $lang['PHILOSOPHIE_SUB_TITLE'] 							= 'STYX Naturcosmetic stands for sustainab
 $lang['PHILOSOPHIE_DESCRIPTION'] 						= 'Discover STYX Naturcosmetic’s commitment to sustainability with eco-friendly production, recyclable packaging, and the use of green electricity. Explore our philosophy of using plant-based, organic raw materials and renewable energy sources for a greener future.';
 $lang['PHILOSOPHIE_KEYWORDS'] 							= 'STYX Naturcosmetic, sustainability, eco-friendly cosmetics, recyclable packaging, green electricity, organic raw materials, climate-neutral production, renewable energy, natural cosmetics, photovoltaic system, wood chips, Green Brand, Climate Alliance';
 
+$lang['ZERTIFIZIERUNGEN_TITLE'] 						= 'Certifications & Labels';
+$lang['ZERTIFIZIERUNGEN_SUB_TITLE'] 					= 'Exclusive production at the Austrian location – with modern, climate-neutral production.';
+$lang['ZERTIFIZIERUNGEN_DESCRIPTION'] 					= 'Exclusive production at the Austrian location – with modern, climate-neutral production';
+$lang['ZERTIFIZIERUNGEN_KEYWORDS'] 						= 'ECOCERT, COSMOS, Certification, Organic, Labels';
+
+$lang['WORLDWIDE_TITLE'] 								= 'STYX Worldwide | STYX Naturcosmetic GmbH';
+$lang['WORLDWIDE_DESCRIPTION'] 							= 'STYX WORLDWIDE, Austrian quality around the world, STYX Naturcosmetic, World of STYX, Natural Cosmetics';
+$lang['WORLDWIDE_KEYWORDS'] 							= 'STYX WORLDWIDE - Austrian quality around the world';
 
 //----------------------------------------------------------------------------------------------------------------------
 //Text

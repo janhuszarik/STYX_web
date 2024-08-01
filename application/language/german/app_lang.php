@@ -61,7 +61,14 @@ $lang['PHILOSOPHIE_SUB_TITLE'] 							= 'STYX Naturcosmetic steht für nachhalti
 $lang['PHILOSOPHIE_DESCRIPTION'] 						= 'Entdecken Sie das Engagement von STYX Naturcosmetic für Nachhaltigkeit mit umweltfreundlicher Produktion, recycelbaren Verpackungen und der Nutzung von Ökostrom. Erfahren Sie mehr über unsere Philosophie der Verwendung von pflanzlichen, biologischen Rohstoffen und erneuerbaren Energiequellen für eine grünere Zukunft.';
 $lang['PHILOSOPHIE_KEYWORDS'] 							= 'STYX Naturcosmetic, Nachhaltigkeit, umweltfreundliche Kosmetik, recycelbare Verpackungen, Ökostrom, biologische Rohstoffe, klimaneutrale Produktion, erneuerbare Energie, Naturkosmetik, Photovoltaikanlage, Hackschnitzel, Green Brand, Klimabündnis';
 
+$lang['ZERTIFIZIERUNGEN_TITLE'] 						= 'Zertifizierungen & Kennzeichnungen';
+$lang['ZERTIFIZIERUNGEN_SUB_TITLE'] 					= 'Ausschließliche Produktion am österreichischen Standort – mit moderner, klimaneutraler Produktion.';
+$lang['ZERTIFIZIERUNGEN_DESCRIPTION'] 					= 'Ausschließliche Produktion am österreichischen Standort  mit moderner, klimaneutraler Produktion';
+$lang['ZERTIFIZIERUNGEN_KEYWORDS'] 						= 'ECOCERT, COSMOS, Zertifizierung, Bio, Kennezichnungen';
 
+$lang['WORLDWIDE_TITLE'] 								= 'STYX Worldwide | STYX Naturcosmetic GmbH';
+$lang['WORLDWIDE_DESCRIPTION'] 							= 'STYX WORLDWIDE, Österreichische Qualität rund um die Welt, STYx Naturcosmetic, World of STYX, Naturkosmetik';
+$lang['WORLDWIDE_KEYWORDS'] 							= 'STYX WORLDWIDE - Österreichische Qualität rund um die Welt';
 
 //----------------------------------------------------------------------------------------------------------------------
 //Text

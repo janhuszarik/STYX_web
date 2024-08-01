@@ -326,6 +326,56 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
+	public function zertifizierungen() {
+		$post = $this->input->post();
+		if (!empty($post)) {
+			if ($this->App_model->philosophie($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect($this->refresh);
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect($this->refresh);
+			}
+		}
+
+		// Nastavenie rôznych stránok podľa jazyka
+		if (language() == 'en') {
+			$data['page'] = 'app/zertifizierungen_en';
+		} elseif (language() == 'de') {
+			$data['page'] = 'app/zertifizierungen_de';
+		} else {
+			$data['page'] = 'app/zertifizierungen';
+		}
+
+		$data['title'] = lang('ZERTIFIZIERUNGEN_TITLE');
+		$data['sub_title'] = lang('ZERTIFIZIERUNGEN_SUB_TITLE');
+		$data['description'] = lang('ZERTIFIZIERUNGEN_DESCRIPTION');
+		$data['keywords'] = lang('ZERTIFIZIERUNGEN_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/philosophie.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
+
+	function worldwide(){
+
+		// Nastavenie rôznych stránok podľa jazyka
+		if (language() == 'en') {
+			$data['page'] = 'app/worldwide_en';
+		} elseif (language() == 'de') {
+			$data['page'] = 'app/worldwide_de';
+		} else {
+			$data['page'] = 'app/worldwide';
+		}
+		$data['title'] 				= lang('WORLDWIDE_TITLE');
+		$data['description'] 		= lang('WORLDWIDE_DESCRIPTION');
+		$data['keywords'] 			= lang('WORLDWIDE_KEYWORDS');
+		$data['image'] 				= BASE_URL . LOGO;
+		$data['image1'] 			= BASE_URL.'img/breadcrumb/worldwide.jpg';
+		$this->load->view('layout/normal', $data);
+
+	}
+
 
 	function error404(){
         
