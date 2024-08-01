@@ -70,7 +70,14 @@ class App extends CI_Controller
 
 	function aboutStyx(){
 
-		$data['page'] 				= 'app/aboutStyx';
+		// Nastavenie rôznych stránok podľa jazyka
+		if (language() == 'en') {
+			$data['page'] = 'app/aboutStyx_en';
+		} elseif (language() == 'de') {
+			$data['page'] = 'app/aboutStyx_de';
+		} else {
+			$data['page'] = 'app/aboutStyx';
+		}
 		$data['title'] 				= lang('ABOUT_STYX_TITLE');
 		$data['description'] 		= lang('ABOUT_STYX_DESCRIPTION');
 		$data['keywords'] 			= lang('ABOUT_STYX_KEYWORDS');
@@ -284,6 +291,42 @@ class App extends CI_Controller
 		// Načítanie view s údajmi
 		$this->load->view('layout/normal', $data);
 	}
+
+	public function philosophie() {
+		$post = $this->input->post();
+		if (!empty($post)) {
+			if ($this->App_model->philosophie($post)) {
+				$this->session->set_flashdata('success', 'alle daten sind gespeichert');
+				redirect($this->refresh);
+			} else {
+				$this->session->set_flashdata('error', 'fehler, versuchen noch einmal');
+				redirect($this->refresh);
+			}
+		}
+
+
+
+
+		// Nastavenie rôznych stránok podľa jazyka
+		if (language() == 'en') {
+			$data['page'] = 'app/Philosophie_en';
+		} elseif (language() == 'de') {
+			$data['page'] = 'app/Philosophie_de';
+		} else {
+			$data['page'] = 'app/Philosophie';
+		}
+
+		$data['title'] = lang('PHILOSOPHIE_TITLE');
+		$data['sub_title'] = lang('PHILOSOPHIE_SUB_TITLE');
+		$data['description'] = lang('PHILOSOPHIE_DESCRIPTION');
+		$data['keywords'] = lang('PHILOSOPHIE_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
+		$data['image1'] = BASE_URL . 'img/breadcrumb/philosophie.jpg';
+
+		$this->load->view('layout/normal', $data);
+	}
+
+
 	function error404(){
         
         header("HTTP/1.1 404 Not Found");

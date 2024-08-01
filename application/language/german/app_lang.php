@@ -56,6 +56,12 @@ $lang['WORDOFSTYX_TITLE'] 								= 'Betriebsführungen';
 $lang['WORDOFSTYX_DESCRIPTION'] 						= 'Besuchen Sie uns in Ober-Grafendorf NÖ – Naturkosmetik, BIO Schokolade & vieles mehr';
 $lang['WORDOFSTYX_KEYWORDS'] 							= 'Tauchen Sie ein in die Welt der Naturkosmetik- und Schokoladeherstellung  ganz gleich ob alleine, zu zweit oder in Gruppen. Auch perfekt für Schulausflüge!';
 
+$lang['PHILOSOPHIE_TITLE'] 								= 'Nachhaltigkeits-Philosophie';
+$lang['PHILOSOPHIE_SUB_TITLE'] 							= 'STYX Naturcosmetic steht für nachhaltige, umweltfreundliche und klimaneutrale Produktion von Naturkosmetik.';
+$lang['PHILOSOPHIE_DESCRIPTION'] 						= 'Entdecken Sie das Engagement von STYX Naturcosmetic für Nachhaltigkeit mit umweltfreundlicher Produktion, recycelbaren Verpackungen und der Nutzung von Ökostrom. Erfahren Sie mehr über unsere Philosophie der Verwendung von pflanzlichen, biologischen Rohstoffen und erneuerbaren Energiequellen für eine grünere Zukunft.';
+$lang['PHILOSOPHIE_KEYWORDS'] 							= 'STYX Naturcosmetic, Nachhaltigkeit, umweltfreundliche Kosmetik, recycelbare Verpackungen, Ökostrom, biologische Rohstoffe, klimaneutrale Produktion, erneuerbare Energie, Naturkosmetik, Photovoltaikanlage, Hackschnitzel, Green Brand, Klimabündnis';
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //Text

@@ -103,27 +103,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/commentar/edit/:num'] 		= 'admin/commentarSave';
 	$route['admin/commentar/del/:num']			= 'admin/commentarSave';
 
-	$route['Unternehmen/AboutStyx']			= 'App/aboutStyx';
-	$route['Naturkosmetik']					= 'App/naturkosmetik';
-	$route['app/naturkosmetik']				= 'App/naturkosmetik';
-	$route['Aroma-Derm']					= 'App/aromaDerm';
-	$route['app/aromaDerm']					= 'App/aromaDerm';
-	$route['Schokoladen']					= 'App/schokoladen';
-	$route['app/schokoladen']				= 'App/schokoladen';
-	$route['Schokolade/figuren']			= 'App/figuren';
-	$route['Private-labeling']				= 'App/privateLabeling';
-	$route['app/Private-labeling']			= 'App/privateLabeling';
-	$route['Werbegeschenke']				= 'App/werbegeschenke';
-	$route['app/werbegeschenke']			= 'App/werbegeschenke';
-	$route['Workshops']						= 'App/workshops';
-	$route['app/workshops']					= 'App/workshops';
-	$route['Betriebsfuehrungen']			= 'App/wordOfStyx';
-	$route['app/wordOfStyx']				= 'App/wordOfStyx';
+	$route['Unternehmen/AboutStyx']				= 'App/aboutStyx';
+	$route['Naturkosmetik']						= 'App/naturkosmetik';
+	$route['app/naturkosmetik']					= 'App/naturkosmetik';
+	$route['Aroma-Derm']						= 'App/aromaDerm';
+	$route['app/aromaDerm']						= 'App/aromaDerm';
+	$route['Schokoladen']						= 'App/schokoladen';
+	$route['app/schokoladen']					= 'App/schokoladen';
+	$route['Schokolade/figuren']				= 'App/figuren';
+	$route['Private-labeling']					= 'App/privateLabeling';
+	$route['app/Private-labeling']				= 'App/privateLabeling';
+	$route['Werbegeschenke']					= 'App/werbegeschenke';
+	$route['app/werbegeschenke']				= 'App/werbegeschenke';
+	$route['Workshops']							= 'App/workshops';
+	$route['app/workshops']						= 'App/workshops';
+	$route['Betriebsfuehrungen']				= 'App/wordOfStyx';
+	$route['app/wordOfStyx']					= 'App/wordOfStyx';
+	$route['Unternehmen/Philosophie']			= 'App/philosophie';
+	$route['app/philosophie']			= 'App/philosophie';
+
 	$route['Company/About-Styx']			= 'App/contact';
 	$route['news_article/:num']		= 'App/news_article';
 	$route['news_article/:num'] 		= 'App/news_article/$1/$2';
-
-$route['admin/uploadImage'] = 'admin/uploadImage';
+	$route['admin/uploadImage'] = 'admin/uploadImage';
 
 
 

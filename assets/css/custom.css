@@ -461,3 +461,12 @@
 	text-decoration: none;
 	cursor: pointer;
 }
+.video-container {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 560px; /* Fixed width to match the iframe */
+	height: 315px; /* Fixed height to match the iframe */
+	background: #000;
+	overflow: hidden;
+}
