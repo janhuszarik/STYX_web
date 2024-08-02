@@ -4147,24 +4147,25 @@ html .list-tertiary.list-icons li > [class*="fa-"]:first-child,
 html .list-tertiary.list-icons li a:first-child > [class*="fa-"]:first-child,
 html .list-tertiary.list-icons li > .icons:first-child,
 html .list-tertiary.list-icons li a:first-child > .icons:first-child {
-	color: #2BAAB1;
-	border-color: #2BAAB1;
+	color: #026dc5;
+	border-color: #026dc5;
 }
+
 
 html .list-tertiary.list-icons.list-icons-style-3 li > [class*="fa-"]:first-child,
 html .list-tertiary.list-icons.list-icons-style-3 li a:first-child > [class*="fa-"]:first-child,
 html .list-tertiary.list-icons.list-icons-style-3 li > .icons:first-child,
 html .list-tertiary.list-icons.list-icons-style-3 li a:first-child > .icons:first-child {
-	background-color: #2BAAB1;
+	background-color: #026dc5;
 	color: #FFF;
 }
 
 html .list-tertiary.list-ordened li:before {
-	color: #2BAAB1;
+	color: #026dc5;
 }
 
 html .list-tertiary.list-ordened.list-ordened-style-3 li:before {
-	background-color: #2BAAB1;
+	background-color: #026dc5;
 	color: #FFF;
 }
 
@@ -4193,6 +4194,56 @@ html .list-quaternary.list-ordened.list-ordened-style-3 li:before {
 	color: #FFF;
 }
 
+
+html .list-yellow.list-icons li > [class*="fa-"]:first-child,
+html .list-yellow.list-icons li a:first-child > [class*="fa-"]:first-child,
+html .list-yellow.list-icons li > .icons:first-child,
+html .list-yellow.list-icons li a:first-child > .icons:first-child {
+	color: #cfa600;
+	border-color: #ffffff;
+}
+
+html .list-yellow.list-icons.list-icons-style-3 li > [class*="fa-"]:first-child,
+html .list-yellow.list-icons.list-icons-style-3 li a:first-child > [class*="fa-"]:first-child,
+html .list-yellow.list-icons.list-icons-style-3 li > .icons:first-child,
+html .list-yellow.list-icons.list-icons-style-3 li a:first-child > .icons:first-child {
+	background-color: #cfa600;
+	color: #FFF;
+}
+
+html .list-yellow.list-ordened li:before {
+	color: #cfa600;
+}
+
+html .list-yellow.list-ordened.list-ordened-style-3 li:before {
+	background-color: #cfa600;
+	color: #FFF;
+}
+
+html .list-white.list-icons li > [class*="fa-"]:first-child,
+html .list-white.list-icons li a:first-child > [class*="fa-"]:first-child,
+html .list-white.list-icons li > .icons:first-child,
+html .list-white.list-icons li a:first-child > .icons:first-child {
+	color: #8f938f;
+	border-color: #ffffff;
+}
+
+html .list-white.list-icons.list-icons-style-3 li > [class*="fa-"]:first-child,
+html .list-white.list-icons.list-icons-style-3 li a:first-child > [class*="fa-"]:first-child,
+html .list-white.list-icons.list-icons-style-3 li > .icons:first-child,
+html .list-white.list-icons.list-icons-style-3 li a:first-child > .icons:first-child {
+	background-color: #919993;
+	color: #FFF;
+}
+
+html .list-white.list-ordened li:before {
+	color: #909892;
+}
+
+html .list-white.list-ordened.list-ordened-style-3 li:before {
+	background-color: #8f9791;
+	color: #FFF;
+}
 html .list-dark.list-icons li > [class*="fa-"]:first-child,
 html .list-dark.list-icons li a:first-child > [class*="fa-"]:first-child,
 html .list-dark.list-icons li > .icons:first-child,

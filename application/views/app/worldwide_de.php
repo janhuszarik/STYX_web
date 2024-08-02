@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="sk">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Mapa sveta</title>
+
 	<style>
 		.land {
 			fill: #ccc;
@@ -33,14 +28,9 @@
 		}
 
 		.land:hover {
-			fill: #a9a9a9;
+			fill: #a5cde2;
 		}
 
-		.tooltip {
-			background-color: #333;
-			color: #fff;
-			padding: 1em;
-		}
 
 		.modal {
 			display: none; /* Skryjeme modal, pokiaľ nie je aktívny */
@@ -76,10 +66,19 @@
 			text-decoration: none;
 			cursor: pointer;
 		}
+		.tooltipStyle{
+			color: #0a0e14; font-weight: bold; font-size: 16px; background-color: #f1f1f1;
+		}
+		.list-containerMap {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 60px;
+
+		}
+
+
 
 	</style>
-</head>
-<body>
 <div role="main" class="main">
 	<section class="page-header page-header-modern page-header-background page-header-background-md overlay overlay-color-primary overlay-show overlay-op-9 mb-0" style="background-image: url(<?=$image1?>);">
 		<div class="container translucent-background">
@@ -124,8 +123,32 @@
 								<p id="countryInfo">.</p>
 							</div>
 						</div>
-						<div class="wrap">
-							<div id="tooltip">Select a Country</div>
+						<br><br>
+						<strong class="text-color-black"><?=lang('MAP_LEGENDE')?>:</strong>
+						<div class="col-lg-12">
+							<div class="list-containerMap">
+								<ul class="list list-icons list-icons-style-3 list-primary">
+									<li><i class="fas fa-location"></i> <?=lang('WORLD_PARTNER_GREEN')?></li>
+								</ul>
+
+								<ul class="list list-icons list-icons-style-3 list-tertiary">
+									<li><i class="fas fa-location"></i> <?=lang('WORLD_PARTNER_BLUE')?></li>
+								</ul>
+
+								<ul class="list list-icons list-icons-style-3 list-yellow">
+									<li><i class="fas fa-location"></i> <?=lang('WORLD_PARTNER_YELLOW')?></li>
+								</ul>
+
+								<ul class="list list-icons list-icons-style-3 list-white">
+									<li><i class="fas fa-check"></i>  <?=lang('WORLD_PARTNER_OTHER_COUNTRIES')?></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="wrap text-center">
+							<div class="tooltipStyle" id="tooltip"><?=lang('SELECT_COUNTRY')?></div>
+							<br><br>
+
 							<svg id="map" viewBox="0 0 1050 650" xmlns="http://www.w3.org/2000/svg">
 								<g>
 									<path id="AE" title="United Arab Emirates" class="land" d="M619.87,393.72L620.37,393.57L620.48,394.41L622.67,393.93L624.99,394.01L626.68,394.1L628.6,392.03L630.7,390.05L632.47,388.15L633,389.2L633.38,391.64L631.95,391.65L631.72,393.65L632.22,394.07L630.95,394.67L630.94,395.92L630.12,397.18L630.05,398.39L629.48,399.03L621.06,397.51L619.98,394.43z"/>

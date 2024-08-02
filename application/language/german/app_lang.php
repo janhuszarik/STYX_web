@@ -15,6 +15,12 @@ $lang['COMMENT']                                       	= 'Kommentar';
 $lang['GDPR_TEXT']                                      = 'Ich stimme der Verarbeitung meiner persönlichen Daten zu. ';
 $lang['GDPR_FOR_LINK']                                  = 'Datenschutzerklärung. ';
 $lang['MORE_INFO']                                  	= 'Mehr Informationen ';
+$lang['SELECT_COUNTRY']                                 = 'Wählen Sie ein Land aus';
+$lang['MAP_LEGENDE']                                 	= 'Kartenlegende';
+$lang['WORLD_PARTNER_GREEN']                            = 'Weltweiten Vertriebspartner';
+$lang['WORLD_PARTNER_BLUE']                            	= 'Export in Länder';
+$lang['WORLD_PARTNER_YELLOW']                           = 'Aktuell markierter Staat';
+$lang['WORLD_PARTNER_OTHER_COUNTRIES']                  = 'Andere Länder';
 
 
 
