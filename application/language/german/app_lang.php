@@ -350,34 +350,38 @@ $lang['ROUTTE_BUTTON']											= 'Anfahrt mit Auto';
 
 $lang['INFOCARD_HEAD_CARD']										= 'Gut zu wissen';
 $lang['INFOCARD_TEXT_CARD'] 									= 'Barrierefreiheit';
+
+
+$lang['MAP_AZ'] 												= '<p>STYX Vertretung in Azerbaijan ist: <a href="http://www.sultansaba.az" target="_blank">Sultan Saba</a></p>';
+$lang['MAP_BG'] 												= '<p>STYX Vertretung in Bulgarien ist: <a href="https://www.styx-biocosmetics.bg/" target="_blank">STYX-East OOD</a></p>';
+$lang['MAP_CN'] 												= '<p>STYX Vertretung in China ist: <a href="http://www.styx-cn.com" target="_blank">STYX China</a></p>';
+$lang['MAP_CY'] 												= '<p>STYX Vertretung in Zypern ist: <a href="https://m.facebook.com/greenselections.organic" target="_blank">Green Selections Trading LTD</a></p>';
+$lang['MAP_CZ'] 												= '<p>STYX Vertretung in Tschechien ist: <a href="http://www.styxcz.cz" target="_blank">STYX Czech</a></p>';
+$lang['MAP_GB'] 												= '<p>STYX Vertretung in Vereinigtes Königreich ist: <a href="http://www.sharlleteaesthetics.com/" target="_blank">Sharllete aesthetics</a></p>';
+$lang['MAP_GR'] 												= '<p>STYX Vertretung in Griechenland ist: <a href="http://www.bioleon.gr" target="_blank">bio LEON</a></p>';
+$lang['MAP_IS'] 												= '<p>STYX Vertretung in Island ist: <a href="http://www.heilsaogutlit.is/" target="_blank">Heilsa og útlit</a></p>';
+$lang['MAP_HU'] 												= '<p>STYX Vertretung in Ungarn ist: <a href="http://styxnaturkozmetika.hu/" target="_blank">STYX Natúrkozmetika</a></p>';
+$lang['MAP_KZ'] 												= '<p>STYX Vertretung in Kasachstan ist: <a href="https://www.styx.kz/" target="_blank">LLP "Love my body"</a></p>';
+$lang['MAP_KE'] 												= '<p>STYX Vertretung in Kenia ist: <a href="https://greenglazebeauty.com/" target="_blank">Green Glaze beauty</a></p>';
+$lang['MAP_LV'] 												= '<p>STYX Vertretung in Lettland ist: <a href="http://www.eo-i.lv" target="_blank">EO International</a></p>';
+$lang['MAP_LT'] 												= '<p>STYX Vertretung in Litauen ist: <a href="http://www.feminabona.lt" target="_blank">Femina Bona</a></p>';
+$lang['MAP_LU'] 												= '<p>STYX Vertretung in Luxemburg ist: <a href="http://www.hospilux.lu" target="_blank">Hospilux</a></p>';
+$lang['MAP_NL'] 												= '<p>STYX Vertretung in Niederlande ist: <a href="http://www.dille-kamille.nl" target="_blank">Dille Kamille</a></p>';
+$lang['MAP_PL'] 												= '<p>STYX Vertretung in Polen ist: <a href="http://www.aroma-derm.pl/" target="_blank">Aroma Derm Poland</a></p>';
+$lang['MAP_SA'] 												= '<p>STYX Vertretung in Saudi-Arabien ist: <a href="http://www.s-jomana.com/eng/index.php" target="_blank">Saudi Jomana</a></p>';
+$lang['MAP_SG'] 												= '<p>STYX Vertretung in Singapur ist: <a href="mailto:ejb@seal.at" target="_blank">Singapore | PAEOS Pte. Ltd.</a>, <br> Ernst Becker, <br> 12A St. Helier"s Ave, 555812 Singapore, <br> SINGAPORE, <br> Tel: +65 96160630, <br> E-Mail: <a href="mailto:ejb@seal.at">ejb@seal.at</a></p>';
+$lang['MAP_KR'] 												= '<p>STYX Vertretung in Südkorea ist: <a href="http://www.aromaderm.kr" target="_blank">shespia.com LTD</a></p>';
+$lang['MAP_SE'] 												= '<p>STYX Vertretung in Schweden ist: <a href="http://www.styx-scandinavia.com/" target="_blank">STYX Scandinavia AB</a></p>';
+$lang['MAP_TW'] 												= '<p>STYX Vertretung in Taiwan ist: <a href="http://www.styx-cn.com" target="_blank">STYX Taiwan</a></p>';
+$lang['MAP_UA'] 												= '<p>STYX Vertretung in Ukraine ist: <a href="http://www.styx-ukraine.com.ua" target="_blank">STYX Ukraine</a></p>';
+$lang['MAP_US'] 												= '<p>STYX Vertretung in Vereinigte Staaten ist: <a href="https://styxnaturcosmetics.com/" target="_blank">STYX USA</a></p>';
+$lang['MAPS_HEADER'] 											= 'Ihr zuverlässiger Partner';
+$lang['MAPS_TEXT'] 												= 'Hier finden Sie alle Kontaktadressen unserer weltweiten Vertriebspartner. <br>	
+																   Bitte wenden Sie sich an die untenstehenden Kontakte Ihres Landes. <br>
+																   Sollte in Ihrem Land kein Kontakt vorhanden sein, freuen wir uns unter export@styx.at auf Ihre Anfrage – Anita Wittmann, Export';
+
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový
-
-$lang['MAP_AZ'] = '<p>STYX Vertretung in Azerbaijan ist: <a href="http://www.sultansaba.az" target="_blank">Sultan Saba</a></p>';
-$lang['MAP_BG'] = '<p>STYX Vertretung in Bulgarien ist: <a href="https://www.styx-biocosmetics.bg/" target="_blank">STYX-East OOD</a></p>';
-$lang['MAP_CN'] = '<p>STYX Vertretung in China ist: <a href="http://www.styx-cn.com" target="_blank">STYX China</a></p>';
-$lang['MAP_CY'] = '<p>STYX Vertretung in Zypern ist: <a href="https://m.facebook.com/greenselections.organic" target="_blank">Green Selections Trading LTD</a></p>';
-$lang['MAP_CZ'] = '<p>STYX Vertretung in Tschechien ist: <a href="http://www.styxcz.cz" target="_blank">STYX Czech</a></p>';
-$lang['MAP_GB'] = '<p>STYX Vertretung in Vereinigtes Königreich ist: <a href="http://www.sharlleteaesthetics.com/" target="_blank">Sharllete aesthetics</a></p>';
-$lang['MAP_GR'] = '<p>STYX Vertretung in Griechenland ist: <a href="http://www.bioleon.gr" target="_blank">bio LEON</a></p>';
-$lang['MAP_IS'] = '<p>STYX Vertretung in Island ist: <a href="http://www.heilsaogutlit.is/" target="_blank">Heilsa og útlit</a></p>';
-$lang['MAP_HU'] = '<p>STYX Vertretung in Ungarn ist: <a href="http://styxnaturkozmetika.hu/" target="_blank">STYX Natúrkozmetika</a></p>';
-$lang['MAP_KZ'] = '<p>STYX Vertretung in Kasachstan ist: <a href="https://www.styx.kz/" target="_blank">LLP "Love my body"</a></p>';
-$lang['MAP_KE'] = '<p>STYX Vertretung in Kenia ist: <a href="https://greenglazebeauty.com/" target="_blank">Green Glaze beauty</a></p>';
-$lang['MAP_LV'] = '<p>STYX Vertretung in Lettland ist: <a href="http://www.eo-i.lv" target="_blank">EO International</a></p>';
-$lang['MAP_LT'] = '<p>STYX Vertretung in Litauen ist: <a href="http://www.feminabona.lt" target="_blank">Femina Bona</a></p>';
-$lang['MAP_LU'] = '<p>STYX Vertretung in Luxemburg ist: <a href="http://www.hospilux.lu" target="_blank">Hospilux</a></p>';
-$lang['MAP_NL'] = '<p>STYX Vertretung in Niederlande ist: <a href="http://www.dille-kamille.nl" target="_blank">Dille Kamille</a></p>';
-$lang['MAP_PL'] = '<p>STYX Vertretung in Polen ist: <a href="http://www.aroma-derm.pl/" target="_blank">Aroma Derm Poland</a></p>';
-$lang['MAP_SA'] = '<p>STYX Vertretung in Saudi-Arabien ist: <a href="http://www.s-jomana.com/eng/index.php" target="_blank">Saudi Jomana</a></p>';
-$lang['MAP_SG'] = '<p>STYX Vertretung in Singapur ist: <a href="mailto:ejb@seal.at" target="_blank">Singapore | PAEOS Pte. Ltd.</a>, <br> Ernst Becker, <br> 12A St. Helier"s Ave, 555812 Singapore, <br> SINGAPORE, <br> Tel: +65 96160630, <br> E-Mail: <a href="mailto:ejb@seal.at">ejb@seal.at</a></p>';
-$lang['MAP_KR'] = '<p>STYX Vertretung in Südkorea ist: <a href="http://www.aromaderm.kr" target="_blank">shespia.com LTD</a></p>';
-$lang['MAP_SE'] = '<p>STYX Vertretung in Schweden ist: <a href="http://www.styx-scandinavia.com/" target="_blank">STYX Scandinavia AB</a></p>';
-$lang['MAP_TW'] = '<p>STYX Vertretung in Taiwan ist: <a href="http://www.styx-cn.com" target="_blank">STYX Taiwan</a></p>';
-$lang['MAP_UA'] = '<p>STYX Vertretung in Ukraine ist: <a href="http://www.styx-ukraine.com.ua" target="_blank">STYX Ukraine</a></p>';
-$lang['MAP_US'] = '<p>STYX Vertretung in Vereinigte Staaten ist: <a href="https://styxnaturcosmetics.com/" target="_blank">STYX USA</a></p>';
-
-
 
 
 

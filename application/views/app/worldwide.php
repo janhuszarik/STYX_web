@@ -103,11 +103,9 @@
 			<div class="blog-posts single-post">
 				<article class="post post-large blog-single-post border-0 m-0 p-0">
 					<div class="post-content ms-0">
-						<h2 style="color: #aad998" class="font-weight-semi-bold">Ihr zuverlässiger Partner</h2>
+						<h2 style="color: #aad998" class="font-weight-semi-bold"><?=lang('MAPS_HEADER')?></h2>
 						<div class="post-meta">
-							<h4 class="text-color-black">Hier finden Sie alle Kontaktadressen unserer weltweiten Vertriebspartner.
-								<br> Bitte wenden Sie sich an die untenstehenden Kontakte Ihres Landes. <br>
-								Sollte in Ihrem Land kein Kontakt vorhanden sein, freuen wir uns unter export@styx.at auf Ihre Anfrage – Anita Wittmann, Export
+							<h4 class="text-color-black"><?=lang('MAPS_TEXT')?>
 							</h4>
 						</div>
 						<div id="myModal" class="modal">

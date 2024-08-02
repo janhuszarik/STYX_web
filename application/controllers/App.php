@@ -359,14 +359,8 @@ class App extends CI_Controller
 
 	function worldwide(){
 
-		// Nastavenie rôznych stránok podľa jazyka
-		if (language() == 'en') {
-			$data['page'] = 'app/worldwide_en';
-		} elseif (language() == 'de') {
-			$data['page'] = 'app/worldwide_de';
-		} else {
-			$data['page'] = 'app/worldwide';
-		}
+
+		$data['page'] 				= 'app/worldwide';
 		$data['title'] 				= lang('WORLDWIDE_TITLE');
 		$data['description'] 		= lang('WORLDWIDE_DESCRIPTION');
 		$data['keywords'] 			= lang('WORLDWIDE_KEYWORDS');

@@ -334,5 +334,34 @@ $lang['ROUTTE_BUTTON']											= 'Directions by Car';
 
 $lang['INFOCARD_HEAD_CARD']										= 'Good to Know';
 $lang['INFOCARD_TEXT_CARD'] 									= 'Accessibility';
+
+$lang['MAP_AZ'] 												= '<p>STYX representation in Azerbaijan is: <a href="http://www.sultansaba.az" target="_blank">Sultan Saba</a></p>';
+$lang['MAP_BG'] 												= '<p>STYX representation in Bulgaria is: <a href="https://www.styx-biocosmetics.bg/" target="_blank">STYX-East OOD</a></p>';
+$lang['MAP_CN'] 												= '<p>STYX representation in China is: <a href="http://www.styx-cn.com" target="_blank">STYX China</a></p>';
+$lang['MAP_CY'] 												= '<p>STYX representation in Cyprus is: <a href="https://m.facebook.com/greenselections.organic" target="_blank">Green Selections Trading LTD</a></p>';
+$lang['MAP_CZ'] 												= '<p>STYX representation in Czech Republic is: <a href="http://www.styxcz.cz" target="_blank">STYX Czech</a></p>';
+$lang['MAP_GB'] 												= '<p>STYX representation in United Kingdom is: <a href="http://www.sharlleteaesthetics.com/" target="_blank">Sharllete aesthetics</a></p>';
+$lang['MAP_GR'] 												= '<p>STYX representation in Greece is: <a href="http://www.bioleon.gr" target="_blank">bio LEON</a></p>';
+$lang['MAP_IS'] 												= '<p>STYX representation in Iceland is: <a href="http://www.heilsaogutlit.is/" target="_blank">Heilsa og útlit</a></p>';
+$lang['MAP_HU'] 												= '<p>STYX representation in Hungary is: <a href="http://styxnaturkozmetika.hu/" target="_blank">STYX Natúrkozmetika</a></p>';
+$lang['MAP_KZ'] 												= '<p>STYX representation in Kazakhstan is: <a href="https://www.styx.kz/" target="_blank">LLP "Love my body"</a></p>';
+$lang['MAP_KE'] 												= '<p>STYX representation in Kenya is: <a href="https://greenglazebeauty.com/" target="_blank">Green Glaze beauty</a></p>';
+$lang['MAP_LV'] 												= '<p>STYX representation in Latvia is: <a href="http://www.eo-i.lv" target="_blank">EO International</a></p>';
+$lang['MAP_LT'] 												= '<p>STYX representation in Lithuania is: <a href="http://www.feminabona.lt" target="_blank">Femina Bona</a></p>';
+$lang['MAP_LU'] 												= '<p>STYX representation in Luxembourg is: <a href="http://www.hospilux.lu" target="_blank">Hospilux</a></p>';
+$lang['MAP_NL'] 												= '<p>STYX representation in Netherlands is: <a href="http://www.dille-kamille.nl" target="_blank">Dille Kamille</a></p>';
+$lang['MAP_PL'] 												= '<p>STYX representation in Poland is: <a href="http://www.aroma-derm.pl/" target="_blank">Aroma Derm Poland</a></p>';
+$lang['MAP_SA'] 												= '<p>STYX representation in Saudi Arabia is: <a href="http://www.s-jomana.com/eng/index.php" target="_blank">Saudi Jomana</a></p>';
+$lang['MAP_SG'] 												= '<p>STYX representation in Singapore is: <a href="mailto:ejb@seal.at" target="_blank">Singapore | PAEOS Pte. Ltd.</a>, <br> Ernst Becker, <br> 12A St. Helier"s Ave, 555812 Singapore, <br> SINGAPORE, <br> Tel: +65 96160630, <br> E-Mail: <a href="mailto:ejb@seal.at">ejb@seal.at</a></p>';
+$lang['MAP_KR'] 												= '<p>STYX representation in South Korea is: <a href="http://www.aromaderm.kr" target="_blank">shespia.com LTD</a></p>';
+$lang['MAP_SE'] 												= '<p>STYX representation in Sweden is: <a href="http://www.styx-scandinavia.com/" target="_blank">STYX Scandinavia AB</a></p>';
+$lang['MAP_TW'] 												= '<p>STYX representation in Taiwan is: <a href="http://www.styx-cn.com" target="_blank">STYX Taiwan</a></p>';
+$lang['MAP_UA'] 												= '<p>STYX representation in Ukraine is: <a href="http://www.styx-ukraine.com.ua" target="_blank">STYX Ukraine</a></p>';
+$lang['MAP_US'] 												= '<p>STYX representation in United States is: <a href="https://styxnaturcosmetics.com/" target="_blank">STYX USA</a></p>';
+$lang['MAPS_HEADER'] 											= 'Your Reliable Partner';
+$lang['MAPS_TEXT'] 												= 'Here you will find all contact addresses of our worldwide distribution partners. <br>
+                      											   Please contact the listed contacts in your country. <br>
+                      											   If there is no contact available in your country, we look forward to your inquiry at export@styx.at – Anita Wittmann, Export';
+
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový
