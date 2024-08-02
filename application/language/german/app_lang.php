@@ -353,6 +353,7 @@ $lang['INFOCARD_TEXT_CARD'] 									= 'Barrierefreiheit';
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový
 
+$lang['MAP_AZ'] 												= 'Zastúpenie pre krajinu Azerbaijan je .<a href="https://sultansaba.az/sultansabais/">Sultan Saba</a>';
 
 
 
