@@ -375,7 +375,7 @@ $lang['MAP_SE'] 												= '<p>STYX Vertretung in Schweden ist: <a href="http
 $lang['MAP_TW'] 												= '<p>STYX Vertretung in Taiwan ist: <a href="http://www.styx-cn.com" target="_blank">STYX Taiwan</a></p>';
 $lang['MAP_UA'] 												= '<p>STYX Vertretung in Ukraine ist: <a href="http://www.styx-ukraine.com.ua" target="_blank">STYX Ukraine</a></p>';
 $lang['MAP_US'] 												= '<p>STYX Vertretung in Vereinigte Staaten ist: <a href="https://styxnaturcosmetics.com/" target="_blank">STYX USA</a></p>';
-$lang['MAPS_HEADER'] 											= 'Ihr zuverlässiger Partner';
+$lang['MAP_AT'] 												= '<p>STYX Naturkosmetic GmbH <br> Am Kräutergarten 6, 3200 Ober-Grafendorf Austria <a href="https://www.styx.at/" target="_blank">STYX Naturkosmetic Austria</a></p>';
 $lang['MAPS_TEXT'] 												= 'Hier finden Sie alle Kontaktadressen unserer weltweiten Vertriebspartner. <br>	
 																   Bitte wenden Sie sich an die untenstehenden Kontakte Ihres Landes. <br>
 																   Sollte in Ihrem Land kein Kontakt vorhanden sein, freuen wir uns unter export@styx.at auf Ihre Anfrage – Anita Wittmann, Export';

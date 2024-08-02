@@ -71,7 +71,23 @@
 		flex-wrap: wrap;
 		gap: 60px;
 	}
+
+	@media (max-width: 600px) {
+		.modal-content {
+			width: 95%;
+			margin: 20% auto;
+		}
+
+		.tooltipStyle {
+			font-size: 14px;
+		}
+
+		.list-containerMap {
+			gap: 30px;
+		}
+	}
 </style>
+
 <div role="main" class="main">
 	<section class="page-header page-header-modern page-header-background page-header-background-md overlay overlay-color-primary overlay-show overlay-op-9 mb-0" style="background-image: url(<?=$image1?>);">
 		<div class="container translucent-background">
@@ -105,8 +121,7 @@
 					<div class="post-content ms-0">
 						<h2 style="color: #aad998" class="font-weight-semi-bold"><?=lang('MAPS_HEADER')?></h2>
 						<div class="post-meta">
-							<h4 class="text-color-black"><?=lang('MAPS_TEXT')?>
-							</h4>
+							<h4 class="text-color-black"><?=lang('MAPS_TEXT')?></h4>
 						</div>
 						<div id="myModal" class="modal">
 							<div class="modal-content">
@@ -329,6 +344,7 @@
 		</div>
 	</div>
 </div>
+
 <script>
 	document.addEventListener('DOMContentLoaded', (event) => {
 		const map = document.getElementById('map');
@@ -338,20 +354,16 @@
 		const span = document.getElementsByClassName("close")[0];
 		const countryInfo = document.getElementById('countryInfo');
 
-		// grab the country name and display
 		function showCountryName(event) {
 			let countryName = event.target.getAttribute('title');
 			toolTip.innerHTML = countryName;
 		}
 
-		// show the default text
 		function hideCountryName() {
 			toolTip.innerHTML = message;
 		}
 
-		// set event listener on the map
-		map.addEventListener('mouseover', function(event){
-			// if the mouse hovers over a country
+		map.addEventListener('mouseover', function(event) {
 			if (event.target.classList.contains('land')) {
 				showCountryName(event);
 			} else {
@@ -359,18 +371,15 @@
 			}
 		});
 
-		// set event listener on click for showing country name
-		map.addEventListener('click', function(event){
-			// if the country is clicked
+		map.addEventListener('click', function(event) {
 			if (event.target.classList.contains('land')) {
 				let countryName = event.target.getAttribute('title');
 				let countryDescription = countryDescriptions[countryName];
-				countryInfo.innerHTML = `<strong>${countryName}</strong>: ${countryDescription}`; // Zmeňte obsah podľa potreby
+				countryInfo.innerHTML = `<strong>${countryName}</strong>: ${countryDescription}`;
 				modal.style.display = "block";
 			}
 		});
 
-		// close the modal
 		span.onclick = function() {
 			modal.style.display = "none";
 		}
@@ -381,7 +390,6 @@
 			}
 		}
 
-		// Country descriptions
 		const countryDescriptions = {
 			"Azerbaijan": `<?php echo lang('MAP_AZ')?>`,
 			"Bulgaria": `<?php echo lang('MAP_BG')?>`,
@@ -405,11 +413,8 @@
 			"Sweden": `<?php echo lang('MAP_SE')?>`,
 			"Taiwan": `<?php echo lang('MAP_TW')?>`,
 			"Ukraine": `<?php echo lang('MAP_UA')?>`,
-			"United States": `<?php echo lang('MAP_US')?>`
-
+			"United States": `<?php echo lang('MAP_US')?>`,
+			"Austria": `<?php echo lang('MAP_AT')?>`
 		};
-
 	});
 </script>
-
-
