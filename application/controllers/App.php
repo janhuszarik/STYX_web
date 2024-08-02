@@ -369,6 +369,24 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 
 	}
+	function beautyClubAustria(){
+
+
+		if (language() == 'en') {
+			$data['page'] = 'app/beautyClubAustria_en';
+		} elseif (language() == 'de') {
+			$data['page'] = 'app/beautyClubAustria_de';
+		} else {
+			$data['page'] = 'app/beautyClubAustria';
+		}
+		$data['title'] 				= lang('BEAUTY_CLUB_AUSTRIA_TITLE');
+		$data['description'] 		= lang('BEAUTY_CLUB_AUSTRIA_DESCRIPTION');
+		$data['keywords'] 			= lang('BEAUTY_CLUB_AUSTRIA_KEYWORDS');
+		$data['image'] 				= BASE_URL . LOGO;
+		$data['image1'] 			= BASE_URL.'img/breadcrumb/beautyClubAustria.jpg';
+		$this->load->view('layout/normal', $data);
+
+	}
 
 
 	function error404(){

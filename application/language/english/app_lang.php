@@ -75,6 +75,10 @@ $lang['WORLDWIDE_TITLE'] 								= 'STYX Worldwide | STYX Naturcosmetic GmbH';
 $lang['WORLDWIDE_DESCRIPTION'] 							= 'STYX WORLDWIDE, Austrian quality around the world, STYX Naturcosmetic, World of STYX, Natural Cosmetics';
 $lang['WORLDWIDE_KEYWORDS'] 							= 'STYX WORLDWIDE - Austrian quality around the world';
 
+$lang['BEAUTY_CLUB_AUSTRIA_TITLE']       				= 'BEAUTY Club AUSTRIA';
+$lang['BEAUTY_CLUB_AUSTRIA_DESCRIPTION'] 				= 'The club with many great benefits for all members';
+$lang['BEAUTY_CLUB_AUSTRIA_KEYWORDS']    				= 'Beauty Club, STYX, Natural cosmetics, Care, Cosmetics, Chin Min, Well-being, Natural';
+
 //----------------------------------------------------------------------------------------------------------------------
 //Text
 //----------------------------------------------------------------------------------------------------------------------

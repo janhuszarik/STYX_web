@@ -76,6 +76,10 @@ $lang['WORLDWIDE_TITLE'] 								= 'STYX Worldwide | STYX Naturcosmetic GmbH';
 $lang['WORLDWIDE_DESCRIPTION'] 							= 'STYX WORLDWIDE, Österreichische Qualität rund um die Welt, STYx Naturcosmetic, World of STYX, Naturkosmetik';
 $lang['WORLDWIDE_KEYWORDS'] 							= 'STYX WORLDWIDE - Österreichische Qualität rund um die Welt';
 
+$lang['BEAUTY_CLUB_AUSTRIA_TITLE'] 						= 'BEAUTY Club AUSTRIA';
+$lang['BEAUTY_CLUB_AUSTRIA_DESCRIPTION'] 				= 'Der Club mit vielen tollen Vergünstigen für alle Mitglieder';
+$lang['BEAUTY_CLUB_AUSTRIA_KEYWORDS'] 					= 'Beauty Club, STYX, Naturkosmetik, Pfelge, Kosmetik, Chin Min, Wohlfühlen, natürlich';
+
 //----------------------------------------------------------------------------------------------------------------------
 //Text
 //----------------------------------------------------------------------------------------------------------------------

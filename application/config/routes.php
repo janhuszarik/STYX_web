@@ -146,6 +146,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['Unternehmen/Styx-Worldwide']		= 'App/worldwide';
 	$route['Company/Styx-Worldwide']			= 'App/worldwide';
 
+	$route['Unternehmen/Beauty-Club-Austria']	= 'App/beautyClubAustria';
+	$route['Company/Beauty-Club-Austria']		= 'App/beautyClubAustria';
+
 	$route['Company/About-Styx']				= 'App/contact';
 	$route['news_article/:num']					= 'App/news_article';
 	$route['news_article/:num'] 				= 'App/news_article/$1/$2';
