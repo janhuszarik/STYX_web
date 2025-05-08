@@ -101,18 +101,40 @@ function getNewsletters(){
 		return $this->db->get_where('slider', array('id' => $id))->row_array();
 	}
 
-	public function save_slider($data, $id = null) {
-		if ($id) {
+	public function save_slider_full($post = false, $image = false, $old_image = false, $id = null) {
+		$data = array(
+			'lang' => $post['lang'],
+			'title' => $post['title'],
+			'name1' => $post['name1'],
+			'name2' => $post['name2'],
+			'name3' => $post['name3'],
+			'button_link' => $post['button_link'],
+			'orderBy' => $post['orderBy'],
+			'active' => isset($post['active']) && $post['active'] == '1' ? 1 : 0
+		);
+
+		if ($image && !isset($image['error'])) {
+			$data['image'] = basename($image);
+		} else if ($old_image) {
+			$data['image'] = $old_image;
+		}
+
+		if (!empty($id)) {
 			$this->db->where('id', $id);
-			$result = $this->db->update('slider', $data);
-			log_message('debug', 'Update result: ' . $result);
-			return $result;
+			return $this->db->update('slider', $data);
 		} else {
-			$result = $this->db->insert('slider', $data);
-			log_message('debug', 'Insert result: ' . $result);
-			return $result;
+			return $this->db->insert('slider', $data);
 		}
 	}
+
+	public function get_slider_image_by_id($id) {
+		$this->db->select('image');
+		$this->db->where('id', $id);
+		$row = $this->db->get('slider')->row();
+		return $row ? $row->image : false;
+	}
+
+
 
 	public function delete_slider($id) {
 		return $this->db->delete('slider', array('id' => $id));

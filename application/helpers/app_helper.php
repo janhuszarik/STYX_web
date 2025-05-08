@@ -112,12 +112,12 @@
 }
 
 	function getCurrentUrl() {
-	return current_url(); // Alebo iná metóda, ktorá získava aktuálnu URL
+	return current_url();
 }
 
 	function getMenu() {
 	$ci = get_instance();
-	$language = language(); // Predpokladám, že language() vracia aktuálny jazyk
+	$language = language();
 
 	$ci->db->select('*');
 	$ci->db->where('active', '1');
@@ -139,7 +139,6 @@
 		$url = empty($mainItem->url) ? '' : $mainItem->url;
 		$isExternal = (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0);
 
-		// Ak URL nie je externá, pridáme jazyk na začiatok
 		if (!$isExternal && strpos($url, $language . '/') === false) {
 			$url = $language . '/' . ltrim($url, '/');
 		}
@@ -158,7 +157,6 @@
 				$subUrl = empty($subItem->url) ? '' : $subItem->url;
 				$isSubExternal = (strpos($subUrl, 'http://') === 0 || strpos($subUrl, 'https://') === 0);
 
-				// Ak URL nie je externá, pridáme jazyk na začiatok
 				if (!$isSubExternal && strpos($subUrl, $language . '/') === false) {
 					$subUrl = $language . '/' . url_oprava($mainItem->name) . '/' . ltrim($subUrl, '/');
 				}
@@ -234,7 +232,7 @@ function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = '
 	function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false){
 
 
-	unset($_FILES['files']); // toto musim doriešiť -- je tu input z aummernote
+	unset($_FILES['files']);
 
 	$CI = & get_instance();
 	$CI->load->library('image_lib');
@@ -264,9 +262,9 @@ function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = '
 		} else {
 			$file = 'img';
 		}
-		foreach ($_FILES as $k => $f){ // Názov inputu file v dokumente tu je $k
+		foreach ($_FILES as $k => $f){
 
-			if (file_exists($_FILES[$k]['tmp_name'])){ // existuje obrázok pod danám inputom? spracuj ho / inak zapis prazdne pole
+			if (file_exists($_FILES[$k]['tmp_name'])){
 				$nazovAkoURL = trim(url_oprava($file));
 				$typ = explode('.',$_FILES[$k]["name"]);
 				$typ = $typ[count($typ) - 1];
@@ -289,12 +287,11 @@ function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = '
 				$data[$k] = '';
 			}
 		}
-		return $data; // vraciam hodnoty ako nazov inputu file z formulara a pod nim je adresa k suboru s priecinkom
+		return $data;
 	} else {
 
 
 		if (empty($_FILES[$file]['name'])){
-//                dd($_FILES);
 			return '';
 		}
 
@@ -347,7 +344,6 @@ function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = '
 
 			$configw['wm_text'] = DOMAIN;
 			$configw['wm_type'] = 'overlay';
-//            $configw['wm_overlay_path'] = APP_PATH.'/img/radvarim-logo145.png';
 			$configw['wm_overlay_path'] = APP_PATH.'/'.LOGO_PNG;
 			$configw['wm_opacity'] = '50';
 			$configw['wm_vrt_alignment'] = 'bottom';
@@ -357,7 +353,6 @@ function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = '
 			$CI->image_lib->watermark();
 		}
 	}
-	// pridá malý obrázok
 	if ($adresaimg) {
 
 		$config['image_library'] = 'gd2';

@@ -84,54 +84,55 @@ class Admin extends CI_Controller
 		return '';
 	}
 
-	public function sliderSave() {
+	function sliderSave()
+	{
 		$post = $this->input->post();
 		$id = $this->uri->segment(3);
-
-		log_message('debug', 'sliderSave post data: ' . print_r($post, true));
-		log_message('debug', 'sliderSave id: ' . $id);
+		$segment2 = $this->uri->segment(2);
 
 		if (!empty($post)) {
-			$post['active'] = isset($post['active']) ? $post['active'] : '0';
-			$post['orderBy'] = isset($post['orderBy']) ? $post['orderBy'] : '0';
-			$post['float'] = isset($post['float']) ? $post['float'] : '0';
+			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
+			$image = uploadImg('image', 'Uploads/sliders', 'slider_' . time(), true);
 
-			if ($this->Admin_model->is_order_by_duplicate($post['orderBy'], $id)) {
-				$post['orderBy'] = $this->Admin_model->get_next_order_by();
+			if (isset($image['error']) && !$image['error']) {
+				$this->session->set_flashdata('error', $image['error']);
+				$data['slider'] = (array)$post;
+				$data['sliders'] = $this->Admin_model->get_all_sliders();
+				$data['title'] = 'Slider';
+				$data['page'] = 'admin/settings/sliders';
+				$this->load->view('admin/layout/normal', $data);
+				return;
 			}
 
-			if ($this->saveSlider($post, $id)) {
-				$this->session->set_flashdata('success', 'Slider erfolgreich gespeichert');
-				redirect('admin/slider');
+			if ($this->Admin_model->save_slider_full($post, $image, $old_image, $id)) {
+				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/sliders/' . $old_image)) {
+					unlink(FCPATH . 'Uploads/sliders/' . $old_image);
+				}
+				$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
+				redirect(BASE_URL . 'admin/slider');
 			} else {
-				$this->session->set_flashdata('error', 'Es ist ein Fehler aufgetreten. Versuchen Sie es erneut');
-				$data['edit'] = (object)$post;
+				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
+				$data['slider'] = (array)$post;
 			}
-		} else {
-			log_message('error', 'Formulardaten sind leer.');
+		}
+
+		if ($segment2 == 'delete_slider' && is_numeric($id)) {
+			if ($this->Admin_model->delete_slider($id)) {
+				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
+			} else {
+				$this->session->set_flashdata('error', 'Fehler beim Löschen');
+			}
+			redirect(BASE_URL . 'admin/slider');
 		}
 
 		$data['sliders'] = $this->Admin_model->get_all_sliders();
-
-		if (!empty($id)) {
-			$data['slider'] = $this->Admin_model->get_slider($id);
-			$data['title'] = 'Slider bearbeiten';
-		} else {
-			$data['slider'] = null;
-			$data['title'] = 'Slider hinzufügen';
-		}
+		$data['slider'] = !empty($id) ? $this->Admin_model->get_slider($id) : array();
+		$data['title'] = 'Slider';
 		$data['page'] = 'admin/settings/sliders';
 		$this->load->view('admin/layout/normal', $data);
 	}
 
-	public function delete_slider($id) {
-		if ($this->Admin_model->delete_slider($id)) {
-			$this->session->set_flashdata('message', 'Slider wurde erfolgreich gelöscht');
-		} else {
-			$this->session->set_flashdata('error', 'Es ist ein Fehler aufgetreten. Versuchen Sie es erneut');
-		}
-		redirect(BASE_URL . 'admin/slider/');
-	}
+
 
 	private function saveSlider($post, $id = null) {
 		log_message('debug', 'saveSlider post data before upload: ' . print_r($post, true));
