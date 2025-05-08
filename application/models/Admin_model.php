@@ -110,7 +110,7 @@ function getNewsletters(){
 			'name3' => $post['name3'],
 			'button_link' => $post['button_link'],
 			'orderBy' => $post['orderBy'],
-			'active' => isset($post['active']) && $post['active'] == '1' ? 1 : 0
+			'active' => $this->input->post('active'),
 		);
 
 		if ($image && !isset($image['error'])) {
