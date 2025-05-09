@@ -13,16 +13,18 @@
 						</div>
 					</div>
 
-					<!-- Textová lišta POD sliderom -->
+					<?php $textColor = 'color:' . htmlspecialchars($s->text_color); ?>
 					<a href="<?= !empty($s->button_link) ? $s->button_link : '#' ?>" style="text-decoration: none;">
 						<div class="slider-text<?= (empty($s->title) && empty($s->name1) && empty($s->name2) && empty($s->name3)) ? ' empty' : ''; ?>"
-							 style="background-color: <?= htmlspecialchars($s->bg_color); ?>; color: <?= htmlspecialchars($s->text_color); ?>;">
-							<?php if (!empty($s->title)): ?><h2><?= $s->title ?></h2><?php endif; ?>
-							<?php if (!empty($s->name1)): ?><h3><?= $s->name1 ?></h3><?php endif; ?>
-							<?php if (!empty($s->name2)): ?><p><?= $s->name2 ?></p><?php endif; ?>
-							<?php if (!empty($s->name3)): ?><p><?= $s->name3 ?></p><?php endif; ?>
+							 style="background-color: <?= htmlspecialchars($s->bg_color); ?>;">
+
+							<?php if (!empty($s->title)): ?><h2 style="<?= $textColor ?>"><?= $s->title ?></h2><?php endif; ?>
+							<?php if (!empty($s->name1)): ?><h3 style="<?= $textColor ?>"><?= $s->name1 ?></h3><?php endif; ?>
+							<?php if (!empty($s->name2)): ?><p style="<?= $textColor ?>"><?= $s->name2 ?></p><?php endif; ?>
+							<?php if (!empty($s->name3)): ?><p style="<?= $textColor ?>"><?= $s->name3 ?></p><?php endif; ?>
 						</div>
 					</a>
+
 
 				</div>
 			<?php endforeach; ?>
