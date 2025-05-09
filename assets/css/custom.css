@@ -10,12 +10,20 @@
 }
 
 .slider-wrapper {
+	position: relative;
+	width: 100%;
+	opacity: 0;
+	transition: opacity 1s ease-in-out;
+	z-index: 0;
 	display: none;
 }
 
 .slider-wrapper.active {
+	opacity: 1;
+	z-index: 1;
 	display: block;
 }
+
 
 
 .slider-section {

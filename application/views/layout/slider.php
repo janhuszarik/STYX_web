@@ -29,38 +29,4 @@
 		</div>
 	<?php endif; ?>
 </div>
-<script>
-	document.addEventListener('DOMContentLoaded', function () {
-		const sliders = document.querySelectorAll('.slider-wrapper');
-		let current = 0;
 
-		const showSlide = (index) => {
-			sliders.forEach((slide, i) => {
-				slide.style.display = i === index ? 'block' : 'none';
-			});
-		};
-
-		const nextSlide = () => {
-			current = (current + 1) % sliders.length;
-			showSlide(current);
-		};
-
-		const prevSlide = () => {
-			current = (current - 1 + sliders.length) % sliders.length;
-			showSlide(current);
-		};
-
-		document.querySelectorAll('.slider-navigation .next').forEach(btn => {
-			btn.addEventListener('click', nextSlide);
-		});
-		document.querySelectorAll('.slider-navigation .prev').forEach(btn => {
-			btn.addEventListener('click', prevSlide);
-		});
-
-		// Init first slide
-		showSlide(current);
-
-		// Auto change every 5 seconds
-		setInterval(nextSlide, 5000);
-	});
-</script>
