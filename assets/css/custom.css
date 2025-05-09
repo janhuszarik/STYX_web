@@ -104,11 +104,6 @@
 		margin-top: 1px;
 	}
 
-	.slider-navigation .prev,
-	.slider-navigation .next {
-		font-size: 20px;
-		padding: 8px;
-	}
 	.slider-navigation {
 		display: none; /* Skryje celé šípky na mobiloch */
 	}
@@ -117,7 +112,11 @@
 
 @media (max-width: 480px) {
 	.slider-section {
-		height: 132px; /* menšie mobily */
+		height: auto; /* nenechaj fixnú výšku */
+		aspect-ratio: 16 / 9;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
 	}
 
 	.slider-text {
