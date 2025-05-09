@@ -64,13 +64,13 @@ $(document).ready(function () {
 	$('.next').click(function () {
 		clearInterval(slideInterval);
 		showNextSlide();
-		slideInterval = setInterval(showNextSlide, 6000);
+		slideInterval = setInterval(showNextSlide, 10000);
 	});
 
 	$('.prev').click(function () {
 		clearInterval(slideInterval);
 		showPrevSlide();
-		slideInterval = setInterval(showNextSlide, 6000);
+		slideInterval = setInterval(showNextSlide, 10000);
 	});
 });
 // Koniec automatického posunu snímok
