@@ -96,26 +96,25 @@
 
 @media (max-width: 768px) {
 	.slider-section {
-		height: 320px; /* väčšie mobily */
+		height: auto; /* Namiesto pevnej výšky */
+		aspect-ratio: 16 / 9; /* Zachová proporcie */
+		background-size: contain; /* Dôležité: nezreže obrázok */
+		background-repeat: no-repeat;
+		background-position: center;
 	}
 
 	.slider-text {
-		padding: 20px 10px;
-		font-size: 15px;
+		padding: 15px 10px;
+		margin-top: 10px;
 	}
 
-	.slider-text h2 {
+	.slider-navigation .prev,
+	.slider-navigation .next {
 		font-size: 20px;
-	}
-
-	.slider-text h3 {
-		font-size: 17px;
-	}
-
-	.slider-text p {
-		font-size: 14px;
+		padding: 8px;
 	}
 }
+
 
 @media (max-width: 480px) {
 	.slider-section {
