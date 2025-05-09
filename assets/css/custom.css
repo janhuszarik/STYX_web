@@ -71,7 +71,6 @@
 	margin-top: 40px;
 }
 
-
 @media (max-width: 1024px) {
 	.slider-section {
 		height: 400px; /* tablety */
@@ -124,7 +123,23 @@
 	}
 
 	.slider-text {
-		padding:
+		padding: 16px 10px;
+		font-size: 14px;
+	}
+
+	.slider-text h2 {
+		font-size: 18px;
+	}
+
+	.slider-text h3 {
+		font-size: 16px;
+	}
+
+	.slider-text p {
+		font-size: 13px;
+	}
+}
+
 
 /*slider css- end*/
 
