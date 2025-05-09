@@ -1,17 +1,17 @@
 /*---------------------------------------------------------------------------------------------------------------*/
 /* Štýly pre slider */
 .slider-container {
+	background: white;
 	position: relative;
-	overflow: visible;
+	overflow: hidden;
 	width: 100%;
 	height: auto;
-	margin-bottom: 0;
-	padding-bottom: 0;
 }
 
 .slider-wrapper {
-	position: relative;
+	position: relative; /* bolo absolute, upravené pre viditeľný text */
 	width: 100%;
+	height: auto;
 	opacity: 0;
 	transition: opacity 1s ease-in-out;
 	z-index: 0;
@@ -24,23 +24,13 @@
 	display: block;
 }
 
-
-
 .slider-section {
-	position: relative;
-	top: auto;
-	left: auto;
 	width: 100%;
 	height: 600px;
-	opacity: 1;
-	transition: none;
 	background-size: cover;
 	background-position: center;
+	position: relative;
 	z-index: 1;
-}
-
-.slider-section.active {
-	opacity: 1;
 }
 
 .slider-navigation {
@@ -68,7 +58,9 @@
 	text-align: center;
 	z-index: 2;
 	position: relative;
-	margin-top: 0;
+	display: block;
+	margin-top: 40px;
+	color: inherit;
 }
 
 .slider-text.empty {
@@ -76,11 +68,13 @@
 	color: transparent;
 	pointer-events: none;
 	height: 60px;
+	margin-top: 40px;
 }
 
 @media (max-width: 768px) {
 	.slider-text {
 		padding: 20px 10px;
+		margin-top: 30px;
 	}
 	h1.text-color-dark {
 		font-size: 24px;
@@ -102,6 +96,7 @@
 	padding: 20px;
 	border-radius: 10px;
 }
+
 
 /*---------------------------------------------------------------------------------------------------------------*/
 /* Nastavenie css pre menu */
