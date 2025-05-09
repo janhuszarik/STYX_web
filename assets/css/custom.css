@@ -9,7 +9,7 @@
 }
 
 .slider-wrapper {
-	position: relative; /* bolo absolute, upravené pre viditeľný text */
+	position: relative;
 	width: 100%;
 	height: auto;
 	opacity: 0;
@@ -54,12 +54,12 @@
 }
 
 .slider-text {
-	padding: 40px 20px;
+	padding: 20px 20px 1px 20px;
 	text-align: center;
 	z-index: 2;
 	position: relative;
 	display: block;
-	margin-top: 40px;
+	margin-top: 3px;
 	color: inherit;
 }
 
