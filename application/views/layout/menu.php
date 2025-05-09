@@ -71,16 +71,10 @@
 													<?php if ($menu['base'] !== 0) { ?>
 														<a class="nav-link dropdown-toggle no-link" href="javascript:void(0);">
 															<?= $menu['name'] ?>
-															<?php if ($menu['has_child']) { ?>
-																<i class="fa fa-angle-down"></i>
-															<?php } ?>
 														</a>
 													<?php } else { ?>
 														<a class="nav-link dropdown-toggle" href="<?= $menu['is_external'] ? $menu['url'] : BASE_URL . $menu['url'] ?>" target="<?= $menu['is_external'] ? '_blank' : '_self' ?>">
 															<?= $menu['name'] ?>
-															<?php if ($menu['has_child']) { ?>
-																<i class="fa fa-angle-down"></i>
-															<?php } ?>
 														</a>
 													<?php } ?>
 													<?php if ($menu['has_child']) { ?>
@@ -93,6 +87,7 @@
 												</li>
 											<?php } ?>
 										</ul>
+
 									</nav>
 								</div>
 								<ul class="header-social-icons social-icons d-none d-sm-block">
