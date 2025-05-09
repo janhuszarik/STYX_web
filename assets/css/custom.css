@@ -118,7 +118,7 @@
 
 @media (max-width: 480px) {
 	.slider-section {
-		height: 260px; /* menšie mobily */
+		height: 100px; /* menšie mobily */
 	}
 
 	.slider-text {
