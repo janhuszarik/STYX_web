@@ -2,19 +2,33 @@
 /* Štýly pre slider */
 .slider-container {
 	position: relative;
-	overflow: hidden;
+	overflow: visible;
 	width: 100%;
-	height: 600px;
+	height: auto;
+	margin-bottom: 0;
+	padding-bottom: 0;
 }
 
+.slider-wrapper {
+	display: none;
+}
+
+.slider-wrapper.active {
+	display: block;
+}
+
+
 .slider-section {
-	position: absolute;
-	top: 0;
-	left: 0;
+	position: relative;
+	top: auto;
+	left: auto;
 	width: 100%;
-	height: 100%;
-	opacity: 0;
-	transition: opacity 1s ease-in-out;
+	height: 600px;
+	opacity: 1;
+	transition: none;
+	background-size: cover;
+	background-position: center;
+	z-index: 1;
 }
 
 .slider-section.active {
@@ -41,40 +55,44 @@
 	font-size: 24px;
 }
 
-.text-background {
-	background-color: rgba(255, 255, 255, 0.6); /* White with 60% opacity */
-	border-radius: 20px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	padding: 32px;
+.slider-text {
+	padding: 40px 20px;
 	text-align: center;
-	max-width: 800px; /* Optional: Maximum width */
-	margin: 0 auto; /* Center the text container */
-	position: relative; /* Ensure position-relative for the absolute children */
-	/* Remove fixed height */
+	z-index: 2;
+	position: relative;
+	margin-top: 0;
+}
+
+.slider-text.empty {
+	background-color: transparent !important;
+	color: transparent;
+	pointer-events: none;
+	height: 60px;
 }
 
 @media (max-width: 768px) {
-	.text-background {
-		padding: 16px; /* Reduce padding for smaller screens */
+	.slider-text {
+		padding: 20px 10px;
 	}
 	h1.text-color-dark {
-		font-size: 24px; /* Reduce font size for smaller screens */
+		font-size: 24px;
 	}
 	p.text-color-dark {
-		font-size: 18px; /* Reduce font size for smaller screens */
+		font-size: 18px;
 	}
 	.btn-success {
-		font-size: 14px; /* Adjust button text size for smaller screens */
+		font-size: 14px;
 	}
 }
+
 /*slider css- end*/
 
 .translucent-background {
-	background-color: rgba(255, 255, 255, 0.36); /* Semi-transparent gray */
-	backdrop-filter: blur(5px); /* Frosted glass effect */
-	-webkit-backdrop-filter: blur(5px); /* For Safari */
-	padding: 20px; /* Adding padding for better text readability */
-	border-radius: 10px; /* Optional: rounded corners for a softer look */
+	background-color: rgba(255, 255, 255, 0.36);
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
+	padding: 20px;
+	border-radius: 10px;
 }
 
 /*---------------------------------------------------------------------------------------------------------------*/
