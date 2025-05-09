@@ -38,23 +38,28 @@ $(document).ready(function(){
 // -----------------------------------------------------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------------------------------------------------
-// Automatický posun snímok
-// Tento kód nastavuje automatický posun snímok každých 6 sekúnd a umožňuje manuálny posun snímok kliknutím na tlačidlá
+// -----------------------------------------------------------------------------------------------------------------------
+// Automatický posun snímok a manuálne prepínanie pre nový slider so .slider-wrapper
 $(document).ready(function () {
-	var slides = $('.slider-section');
+	var wrappers = $('.slider-wrapper');
 	var currentIndex = 0;
-	var slideInterval = setInterval(showNextSlide, 6000); // Zmena snímky každých 6 sekúnd
+	var slideInterval = setInterval(showNextSlide, 6000); // každých 6 sekúnd
+
+	// Inicializuj prvý slide ako aktívny
+	if (wrappers.length > 0) {
+		wrappers.eq(0).addClass('active');
+	}
 
 	function showNextSlide() {
-		slides.eq(currentIndex).removeClass('active');
-		currentIndex = (currentIndex + 1) % slides.length;
-		slides.eq(currentIndex).addClass('active');
+		wrappers.removeClass('active');
+		currentIndex = (currentIndex + 1) % wrappers.length;
+		wrappers.eq(currentIndex).addClass('active');
 	}
 
 	function showPrevSlide() {
-		slides.eq(currentIndex).removeClass('active');
-		currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-		slides.eq(currentIndex).addClass('active');
+		wrappers.removeClass('active');
+		currentIndex = (currentIndex - 1 + wrappers.length) % wrappers.length;
+		wrappers.eq(currentIndex).addClass('active');
 	}
 
 	$('.next').click(function () {
@@ -71,6 +76,7 @@ $(document).ready(function () {
 });
 // Koniec automatického posunu snímok
 // -----------------------------------------------------------------------------------------------------------------------
+
 
 
 // -----------------------------------------------------------------------------------------------------------------------
