@@ -109,6 +109,8 @@ function getNewsletters(){
 			'name2' => $post['name2'],
 			'name3' => $post['name3'],
 			'button_link' => $post['button_link'],
+			'bg_color' => $post['bg_color'],
+			'text_color' => $post['text_color'],
 			'orderBy' => $post['orderBy'],
 			'active' => $this->input->post('active'),
 		);

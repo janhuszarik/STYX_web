@@ -62,6 +62,18 @@
 						<label for="button_link">Schaltflächenlink</label>
 						<input type="text" class="form-control" name="button_link" id="button_link" value="<?php echo isset($slider['button_link']) ? $slider['button_link'] : ''; ?>">
 					</div>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label for="bg_color">Hintergrundfarbe</label>
+							<input type="color" class="form-control form-control-color" name="bg_color" id="bg_color"
+								   value="<?php echo isset($slider['bg_color']) ? $slider['bg_color'] : '#ffffff'; ?>">
+						</div>
+						<div class="col-md-6">
+							<label for="text_color">Textfarbe</label>
+							<input type="color" class="form-control form-control-color" name="text_color" id="text_color"
+								   value="<?php echo isset($slider['text_color']) ? $slider['text_color'] : '#000000'; ?>">
+						</div>
+					</div>
 
 					<div class="form-group">
 						<label for="orderBy">Order By</label>
