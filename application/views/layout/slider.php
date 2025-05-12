@@ -5,8 +5,9 @@
 				<div class="slider-wrapper <?= $index === 0 ? 'active' : '' ?>" role="group" aria-roledescription="slide" aria-label="<?= ($index + 1) . ' / ' . count($sliders) ?>">
 					<div class="slider-section" style="background-image: url('<?= base_url('uploads/sliders/' . $s->image); ?>');" aria-hidden="<?= $index === 0 ? 'false' : 'true' ?>">
 						<div class="slider-navigation">
-							<button class="prev" aria-label="<?= lang('SLIDER_PREV') ?>">❮</button>
-							<button class="next" aria-label="<?= lang('SLIDER_NEXT') ?>">❯</button>
+							<button class="custom-prev" aria-label="Previous slide">‹</button>
+							<button class="custom-next" aria-label="Next slide">›</button>
+
 						</div>
 					</div>
 					<?php $textColor = 'color:' . htmlspecialchars($s->text_color); ?>
