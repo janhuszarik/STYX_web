@@ -546,4 +546,25 @@
 	}
 }
 
+.accessibility-mode {
+	font-size: 18px;
+	line-height: 1.6;
+	background-color: #ffffff !important;
+	color: #000000 !important;
+}
+
+.accessibility-mode a {
+	color: #000 !important;
+	text-decoration: underline;
+}
+
+.accessibility-mode .slider-container,
+.accessibility-mode .carousel-container {
+	display: none !important;
+}
+
+.accessibility-mode * {
+	animation: none !important;
+	transition: none !important;
+}
 

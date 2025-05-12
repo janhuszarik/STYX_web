@@ -1,6 +1,12 @@
 // -----------------------------------------------------------------------------------------------------------------------
 // Nastavenie karuselu s lazy loading
 // Tento kód inicializuje dva karusely s rôznymi počtami kariet pri načítaní okna
+document.getElementById('accessibilityToggle')?.addEventListener('click', function () {
+	document.body.classList.toggle('accessibility-mode');
+	const isActive = document.body.classList.contains('accessibility-mode');
+	this.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+});
+
 $(document).ready(function(){
 	$('.news-carousel').owlCarousel({
 		items: 4,

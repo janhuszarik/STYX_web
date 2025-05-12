@@ -16,32 +16,40 @@
 					<div class="header-column justify-content-end">
 						<div class="header-row pt-3">
 							<nav class="header-nav-top">
-								<ul class="nav nav-pills">
+								<ul class="nav nav-pills align-items-center">
 									<li class="nav-item dropdown nav-item-left-border d-none d-sm-block nav-item-left-border-remove nav-item-left-border-md-show">
 										<div style="padding: 0px" class="d-flex">
 											<?php foreach (getLanguages() as $l){ ?>
 												<div class="lang me-2">
-													<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="40px" alt=""></a>
+													<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="40px" alt="<?= strtoupper($l) ?>"></a>
 												</div>
 											<?php } ?>
 										</div>
 									</li>
 									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
 										<div class="container">
-											<a href="<?=lang('HÄNDLER_URL')?>"><button class="aroma-button">
-													<?=lang('HÄNDLER_TEXT')?>
-												</button></a>
+											<a href="<?=lang('HÄNDLER_URL')?>"><button class="aroma-button"><?=lang('HÄNDLER_TEXT')?></button></a>
 										</div>
 									</li>
 									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
 										<div class="container">
-											<a href="https://shop.styx.at/"><button class="pulse-button">
-													<span style="font-weight: bold"></span> SHOP
-												</button></a>
+											<a href="https://shop.styx.at/"><button class="pulse-button"><span style="font-weight: bold"></span> SHOP</button></a>
 										</div>
+									</li>
+
+									<!-- Accessibility Button -->
+									<li class="nav-item ms-auto">
+										<button id="accessibilityToggle"
+												aria-pressed="false"
+												class="btn btn-warning btn-sm ms-2"
+												style="font-weight: bold; border-radius: 20px;"
+												title="<?= lang('ACCESSIBILITY_MODE') ?>">
+											♿ <?= lang('ACCESSIBILITY_MODE') ?>
+										</button>
 									</li>
 								</ul>
 							</nav>
+
 							<div class="header-nav-features header-nav-hide">
 								<div class="header-nav-feature header-nav-features-search d-inline-flex">
 									<a href="#" class="header-nav-features-toggle text-decoration-none" data-focus="headerSearch" aria-label="Search">
