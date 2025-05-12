@@ -366,6 +366,9 @@ $lang['MAPS_HEADER'] 											= 'Your Reliable Partner';
 $lang['MAPS_TEXT'] 												= 'Here you will find all contact addresses of our worldwide distribution partners. <br>
                       											   Please contact the listed contacts in your country. <br>
                       											   If there is no contact available in your country, we look forward to your inquiry at export@styx.at – Anita Wittmann, Export';
+$lang['SLIDER_STARTSEITE'] 										= 'Main slider on the homepage';
+$lang['SLIDER_PREV'] 											= 'Previous slide';
+$lang['SLIDER_NEXT'] 											= 'Next slide';
 
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový

@@ -383,6 +383,9 @@ $lang['MAP_AT'] 												= '<p>STYX Naturkosmetic GmbH <br> Am Kräutergarten
 $lang['MAPS_TEXT'] 												= 'Hier finden Sie alle Kontaktadressen unserer weltweiten Vertriebspartner. <br>	
 																   Bitte wenden Sie sich an die untenstehenden Kontakte Ihres Landes. <br>
 																   Sollte in Ihrem Land kein Kontakt vorhanden sein, freuen wir uns unter export@styx.at auf Ihre Anfrage – Anita Wittmann, Export';
+$lang['SLIDER_STARTSEITE'] 										= 'Hauptslider auf der Startseite';
+$lang['SLIDER_PREV'] 											= 'Vorheriger Slide';
+$lang['SLIDER_NEXT'] 											= 'Nächster Slide';
 
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový
