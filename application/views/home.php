@@ -47,15 +47,16 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div class="row d-none d-lg-block">
 		<div class="col">
 			<hr class="solid my-5">
 			<h1 style='font-weight: bolder' class="text-center"><?= lang('PRODUCT_WEB') ?></h1>
 		</div>
 	</div>
 
-	<div class="carousel-container">
-		<div class="owl-carousel owl-theme full-width product-carousel" data-plugin-options="{'items': 6, 'loop': true, 'dots': false, 'autoplay': true, 'autoplayTimeout': 5000, 'autoplayHoverPause': true}">
+	<div class="carousel-container d-none d-lg-block">
+		<div class="owl-carousel owl-theme full-width product-carousel"
+			 data-plugin-options="{'items': 6, 'loop': true, 'dots': false, 'autoplay': true, 'autoplayTimeout': 5000, 'autoplayHoverPause': true}">
 			<?php foreach ($product as $product_item): ?>
 				<a href="<?= $product_item->url ?>" aria-label="">
                 <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
@@ -87,6 +88,7 @@
 			<button class="custom-next">›</button>
 		</div>
 	</div>
+
 
 
 	<div class="container py-5 my-4">
