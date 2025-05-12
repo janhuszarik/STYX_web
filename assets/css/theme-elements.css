@@ -16792,9 +16792,9 @@ html.gecko .sort-destination.sort-destination-margin > [class*="col-"] {
 	color: #FFF;
 }
 .thumb-info.thumb-info-bottom-info-custom .thumb-info-title {
-	background: #70ab2ce0;
-	color: #FFF;
-	height: 130px;
+	background: #ffffff;
+	color: #3a3a3a;
+	height: 120px;
 }
 
 .thumb-info.thumb-info-bottom-info-dark-linear .thumb-info-title {
