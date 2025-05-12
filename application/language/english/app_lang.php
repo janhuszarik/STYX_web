@@ -369,6 +369,8 @@ $lang['MAPS_TEXT'] 												= 'Here you will find all contact addresses of ou
 $lang['SLIDER_STARTSEITE'] 										= 'Main slider on the homepage';
 $lang['SLIDER_PREV'] 											= 'Previous slide';
 $lang['SLIDER_NEXT'] 											= 'Next slide';
+$lang['ACCESSIBILITY_MODE'] 									= 'Accessibility';
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový

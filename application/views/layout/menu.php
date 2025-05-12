@@ -28,6 +28,16 @@
 									</li>
 									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
 										<div class="container">
+											<button id="accessibilityToggle"
+													aria-pressed="false"
+													class="aroma-button"
+													title="<?= lang('ACCESSIBILITY_MODE') ?>">
+												♿ <?= lang('ACCESSIBILITY_MODE') ?>
+											</button>
+										</div>
+									</li>
+									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
+										<div class="container">
 											<a href="<?=lang('HÄNDLER_URL')?>"><button class="aroma-button"><?=lang('HÄNDLER_TEXT')?></button></a>
 										</div>
 									</li>
@@ -37,16 +47,6 @@
 										</div>
 									</li>
 
-									<!-- Accessibility Button -->
-									<li class="nav-item ms-auto">
-										<button id="accessibilityToggle"
-												aria-pressed="false"
-												class="btn btn-warning btn-sm ms-2"
-												style="font-weight: bold; border-radius: 20px;"
-												title="<?= lang('ACCESSIBILITY_MODE') ?>">
-											♿ <?= lang('ACCESSIBILITY_MODE') ?>
-										</button>
-									</li>
 								</ul>
 							</nav>
 

@@ -568,3 +568,21 @@
 	transition: none !important;
 }
 
+.btn-accessibility {
+	background-color: #28a745; /* zelená */
+	color: #fff;
+	font-weight: bold;
+	border-radius: 30px;
+	padding: 6px 16px;
+	box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+	font-size: 14px;
+	transition: background-color 0.3s ease, box-shadow 0.3s ease;
+	border: none;
+}
+.btn-accessibility:hover,
+.btn-accessibility:focus {
+	background-color: #218838;
+	box-shadow: 0 0 12px rgba(33, 136, 56, 0.5);
+	outline: none;
+}
+

@@ -386,6 +386,8 @@ $lang['MAPS_TEXT'] 												= 'Hier finden Sie alle Kontaktadressen unserer w
 $lang['SLIDER_STARTSEITE'] 										= 'Hauptslider auf der Startseite';
 $lang['SLIDER_PREV'] 											= 'Vorheriger Slide';
 $lang['SLIDER_NEXT'] 											= 'Nächster Slide';
+$lang['ACCESSIBILITY_MODE'] 									= 'Barrierefrei';
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový
