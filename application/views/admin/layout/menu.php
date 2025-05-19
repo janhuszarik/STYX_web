@@ -1,7 +1,6 @@
 <?php $user = $this->ion_auth->user()->row(); ?>
 <section class="body">
 
-	<!-- start: header -->
 	<header class="header">
 		<div class="logo-container">
 			<a href="<?=BASE_URL.'admin'?>" class="logo">
@@ -14,20 +13,14 @@
 
 		</div>
 
-		<!-- start: search & user box -->
 		<div class="header-right">
-
-
-
-			<span class="separator"></span>
-
 
 			<span class="separator"></span>
 
 			<div id="userbox" class="userbox">
 				<a href="#" data-bs-toggle="dropdown">
 					<figure class="profile-picture">
-						<img src="<?=BASE_URL?>adm/assets/img/!logged-user.png" alt="Joseph Doe" class="rounded-circle" data-lock-picture="img/!logged-user.jpg" />
+						<img src="<?=BASE_URL?>adm/assets/img/!logged-user.png" alt="Web Admin" class="rounded-circle" data-lock-picture="img/!logged-user.jpg" />
 					</figure>
 					<div class="profile-info" data-lock-name="<?=$user->first_name.' '.$user->last_name?>" data-lock-email="johndoe@okler.com">
 						<span class="name"><?=$user->first_name.' '.$user->last_name?></span>
@@ -44,7 +37,7 @@
 							<a role="menuitem" tabindex="-1" href="pages-user-profile.html"><i class="bx bx-user-circle"></i> Meine Profile</a>
 						</li>
 						<li>
-							<a role="menuitem" tabindex="-1" href="pages-signin.html"><i class="bx bx-power-off"></i> Abmelden</a>
+							<a role="menuitem" tabindex="-1" href="<?=BASE_URL.'logout'?>"><i class="bx bx-power-off"></i> Abmelden</a>
 						</li>
 					</ul>
 				</div>
@@ -71,9 +64,8 @@
 
 						<ul class="nav nav-main">
 							<li>
-								<a class="nav-link" href="<?=BASE_URL?>">
+								<a class="nav-link" href="<?=BASE_URL.'admin'?>">
 									<i class="bx bx-home-alt" aria-hidden="true"></i>
-<!--									<span class="float-end badge badge-primary">Hauptmenü</span>-->
 									<span>Dashboard</span>
 								</a>
 							</li>
@@ -96,13 +88,37 @@
 									<span>Aktuell</span>
 								</a>
 							</li>
+							<li class="nav-parent">
+								<a class="nav-link" href="#">
+									<i class="bx bx-news" aria-hidden="true"></i>
+									<span>Beiträge bearbeiten</span>
+								</a>
+								<ul class="nav nav-children">
+									<li>
+										<a class="nav-link" href="<?=BASE_URL.'admin/news/categories'?>">
+											Kategorien
+										</a>
+									</li>
+									<li>
+										<a class="nav-link" href="<?=BASE_URL.'admin/news'?>">
+											Artikel
+										</a>
+									</li>
+								</ul>
+							</li>
+
 							<li>
 								<a class="nav-link" href="<?=BASE_URL.'admin/bestProduct'?>">
 									<i class="bx bx-history" aria-hidden="true"></i>
 									<span>Beliebte produkte</span>
 								</a>
 							</li>
-
+							<li>
+								<a class="nav-link" href="<?=BASE_URL.'admin/bestProduct'?>">
+									<i class="bx bx-layer" aria-hidden="true"></i>
+									<span>Daten Manager</span>
+								</a>
+							</li>
 							<li>
 								<a class="nav-link" href="mailbox-folder.html">
 									<span class="float-end badge badge-primary"></span>
@@ -117,7 +133,6 @@
 									<span style="color: red">Logout</span>
 								</a>
 							</li>
-
 						</ul>
 					</nav>
 				</div>
