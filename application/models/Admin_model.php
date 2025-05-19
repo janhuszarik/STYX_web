@@ -260,5 +260,39 @@ function getNewsletters(){
 		return $this->db->delete('bestProduct');
 
 	}
+	public function saveArticle($post = false)
+	{
+		$data = [
+			'name' => $post['name'],
+			'slug' => url_title($post['name'], 'dash', true),
+			'category_id' => $post['category_id'],
+			'lang' => $post['lang'],
+			'active' => $post['active'],
+			'content' => $post['content'],
+			'created_at' => date('Y-m-d H:i:s'),
+		];
+
+		if (!empty($post['id']) && is_numeric($post['id'])) {
+			$this->db->where('id', $post['id']);
+			return $this->db->update('articles', $data);
+		} else {
+			return $this->db->insert('articles', $data);
+		}
+	}
+
+	public function getArticles($id = false)
+	{
+		if ($id === false) {
+			return $this->db->order_by('id', 'DESC')->get('articles')->result();
+		} else {
+			return $this->db->get_where('articles', ['id' => $id])->row();
+		}
+	}
+
+	public function deleteArticle($id)
+	{
+		return $this->db->delete('articles', ['id' => $id]);
+	}
+
 
 }

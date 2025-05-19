@@ -95,7 +95,7 @@
 								</a>
 								<ul class="nav nav-children">
 									<li>
-										<a class="nav-link" href="<?=BASE_URL.'admin/news/categories'?>">
+										<a class="nav-link" href="<?=BASE_URL.'admin/article_categories'?>">
 											Kategorien
 										</a>
 									</li>

@@ -394,4 +394,49 @@ class Admin extends CI_Controller
 		}
 	}
 
+
+	public function articlesSave()
+	{
+		$post = $this->input->post();
+		$id = $this->uri->segment(4); // ID článku
+		$segment2 = $this->uri->segment(3); // edit alebo del
+
+		if (!empty($post)) {
+			if (!empty($post['id'])) {
+				if ($this->Admin_model->saveArticle($post)) {
+					$this->session->set_flashdata('success', 'Článok bol upravený.');
+					redirect(BASE_URL . 'admin/articles');
+				} else {
+					$this->session->set_flashdata('error', 'Chyba pri ukladaní.');
+					$data['edit'] = (object)$post;
+				}
+			} else {
+				if ($this->Admin_model->saveArticle($post)) {
+					$this->session->set_flashdata('success', 'Článok bol pridaný.');
+					redirect(BASE_URL . 'admin/articles');
+				} else {
+					$this->session->set_flashdata('error', 'Chyba pri ukladaní.');
+					$data['edit'] = (object)$post;
+				}
+			}
+		}
+
+		if ($segment2 == 'del' && is_numeric($id)) {
+			if ($this->Admin_model->deleteArticle($id)) {
+				$this->session->set_flashdata('success', 'Článok bol zmazaný.');
+				redirect(BASE_URL . 'admin/articles');
+			} else {
+				$this->session->set_flashdata('error', 'Chyba pri mazaní.');
+			}
+		}
+
+		$data['articles'] = $this->Admin_model->getArticles(); // zoznam všetkých
+		$data['article'] = $this->Admin_model->getArticles($id); // 1 ak existuje
+		$data['categories'] = $this->Admin_model->get_all_article_categories(); // na výber kategórií
+		$data['title'] = 'Články';
+		$data['page'] = 'admin/settings/article_categories'; // spoločný view
+		$this->load->view('admin/layout/normal', $data);
+	}
+
+
 }
