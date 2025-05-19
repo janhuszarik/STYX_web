@@ -261,43 +261,4 @@ function getNewsletters(){
 
 	}
 
-	public function naturkosmetikSave($post = false)
-	{
-		$data = array(
-			'lang' => language(),
-			'name' => $this->input->post('name'),
-			'email' => $this->input->post('email'),
-			'comment' => $this->input->post('comment'),
-			'section_id' => $this->input->post('section_id'),
-			'consent' => $this->input->post('consent'),
-			'active' => $this->input->post('active'),
-		);
-
-		if (is_numeric($post['id'])) {
-			$this->db->where('id', $post['id']);
-			return $this->db->update('comments', $data);
-		} else {
-			return $this->db->insert('comments', $data);
-		}
-	}
-	function getKomentar($id = false)
-	{
-
-		if ($id == false) {
-			$this->db->select('*');
-			return $this->db->get('comments')->result();
-
-		} else {
-			$this->db->select('*');
-			$this->db->where('id', $id);
-			return $this->db->get('comments')->row();
-		}
-	}
-	function naturkosmetikDelete($id)
-	{
-
-		$this->db->where('id', $id);
-		return $this->db->delete('comments');
-
-	}
 }
