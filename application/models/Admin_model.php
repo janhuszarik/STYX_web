@@ -260,39 +260,42 @@ function getNewsletters(){
 		return $this->db->delete('bestProduct');
 
 	}
-	public function saveArticle($post = false)
+	public function saveArticleCategory($post = false)
 	{
 		$data = [
 			'name' => $post['name'],
 			'slug' => url_title($post['name'], 'dash', true),
-			'category_id' => $post['category_id'],
 			'lang' => $post['lang'],
 			'active' => $post['active'],
-			'content' => $post['content'],
 			'created_at' => date('Y-m-d H:i:s'),
 		];
 
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
-			return $this->db->update('articles', $data);
+			return $this->db->update('article_categories', $data);
 		} else {
-			return $this->db->insert('articles', $data);
+			return $this->db->insert('article_categories', $data);
 		}
 	}
 
-	public function getArticles($id = false)
+	public function getArticleCategories($id = false)
 	{
-		if ($id === false) {
-			return $this->db->order_by('id', 'DESC')->get('articles')->result();
+		if ($id == false) {
+			$this->db->select('*');
+			return $this->db->get('article_categories')->result();
 		} else {
-			return $this->db->get_where('articles', ['id' => $id])->row();
+			$this->db->select('*');
+			$this->db->where('id', $id);
+			return $this->db->get('article_categories')->row();
 		}
 	}
 
-	public function deleteArticle($id)
+
+	public function deleteArticleCategory($id)
 	{
-		return $this->db->delete('articles', ['id' => $id]);
+		return $this->db->delete('article_categories', ['id' => $id]);
 	}
+
 
 
 }

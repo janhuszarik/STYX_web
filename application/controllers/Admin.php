@@ -395,48 +395,49 @@ class Admin extends CI_Controller
 	}
 
 
-	public function articlesSave()
+	public function articleCategoriesSave()
 	{
 		$post = $this->input->post();
-		$id = $this->uri->segment(4); // ID článku
-		$segment2 = $this->uri->segment(3); // edit alebo del
+		$id = $this->uri->segment(4);
+		$segment2 = $this->uri->segment(3); // edit oder del
 
 		if (!empty($post)) {
 			if (!empty($post['id'])) {
-				if ($this->Admin_model->saveArticle($post)) {
-					$this->session->set_flashdata('success', 'Článok bol upravený.');
-					redirect(BASE_URL . 'admin/articles');
+				if ($this->Admin_model->saveArticleCategory($post)) {
+					$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich bearbeitet.');
+					redirect(BASE_URL . 'admin/article_categories');
 				} else {
-					$this->session->set_flashdata('error', 'Chyba pri ukladaní.');
+					$this->session->set_flashdata('error', 'Fehler beim Speichern.');
 					$data['edit'] = (object)$post;
 				}
 			} else {
-				if ($this->Admin_model->saveArticle($post)) {
-					$this->session->set_flashdata('success', 'Článok bol pridaný.');
-					redirect(BASE_URL . 'admin/articles');
+				if ($this->Admin_model->saveArticleCategory($post)) {
+					$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich hinzugefügt.');
+					redirect(BASE_URL . 'admin/article_categories');
 				} else {
-					$this->session->set_flashdata('error', 'Chyba pri ukladaní.');
+					$this->session->set_flashdata('error', 'Fehler beim Speichern.');
 					$data['edit'] = (object)$post;
 				}
 			}
 		}
 
 		if ($segment2 == 'del' && is_numeric($id)) {
-			if ($this->Admin_model->deleteArticle($id)) {
-				$this->session->set_flashdata('success', 'Článok bol zmazaný.');
-				redirect(BASE_URL . 'admin/articles');
+			if ($this->Admin_model->deleteArticleCategory($id)) {
+				$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich gelöscht.');
+				redirect(BASE_URL . 'admin/article_categories');
 			} else {
-				$this->session->set_flashdata('error', 'Chyba pri mazaní.');
+				$this->session->set_flashdata('error', 'Fehler beim Löschen.');
 			}
 		}
 
-		$data['articles'] = $this->Admin_model->getArticles(); // zoznam všetkých
-		$data['article'] = $this->Admin_model->getArticles($id); // 1 ak existuje
-		$data['categories'] = $this->Admin_model->get_all_article_categories(); // na výber kategórií
-		$data['title'] = 'Články';
-		$data['page'] = 'admin/settings/article_categories'; // spoločný view
+		$data['articleCategories'] = $this->Admin_model->getArticleCategories(); // alle
+		$data['articleCategory'] = $this->Admin_model->getArticleCategories($id); // 1 falls Edit
+		$data['title'] = 'Artikelkategorien';
+		$data['page'] = 'admin/settings/article_categories';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
+
 
 
 }
