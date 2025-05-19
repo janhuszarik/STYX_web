@@ -16,9 +16,9 @@
 						<div class="row form-group pb-3">
 							<div class="col-lg-6">
 								<label class="col-form-label">Sprache</label>
-								<select class="form-control" name="lang">
-									<option value="sk" <?= isset($articleCategory) && $articleCategory->lang == 'sk' ? 'selected' : '' ?>>Slowakisch</option>
-									<option value="de" <?= isset($articleCategory) && $articleCategory->lang == 'de' ? 'selected' : '' ?>>Deutsch</option>
+								<select class="form-control" name="lang" id="inputLang">
+									<option value="de" <?php echo ($menu->lang == 'de') ? 'selected' : ''; ?>>Deutsch</option>
+									<option value="en" <?php echo ($menu->lang == 'en') ? 'selected' : ''; ?>>English</option>
 								</select>
 							</div>
 							<div class="col-lg-6">
