@@ -22,3 +22,21 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 // Admin Alerty nastavenie - koniec
+$(document).ready(function () {
+  $('#summernote').summernote({
+    height: 300,
+    placeholder: 'Text hier eingeben...',
+    toolbar: [
+      ['style', ['bold', 'italic', 'underline', 'clear']],
+      ['font', ['strikethrough']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['insert', ['link', 'picture', 'video']],
+      ['view', ['codeview']]
+    ]
+  });
+
+  // pri odoslaní formulára vloží obsah editoru do hidden inputu
+  $('form').on('submit', function () {
+    $('#text').val($('#summernote').summernote('code'));
+  });
+});

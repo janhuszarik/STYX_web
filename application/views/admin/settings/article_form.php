@@ -18,10 +18,14 @@ $actionUrl = isset($article) ? 'admin/article_save/edit/' . $article->id : 'admi
 		<input type="text" class="form-control" name="slug" id="slug" value="<?= isset($article) ? $article->slug : '' ?>">
 	</div>
 
-	<div class="form-group pb-3">
-		<label for="text">Beschreibung</label>
-		<textarea class="form-control" name="text" id="text" rows="4"><?= isset($article) ? htmlspecialchars($article->text) : '' ?></textarea>
+	<div class="row form-group pb-3">
+		<div class="col-lg-12">
+			<label for="text">text</label>
+			<div id="summernote"><?= !empty($article->text) ? htmlspecialchars_decode($article->text) : '' ?></div>
+			<input type="hidden" name="text" id="text">
+		</div>
 	</div>
+
 
 	<div class="form-group pb-3">
 		<label for="keywords">Keywords</label>
@@ -56,5 +60,6 @@ $actionUrl = isset($article) ? 'admin/article_save/edit/' . $article->id : 'admi
 	<button type="submit" class="btn btn-primary">Speichern</button>
 	<a href="<?= base_url('admin/articles_in_category/' . $categoryId) ?>" class="btn btn-secondary">Zurück</a>
 </form>
+
 
 
