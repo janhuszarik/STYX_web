@@ -1,6 +1,5 @@
 <div class="container-fluid"> <!-- pridané pre istotu okolo všetkého -->
 	<div class="row">
-		<!-- FORMULÁR VĽAVO -->
 		<div class="col-lg-6">
 			<section class="card">
 				<header class="card-header">
@@ -39,13 +38,11 @@
 							<?= isset($articleCategory->id) ? 'Änderungen speichern' : 'Speichern' ?>
 						</button>
 
-
 					</form>
 				</div>
 			</section>
 		</div>
 
-		<!-- TABUĽKA VPRAVO -->
 		<div class="col-lg-6">
 			<section class="card card-yellow">
 				<header class="card-header">
@@ -80,11 +77,18 @@
 									</td>
 
 									<td class="text-center"><?= active($r->active)?></td>
+
 									<td class="text-center">
-										<a href="<?= base_url('admin/article_categories/edit/' . $r->id) ?>"><i class="fa fa-edit text-success"></i></a>
-										 
-										<a href="<?= base_url('admin/article_categories/del/' . $r->id) ?>" onclick="return confirm('Möchten Sie wirklich löschen?')"><i class="fa fa-trash text-danger"></i></a>
+										<a href="<?= base_url('admin/article_categories/edit/' . $r->id) ?>" class="btn btn-success btn-sm">
+											<i class="fa fa-pencil"></i>
+										</a>
+										<a href="<?= base_url('admin/article_categories/del/' . $r->id) ?>" class="btn btn-danger btn-sm">
+											<i class="fa fa-trash"></i>
+										</a>
 									</td>
+
+
+
 								</tr>
 							<?php endforeach; endif; ?>
 							</tbody>
