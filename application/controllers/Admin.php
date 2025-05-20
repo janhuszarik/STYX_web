@@ -451,6 +451,14 @@ class Admin extends CI_Controller
 
 		$this->load->view('admin/layout/normal', $data);
 	}
+	public function articlesByCategory($categoryId)
+	{
+		$data['articles'] = $this->Admin_model->getArticlesByCategory($categoryId);
+		$data['categoryId'] = $categoryId;
+		$data['title'] = 'Artikel verwalten';
+		$data['page'] = 'admin/settings/articles';
+		$this->load->view('admin/layout/normal', $data);
+	}
 
 
 

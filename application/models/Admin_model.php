@@ -297,7 +297,13 @@ function getNewsletters(){
 	{
 		return $this->db->delete('article_categories', ['id' => $id]);
 	}
-
-
+	public function getArticlesByCategory($categoryId)
+	{
+		$this->db->select('*');
+		$this->db->from('articles');
+		$this->db->where('category_id', $categoryId);
+		$this->db->order_by('id', 'DESC');
+		return $this->db->get()->result();
+	}
 
 }
