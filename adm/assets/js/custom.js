@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 $(document).ready(function () {
   // Summernote init
   $('#summernote').summernote({
-    height: 300,
+    height: 450,
     toolbar: [
       ['style', ['bold', 'italic', 'underline', 'clear']],
       ['font', ['strikethrough']],
