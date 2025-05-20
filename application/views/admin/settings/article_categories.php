@@ -22,7 +22,7 @@
 							<th>Slug</th>
 							<th class="text-center">Keywords</th>
 							<th class="text-center">Description</th>
-							<th class="text-center">Artikel im Kategorie</th>
+							<th class="text-center">Artikel</th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Aktionen</th>
 						</tr>
@@ -37,11 +37,14 @@
 									<td><?= $cat->slug ?></td>
 									<td class="text-center"><?= checkTextIcon($cat->keywords) ?></td>
 									<td class="text-center"><?= checkTextIcon($cat->description) ?></td>
-									<td class="text-center">
-										<a href="<?= base_url('admin/articles_in_category/' . $cat->id) ?>" class="btn btn-sm btn-outline-primary px-2 py-0" style="font-size: 13px; line-height: 1.2;">
+									<td class="text-center align-middle">
+										<a href="<?= base_url('admin/articles_in_category/' . $cat->id) ?>"
+										   class="btn btn-outline-primary d-inline-flex justify-content-center align-items-center"
+										   style="width: 30px; height: 30px; font-size: 12px; padding: 0;">
 											<?= $cat->article_count ?? 0 ?>
 										</a>
 									</td>
+
 									<td class="text-center">
 										<?= $cat->active ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>' ?>
 									</td>

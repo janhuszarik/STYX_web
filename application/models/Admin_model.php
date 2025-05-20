@@ -305,5 +305,15 @@ function getNewsletters(){
 		$this->db->order_by('id', 'DESC');
 		return $this->db->get()->result();
 	}
+	public function getArticleCategoriesWithCount()
+	{
+		$this->db->select('ac.*, COUNT(a.id) as article_count');
+		$this->db->from('article_categories ac');
+		$this->db->join('articles a', 'a.category_id = ac.id', 'left');
+		$this->db->group_by('ac.id');
+		return $this->db->get()->result();
+	}
+
+
 
 }

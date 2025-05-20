@@ -1,68 +1,55 @@
 <div class="row">
-	<div class="col-lg-8">
-		<section class="card">
-			<header class="card-header">
-				<h2 class="card-title">
-					<?= isset($article->id) ? 'Artikel bearbeiten' : 'Neuer Artikel' ?>
-				</h2>
-				<p class="card-subtitle">Bitte füllen Sie die Felder aus</p>
+	<!-- TABUĽKA NA CELOU ŠÍRKU -->
+	<div class="col-lg-12">
+		<section class="card card-yellow">
+			<header class="card-header d-flex justify-content-between align-items-center">
+				<div>
+					<h3 class="card-title mb-0">Artikel in Kategorie</h3>
+					<p class="card-subtitle">Kategorie ID: <?=$categoryId ?></p>
+				</div>
 			</header>
 			<div class="card-body">
-				<form action="<?= base_url('admin/articles/save') ?>" method="post">
-					<?php if (isset($article->id)): ?>
-						<input type="hidden" name="id" value="<?= $article->id ?>">
-					<?php endif; ?>
-
-					<div class="row form-group pb-3">
-						<div class="col-md-6">
-							<label for="slug">Slug</label>
-							<input type="text" class="form-control" name="slug" id="slug" value="<?= $article->slug ?? '' ?>" required>
-						</div>
-						<div class="col-md-6">
-							<label for="title">Titel</label>
-							<input type="text" class="form-control" name="title" id="title" value="<?= $article->title ?? '' ?>" required>
-						</div>
-					</div>
-
-					<div class="form-group pb-3">
-						<label for="text">Text</label>
-						<textarea class="form-control" name="text" id="text" rows="5"><?= $article->text ?? '' ?></textarea>
-					</div>
-
-					<div class="row form-group pb-3">
-						<div class="col-md-6">
-							<label for="keywords">Keywords</label>
-							<input type="text" class="form-control" name="keywords" id="keywords" value="<?= $article->keywords ?? '' ?>">
-						</div>
-						<div class="col-md-6">
-							<label for="meta">Meta Tags</label>
-							<input type="text" class="form-control" name="meta" id="meta" value="<?= $article->meta ?? '' ?>">
-						</div>
-					</div>
-
-					<div class="row form-group pb-3">
-						<div class="col-md-6">
-							<label for="created_at">Erstellt am</label>
-							<input type="datetime-local" class="form-control" name="created_at" id="created_at" value="<?= isset($article->created_at) ? date('Y-m-d\TH:i', strtotime($article->created_at)) : '' ?>">
-						</div>
-						<div class="col-md-6">
-							<label for="updated_at">Aktualisiert am</label>
-							<input type="datetime-local" class="form-control" name="updated_at" id="updated_at" value="<?= isset($article->updated_at) ? date('Y-m-d\TH:i', strtotime($article->updated_at)) : '' ?>">
-						</div>
-					</div>
-
-					<div class="form-group pb-3">
-						<label for="active">Status</label>
-						<select class="form-control" name="active" id="active">
-							<option value="J" <?= isset($article->active) && $article->active === 'J' ? 'selected' : '' ?>>Aktiv</option>
-							<option value="N" <?= isset($article->active) && $article->active === 'N' ? 'selected' : '' ?>>Inaktiv</option>
-						</select>
-					</div>
-
-					<footer class="text-end">
-						<button type="submit" class="btn btn-primary">Speichern</button>
-					</footer>
-				</form>
+				<div class="table-responsive">
+					<table class="table table-hover table-bordered mb-0">
+						<thead>
+						<tr>
+							<th class="text-center">#</th>
+							<th>Titel</th>
+							<th>Slug</th>
+							<th class="text-center">Keywords</th>
+							<th class="text-center">Beschreibung</th>
+							<th class="text-center">Meta</th>
+							<th class="text-center">Erstellt</th>
+							<th class="text-center">Status</th>
+							<th class="text-center">Aktionen</th>
+						</tr>
+						</thead>
+						<tbody>
+						<?php if (!empty($articles)): ?>
+						<?php foreach ($articles as $index => $article): ?>
+						<tr>
+							<td class="text-center"><?= $index + 1 ?></td>
+							<td><?= htmlspecialchars($article->title_alt) ?></td>
+							<td><?= $article->slug ?></td>
+							<td class="text-center"><?= checkTextIcon($article->keywords) ?></td>
+							<td class="text-center"><?= checkTextIcon($article->text) ?></td>
+							<td class="text-center"><?= checkTextIcon($article->meta) ?></td>
+							<td class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
+							<td class="text-center">
+								<?= $article->active == 'J' ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>' ?>
+							</td>
+							<td class="text-center">
+								<a href="<?= base_url('admin/edit_article/' . $article->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
+								<a href="<?= base_url('admin/delete_article/' . $article->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Wirklich löschen?')"><i class="fa fa-trash"></i></a>
+							</td>
+						</tr>
+						<?php endforeach; ?>
+						<?php else: ?>
+						<tr><td colspan="9" class="text-center">Keine Artikel gefunden.</td></tr>
+						<?php endif; ?>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</section>
 	</div>

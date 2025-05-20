@@ -430,12 +430,13 @@ class Admin extends CI_Controller
 			}
 		}
 
-		$data['articleCategories'] = $this->Admin_model->getArticleCategories(); // alle
+		$data['articleCategories'] = $this->Admin_model->getArticleCategoriesWithCount();
 		$data['articleCategory'] = $this->Admin_model->getArticleCategories($id); // 1 falls Edit
 		$data['title'] = 'Artikelkategorien';
 		$data['page'] = 'admin/settings/article_categories';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
 
 	public function articleCategoryForm($id = null)
 	{
@@ -453,6 +454,7 @@ class Admin extends CI_Controller
 	}
 	public function articlesByCategory($categoryId)
 	{
+		$data['articleCategories'] = $this->Admin_model->getArticleCategoriesWithCount();
 		$data['articles'] = $this->Admin_model->getArticlesByCategory($categoryId);
 		$data['categoryId'] = $categoryId;
 		$data['title'] = 'Artikel verwalten';
