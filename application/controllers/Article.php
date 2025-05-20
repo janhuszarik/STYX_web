@@ -107,16 +107,20 @@ class Article extends CI_Controller
 			}
 		}
 
-		if ($segment2 == 'del' && is_numeric($id)) {
-			if ($this->Article_model->deleteArticle($id)) {
-				$this->session->set_flashdata('success', 'Artikel wurde erfolgreich gelöscht.');
-				redirect(BASE_URL . 'admin/articles_in_category/' . $this->uri->segment(4));
-			} else {
-				$this->session->set_flashdata('error', 'Fehler beim Löschen.');
-			}
-		}
+        if ($segment2 == 'del' && is_numeric($id)) {
+            $article = $this->Article_model->getArticle($id);
 
-		$data['article'] = $this->Article_model->getArticle($id);
+            if ($this->Article_model->deleteArticle($id)) {
+                $this->session->set_flashdata('success', 'Artikel wurde erfolgreich gelöscht.');
+                $categoryId = $article->category_id ?? 0;
+                redirect(BASE_URL . 'admin/articles_in_category/' . $categoryId);
+            } else {
+                $this->session->set_flashdata('error', 'Fehler beim Löschen.');
+            }
+        }
+
+
+        $data['article'] = $this->Article_model->getArticle($id);
 		$data['categoryId'] = $data['article']->category_id ?? $id;
 		$data['title'] = 'Artikel verwalten';
 		$data['page'] = 'admin/settings/article_form';

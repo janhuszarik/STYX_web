@@ -1,5 +1,5 @@
 <?php
-$actionUrl = isset($article) ? 'admin/update_article/' . $article->id : 'admin/save_article';
+$actionUrl = isset($article) ? 'admin/article_save/edit/' . $article->id : 'admin/article_save';
 ?>
 
 	<form method="post" action="<?= base_url($actionUrl) ?>">
@@ -37,6 +37,9 @@ $actionUrl = isset($article) ? 'admin/update_article/' . $article->id : 'admin/s
 				<option value="N" <?= isset($article) && $article->active == 'N' ? 'selected' : '' ?>>Inaktiv</option>
 			</select>
 		</div>
+		<?php if (isset($article)): ?>
+			<input type="hidden" name="id" value="<?= $article->id ?>">
+		<?php endif; ?>
 
 		<button type="submit" class="btn btn-primary">Speichern</button>
 		<a href="<?= base_url('admin/articles_in_category/' . $categoryId) ?>" class="btn btn-secondary">Zurück</a>

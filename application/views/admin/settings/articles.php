@@ -32,7 +32,7 @@
 							<?php foreach ($articles as $index => $article): ?>
 								<tr>
 									<td class="text-center"><?= $index + 1 ?></td>
-									<td><?= htmlspecialchars($article->title_alt) ?></td>
+									<td><?= $article->title_alt ?></td>
 									<td><?= $article->slug ?></td>
 									<td class="text-center"><?= checkTextIcon($article->keywords) ?></td>
 									<td class="text-center"><?= checkTextIcon($article->text) ?></td>

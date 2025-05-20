@@ -71,7 +71,7 @@ class Article_model extends CI_Model
 			'updated_at' => date('Y-m-d H:i:s')
 		];
 
-		if (!empty($post['id'])) {
+		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
 			return $this->db->update('articles', $data);
 		} else {
@@ -79,4 +79,12 @@ class Article_model extends CI_Model
 			return $this->db->insert('articles', $data);
 		}
 	}
+	public function deleteArticle($id)
+	{
+		return $this->db->delete('articles', ['id' => $id]);
+	}
+
+
+
+
 }
