@@ -456,7 +456,16 @@ function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = '
 		return $urlimgthumb;
 	}
 }
-
+//funkcia pre Admin na zobrazenie stavu keywords a description
+if (!function_exists('checkTextIcon')) {
+	function checkTextIcon($value = '') {
+		if (!empty(trim($value))) {
+			return '<i class="fa fa-check text-success"></i>';
+		} else {
+			return '<i class="fa fa-times text-danger"></i>';
+		}
+	}
+}
 
 
 

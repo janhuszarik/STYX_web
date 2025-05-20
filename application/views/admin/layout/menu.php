@@ -88,25 +88,12 @@
 									<span>Aktuell</span>
 								</a>
 							</li>
-							<li class="nav-parent">
-								<a class="nav-link" href="#">
+							<li>
+								<a class="nav-link" href="<?=BASE_URL.'admin/article_categories'?>">
 									<i class="bx bx-news" aria-hidden="true"></i>
-									<span>Beiträge bearbeiten</span>
+									<span>Beiträge manager</span>
 								</a>
-								<ul class="nav nav-children">
-									<li>
-										<a class="nav-link" href="<?=BASE_URL.'admin/article_categories'?>">
-											Kategorien
-										</a>
-									</li>
-									<li>
-										<a class="nav-link" href="<?=BASE_URL.'admin/news'?>">
-											Artikel
-										</a>
-									</li>
-								</ul>
 							</li>
-
 							<li>
 								<a class="nav-link" href="<?=BASE_URL.'admin/bestProduct'?>">
 									<i class="bx bx-history" aria-hidden="true"></i>
