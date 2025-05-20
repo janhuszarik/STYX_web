@@ -80,19 +80,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $route['admin/menu/edit/:num'] 			= 'admin/menuSave';
     $route['admin/menu/del/:num'] 			= 'admin/menuSave';
 
-	$route['admin/article_categories'] 		= 'admin/articleCategoriesSave';
-	$route['admin/article_categories/add'] 	= 'admin/articleCategoryForm';
-	$route['admin/article_categories/edit/(:num)'] = 'admin/articleCategoryForm/$1';
-	$route['admin/article_categories/del/(:num)'] = 'admin/articleCategoriesSave/del/$1';
+$route['admin/article_categories'] = 'article/articleCategoriesSave';
+$route['admin/article_category_form'] = 'article/articleCategoryForm';
+$route['admin/article_category_form/(:num)'] = 'article/articleCategoryForm/$1';
 
+$route['admin/articles_in_category/(:num)'] = 'article/articlesByCategory/$1';
+$route['admin/article_save'] = 'article/articlesSave';
+$route['admin/article_save/edit/(:num)'] = 'article/articlesSave/$1';
+$route['admin/article_save/del/(:num)'] = 'article/articlesSave/del/$1';
 
-
-
-$route['admin/articles_in_category/(:num)'] = 'admin/articlesByCategory/$1';
-
-$route['admin/articleSave'] = 'admin/articlesSave';
-$route['admin/edit_article/(:num)'] = 'admin/articlesSave/$1';
-$route['admin/delete_article/(:num)/(:num)'] = 'admin/articlesSave/del/$1/$2'; // $1=id článku, $2=category_id
 
 
 
