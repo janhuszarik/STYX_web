@@ -268,6 +268,8 @@ function getNewsletters(){
 			'lang' => $post['lang'],
 			'active' => $post['active'],
 			'created_at' => date('Y-m-d H:i:s'),
+			'keywords'    => $post['keywords'] ,
+			'description' => $post['description']
 		];
 
 		if (!empty($post['id']) && is_numeric($post['id'])) {

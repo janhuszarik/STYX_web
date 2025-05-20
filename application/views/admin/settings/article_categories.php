@@ -2,11 +2,14 @@
 	<!-- TABUĽKA NA CELOU ŠÍRKU -->
 	<div class="col-lg-12">
 		<section class="card card-yellow">
-			<header class="card-header">
-				<h3 class="card-title">Kategorien Liste</h3>
-				<p class="card-subtitle">
-					Anzahl: <?= isset($articleCategories) && is_array($articleCategories) ? count($articleCategories) : 0 ?>
-				</p>
+			<header class="card-header d-flex justify-content-between align-items-center">
+				<div>
+					<h3 class="card-title mb-0">Kategorien Liste</h3>
+					<p class="card-subtitle">Anzahl: <?= isset($articleCategories) && is_array($articleCategories) ? count($articleCategories) : 0 ?></p>
+				</div>
+				<div>
+					<a href="<?= base_url('admin/article_categories/add') ?>" class="btn btn-sm btn-primary">+ Kategorie hinzufügen</a>
+				</div>
 			</header>
 			<div class="card-body">
 				<div class="table-responsive">

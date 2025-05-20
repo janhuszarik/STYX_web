@@ -437,6 +437,20 @@ class Admin extends CI_Controller
 		$this->load->view('admin/layout/normal', $data);
 	}
 
+	public function articleCategoryForm($id = null)
+	{
+		$data['title'] = $id ? 'Kategorie bearbeiten' : 'Kategorie hinzufügen';
+		$data['page'] = 'admin/settings/article_category_form';
+
+		if ($id) {
+			$data['articleCategory'] = $this->Admin_model->getArticleCategories($id);
+			if (!$data['articleCategory']) {
+				show_404();
+			}
+		}
+
+		$this->load->view('admin/layout/normal', $data);
+	}
 
 
 
