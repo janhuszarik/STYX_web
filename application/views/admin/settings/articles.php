@@ -42,8 +42,8 @@
 										<?= $article->active == 'J' ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>' ?>
 									</td>
 									<td class="text-center">
-										<a href="<?= base_url('admin/edit_article/' . $article->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
-										<a href="<?= base_url('admin/delete_article/' . $article->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Wirklich löschen?')"><i class="fa fa-trash"></i></a>
+										<a href="<?= base_url('admin/article_save/edit/' . $article->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
+										<a href="<?= base_url('admin/article_save/del/' . $article->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Wirklich löschen?')"><i class="fa fa-trash"></i></a>
 									</td>
 								</tr>
 							<?php endforeach; ?>
