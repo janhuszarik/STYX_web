@@ -68,6 +68,8 @@ class Article_model extends CI_Model
 			'keywords' => $post['keywords'],
 			'meta' => $post['meta'],
 			'active' => $post['active'],
+			'start_date_from' => !empty($post['start_date_from']) ? $post['start_date_from'] : null,
+			'end_date_to' => !empty($post['end_date_to']) ? $post['end_date_to'] : null,
 			'updated_at' => date('Y-m-d H:i:s')
 		];
 
@@ -79,12 +81,9 @@ class Article_model extends CI_Model
 			return $this->db->insert('articles', $data);
 		}
 	}
+
 	public function deleteArticle($id)
 	{
 		return $this->db->delete('articles', ['id' => $id]);
 	}
-
-
-
-
 }

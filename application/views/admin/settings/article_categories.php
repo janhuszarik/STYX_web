@@ -44,9 +44,8 @@
 											<?= $cat->article_count ?? 0 ?>
 										</a>
 									</td>
-
 									<td class="text-center">
-										<?= $cat->active ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>' ?>
+										<?= active($cat->active) ?>
 									</td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/article_categories/edit/' . $cat->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
