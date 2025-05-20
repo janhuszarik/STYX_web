@@ -313,6 +313,32 @@ function getNewsletters(){
 		$this->db->group_by('ac.id');
 		return $this->db->get()->result();
 	}
+	public function getArticle($id)
+	{
+		return $this->db->get_where('articles', ['id' => $id])->row();
+	}
+
+	public function saveArticle($post)
+	{
+		$data = [
+			'category_id' => $post['category_id'],
+			'title' => $post['title'],
+			'slug' => $post['slug'],
+			'text' => $post['text'],
+			'keywords' => $post['keywords'],
+			'meta' => $post['meta'],
+			'active' => $post['active'],
+			'updated_at' => date('Y-m-d H:i:s')
+		];
+
+		if (!empty($post['id'])) {
+			$this->db->where('id', $post['id']);
+			return $this->db->update('articles', $data);
+		} else {
+			$data['created_at'] = date('Y-m-d H:i:s');
+			return $this->db->insert('articles', $data);
+		}
+	}
 
 
 

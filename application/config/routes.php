@@ -88,10 +88,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-	$route['admin/articles_in_category/(:num)'] = 'admin/articlesByCategory/$1';
-	$route['admin/articles/add'] = 'admin/articleSave';
-	$route['admin/articles/edit/(:num)'] = 'admin/articleSave/$1';
-	$route['admin/articles/del/(:num)'] = 'admin/articleSave/del/$1';
+$route['admin/articles_in_category/(:num)'] = 'admin/articlesByCategory/$1';
+
+$route['admin/articleSave'] = 'admin/articlesSave';
+$route['admin/edit_article/(:num)'] = 'admin/articlesSave/$1';
+$route['admin/delete_article/(:num)/(:num)'] = 'admin/articlesSave/del/$1/$2'; // $1=id článku, $2=category_id
+
+
 
 
 

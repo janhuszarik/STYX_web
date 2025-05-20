@@ -463,5 +463,47 @@ class Admin extends CI_Controller
 	}
 
 
+	public function articlesSave()
+	{
+		$post = $this->input->post();
+		$id = $this->uri->segment(4);
+		$segment2 = $this->uri->segment(3); // edit oder del
+
+		if (!empty($post)) {
+			if (!empty($post['id'])) {
+				if ($this->Admin_model->saveArticle($post)) {
+					$this->session->set_flashdata('success', 'Artikel wurde erfolgreich bearbeitet.');
+					redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
+				} else {
+					$this->session->set_flashdata('error', 'Fehler beim Speichern.');
+					$data['article'] = (object)$post;
+				}
+			} else {
+				if ($this->Admin_model->saveArticle($post)) {
+					$this->session->set_flashdata('success', 'Artikel wurde erfolgreich hinzugefügt.');
+					redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
+				} else {
+					$this->session->set_flashdata('error', 'Fehler beim Speichern.');
+					$data['article'] = (object)$post;
+				}
+			}
+		}
+
+		if ($segment2 == 'del' && is_numeric($id)) {
+			if ($this->Admin_model->deleteArticle($id)) {
+				$this->session->set_flashdata('success', 'Artikel wurde erfolgreich gelöscht.');
+				redirect(BASE_URL . 'admin/articles_in_category/' . $this->uri->segment(4));
+			} else {
+				$this->session->set_flashdata('error', 'Fehler beim Löschen.');
+			}
+		}
+
+		$data['article'] = $this->Admin_model->getArticle($id);
+		$data['categoryId'] = $data['article']->category_id ?? $id;
+		$data['title'] = 'Artikel verwalten';
+		$data['page'] = 'admin/settings/article_form';
+		$this->load->view('admin/layout/normal', $data);
+	}
+
 
 }
