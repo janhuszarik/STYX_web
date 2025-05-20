@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 // Admin Alerty nastavenie - koniec
 $(document).ready(function () {
+  // Summernote init
   $('#summernote').summernote({
     height: 300,
-    placeholder: 'Text hier eingeben...',
     toolbar: [
       ['style', ['bold', 'italic', 'underline', 'clear']],
       ['font', ['strikethrough']],
@@ -35,8 +35,66 @@ $(document).ready(function () {
     ]
   });
 
-  // pri odoslaní formulára vloží obsah editoru do hidden inputu
+  // Synchronizácia pri submit
   $('form').on('submit', function () {
     $('#text').val($('#summernote').summernote('code'));
   });
+
+  // Načítanie šablón z JSON
+  console.log("Načítavam šablóny...");
+
+  fetch(BASE_URL + 'adm/assets/js/article_templates.json')
+    .then(res => {
+      if (!res.ok) throw new Error('Chyba načítania: ' + res.status);
+      return res.json();
+    })
+    .then(templates => {
+      const $picker = $('#templatePicker');
+      console.log('Šablóny načítané:', templates);
+      templates.forEach(t => {
+        $picker.append(
+          $('<option>', {
+            value: t.content,
+            text: t.label
+          })
+        );
+      });
+    })
+    .catch(err => {
+      console.error('Šablóny sa nepodarilo načítať:', err);
+    });
+
+
+
+  // Po výbere šablóny vlož do editora
+  $('#templatePicker').on('change', function () {
+    const html = $(this).val();
+    if (html) $('#summernote').summernote('code', html);
+  });
+
+  // Výmena obrázkov kliknutím
+  $('#summernote').on('click', 'img', function () {
+    const img = this;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          $(img).attr('src', evt.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  });
+});
+
+$('#templatePicker').on('change', function () {
+  const template = $(this).val();
+  if (template) {
+    $('#summernote').summernote('code', template);
+  }
 });

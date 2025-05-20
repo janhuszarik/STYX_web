@@ -1,0 +1,14 @@
+[
+  {
+    "label": "Produktneuheit: Naturshampoo",
+    "content": "<h2>Unsere neue Naturshampoo-Serie</h2><p>Entdecken Sie die Kraft der Natur für Ihr Haar. Unsere neue Linie an Naturshampoos basiert auf reinen pflanzlichen Inhaltsstoffen – ganz ohne Silikone oder Parabene.</p><img src='https://via.placeholder.com/200x150' alt='Naturshampoo' style='float:right; margin:10px; max-width:40%;'><h3>Was macht unser Shampoo besonders?</h3><ul><li>100 % natürliche Inhaltsstoffe</li><li>Ohne künstliche Duftstoffe</li><li>Sanft zur Kopfhaut</li></ul><p>Ideal für die tägliche Pflege bei empfindlicher Haut.</p><img src='https://via.placeholder.com/200x150' alt='Anwendung' style='float:left; margin:10px; max-width:40%;'><h3>In drei Varianten erhältlich</h3><p>Für trockenes, fettiges oder normales Haar. Jede Sorte ist sorgfältig abgestimmt auf spezifische Bedürfnisse.</p><img src='https://via.placeholder.com/200x150' alt='Sortenübersicht' style='display:block; margin:10px auto; max-width:60%;'>"
+  },
+  {
+    "label": "Ankündigung: Sommeraktion 2025",
+    "content": "<h2>Sommeraktion 2025 – Jetzt sparen!</h2><p>Der Sommer wird heiß – und unsere Angebote auch! Sichern Sie sich exklusive Rabatte auf ausgewählte Produkte.</p><img src='https://via.placeholder.com/200x150' alt='Sommeraktion' style='float:right; margin:10px; max-width:40%;'><h3>Unsere Highlights:</h3><ol><li>Bis zu 30 % Rabatt auf Pflegeprodukte</li><li>Gratis-Versand ab 50 € Bestellwert</li><li>Kostenlose Sommer-Tester-Sets</li></ol><img src='https://via.placeholder.com/200x150' alt='Rabatte' style='float:left; margin:10px; max-width:40%;'><h3>Jetzt online oder im Geschäft erhältlich</h3><p>Besuchen Sie unsere Filialen oder unseren Onlineshop – nur solange der Vorrat reicht.</p><img src='https://via.placeholder.com/200x150' alt='Filialen' style='display:block; margin:10px auto; max-width:60%;'>"
+  },
+  {
+    "label": "Wissenswertes: Die Wirkung ätherischer Öle",
+    "content": "<h2>Die Welt der ätherischen Öle</h2><p>Ätherische Öle sind hochkonzentrierte Pflanzenextrakte mit erstaunlicher Wirkung auf Körper und Geist.</p><img src='https://via.placeholder.com/200x150' alt='Ölflaschen' style='float:right; margin:10px; max-width:40%;'><h3>Anwendungsgebiete</h3><ul><li>Stressabbau durch Lavendel</li><li>Aktivierung durch Zitrone</li><li>Immunsystem-Stärkung mit Eukalyptus</li></ul><p>Schon wenige Tropfen entfalten eine intensive Wirkung.</p><img src='https://via.placeholder.com/200x150' alt='Duftlampe' style='float:left; margin:10px; max-width:40%;'><h3>Hinweis zur Anwendung</h3><p>Verwenden Sie ätherische Öle immer verdünnt und achten Sie auf Hautverträglichkeit.</p><img src='https://via.placeholder.com/200x150' alt='Aromatherapie' style='display:block; margin:10px auto; max-width:60%;'>"
+  }
+]
