@@ -29,37 +29,36 @@
 	return $ci->config->config['languages'];
 
 }
-	function langInfo($lang = false){
+function langInfo($lang = false) {
+	$default = [
+		'text' => strtoupper($lang),
+		'flag' => BASE_URL . 'img/flag/default.png' // fallback obrázok
+	];
 
-		if($lang == 'sk'){
-
-			$info = array(
-				'text' => 'Slovensky',
-				'flag' => BASE_URL.'img/flag/png/slovak.png'
-			);
-			return $info;
-
-		} elseif ($lang == 'en') {
-			$info = array(
-				'text' => 'Anglicky',
-				'flag' => BASE_URL . 'img/flag/svg/us.svg'
-			);
-			return $info;
-		} elseif ($lang == 'de'){
-			$info = array(
-				'text' => 'Nemecky',
-				'flag' => BASE_URL.'img/flag/svg/german.svg'
-			);
-			return $info;
-
-		} else {
-			echo 'fehler';
-		}
-
+	if ($lang === 'sk') {
+		return [
+			'text' => 'Slowakisch',
+			'flag' => BASE_URL . 'img/flag/png/slovak.png'
+		];
+	} elseif ($lang === 'en') {
+		return [
+			'text' => 'Englisch',
+			'flag' => BASE_URL . 'img/flag/svg/england.svg'
+		];
+	} elseif ($lang === 'de') {
+		return [
+			'text' => 'Deutsch',
+			'flag' => BASE_URL . 'img/flag/svg/austria.svg'
+		];
 	}
 
+	// fallback pre neznámy jazykový kód
+	return $default;
+}
 
-	// Skontroluje, či neexistuje funkcia s názvom 'lang'
+
+
+// Skontroluje, či neexistuje funkcia s názvom 'lang'
 	if ( ! function_exists('lang'))
 
 		// Ak neexistuje, definuje funkciu 'lang'

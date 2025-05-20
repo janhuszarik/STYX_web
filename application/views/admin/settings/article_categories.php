@@ -75,8 +75,11 @@
 									<td><?= ++$k ?></td>
 									<td><?= htmlspecialchars($r->name) ?></td>
 									<td><?= $r->slug ?></td>
-									<td><?= strtoupper($r->lang) ?></td>
-									<td><?= $r->active ? 'Ja' : 'Nein' ?></td>
+									<td class="text-center">
+										<img src="<?=langInfo($r->lang)['flag']?>" width="24px" alt="<?='country'.' '.$r->lang?>">
+									</td>
+
+									<td class="text-center"><?= active($r->active)?></td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/article_categories/edit/' . $r->id) ?>"><i class="fa fa-edit text-success"></i></a>
 										 
