@@ -119,6 +119,7 @@ class Article extends CI_Controller
             }
         }
 
+		$data['articleCategories'] = $this->Article_model->getArticleCategories();
 
         $data['article'] = $this->Article_model->getArticle($id);
 		$data['categoryId'] = $data['article']->category_id ?? $id;

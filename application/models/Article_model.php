@@ -60,14 +60,26 @@ class Article_model extends CI_Model
 
 	public function saveArticle($post)
 	{
+		$image = null;
+		if (!empty($_FILES['image']['name'])) {
+			$this->load->helper('app_helper');
+			$uploadPath = uploadImg('image', 'uploads/articles');
+			if (!empty($uploadPath)) {
+				$image = basename($uploadPath); // uloží len názov súboru
+			}
+		}
+
+
 		$data = [
 			'category_id' => $post['category_id'],
 			'title' => $post['title'],
-			'slug' => $post['slug'],
+			'subtitle' => $post['subtitle'],
+			'slug' => url_title($post['title'], 'dash', true),
+			'image' => $image ?? ($post['old_image'] ?? null),
 			'text' => $post['text'],
 			'keywords' => $post['keywords'],
 			'meta' => $post['meta'],
-			'active' => $post['active'],
+			'active' => isset($post['active']) ? 1 : 0,
 			'start_date_from' => !empty($post['start_date_from']) ? $post['start_date_from'] : null,
 			'end_date_to' => !empty($post['end_date_to']) ? $post['end_date_to'] : null,
 			'updated_at' => date('Y-m-d H:i:s')
