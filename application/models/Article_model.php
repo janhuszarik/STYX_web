@@ -58,6 +58,13 @@ class Article_model extends CI_Model
 		return $this->db->get_where('articles', ['id' => $id])->row();
 	}
 
+	public function getSections($articleId)
+	{
+		$this->db->where('article_id', $articleId);
+		$this->db->order_by('order');
+		return $this->db->get('article_sections')->result();
+	}
+
 	public function saveArticle($post)
 	{
 		$image = null;
@@ -65,10 +72,9 @@ class Article_model extends CI_Model
 			$this->load->helper('app_helper');
 			$uploadPath = uploadImg('image', 'uploads/articles');
 			if (!empty($uploadPath)) {
-				$image = basename($uploadPath); // uloží len názov súboru
+				$image = basename($uploadPath);
 			}
 		}
-
 
 		$data = [
 			'category_id' => $post['category_id'],
@@ -76,7 +82,6 @@ class Article_model extends CI_Model
 			'subtitle' => $post['subtitle'],
 			'slug' => url_title($post['title'], 'dash', true),
 			'image' => $image ?? ($post['old_image'] ?? null),
-			'text' => $post['text'],
 			'keywords' => $post['keywords'],
 			'meta' => $post['meta'],
 			'active' => isset($post['active']) ? 1 : 0,
@@ -87,11 +92,45 @@ class Article_model extends CI_Model
 
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
-			return $this->db->update('articles', $data);
+			$success = $this->db->update('articles', $data);
+			$articleId = $post['id'];
 		} else {
 			$data['created_at'] = date('Y-m-d H:i:s');
-			return $this->db->insert('articles', $data);
+			$this->db->insert('articles', $data);
+			$articleId = $this->db->insert_id();
+			$success = true;
 		}
+
+		if ($success && isset($post['sections']) && is_array($post['sections'])) {
+			$this->db->delete('article_sections', ['article_id' => $articleId]);
+
+			foreach ($post['sections'] as $index => $text) {
+				$imageName = null;
+				if (!empty($_FILES['section_images']['name'][$index])) {
+					$_FILES['single_section'] = [
+						'name' => $_FILES['section_images']['name'][$index],
+						'type' => $_FILES['section_images']['type'][$index],
+						'tmp_name' => $_FILES['section_images']['tmp_name'][$index],
+						'error' => $_FILES['section_images']['error'][$index],
+						'size' => $_FILES['section_images']['size'][$index],
+					];
+					$this->load->helper('app_helper');
+					$upload = uploadImg('single_section', 'uploads/articles/sections');
+					if (!empty($upload)) {
+						$imageName = basename($upload);
+					}
+				}
+
+				$this->db->insert('article_sections', [
+					'article_id' => $articleId,
+					'content' => $text,
+					'image' => $imageName,
+					'order' => $index
+				]);
+			}
+		}
+
+		return $success;
 	}
 
 	public function deleteArticle($id)

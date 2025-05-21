@@ -228,89 +228,61 @@ function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = '
 
 }
 
-	function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false){
-
-
+function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false){
 	unset($_FILES['files']);
 
 	$CI = & get_instance();
 	$CI->load->library('image_lib');
 	if ($dir == false){
 		$dir = 'uploads/';
-		if (!is_dir($dir) ? mkdir( $dir, 0755) : '');
+		if (!is_dir($dir)) mkdir($dir, 0755, true);
 	} else {
-		if (!is_dir($dir) ? mkdir( $dir, 0755) : '');
-		$dir = $dir.'/';
+		if (!is_dir($dir)) mkdir($dir, 0755, true);
+		$dir = rtrim($dir, '/') . '/';
 	}
-	if ( $saveAsNameFile == false) { $saveAsNameFile = 'img';}
-	if (count($_FILES) > 1){ // je vo FILES viac obrázkov?
 
+	if ($saveAsNameFile == false) { $saveAsNameFile = 'img'; }
+
+	if (is_array($_FILES[$file]['name'])) {
 		$data = array();
-		$name = $CI->input->post('name');
-		if (!empty($name)){
-			if ($file == false){
-				if (!$name){
-					$file = 'file';
-				} else {
-					$file = $name;
+		foreach ($_FILES[$file]['name'] as $k => $name) {
+			if (!empty($name)) {
+				$tmpName = $_FILES[$file]['tmp_name'][$k];
+				if (isset($tmpName) && is_string($tmpName) && file_exists($tmpName)) {
+					$nazovAkoURL = trim(url_oprava($saveAsNameFile));
+					$typ = pathinfo($name, PATHINFO_EXTENSION);
+					$urlimg = $dir . $nazovAkoURL . '-' . uniqid() . '.' . $typ;
+
+					if (in_array(strtolower($typ), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
+						if (move_uploaded_file($tmpName, $urlimg)) {
+							$data[$k] = $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
+						} else {
+							$data[$k] = '';
+						}
+					}
 				}
-
-			} else {
-				$file = 'img';
-			}
-		} else {
-			$file = 'img';
-		}
-		foreach ($_FILES as $k => $f){
-
-			if (file_exists($_FILES[$k]['tmp_name'])){
-				$nazovAkoURL = trim(url_oprava($file));
-				$typ = explode('.',$_FILES[$k]["name"]);
-				$typ = $typ[count($typ) - 1];
-				$urlimg = $dir.$nazovAkoURL.'-'.uniqid().'.'.$typ;
-				if(in_array($typ, array('jpg', 'jpeg', 'png', 'gif')))
-					if (is_uploaded_file($_FILES[$k]["tmp_name"]))
-						if (move_uploaded_file($_FILES[$k]["tmp_name"], $urlimg));
-
-
-
-				if ($resizeImage == true){
-					$data[$k] = obrazokfinal($urlimg,$watermark);
-				} else {
-					$data[$k] = $urlimg;
-				}
-
-
-
-			} else {
-				$data[$k] = '';
 			}
 		}
 		return $data;
 	} else {
-
-
 		if (empty($_FILES[$file]['name'])){
 			return '';
 		}
 
-		$nazovAkoURL = trim(url_oprava($saveAsNameFile));
-		$typ = explode('.',$_FILES[$file]["name"]);
-		$typ = $typ[count($typ) - 1];
-		$urlimg = $dir.$nazovAkoURL.'-'.uniqid().'.'.$typ;
-		if(in_array($typ, array('jpg', 'jpeg', 'png', 'gif','webp')))
-			if (is_uploaded_file($_FILES[$file]["tmp_name"]))
-				if (move_uploaded_file($_FILES[$file]["tmp_name"], $urlimg));
+		$tmpName = $_FILES[$file]['tmp_name'];
+		if (isset($tmpName) && is_string($tmpName) && file_exists($tmpName)) {
+			$nazovAkoURL = trim(url_oprava($saveAsNameFile));
+			$typ = pathinfo($_FILES[$file]['name'], PATHINFO_EXTENSION);
+			$urlimg = $dir . $nazovAkoURL . '-' . uniqid() . '.' . $typ;
 
-		if ($resizeImage == true){
-			$urlimg = obrazokfinal($urlimg,$watermark);
+			if (in_array(strtolower($typ), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
+				if (move_uploaded_file($tmpName, $urlimg)) {
+					return $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
+				}
+			}
 		}
-
-		return $urlimg;
+		return '';
 	}
-
-
-
 }
 
 	function obrazokfinal ($adresaimg,$offLogo = true, $defaultWidthImage = 1600){
