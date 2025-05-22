@@ -3,34 +3,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Ftpmanager_model extends CI_Model
 {
-	public function connect_to_ftp()
+	public function connect_to_ftp($path = '')
 	{
-		$host = 'ftp.styxnatur.at';
-		$username = 'testujem@styxnatur.at';
-		$password = 'tQS!2g-x6Oy3S_7.';
-		$port = 21;
+		$ftp_server = "ftp.styxnatur.at";
+		$ftp_user = "testujem@styxnatur.at";
+		$ftp_pass = "tQS!2g-x6Oy3S_7.";
+		$ftp_port = 21;
 
-		$ftp = ftp_connect($host, $port, 10);
+		$conn = ftp_connect($ftp_server, $ftp_port, 10);
 
-		if (!$ftp) {
-			return ['__error' => 'Pripojenie na FTP server zlyhalo.'];
+		if (!$conn) {
+			return ['__error' => 'Nepodarilo sa pripojiť k FTP serveru.'];
 		}
 
-		if (!ftp_login($ftp, $username, $password)) {
-			ftp_close($ftp);
-			return ['__error' => 'Prihlásenie zlyhalo.'];
+		if (!ftp_login($conn, $ftp_user, $ftp_pass)) {
+			ftp_close($conn);
+			return ['__error' => 'Chyba pri prihlasovaní.'];
 		}
 
-		ftp_pasv($ftp, true); // pasívny mód
+		ftp_pasv($conn, true); // zapni pasívny režim
 
-		$list = ftp_nlist($ftp, '.');
+		$path = trim($path ?? '', '/');
 
-		ftp_close($ftp);
+		if ($path !== '') {
+			if (!@ftp_chdir($conn, $path)) {
+				ftp_close($conn);
+				return ['__error' => 'Nepodarilo sa zmeniť adresár: ' . $path];
+			}
+		}
+
+		$list = @ftp_nlist($conn, ".");
 
 		if ($list === false) {
-			return ['__error' => 'Nepodarilo sa získať zoznam súborov.'];
+			ftp_close($conn);
+			return ['__error' => 'Nepodarilo sa získať zoznam súborov v adresári: ' . $path];
 		}
 
+		$list = array_filter($list, fn($item) => $item !== '.' && $item !== '..');
+		ftp_close($conn);
 		return $list;
 	}
 }
