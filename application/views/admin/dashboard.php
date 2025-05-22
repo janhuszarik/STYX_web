@@ -1,24 +1,18 @@
 <style>
-	.card-footer {
-		padding: 12px 0 0 0;
-		border-top: 1px solid #eee;
+	.card-body {
+		padding: 1rem 1.2rem;
 	}
 
-	.btn-settings {
-		font-size: 0.8rem;
-		font-weight: 500;
-		padding: 0.25rem 0.75rem;
-		border-radius: 20px;
-		background-color: #007bff;
-		border-color: #007bff;
-		transition: background-color 0.2s ease-in-out;
-	}
-
-	.btn-settings:hover {
-		background-color: #0056b3;
-		border-color: #0056b3;
+	.card {
+		margin-bottom: 1.5rem;
+		transition: box-shadow 0.2s ease-in-out;
+		cursor: pointer;
 		text-decoration: none;
-		color: #fff;
+	}
+
+	.card:hover {
+		box-shadow: 0 0 10px rgba(0,0,0,0.1);
+		text-decoration: none;
 	}
 
 	.card-body ul {
@@ -31,10 +25,6 @@
 		color: #555;
 	}
 
-	.card {
-		margin-bottom: 2rem;
-	}
-
 	.summary .amount {
 		font-size: 2rem;
 		font-weight: 700;
@@ -45,33 +35,47 @@
 		font-size: 0.9rem;
 		color: #888;
 	}
+
+	/* Odstupy medzi vnútornými stĺpcami (ľavá mriežka 2×3) */
+	.row > [class*='col-'] {
+		padding-right: 10px;
+		padding-left: 5px;
+		margin-bottom: 1rem;
+	}
+
+	.card-calendar {
+		height: 100%;
+	}
+	.number_custom {
+		font-size: 25px;
+	}
 </style>
 
 <div class="row">
-	<?php
-	$cards = [
-		'menuStats' => ['label' => 'Menü', 'link' => 'admin/menu'],
-		'sliderStats' => ['label' => 'Slider', 'link' => 'admin/slider'],
-		'productStats' => ['label' => 'Beliebte Produkte', 'link' => 'admin/bestProduct'],
-		'newsStats' => ['label' => 'Aktuelle Beiträge', 'link' => 'admin/news'],
-		'articleCategoryStats' => ['label' => 'Artikelkategorien', 'link' => 'admin/article_categories'],
-		'articleStats' => ['label' => 'Artikel', 'link' => 'admin/article'],
-	];
+	<!-- ĽAVÁ strana: 6 kariet rozdelených do 3 riadkov -->
+	<div class="col-md-6">
+		<div class="row">
+			<?php
+			$cards = [
+				'menuStats' => ['label' => 'Menü', 'link' => 'admin/menu'],
+				'sliderStats' => ['label' => 'Slider', 'link' => 'admin/slider'],
+				'productStats' => ['label' => 'Beliebte Produkte', 'link' => 'admin/bestProduct'],
+				'newsStats' => ['label' => 'Aktuelle Beiträge', 'link' => 'admin/news'],
+				'articleCategoryStats' => ['label' => 'Artikelkategorien', 'link' => 'admin/article_categories'],
+				'articleStats' => ['label' => 'Artikel', 'link' => 'admin/article'],
+			];
 
-	foreach ($cards as $key => $info):
-		$data = $$key;
-		$has_last = !empty($data['last_title']);
-		?>
-		<div class="col-md-6 col-xl-4">
-			<section class="card card-featured-left card-featured-primary">
-				<div class="card-body">
-					<div class="widget-summary">
-						<div class="widget-summary-col">
-							<div class="summary">
-								<h4 class="title"><?= $info['label'] ?></h4>
-								<div class="info">
-									<strong class="amount"><?= $data['total'] ?? 0 ?></strong>
-									<span class="text-muted">gesamt</span>
+			foreach ($cards as $key => $info):
+				$data = $$key;
+				$has_last = !empty($data['last_title']);
+				?>
+				<div class="col-md-6">
+					<a href="<?= base_url($info['link']) ?>" class="card card-featured-left card-featured-primary h-100 text-dark text-decoration-none">
+						<div class="card-body d-flex flex-column justify-content-between">
+							<div>
+								<div class="d-flex justify-content-between align-items-center mb-2">
+									<h4 class="fw-bold mb-0" style="border-left: 4px solid #28a745; padding-left: 10px;"><?= $info['label'] ?></h4>
+									<span class="text-muted">gesamt: <strong class="text-dark number_custom"><?= $data['total'] ?? 0 ?></strong></span>
 								</div>
 
 								<div class="info mb-2" style="<?= !$has_last ? 'margin-bottom: 1.5rem;' : '' ?>">
@@ -82,7 +86,6 @@
 										</span>
 									<?php endif; ?>
 								</div>
-
 								<?php if (!empty($data['recent'])): ?>
 									<ul>
 										<?php foreach ($data['recent'] as $item): ?>
@@ -92,14 +95,40 @@
 								<?php endif; ?>
 							</div>
 						</div>
-					</div>
-					<div class="card-footer text-end">
-						<a href="<?= base_url($info['link']) ?>" class="btn btn-sm btn-primary px-3">
-							Zu den Einstellungen
-						</a>
-					</div>
+					</a>
 				</div>
-			</section>
+			<?php endforeach; ?>
 		</div>
-	<?php endforeach; ?>
+	</div>
+
+	<div class="col-md-6 d-flex flex-column">
+		<section class="card card-calendar flex-grow-1">
+			<div class="card-body">
+				<h4 class="title">Kalender</h4>
+				<div id="calendar-placeholder">
+					<div id="calendar"></div>
+				</div>
+
+			</div>
+		</section>
+	</div>
 </div>
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		var calendarEl = document.getElementById('calendar');
+
+		var calendar = new FullCalendar.Calendar(calendarEl, {
+			locale: 'de',                 // 🇩🇪 Nemecký jazyk
+			firstDay: 1,                  // Začiatok týždňa = Pondelok
+			initialView: 'dayGridMonth',
+			headerToolbar: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'dayGridMonth,listWeek'
+			},
+
+		});
+
+		calendar.render();
+	});
+</script>
