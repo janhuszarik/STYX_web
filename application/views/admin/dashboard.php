@@ -52,6 +52,56 @@
 	#calendar {
 		min-height: 400px;
 	}
+	.custom-select-wrapper {
+		position: relative;
+		display: inline-block;
+		width: 100%;
+	}
+
+	.custom-select {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border: 1px solid #ccc;
+		padding: 8px 12px;
+		border-radius: 4px;
+		cursor: pointer;
+		background: white;
+	}
+
+	.color-dot {
+		display: inline-block;
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		margin-right: 8px;
+		vertical-align: middle;
+	}
+
+	.custom-options {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		border: 1px solid #ccc;
+		background: white;
+		z-index: 10;
+		display: none;
+		max-height: 200px;
+		overflow-y: auto;
+	}
+
+	.custom-option {
+		padding: 8px 12px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+	}
+
+	.custom-option:hover {
+		background-color: #f0f0f0;
+	}
+
 
 </style>
 
@@ -117,8 +167,7 @@
 		</section>
 	</div>
 </div>
-<!-- MODÁLNE OKNO PRE PRIDANIE / EDIT POZNÁMKY -->
-<!-- MODÁLNE OKNO -->
+
 <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<form id="noteForm" novalidate>
@@ -148,22 +197,20 @@
 					<div class="mb-3">
 						<label for="noteColor" class="form-label">Farbe</label>
 						<select id="noteColor" name="color" class="form-select" required>
-							<option value="#3788d8">🔵 Blau</option>
-							<option value="#dc3545">🔴 Rot</option>
-							<option value="#198754">🟢 Grün</option>
-							<option value="#ffc107">🟡 Gelb</option>
-							<option value="#6f42c1">🟣 Violett</option>
-							<option value="#0dcaf0">🔵 Türkis</option>
-							<option value="#fd7e14">🟠 Orange</option>
-							<option value="#6c757d">⚫ Grau</option>
-							<option value="#000000">⚫ Schwarz</option>
 							<option value="#ffffff">⚪ Weiß</option>
-							<option value="#6610f2">🟣 Indigo</option>
-							<option value="#20c997">🟢 Mint</option>
-							<option value="#e83e8c">🟣 Pink</option>
-							<option value="#adb5bd">⚪ Silber</option>
-							<option value="#343a40">⚫ Dunkelgrau</option>
+							<option value="#ff0000">🔴 Rot</option>
+							<option value="#ff7f00">🟠 Orange</option>
+							<option value="#ffff00">🟡 Gelb</option>
+							<option value="#00ff00">🟢 Grün</option>
+							<option value="#0000ff">🔵 Blau</option>
+
+							<option value="#000000">⚫ Schwarz</option>
 						</select>
+
+
+
+
+
 					</div>
 
 					<div class="d-flex justify-content-between">
@@ -202,7 +249,7 @@
 				document.getElementById('noteEnd').value = info.dateStr;
 				document.getElementById('noteText').value = '';
 				document.getElementById('noteId').value = '';
-				document.getElementById('noteColor').value = '#3788d8';
+				document.getElementById('noteColor').value = '#0000ff';
 				document.getElementById('deleteNoteBtn').style.display = 'none';
 				modal.show();
 			},
