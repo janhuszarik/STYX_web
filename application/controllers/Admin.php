@@ -24,6 +24,15 @@ class Admin extends CI_Controller
 	{
 		$data['title'] = 'Admin - Dashboard';
 		$data['page'] = 'admin/dashboard';
+
+		// Získanie štatistík
+		$data['articleStats'] = $this->Admin_model->getArticleStats();
+		$data['menuStats'] = $this->Admin_model->getMenuStats();
+		$data['sliderStats'] = $this->Admin_model->getSliderStats();
+		$data['newsStats'] = $this->Admin_model->getNewsStats();
+		$data['productStats'] = $this->Admin_model->getBestProductStats();
+		$data['articleCategoryStats'] = $this->Admin_model->getArticleCategoryStats();
+
 		$this->load->view('admin/layout/normal', $data);
 	}
 

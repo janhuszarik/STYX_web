@@ -144,13 +144,9 @@
 
 				<div class="right-wrapper text-end">
 					<ol class="breadcrumbs">
-						<li>
-							<a href="<?=BASE_URL?>">
-								<i class="bx bx-home-alt"></i>
-							</a>
-						</li>
 
-						<li><span>REMISE</span></li>
+
+						<li><span><a style="color: green; font-weight: 600" href="<?=BASE_URL?>">www.styx.at</a></span></li>
 
 						<li><span><?=$title?></span></li>
 

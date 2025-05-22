@@ -33,11 +33,14 @@ function getNewsletters(){
 			);
 
 			if (is_numeric($post['id'])) {
+				$data['updated_at'] = date('Y-m-d H:i:s');
 				$this->db->where('id', $post['id']);
 				return $this->db->update('menu', $data);
 			} else {
+				$data['created_at'] = date('Y-m-d H:i:s');
 				return $this->db->insert('menu', $data);
 			}
+
 		}
 		return false;
 	}
@@ -122,11 +125,14 @@ function getNewsletters(){
 		}
 
 		if (!empty($id)) {
+			$data['updated_at'] = date('Y-m-d H:i:s');
 			$this->db->where('id', $id);
 			return $this->db->update('slider', $data);
 		} else {
+			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('slider', $data);
 		}
+
 	}
 
 	public function get_slider_image_by_id($id) {
@@ -181,11 +187,14 @@ function getNewsletters(){
 		}
 
 		if (is_numeric($post['id'])) {
+			$data['updated_at'] = date('Y-m-d H:i:s');
 			$this->db->where('id', $post['id']);
 			return $this->db->update('news', $data);
 		} else {
+			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('news', $data);
 		}
+
 	}
 
 
@@ -233,11 +242,14 @@ function getNewsletters(){
 		}
 
 		if (is_numeric($post['id'])) {
+			$data['updated_at'] = date('Y-m-d H:i:s');
 			$this->db->where('id', $post['id']);
 			return $this->db->update('bestProduct', $data);
 		} else {
+			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('bestProduct', $data);
 		}
+
 	}
 
 	function getProduct($id = false)
@@ -273,11 +285,14 @@ function getNewsletters(){
 		];
 
 		if (!empty($post['id']) && is_numeric($post['id'])) {
+			$data['updated_at'] = date('Y-m-d H:i:s');
 			$this->db->where('id', $post['id']);
 			return $this->db->update('article_categories', $data);
 		} else {
+			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('article_categories', $data);
 		}
+
 	}
 
 	public function getArticleCategories($id = false)
@@ -339,6 +354,140 @@ function getNewsletters(){
 			return $this->db->insert('articles', $data);
 		}
 	}
+
+	// ČLÁNKY
+	public function getArticleStats()
+	{
+		$this->db->from('articles');
+		$total = $this->db->count_all_results();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$last = $this->db->get('articles', 1)->row();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$recent = $this->db->get('articles', 3)->result();
+
+		return [
+			'total' => $total,
+			'last_title' => $last ? $last->title : '',
+			'last_date' => $last ? date('d.m.Y', strtotime($last->updated_at ?? '')) : '',
+			'recent' => $recent
+		];
+	}
+
+// MENU
+	public function getMenuStats()
+	{
+		$this->db->from('menu');
+		$total = $this->db->count_all_results();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$last = $this->db->get('menu', 1)->row();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$recent = $this->db->get('menu', 3)->result();
+
+		return [
+			'total' => $total,
+			'last_title' => $last ? $last->name : '',
+			'last_date' => $last ? date('d.m.Y', strtotime($last->updated_at ?? '')) : '',
+			'recent' => $recent
+		];
+	}
+
+// SLIDER
+	public function getSliderStats()
+	{
+		$this->db->from('slider');
+		$total = $this->db->count_all_results();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$last = $this->db->get('slider', 1)->row();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$recent = $this->db->get('slider', 3)->result();
+
+		// Najdi názov – skús name1, potom title, potom fallback
+		$last_title = '';
+		if ($last) {
+			$last_title = $last->name1 ?: ($last->title ?: '[kein Titel]');
+		}
+
+		return [
+			'total' => $total,
+			'last_title' => $last_title,
+			'last_date' => $last ? date('d.m.Y', strtotime($last->updated_at ?? '')) : '',
+			'recent' => $recent
+		];
+	}
+
+
+// NEWS
+	public function getNewsStats()
+	{
+		$this->db->from('news');
+		$total = $this->db->count_all_results();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$last = $this->db->get('news', 1)->row();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$recent = $this->db->get('news', 3)->result();
+
+		return [
+			'total' => $total,
+			'last_title' => $last ? $last->name : '',
+			'last_date' => $last ? date('d.m.Y', strtotime($last->updated_at ?? '')) : '',
+			'recent' => $recent
+		];
+	}
+
+
+// BELIEBTE PRODUKTE
+	public function getBestProductStats()
+	{
+		$this->db->from('bestProduct');
+		$total = $this->db->count_all_results();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$top = $this->db->get('bestProduct', 1)->row();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$recent = $this->db->get('bestProduct', 3)->result();
+
+		return [
+			'total' => $total,
+			'last_title' => $top ? $top->name : '',
+			'last_date' => $top ? date('d.m.Y', strtotime($top->updated_at ?? '')) : '',
+			'recent' => $recent
+		];
+	}
+
+
+
+	public function getArticleCategoryStats()
+	{
+		$this->db->from('article_categories');
+		$total = $this->db->count_all_results();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$last = $this->db->get('article_categories', 1)->row();
+
+		$this->db->order_by('updated_at', 'DESC');
+		$recent = $this->db->get('article_categories', 3)->result();
+
+		return [
+			'total' => $total,
+			'last_title' => $last ? ($last->title ?? $last->name) : '',
+			'last_date' => $last ? date('d.m.Y', strtotime($last->updated_at ?? '')) : '',
+			'recent' => $recent
+		];
+	}
+
+
+
+
+
 
 
 
