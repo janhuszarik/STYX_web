@@ -97,6 +97,8 @@ $route['admin/save_calendar_note'] = 'admin/save_calendar_note';
 $route['admin/update_calendar_note'] = 'admin/update_calendar_note';
 $route['admin/delete_calendar_note/(:num)'] = 'admin/delete_calendar_note/$1';
 
+$route['admin/ftpmanager'] = 'Ftpmanager/index';
+$route['admin/ftpmanager/delete'] = 'Ftpmanager/delete';
 
 
 
