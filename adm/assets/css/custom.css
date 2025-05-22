@@ -8,3 +8,60 @@
   justify-content: center; /* zarovná tlačidlá do stredu, ak je to potrebné */
   gap: 10px; /* nastaví medzeru medzi tlačidlami */
 }
+
+
+/*dashboard kalendar*/
+.card-body {
+  padding: 1rem 1.2rem;
+}
+
+.card {
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-decoration: none;
+}
+
+.card-body ul {
+  padding-left: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-body ul li {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.summary .amount {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.summary .text-muted {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.row > [class*='col-'] {
+  padding-right: 10px;
+  padding-left: 5px;
+  margin-bottom: 1rem;
+}
+
+.card-calendar {
+  height: 100%;
+}
+.number_custom {
+  font-size: 25px;
+  
+}
+#calendar {
+  min-height: 400px;
+}
+/*dashboard kalendar end*/
