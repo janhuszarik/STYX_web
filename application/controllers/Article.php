@@ -8,11 +8,11 @@
  */
 class Article extends CI_Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->load->model('Article_model');
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('Article_model');
+	}
 
 	public function articleCategoriesSave()
 	{
@@ -49,7 +49,30 @@ class Article extends CI_Controller
 			}
 		}
 
-		$data['articleCategories'] = $this->Article_model->getArticleCategoriesWithCount();
+		$this->load->library('pagination');
+		$config['base_url'] = base_url('admin/article_categories');
+		$config['total_rows'] = $this->Article_model->countCategories();
+		$config['per_page'] = 15;
+		$config['uri_segment'] = 3;
+		$config['full_tag_open'] = '<ul class="pagination justify-content-center">';
+		$config['full_tag_close'] = '</ul>';
+		$config['attributes'] = ['class' => 'page-link'];
+		$config['first_link'] = '«';
+		$config['last_link'] = '»';
+		$config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+		$config['cur_tag_close'] = '</span></li>';
+		$config['num_tag_open'] = '<li class="page-item">';
+		$config['num_tag_close'] = '</li>';
+		$config['prev_tag_open'] = '<li class="page-item">';
+		$config['prev_tag_close'] = '</li>';
+		$config['next_tag_open'] = '<li class="page-item">';
+		$config['next_tag_close'] = '</li>';
+
+		$this->pagination->initialize($config);
+		$offset = $this->uri->segment(3) ?? 0;
+
+		$data['articleCategories'] = $this->Article_model->getPaginatedCategories($config['per_page'], $offset);
+		$data['pagination'] = $this->pagination->create_links();
 		$data['articleCategory'] = $this->Article_model->getArticleCategories($id);
 		$data['title'] = 'Artikelkategorien';
 		$data['page'] = 'admin/settings/article_categories';
@@ -73,9 +96,32 @@ class Article extends CI_Controller
 
 	public function articlesByCategory($categoryId)
 	{
+		$this->load->library('pagination');
+		$config['base_url'] = base_url('admin/articles_in_category/' . $categoryId);
+		$config['total_rows'] = $this->Article_model->countArticlesByCategory($categoryId);
+		$config['per_page'] = 15;
+		$config['uri_segment'] = 4;
+		$config['full_tag_open'] = '<ul class="pagination justify-content-center">';
+		$config['full_tag_close'] = '</ul>';
+		$config['attributes'] = ['class' => 'page-link'];
+		$config['first_link'] = '«';
+		$config['last_link'] = '»';
+		$config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+		$config['cur_tag_close'] = '</span></li>';
+		$config['num_tag_open'] = '<li class="page-item">';
+		$config['num_tag_close'] = '</li>';
+		$config['prev_tag_open'] = '<li class="page-item">';
+		$config['prev_tag_close'] = '</li>';
+		$config['next_tag_open'] = '<li class="page-item">';
+		$config['next_tag_close'] = '</li>';
+
+		$this->pagination->initialize($config);
+		$offset = $this->uri->segment(4) ?? 0;
+
 		$data['articleCategories'] = $this->Article_model->getArticleCategoriesWithCount();
-		$data['articles'] = $this->Article_model->getArticlesByCategory($categoryId);
+		$data['articles'] = $this->Article_model->getPaginatedArticlesByCategory($categoryId, $config['per_page'], $offset);
 		$data['categoryId'] = $categoryId;
+		$data['pagination'] = $this->pagination->create_links();
 		$data['title'] = 'Artikel verwalten';
 		$data['page'] = 'admin/settings/articles';
 		$this->load->view('admin/layout/normal', $data);
@@ -107,25 +153,24 @@ class Article extends CI_Controller
 			}
 		}
 
-        if ($segment2 == 'del' && is_numeric($id)) {
-            $article = $this->Article_model->getArticle($id);
+		if ($segment2 == 'del' && is_numeric($id)) {
+			$article = $this->Article_model->getArticle($id);
 
-            if ($this->Article_model->deleteArticle($id)) {
-                $this->session->set_flashdata('success', 'Artikel wurde erfolgreich gelöscht.');
-                $categoryId = $article->category_id ?? 0;
-                redirect(BASE_URL . 'admin/articles_in_category/' . $categoryId);
-            } else {
-                $this->session->set_flashdata('error', 'Fehler beim Löschen.');
-            }
-        }
+			if ($this->Article_model->deleteArticle($id)) {
+				$this->session->set_flashdata('success', 'Artikel wurde erfolgreich gelöscht.');
+				$categoryId = $article->category_id ?? 0;
+				redirect(BASE_URL . 'admin/articles_in_category/' . $categoryId);
+			} else {
+				$this->session->set_flashdata('error', 'Fehler beim Löschen.');
+			}
+		}
 
 		$data['article'] = $this->Article_model->getArticle($id);
 		$data['categoryId'] = $data['article']->category_id ?? $id;
 		$data['articleCategories'] = $this->Article_model->getArticleCategories();
-		$data['sections'] = $this->Article_model->getSections($id); // ← TOTO PRIDAŤ
+		$data['sections'] = $this->Article_model->getSections($id);
 		$data['title'] = 'Artikel verwalten';
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
-
 	}
 }

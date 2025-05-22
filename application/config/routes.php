@@ -81,9 +81,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $route['admin/menu/del/:num'] 			= 'admin/menuSave';
 
 $route['admin/article_categories'] = 'article/articleCategoriesSave';
+$route['admin/article_categories/(:num)'] = 'article/articleCategoriesSave/$1';
+
 $route['admin/article_category_form'] = 'article/articleCategoryForm';
 $route['admin/article_category_form/(:num)'] = 'article/articleCategoryForm/$1';
 
+$route['admin/articles_in_category/(:num)/(:num)'] = 'article/articlesByCategory/$1/$2';
 $route['admin/articles_in_category/(:num)'] = 'article/articlesByCategory/$1';
 $route['admin/article_save'] = 'article/articlesSave';
 $route['admin/article_save/edit/(:num)'] = 'article/articlesSave/$1';

@@ -1,5 +1,10 @@
+<div class="row mb-3">
+	<div class="col-md-6">
+		<input type="text" id="categorySearch" class="form-control" placeholder="Suchen...">
+	</div>
+</div>
+
 <div class="row">
-	<!-- TABUĽKA NA CELOU ŠÍRKU -->
 	<div class="col-lg-12">
 		<section class="card card-yellow">
 			<header class="card-header d-flex justify-content-between align-items-center">
@@ -13,7 +18,7 @@
 			</header>
 			<div class="card-body">
 				<div class="table-responsive">
-					<table class="table table-hover table-bordered mb-0">
+					<table class="table table-hover table-bordered mb-0" id="categoryTable">
 						<thead>
 						<tr>
 							<th class="text-center">#</th>
@@ -32,7 +37,7 @@
 							<?php foreach ($articleCategories as $index => $cat): ?>
 								<tr>
 									<td class="text-center"><?= $index + 1 ?></td>
-									<td class="text-center"><img src="<?=langInfo($cat->lang)['flag']?>" width="24px" alt="<?='country'.' '.$r->lang?>"></td>
+									<td class="text-center"><img src="<?= langInfo($cat->lang)['flag'] ?>" width="24px" alt="flag"></td>
 									<td><?= htmlspecialchars($cat->name) ?></td>
 									<td><?= $cat->slug ?></td>
 									<td class="text-center"><?= checkTextIcon($cat->keywords) ?></td>
@@ -44,9 +49,7 @@
 											<?= $cat->article_count ?? 0 ?>
 										</a>
 									</td>
-									<td class="text-center">
-										<?= active($cat->active) ?>
-									</td>
+									<td class="text-center"><?= active($cat->active) ?></td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/article_categories/edit/' . $cat->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
 										<?php if ($cat->article_count == 0): ?>
@@ -56,12 +59,31 @@
 								</tr>
 							<?php endforeach; ?>
 						<?php else: ?>
-							<tr><td colspan="8" class="text-center">Keine Daten</td></tr>
+							<tr><td colspan="9" class="text-center">Keine Daten</td></tr>
 						<?php endif; ?>
 						</tbody>
 					</table>
+				</div>
+				<div class="mt-3">
+					<?= $pagination ?? '' ?>
 				</div>
 			</div>
 		</section>
 	</div>
 </div>
+
+<!-- Hľadanie v JS -->
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const searchInput = document.getElementById("categorySearch");
+		const rows = document.querySelectorAll("#categoryTable tbody tr");
+
+		searchInput.addEventListener("input", function () {
+			const val = this.value.toLowerCase();
+			rows.forEach(row => {
+				const visible = row.innerText.toLowerCase().includes(val);
+				row.style.display = visible ? '' : 'none';
+			});
+		});
+	});
+</script>

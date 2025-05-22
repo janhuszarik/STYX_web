@@ -52,6 +52,34 @@ class Article_model extends CI_Model
 		$this->db->group_by('ac.id');
 		return $this->db->get()->result();
 	}
+	public function countCategories()
+	{
+		return $this->db->count_all('article_categories');
+	}
+
+	public function getPaginatedCategories($limit, $offset)
+	{
+		$this->db->select('ac.*, COUNT(a.id) as article_count');
+		$this->db->from('article_categories ac');
+		$this->db->join('articles a', 'a.category_id = ac.id', 'left');
+		$this->db->group_by('ac.id');
+		$this->db->order_by('ac.id', 'DESC');
+		$this->db->limit($limit, $offset);
+		return $this->db->get()->result();
+	}
+	public function countArticlesByCategory($categoryId)
+	{
+		$this->db->where('category_id', $categoryId);
+		return $this->db->count_all_results('articles');
+	}
+
+	public function getPaginatedArticlesByCategory($categoryId, $limit, $offset)
+	{
+		$this->db->where('category_id', $categoryId);
+		$this->db->order_by('id', 'DESC');
+		return $this->db->get('articles', $limit, $offset)->result();
+	}
+
 
 	public function getArticle($id)
 	{

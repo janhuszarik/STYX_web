@@ -1,7 +1,8 @@
 <div class="row">
-	<!-- TABUĽKA NA CELOU ŠÍRKU -->
 	<div class="col-lg-12">
 		<section class="card card-yellow">
+			<input type="text" class="form-control mb-3" id="searchInput" placeholder="Artikel suchen...">
+
 			<header class="card-header d-flex justify-content-between align-items-center">
 				<div>
 					<h3 class="card-title mb-0">Artikel in Kategorie</h3>
@@ -51,9 +52,28 @@
 							<tr><td colspan="9" class="text-center">Keine Artikel gefunden.</td></tr>
 						<?php endif; ?>
 						</tbody>
+						<tfoot>
+						<tr>
+							<td colspan="9" class="text-center">
+								<?= $pagination ?? '' ?>
+							</td>
+						</tr>
+						</tfoot>
+
 					</table>
 				</div>
 			</div>
 		</section>
 	</div>
 </div>
+<script>
+	document.getElementById('searchInput').addEventListener('keyup', function () {
+		const filter = this.value.toLowerCase();
+		const rows = document.querySelectorAll('table tbody tr');
+		rows.forEach(row => {
+			row.style.display = [...row.cells].some(cell =>
+				cell.textContent.toLowerCase().includes(filter)
+			) ? '' : 'none';
+		});
+	});
+</script>
