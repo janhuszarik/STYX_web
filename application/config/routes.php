@@ -93,6 +93,9 @@ $route['admin/article_save/edit/(:num)'] = 'article/articlesSave/$1';
 $route['admin/article_save/del/(:num)'] = 'article/articlesSave/del/$1';
 
 
+$route['admin/save_calendar_note'] = 'admin/save_calendar_note';
+$route['admin/update_calendar_note'] = 'admin/update_calendar_note';
+$route['admin/delete_calendar_note/(:num)'] = 'admin/delete_calendar_note/$1';
 
 
 

@@ -483,6 +483,10 @@ function getNewsletters(){
 			'recent' => $recent
 		];
 	}
+	public function get_calendar_notes()
+	{
+		return $this->db->get('calendar_notes')->result();
+	}
 
 
 

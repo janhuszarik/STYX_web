@@ -33,8 +33,75 @@ class Admin extends CI_Controller
 		$data['productStats'] = $this->Admin_model->getBestProductStats();
 		$data['articleCategoryStats'] = $this->Admin_model->getArticleCategoryStats();
 
+		// Získanie udalostí do kalendára
+		$data['calendar_events'] = array_map(function($n) {
+			return [
+				'id' => $n->id,
+				'title' => $n->note,
+				'start' => $n->date,
+				'end' => $n->end_date ? date('Y-m-d', strtotime($n->end_date . ' +1 day')) : null, // pre kalendár
+				'raw_end' => $n->end_date, // pre modálne okno
+				'color' => $n->color
+			];
+		}, $this->Admin_model->get_calendar_notes());
+
+
+
+
 		$this->load->view('admin/layout/normal', $data);
 	}
+
+	public function save_calendar_note()
+	{
+		$post = json_decode(file_get_contents("php://input"), true);
+
+		$this->db->insert('calendar_notes', [
+			'note' => $post['note'],
+			'date' => $post['date'],
+			'end_date' => $post['end_date'] ?? null,
+			'color' => $post['color'] ?? '#3788d8'
+		]);
+
+		$id = $this->db->insert_id();
+		echo json_encode(['success' => true, 'id' => $id]);
+	}
+
+	public function update_calendar_note()
+	{
+		$post = json_decode(file_get_contents("php://input"), true);
+
+		if (empty($post['id']) || empty($post['note'])) {
+			echo json_encode(['success' => false, 'error' => 'Chýbajúce údaje']);
+			return;
+		}
+
+		$this->db->where('id', $post['id']);
+		$this->db->update('calendar_notes', [
+			'note' => $post['note'],
+			'date' => $post['start'],
+			'end_date' => $post['end'],
+			'color' => $post['color']
+		]);
+
+
+		echo json_encode(['success' => true]);
+	}
+
+	public function delete_calendar_note($id)
+	{
+		if (!is_numeric($id)) {
+			echo json_encode(['success' => false, 'error' => 'Nesprávne ID']);
+			return;
+		}
+
+		if ($this->db->delete('calendar_notes', ['id' => $id])) {
+			echo json_encode(['success' => true, 'id' => $id]);
+		} else {
+			echo json_encode(['success' => false, 'error' => 'Chyba pri mazaní']);
+		}
+	}
+
+
 
 	public function menuSave()
 	{
