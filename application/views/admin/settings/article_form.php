@@ -30,7 +30,7 @@ $titleSub = isset($article) ? 'Bestehenden Artikel nach Bedarf anpassen.' : 'Neu
 			<label for="category_id">Kategorie</label>
 			<select name="category_id" class="form-control">
 				<?php foreach ($articleCategories as $cat): ?>
-					<option value="<?= $cat->id ?>" <?= (isset($article) && $article->category_id == $cat->id) ? 'selected' : '' ?>>
+					<option value="<?= $cat->id ?>" <?= (isset($article) && $article->category_id == $cat->id) ? 'selected' : '' ?> required>
 						<?= htmlspecialchars($cat->name) ?>
 					</option>
 				<?php endforeach; ?>
