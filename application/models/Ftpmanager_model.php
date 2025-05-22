@@ -1,56 +1,36 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Ftpmanager_model extends CI_Model {
+class Ftpmanager_model extends CI_Model
+{
+	public function connect_to_ftp()
+	{
+		$host = 'ftp.styxnatur.at';
+		$username = 'testujem@styxnatur.at';
+		$password = 'tQS!2g-x6Oy3S_7.';
+		$port = 21;
 
-	private $ftp_config = [];
-	private $conn_status = false;
+		$ftp = ftp_connect($host, $port, 10);
 
-	public function __construct() {
-		parent::__construct();
-
-		$this->ftp_config = [
-			'hostname' => 'ftp.styxnatur.at',
-			'username' => 'testujem@styxnatur.at',
-			'password' => 'tQS!2g-x6Oy3S_7.',
-			'port'     => 21,
-			'passive'  => FALSE,
-			'debug'    => TRUE
-		];
-
-		// Načíta FTP knižnicu
-		$this->load->library('ftp');
-	}
-
-	// Funkcia na pripojenie, ktorá si ukladá výsledok do premennej
-	private function connect_ftp() {
-		if ($this->conn_status === false) {
-			$this->conn_status = $this->ftp->connect($this->ftp_config);
-		}
-		return $this->conn_status;
-	}
-
-	public function list_files($path) {
-		if (!$this->connect_ftp()) {
-			log_message('error', '❌ FTP pripojenie zlyhalo');
-			return ['Chyba: Pripojenie na FTP zlyhalo'];
+		if (!$ftp) {
+			return ['__error' => 'Pripojenie na FTP server zlyhalo.'];
 		}
 
-		$list = $this->ftp->list_files($path);
-		$this->ftp->close();
-		$this->conn_status = false;  // reset pripojenia po close
+		if (!ftp_login($ftp, $username, $password)) {
+			ftp_close($ftp);
+			return ['__error' => 'Prihlásenie zlyhalo.'];
+		}
+
+		ftp_pasv($ftp, true); // pasívny mód
+
+		$list = ftp_nlist($ftp, '.');
+
+		ftp_close($ftp);
+
+		if ($list === false) {
+			return ['__error' => 'Nepodarilo sa získať zoznam súborov.'];
+		}
+
 		return $list;
-	}
-
-	public function delete_file($file) {
-		if (!$this->connect_ftp()) {
-			log_message('error', '❌ FTP pripojenie zlyhalo pri mazaní');
-			return false;
-		}
-
-		$success = $this->ftp->delete_file($file);
-		$this->ftp->close();
-		$this->conn_status = false; // reset pripojenia po close
-		return $success;
 	}
 }

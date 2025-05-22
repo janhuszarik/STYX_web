@@ -80,29 +80,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $route['admin/menu/edit/:num'] 			= 'admin/menuSave';
     $route['admin/menu/del/:num'] 			= 'admin/menuSave';
 
-$route['admin/article_categories'] = 'article/articleCategoriesSave';
-$route['admin/article_categories/(:num)'] = 'article/articleCategoriesSave/$1';
+	$route['admin/article_categories'] = 'article/articleCategoriesSave';
+	$route['admin/article_categories/(:num)'] = 'article/articleCategoriesSave/$1';
 
-$route['admin/article_category_form'] = 'article/articleCategoryForm';
-$route['admin/article_category_form/(:num)'] = 'article/articleCategoryForm/$1';
+	$route['admin/article_category_form'] = 'article/articleCategoryForm';
+	$route['admin/article_category_form/(:num)'] = 'article/articleCategoryForm/$1';
 
-$route['admin/articles_in_category/(:num)/(:num)'] = 'article/articlesByCategory/$1/$2';
-$route['admin/articles_in_category/(:num)'] = 'article/articlesByCategory/$1';
-$route['admin/article_save'] = 'article/articlesSave';
-$route['admin/article_save/edit/(:num)'] = 'article/articlesSave/$1';
-$route['admin/article_save/del/(:num)'] = 'article/articlesSave/del/$1';
-
-
-$route['admin/save_calendar_note'] = 'admin/save_calendar_note';
-$route['admin/update_calendar_note'] = 'admin/update_calendar_note';
-$route['admin/delete_calendar_note/(:num)'] = 'admin/delete_calendar_note/$1';
-
-$route['admin/ftpmanager'] = 'Ftpmanager/index';
-$route['admin/ftpmanager/delete'] = 'Ftpmanager/delete';
+	$route['admin/articles_in_category/(:num)/(:num)'] = 'article/articlesByCategory/$1/$2';
+	$route['admin/articles_in_category/(:num)'] = 'article/articlesByCategory/$1';
+	$route['admin/article_save'] = 'article/articlesSave';
+	$route['admin/article_save/edit/(:num)'] = 'article/articlesSave/$1';
+	$route['admin/article_save/del/(:num)'] = 'article/articlesSave/del/$1';
 
 
+	$route['admin/save_calendar_note'] = 'admin/save_calendar_note';
+	$route['admin/update_calendar_note'] = 'admin/update_calendar_note';
+	$route['admin/delete_calendar_note/(:num)'] = 'admin/delete_calendar_note/$1';
 
-$route['admin/slider'] 					= 'admin/sliderSave';
+	$route['admin/ftpmanager'] = 'Ftpmanager/index';
+
+
+
+
+	$route['admin/slider'] 					= 'admin/sliderSave';
 	$route['admin/sliderSave'] 				= 'admin/sliderSave';
 	$route['admin/sliderSave/(:num)'] 		= 'admin/sliderSave/$1';
 	$route['admin/delete_slider/(:num)'] 	= 'admin/delete_slider/$1';
