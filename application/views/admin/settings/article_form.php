@@ -96,15 +96,15 @@ $actionUrl = isset($article) ? 'admin/article_save/edit/' . $article->id : 'admi
 </form>
 
 <script>
-let sectionCount = 0;
-const maxSections = 6;
-const sectionsData = <?= isset($sections) ? json_encode($sections) : '[]' ?>;
+	let sectionCount = 0;
+	const maxSections = 6;
+	const sectionsData = <?= isset($sections) ? json_encode($sections) : '[]' ?>;
 
-function addSection(content = '', imagePath = null) {
-	if (sectionCount >= maxSections) return;
-	sectionCount++;
+	function addSection(content = '', imagePath = null) {
+		if (sectionCount >= maxSections) return;
+		sectionCount++;
 
-	const sectionHtml = `
+		const sectionHtml = `
 	<div class="row align-items-start border p-2 mb-2" data-section="${sectionCount}">
 		<div class="col-md-9">
 			<textarea name="sections[]" class="form-control summernote" rows="3">${content}</textarea>
@@ -116,38 +116,34 @@ function addSection(content = '', imagePath = null) {
 		</div>
 	</div>`;
 
-	document.querySelector('#sections-container').insertAdjacentHTML('beforeend', sectionHtml);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-	// Inicializuj summernote pre dynamicky vložené sekcie
-	function reinitSummernote() {
-		$('.summernote').summernote({
-			height: 200
-		});
+		document.querySelector('#sections-container').insertAdjacentHTML('beforeend', sectionHtml);
 	}
 
-	// Pridať novú sekciu
-	document.getElementById('add-section').addEventListener('click', function () {
-		addSection();
-		reinitSummernote();
-	});
+	document.addEventListener('DOMContentLoaded', function () {
+		function reinitSummernote() {
+			$('.summernote').summernote({
+				height: 200
+			});
+		}
 
-	// Odstrániť sekciu
-	document.getElementById('sections-container').addEventListener('click', function (e) {
-		if (e.target.classList.contains('remove-section')) {
-			e.target.closest('[data-section]').remove();
-			sectionCount--;
+		document.getElementById('add-section').addEventListener('click', function () {
+			addSection();
+			reinitSummernote();
+		});
+
+		document.getElementById('sections-container').addEventListener('click', function (e) {
+			if (e.target.classList.contains('remove-section')) {
+				e.target.closest('[data-section]').remove();
+				sectionCount--;
+			}
+		});
+
+		if (sectionsData.length) {
+			sectionsData.forEach(sec => {
+				const imagePath = sec.image ? "<?= base_url('uploads/articles/sections/') ?>" + sec.image : null;
+				addSection(sec.content, imagePath);
+			});
+			reinitSummernote();
 		}
 	});
-
-	// Načítaj existujúce sekcie
-	if (sectionsData.length) {
-		sectionsData.forEach(sec => {
-			const imagePath = sec.image ? "<?= base_url('uploads/articles/sections/') ?>" + sec.image : null;
-			addSection(sec.content, imagePath);
-		});
-		reinitSummernote();
-	}
-});
 </script>

@@ -119,12 +119,13 @@ class Article extends CI_Controller
             }
         }
 
-		$data['articleCategories'] = $this->Article_model->getArticleCategories();
-
-        $data['article'] = $this->Article_model->getArticle($id);
+		$data['article'] = $this->Article_model->getArticle($id);
 		$data['categoryId'] = $data['article']->category_id ?? $id;
+		$data['articleCategories'] = $this->Article_model->getArticleCategories();
+		$data['sections'] = $this->Article_model->getSections($id); // ← TOTO PRIDAŤ
 		$data['title'] = 'Artikel verwalten';
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
+
 	}
 }
