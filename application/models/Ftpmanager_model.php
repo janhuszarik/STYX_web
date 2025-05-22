@@ -10,20 +10,21 @@ class Ftpmanager_model extends CI_Model {
 
 		$this->ftp_config = [
 			'hostname' => 'ftp.styxnatur.at',
-			'username' => 'mediaftp@styxnatur.at',
-			'password' => '5qogN!-J6ZX9G4-_',
+			'username' => 'testujem@styxnatur.at',
+			'password' => 'tQS!2g-x6Oy3S_7.',
 			'port'     => 21,
-			'passive' => FALSE,
+			'passive'  => FALSE,  // môžeš neskôr vyskúšať TRUE, ak by boli problémy s výpisom
 			'debug'    => TRUE
 		];
-
 
 		$this->load->library('ftp', $this->ftp_config);
 	}
 
-
 	public function list_files($path) {
-		if (!$this->ftp->connect($this->ftp_config)) return [];
+		if (!$this->ftp->connect($this->ftp_config)) {
+			log_message('error', '❌ FTP pripojenie zlyhalo');
+			return ['Chyba: Nedá sa pripojiť na FTP server.'];
+		}
 
 		$list = $this->ftp->list_files($path);
 		$this->ftp->close();
@@ -31,7 +32,10 @@ class Ftpmanager_model extends CI_Model {
 	}
 
 	public function delete_file($file) {
-		if (!$this->ftp->connect($this->ftp_config)) return false;
+		if (!$this->ftp->connect($this->ftp_config)) {
+			log_message('error', '❌ FTP pripojenie zlyhalo pri mazaní');
+			return false;
+		}
 
 		$success = $this->ftp->delete_file($file);
 		$this->ftp->close();
