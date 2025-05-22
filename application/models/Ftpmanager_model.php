@@ -9,13 +9,14 @@ class Ftpmanager_model extends CI_Model {
 		parent::__construct();
 
 		$this->ftp_config = [
-			'hostname' => 'ftp.styxnatur.at',              // Skutočný hostname servera
-			'username' => 'mediaftp@styxnatur.at',         // Úplný login aj s doménou
-			'password' => '5qogN!-J6ZX9G4-_',               // Tvoje silné heslo
+			'hostname' => 'ftp.styxnatur.at',
+			'username' => 'mediaftp@styxnatur.at',
+			'password' => '5qogN!-J6ZX9G4-_',
 			'port'     => 21,
-			'passive'  => TRUE,
+			'passive' => FALSE,
 			'debug'    => TRUE
 		];
+
 
 		$this->load->library('ftp', $this->ftp_config);
 	}
