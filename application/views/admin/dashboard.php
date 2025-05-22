@@ -36,7 +36,6 @@
 		color: #888;
 	}
 
-	/* Odstupy medzi vnútornými stĺpcami (ľavá mriežka 2×3) */
 	.row > [class*='col-'] {
 		padding-right: 10px;
 		padding-left: 5px;
@@ -52,56 +51,6 @@
 	#calendar {
 		min-height: 400px;
 	}
-	.custom-select-wrapper {
-		position: relative;
-		display: inline-block;
-		width: 100%;
-	}
-
-	.custom-select {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		border: 1px solid #ccc;
-		padding: 8px 12px;
-		border-radius: 4px;
-		cursor: pointer;
-		background: white;
-	}
-
-	.color-dot {
-		display: inline-block;
-		width: 14px;
-		height: 14px;
-		border-radius: 50%;
-		margin-right: 8px;
-		vertical-align: middle;
-	}
-
-	.custom-options {
-		position: absolute;
-		top: 100%;
-		left: 0;
-		right: 0;
-		border: 1px solid #ccc;
-		background: white;
-		z-index: 10;
-		display: none;
-		max-height: 200px;
-		overflow-y: auto;
-	}
-
-	.custom-option {
-		padding: 8px 12px;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-	}
-
-	.custom-option:hover {
-		background-color: #f0f0f0;
-	}
-
 
 </style>
 
