@@ -87,8 +87,39 @@ class Article_model extends CI_Model
 			'active' => isset($post['active']) ? 1 : 0,
 			'start_date_from' => !empty($post['start_date_from']) ? $post['start_date_from'] : null,
 			'end_date_to' => !empty($post['end_date_to']) ? $post['end_date_to'] : null,
-			'updated_at' => date('Y-m-d H:i:s')
+			'updated_at' => date('Y-m-d H:i:s'),
+			'product_name1' => $post['product_name1'] ?? null,
+			'product_description1' => $post['product_description1'] ?? null,
+			'product_url1' => $post['product_url1'] ?? null,
+			'product_image1' => null,
+			'product_name2' => $post['product_name2'] ?? null,
+			'product_description2' => $post['product_description2'] ?? null,
+			'product_url2' => $post['product_url2'] ?? null,
+			'product_image2' => null,
+			'product_name3' => $post['product_name3'] ?? null,
+			'product_description3' => $post['product_description3'] ?? null,
+			'product_url3' => $post['product_url3'] ?? null,
+			'product_image3' => null,
+			'empfohlen_name1' => $post['empfohlen_name1'] ?? null,
+			'empfohlen_url1' => $post['empfohlen_url1'] ?? null,
+			'empfohlen_name2' => $post['empfohlen_name2'] ?? null,
+			'empfohlen_url2' => $post['empfohlen_url2'] ?? null,
+			'empfohlen_name3' => $post['empfohlen_name3'] ?? null,
+			'empfohlen_url3' => $post['empfohlen_url3'] ?? null
 		];
+
+		// Produktbilder verarbeiten
+		for ($i = 1; $i <= 3; $i++) {
+			$field = 'product_image' . $i;
+			if (!empty($_FILES[$field]['name'])) {
+				$upload = uploadImg($field, 'uploads/articles/products');
+				if (!empty($upload)) {
+					$data[$field] = basename($upload);
+				}
+			} else {
+				$data[$field] = $post['old_' . $field] ?? null;
+			}
+		}
 
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
@@ -132,6 +163,7 @@ class Article_model extends CI_Model
 
 		return $success;
 	}
+
 
 	public function deleteArticle($id)
 	{
