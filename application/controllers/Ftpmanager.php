@@ -5,15 +5,14 @@ class Ftpmanager extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		$this->load->library('ftp');
-		$this->load->model('Ftpmanager_model', 'ftpmodel');
-		// Nezabudni na overenie, či je užívateľ prihlásený
+		$this->load->model('Ftpmanager_model');
+		// Načítanie knižnice ftp tu už nie je potrebné!
 	}
 
 	public function index() {
-		$path = '/';
+		$path = '/'; // alebo "/shared" podľa FTP štruktúry
 
-		$data['files'] = $this->ftpmodel->list_files($path);
+		$data['files'] = $this->Ftpmanager_model->list_files($path);
 		$data['title'] = 'FTP správca';
 		$data['page'] = 'admin/settings/ftpmanager_view';
 
@@ -21,11 +20,16 @@ class Ftpmanager extends CI_Controller {
 	}
 
 
+
+
+
+
+
+
 	public function delete() {
 		$file = $this->input->post('file');
-		$result = $this->ftpmodel->delete_file($file);
+		$result = $this->Ftpmanager_model->delete_file($file);
 		echo json_encode(['success' => $result]);
 	}
-
-	// Môžeme doplniť aj metódy upload(), rename(), mkdir() atď.
 }
+
