@@ -11,36 +11,33 @@ class Ftpmanager_model extends CI_Model
 		$ftp_port = 21;
 
 		$conn = ftp_connect($ftp_server, $ftp_port, 10);
-
-		if (!$conn) {
-			return ['__error' => 'Nepodarilo sa pripojiť k FTP serveru.'];
-		}
+		if (!$conn) return ['__error' => 'Nepodarilo sa pripojiť k FTP serveru.'];
 
 		if (!ftp_login($conn, $ftp_user, $ftp_pass)) {
 			ftp_close($conn);
 			return ['__error' => 'Chyba pri prihlasovaní.'];
 		}
 
-		ftp_pasv($conn, true); // zapni pasívny režim
+		ftp_pasv($conn, true); // pasívny režim
 
 		$path = trim($path ?? '', '/');
 
-		if ($path !== '') {
-			if (!@ftp_chdir($conn, $path)) {
-				ftp_close($conn);
-				return ['__error' => 'Nepodarilo sa zmeniť adresár: ' . $path];
-			}
-		}
-
-		$list = @ftp_nlist($conn, ".");
-
+		$list = @ftp_nlist($conn, $path === '' ? '.' : $path);
 		if ($list === false) {
 			ftp_close($conn);
 			return ['__error' => 'Nepodarilo sa získať zoznam súborov v adresári: ' . $path];
 		}
 
-		$list = array_filter($list, fn($item) => $item !== '.' && $item !== '..');
+		// Odstráň ./ a ../ z výpisu
+		$list = array_filter($list, function($item) {
+			return basename($item) !== '.' && basename($item) !== '..';
+		});
+
+		// Vyber len názvy (nie cesty)
+		$list = array_map('basename', $list);
+
 		ftp_close($conn);
 		return $list;
 	}
 }
+
