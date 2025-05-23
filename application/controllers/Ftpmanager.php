@@ -81,18 +81,26 @@ class Ftpmanager extends CI_Controller
 
 	public function create_folder()
 	{
-		$name = $this->input->post('folder_name');
-		$path = $this->input->post('current_path');
-		$full_path = trim($path, '/') . '/' . trim($name, '/');
+		$name = trim($this->input->post('folder_name'));
+		$path = trim($this->input->post('current_path'), '/');
+		$full_path = ($path ? $path . '/' : '') . $name;
+
+		if ($name === '') {
+			$this->session->set_flashdata('error', 'Názov priečinka nemôže byť prázdny.');
+			redirect('admin/ftpmanager?path=' . urlencode($path));
+			return;
+		}
 
 		$result = $this->Ftpmanager_model->create_dir($full_path);
 		if (isset($result['__error'])) {
 			$this->session->set_flashdata('error', $result['__error']);
 		} else {
-			$this->session->set_flashdata('success', 'Verzeichnis wurde erstellt.');
+			$this->session->set_flashdata('success', 'Priečinok bol vytvorený.');
 		}
+
 		redirect('admin/ftpmanager?path=' . urlencode($path));
 	}
+
 
 	public function move_file()
 	{

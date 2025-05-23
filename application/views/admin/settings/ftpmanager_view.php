@@ -16,21 +16,30 @@ $http_url_base = 'https://styx.styxnatur.at/';
 	<div class="row">
 		<div class="col-lg-12">
 			<section class="card">
-				<header class="card-header d-flex justify-content-between align-items-center">
-					<div>
-						<h3 class="card-title">File Management via FTP | <a href="https://www.hostcreators.sk">Hostcreators</a></h3>
-						<p class="card-subtitle">Current Path: <?= $current_path === '' ? '/' : htmlspecialchars($current_path) ?></p>
+				<header class="card-header d-flex justify-content-between align-items-start flex-wrap">
+					<div class="mb-2">
+						<h3 class="card-title mb-0">Dateiverwaltung via FTP | <a href="https://www.hostcreators.sk" target="_blank">Hostcreators</a></h3>
+						<p class="card-subtitle">Aktueller Pfad: <?= $current_path === '' ? '/' : htmlspecialchars($current_path) ?></p>
 					</div>
-					<div class="text-end">
-						<form action="<?= base_url('admin/ftpmanager/upload') ?>" method="post" enctype="multipart/form-data">
+
+					<div class="d-flex flex-column flex-md-row align-items-start gap-3 text-end">
+						<!-- Upload-Formular -->
+						<form action="<?= base_url('admin/ftpmanager/upload') ?>" method="post" enctype="multipart/form-data" class="d-flex flex-column gap-2">
 							<input type="hidden" name="path" value="<?= htmlspecialchars($current_path) ?>">
-							<input type="file" name="image" class="form-control mb-2" id="imageUpload" accept="image/*,.pdf">
-							<button type="submit" class="btn btn-primary btn-sm">Upload Image</button>
+							<input type="file" name="image" class="form-control form-control-sm" id="imageUpload" accept="image/*,.pdf" required>
+							<button type="submit" class="btn btn-sm btn-primary">Datei hochladen</button>
 						</form>
 
-
+						<!-- Ordner-Erstellung -->
+						<form action="<?= base_url('admin/ftpmanager/create_folder') ?>" method="post" class="d-flex flex-column gap-2">
+							<input type="hidden" name="current_path" value="<?= htmlspecialchars($current_path) ?>">
+							<input type="text" name="folder_name" class="form-control form-control-sm" placeholder="Neuer Ordner name" required>
+							<button type="submit" class="btn btn-sm btn-danger">Ordner erstellen</button>
+						</form>
 					</div>
 				</header>
+
+
 				<div class="card-body">
 					<?php if (isset($files['__error'])): ?>
 						<div class="alert alert-danger">❌ <?= $files['__error'] ?></div>

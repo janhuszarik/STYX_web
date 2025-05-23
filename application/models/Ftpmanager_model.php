@@ -97,13 +97,15 @@ class Ftpmanager_model extends CI_Model
 		$conn = $this->connect_raw();
 		if (!$conn) return ['__error' => 'Chyba pripojenia k FTP.'];
 
-		if (ftp_mkdir($conn, $path)) {
+		if (@ftp_mkdir($conn, $path)) {
 			ftp_close($conn);
 			return true;
 		}
+
 		ftp_close($conn);
 		return ['__error' => 'Nepodarilo sa vytvoriť adresár.'];
 	}
+
 	public function upload_file($local_path, $remote_path)
 	{
 		$conn = $this->connect_raw();
