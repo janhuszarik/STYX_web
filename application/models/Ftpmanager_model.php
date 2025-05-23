@@ -69,6 +69,7 @@ class Ftpmanager_model extends CI_Model
 		return ['__error' => 'Nepodarilo sa vymazať: ' . $path];
 	}
 
+
 	private function connect_raw()
 	{
 		$ftp_server = "ftp.styxnatur.at";
@@ -102,6 +103,19 @@ class Ftpmanager_model extends CI_Model
 		}
 		ftp_close($conn);
 		return ['__error' => 'Nepodarilo sa vytvoriť adresár.'];
+	}
+	public function upload_file($local_path, $remote_path)
+	{
+		$conn = $this->connect_raw();
+		if (!$conn) return ['__error' => 'Nepodarilo sa pripojiť k FTP serveru.'];
+
+		$upload = ftp_put($conn, $remote_path, $local_path, FTP_BINARY);
+		ftp_close($conn);
+
+		if (!$upload) {
+			return ['__error' => 'Nepodarilo sa nahrať súbor na FTP.'];
+		}
+		return true;
 	}
 
 

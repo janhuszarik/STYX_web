@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('Kein direkter Skriptzugriff erlaubt');
 
 class Ftpmanager extends CI_Controller
 {
@@ -13,7 +13,7 @@ class Ftpmanager extends CI_Controller
 	{
 		$path = $this->input->get('path') ?? '';
 
-		$data['title'] = 'FTP Manager';
+		$data['title'] = 'FTP-Manager';
 		$data['page'] = 'admin/settings/ftpmanager_view';
 		$data['current_path'] = $path;
 		$data['files'] = $this->Ftpmanager_model->connect_to_ftp($path);
@@ -25,7 +25,7 @@ class Ftpmanager extends CI_Controller
 	{
 		$path = $this->input->get('path');
 		if (!$path || !preg_match('/^[a-zA-Z0-9_\-\/\.]+$/', $path)) {
-			show_error('Neplatná cesta.');
+			show_error('Ungültiger Pfad.');
 		}
 
 		$filename = basename($path);
@@ -40,10 +40,10 @@ class Ftpmanager extends CI_Controller
 
 		$data = @file_get_contents($remote_url, false, $context);
 		if ($data === false) {
-			show_error('Nepodarilo sa načítať súbor z URL.');
+			show_error('Datei konnte nicht von der URL geladen werden.');
 		}
 
-		// MIME typ podľa prípony, fallback
+		// MIME-Typ basierend auf der Erweiterung, Fallback
 		$extension = strtolower(pathinfo($remote_url, PATHINFO_EXTENSION));
 		$mime_types = [
 			'jpg' => 'image/jpeg',
@@ -54,7 +54,7 @@ class Ftpmanager extends CI_Controller
 			'pdf' => 'application/pdf',
 			'mp4' => 'video/mp4',
 			'zip' => 'application/zip',
-			// doplniť podľa potreby
+			// nach Bedarf ergänzen
 		];
 		$mime = $mime_types[$extension] ?? 'application/octet-stream';
 
@@ -63,6 +63,7 @@ class Ftpmanager extends CI_Controller
 			->set_header('Content-Disposition: attachment; filename="' . $filename . '"')
 			->set_output($data);
 	}
+
 	public function delete()
 	{
 		$path = $this->input->get('path');
@@ -71,13 +72,12 @@ class Ftpmanager extends CI_Controller
 		if (is_array($result) && isset($result['__error'])) {
 			$this->session->set_flashdata('error', $result['__error']);
 		} else {
-			$this->session->set_flashdata('success', 'Súbor bol vymazaný.');
+			$this->session->set_flashdata('success', 'Datei wurde gelöscht.');
 		}
 
 		$parent = dirname($path);
 		redirect('admin/ftpmanager?path=' . urlencode($parent));
 	}
-
 
 	public function create_folder()
 	{
@@ -89,25 +89,57 @@ class Ftpmanager extends CI_Controller
 		if (isset($result['__error'])) {
 			$this->session->set_flashdata('error', $result['__error']);
 		} else {
-			$this->session->set_flashdata('success', 'Adresár bol vytvorený.');
+			$this->session->set_flashdata('success', 'Verzeichnis wurde erstellt.');
 		}
 		redirect('admin/ftpmanager?path=' . urlencode($path));
 	}
-	public function move_file(){
-	$from = $this->input->post('from');
-	$to = $this->input->post('to');
 
-	$result = $this->Ftpmanager_model->move($from, $to);
-	if (isset($result['__error'])) {
-		$this->session->set_flashdata('error', $result['__error']);
-	} else {
-		$this->session->set_flashdata('success', 'Súbor bol presunutý.');
+	public function move_file()
+	{
+		$from = $this->input->post('from');
+		$to = $this->input->post('to');
+
+		$result = $this->Ftpmanager_model->move($from, $to);
+		if (isset($result['__error'])) {
+			$this->session->set_flashdata('error', $result['__error']);
+		} else {
+			$this->session->set_flashdata('success', 'Datei wurde verschoben.');
+		}
+		redirect('admin/ftpmanager?path=' . urlencode(dirname($to)));
 	}
-	redirect('admin/ftpmanager?path=' . urlencode(dirname($to)));
-}
+	public function upload()
+	{
+		$current_path = $this->input->get_post('path') ?? '';
+		$current_path = trim($current_path, '/');
 
+		if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+			$tmp_name = $_FILES['image']['tmp_name'];
+			$filename = basename($_FILES['image']['name']);
+			$remote_path = ($current_path ? $current_path . '/' : '') . $filename;
 
+			// ✅ Povolené prípony
+			$allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'];
+			$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
+			if (!in_array($ext, $allowed_extensions)) {
+				$this->session->set_flashdata('error', 'Nepovolený typ súboru. Povolené sú: ' . implode(', ', $allowed_extensions));
+				redirect('admin/ftpmanager?path=' . urlencode($current_path));
+				return;
+			}
+
+			$result = $this->Ftpmanager_model->upload_file($tmp_name, $remote_path);
+
+			if (isset($result['__error'])) {
+				$this->session->set_flashdata('error', $result['__error']);
+			} else {
+				$this->session->set_flashdata('success', 'Súbor bol úspešne nahratý.');
+			}
+		} else {
+			$this->session->set_flashdata('error', 'Nebolo vybraté žiadne súbor alebo nastala chyba pri nahrávaní.');
+		}
+
+		redirect('admin/ftpmanager?path=' . urlencode($current_path));
+	}
 
 
 }
