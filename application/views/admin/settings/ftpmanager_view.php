@@ -31,11 +31,11 @@ $http_url_base = 'https://styx.styxnatur.at/';
 							<table class="table table-responsive-md table-hover table-bordered mb-0">
 								<thead>
 								<tr>
-									<th>Type</th>
+									<th>Typ</th>
 									<th>Name</th>
-									<th>Path</th>
-									<th>Size</th>
-									<th>Action</th>
+									<th>Pfad</th>
+									<th>Größe</th>
+									<th>Aktion</th>
 								</tr>
 								</thead>
 								<tbody>
@@ -61,7 +61,7 @@ $http_url_base = 'https://styx.styxnatur.at/';
 									$url = $http_url_base . $full_path;
 									?>
 									<tr>
-										<td data-title="Type"><?= $is_dir ? '📁' : '📄' ?></td>
+										<td style="font-size: 22px" data-title="Type"><?= $is_dir ? '📁' : '📄' ?></td>
 										<td data-title="Name">
 											<?php if ($is_dir): ?>
 												<a href="<?= base_url('admin/ftpmanager?path=' . urlencode($full_path)) ?>">
@@ -71,14 +71,18 @@ $http_url_base = 'https://styx.styxnatur.at/';
 												<?= htmlspecialchars($name) ?>
 											<?php endif; ?>
 										</td>
-										<td data-title="Path"><?= htmlspecialchars($full_path) ?></td>
+										<td data-title="Path">
+											<a href="<?= htmlspecialchars(BASE_URL . $full_path) ?>" target="_blank">
+												<?= htmlspecialchars(BASE_URL . $full_path) ?>
+											</a>
+										</td>
 										<td data-title="Size"><?= $size !== null ? round($size / 1024, 2) . ' KB' : '-' ?></td>
 										<td data-title="Action">
 											<?php if (!$is_dir): ?>
 												<?php if (preg_match('/\.(jpe?g|png|gif|webp)$/i', $name)): ?>
-													<a href="<?= $url ?>" target="_blank" class="btn btn-sm btn-info">View</a>
+													<a href="<?= $url ?>" target="_blank" class="btn btn-sm btn-info">Ansehen</a>
 												<?php endif; ?>
-												<a href="<?= base_url('admin/ftpmanager/download?path=' . urlencode($full_path)) ?>" class="btn btn-sm btn-success">Download</a>
+												<a href="<?= base_url('admin/ftpmanager/download?path=' . urlencode($full_path)) ?>" class="btn btn-sm btn-success">Herunterladen</a>
 											<?php endif; ?>
 										</td>
 									</tr>
