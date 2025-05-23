@@ -21,6 +21,16 @@ class App extends CI_Controller
 	function index(){
 		$this->home();
 	}
+	function error404(){
+
+		header("HTTP/1.1 404 Not Found");
+		$data['title'] = 'Error 404 ';
+		$data['page'] = 'Error404';
+		$data['description'] = '';
+		$data['keywords'] = '';
+		$this->load->view('layout/normal',$data);
+
+	}
 
 	public function home()
 	{
@@ -40,6 +50,7 @@ class App extends CI_Controller
 		// Laden der Ansicht
 		$this->load->view('layout/normal', $data);
 	}
+
 
 	private function check_cookie_consent() {
 		if (!$this->input->cookie('cookie_consent', TRUE)) {
@@ -372,14 +383,7 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
-	function error404(){
-		header("HTTP/1.1 404 Not Found");
-		$data['title'] = 'Fehler 404';
-		$data['page'] = 'fehler';
-		$data['description'] = '';
-		$data['keywords'] = '';
-		$this->load->view('layout/normal',$data);
-	}
+
 
 	function impressum() {
 		$data['title']          = 'Impressum';
