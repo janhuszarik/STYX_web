@@ -22,4 +22,11 @@ class Ftpmanager extends CI_Controller
 			'current_path' => $data['current_path'],
 		]);
 	}
+	public function ajax_list()
+	{
+		$path = $this->input->post('path') ?? '';
+		$data = $this->Ftpmanager_model->connect_to_ftp($path);
+		echo json_encode($data);
+	}
+
 }

@@ -13,7 +13,9 @@ $parent_path = $parent_path === '.' ? '' : $parent_path;
 	<header class="page-header">
 		<h2>FTP Zoznam súborov</h2>
 	</header>
-
+	<div id="ftpContent">
+		<!-- sem sa cez JS načíta zoznam súborov AJAX-om -->
+	</div>
 	<p><i class="fas fa-folder-open"></i> <strong>Aktuálna cesta:</strong> <?= $current_path === '' ? '/' : htmlspecialchars($current_path) ?></p>
 
 	<?php if (isset($files['__error'])): ?>
@@ -64,3 +66,34 @@ $parent_path = $parent_path === '.' ? '' : $parent_path;
 		</div>
 	<?php endif; ?>
 </section>
+<script>
+		function loadFolder(path = '') {
+		$.post('<?= base_url('admin/ftpmanager/ajax_list') ?>', { path }, function(response) {
+			if (response.__error) {
+				$('#ftpContent').html('<div class="alert alert-danger">' + response.__error + '</div>');
+			} else {
+				let html = '<p><i class="fas fa-folder-open"></i> <strong>Aktuálna cesta:</strong> ' + (path || '/') + '</p>';
+				html += '<table class="table table-bordered"><thead><tr><th>Typ</th><th>Názov</th></tr></thead><tbody>';
+				if (path) {
+					let parent = path.split('/').slice(0, -1).join('/');
+					html += `<tr><td>🔙</td><td><a href="#" onclick="loadFolder('${parent}'); return false;"><em>Späť</em></a></td></tr>`;
+				}
+				response.forEach(file => {
+					let isDir = !file.includes('.');
+					let next = path ? path + '/' + file : file;
+					if (isDir) {
+						html += `<tr><td>📁</td><td><a href="#" onclick="loadFolder('${next}'); return false;"><strong>${file}</strong></a></td></tr>`;
+					} else {
+						html += `<tr><td>📄</td><td>${file}</td></tr>`;
+					}
+				});
+				html += '</tbody></table>';
+				$('#ftpContent').html(html);
+			}
+		}, 'json');
+	}
+
+		$(document).ready(() => loadFolder());
+</script>
+
+

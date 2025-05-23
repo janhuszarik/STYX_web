@@ -101,7 +101,7 @@
 								</a>
 							</li>
 							<li>
-								<a class="nav-link" href="<?=BASE_URL.'admin/bestProduct'?>">
+								<a class="nav-link" href="<?=BASE_URL.'admin/ftpmanager'?>">
 									<i class="bx bx-layer" aria-hidden="true"></i>
 									<span>Daten Manager</span>
 								</a>
