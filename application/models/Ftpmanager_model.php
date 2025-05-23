@@ -50,4 +50,64 @@ class Ftpmanager_model extends CI_Model
 		ftp_close($conn);
 		return $list;
 	}
+	public function delete($path)
+	{
+		$conn = $this->connect_raw();
+		if (!$conn) return ['__error' => 'Chyba pripojenia k FTP.'];
+
+		if (@ftp_delete($conn, $path)) {
+			ftp_close($conn);
+			return true;
+		}
+
+		if (@ftp_rmdir($conn, $path)) {
+			ftp_close($conn);
+			return true;
+		}
+
+		ftp_close($conn);
+		return ['__error' => 'Nepodarilo sa vymazať: ' . $path];
+	}
+
+	private function connect_raw()
+	{
+		$ftp_server = "ftp.styxnatur.at";
+		$ftp_user = "testujem@styxnatur.at";
+		$ftp_pass = "tQS!2g-x6Oy3S_7.";
+		$conn = ftp_connect($ftp_server);
+		if (!$conn || !ftp_login($conn, $ftp_user, $ftp_pass)) return false;
+		ftp_pasv($conn, true);
+		return $conn;
+	}
+	public function move($from, $to)
+	{
+		$conn = $this->connect_raw();
+		if (!$conn) return ['__error' => 'Chyba pripojenia k FTP.'];
+
+		if (ftp_rename($conn, $from, $to)) {
+			ftp_close($conn);
+			return true;
+		}
+		ftp_close($conn);
+		return ['__error' => 'Nepodarilo sa presunúť súbor.'];
+	}
+	public function create_dir($path)
+	{
+		$conn = $this->connect_raw();
+		if (!$conn) return ['__error' => 'Chyba pripojenia k FTP.'];
+
+		if (ftp_mkdir($conn, $path)) {
+			ftp_close($conn);
+			return true;
+		}
+		ftp_close($conn);
+		return ['__error' => 'Nepodarilo sa vytvoriť adresár.'];
+	}
+
+
+
+
+
+
+
 }

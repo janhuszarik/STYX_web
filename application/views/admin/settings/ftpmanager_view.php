@@ -1,3 +1,10 @@
+
+<?php if ($this->session->flashdata('error')): ?>
+	<div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+<?php elseif ($this->session->flashdata('success')): ?>
+	<div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+<?php endif; ?>
+
 <?php
 $current_path = trim($current_path ?? '', '/');
 $parent_path = dirname($current_path);
@@ -83,6 +90,8 @@ $http_url_base = 'https://styx.styxnatur.at/';
 													<a href="<?= $url ?>" target="_blank" class="btn btn-sm btn-info">Ansehen</a>
 												<?php endif; ?>
 												<a href="<?= base_url('admin/ftpmanager/download?path=' . urlencode($full_path)) ?>" class="btn btn-sm btn-success">Herunterladen</a>
+												<a href="<?= base_url('admin/ftpmanager/delete?path=' . urlencode($full_path)) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Naozaj vymazať?')">Löschen</a>
+
 											<?php endif; ?>
 										</td>
 									</tr>

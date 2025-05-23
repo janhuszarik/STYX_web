@@ -99,6 +99,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	$route['admin/ftpmanager'] = 'Ftpmanager/index';
 $route['admin/ftpmanager/download'] = 'ftpmanager/download';
+$route['admin/ftpmanager/create_folder'] = 'ftpmanager/create_folder';
+$route['admin/ftpmanager/move_file'] = 'ftpmanager/move_file';
 
 
 

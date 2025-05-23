@@ -63,6 +63,49 @@ class Ftpmanager extends CI_Controller
 			->set_header('Content-Disposition: attachment; filename="' . $filename . '"')
 			->set_output($data);
 	}
+	public function delete()
+	{
+		$path = $this->input->get('path');
+		$result = $this->Ftpmanager_model->delete($path);
+
+		if (is_array($result) && isset($result['__error'])) {
+			$this->session->set_flashdata('error', $result['__error']);
+		} else {
+			$this->session->set_flashdata('success', 'Súbor bol vymazaný.');
+		}
+
+		$parent = dirname($path);
+		redirect('admin/ftpmanager?path=' . urlencode($parent));
+	}
+
+
+	public function create_folder()
+	{
+		$name = $this->input->post('folder_name');
+		$path = $this->input->post('current_path');
+		$full_path = trim($path, '/') . '/' . trim($name, '/');
+
+		$result = $this->Ftpmanager_model->create_dir($full_path);
+		if (isset($result['__error'])) {
+			$this->session->set_flashdata('error', $result['__error']);
+		} else {
+			$this->session->set_flashdata('success', 'Adresár bol vytvorený.');
+		}
+		redirect('admin/ftpmanager?path=' . urlencode($path));
+	}
+	public function move_file(){
+	$from = $this->input->post('from');
+	$to = $this->input->post('to');
+
+	$result = $this->Ftpmanager_model->move($from, $to);
+	if (isset($result['__error'])) {
+		$this->session->set_flashdata('error', $result['__error']);
+	} else {
+		$this->session->set_flashdata('success', 'Súbor bol presunutý.');
+	}
+	redirect('admin/ftpmanager?path=' . urlencode(dirname($to)));
+}
+
 
 
 
