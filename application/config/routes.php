@@ -98,6 +98,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/delete_calendar_note/(:num)'] = 'admin/delete_calendar_note/$1';
 
 	$route['admin/ftpmanager'] = 'Ftpmanager/index';
+$route['admin/ftpmanager/download'] = 'ftpmanager/download';
 
 
 

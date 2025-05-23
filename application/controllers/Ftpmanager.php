@@ -22,11 +22,50 @@ class Ftpmanager extends CI_Controller
 			'current_path' => $data['current_path'],
 		]);
 	}
-	public function ajax_list()
+	public function download()
 	{
-		$path = $this->input->post('path') ?? '';
-		$data = $this->Ftpmanager_model->connect_to_ftp($path);
-		echo json_encode($data);
+		$path = $this->input->get('path');
+		if (!$path || !preg_match('/^[a-zA-Z0-9_\-\/\.]+$/', $path)) {
+			show_error('Neplatná cesta.');
+		}
+
+		$filename = basename($path);
+		$remote_url = 'https://styx.styxnatur.at/' . $path;
+
+		$context = stream_context_create([
+			"http" => [
+				"follow_location" => true,
+				"timeout" => 30
+			]
+		]);
+
+		$data = @file_get_contents($remote_url, false, $context);
+		if ($data === false) {
+			show_error('Nepodarilo sa načítať súbor z URL.');
+		}
+
+		// MIME typ podľa prípony, fallback
+		$extension = strtolower(pathinfo($remote_url, PATHINFO_EXTENSION));
+		$mime_types = [
+			'jpg' => 'image/jpeg',
+			'jpeg' => 'image/jpeg',
+			'png' => 'image/png',
+			'gif' => 'image/gif',
+			'webp' => 'image/webp',
+			'pdf' => 'application/pdf',
+			'mp4' => 'video/mp4',
+			'zip' => 'application/zip',
+			// doplniť podľa potreby
+		];
+		$mime = $mime_types[$extension] ?? 'application/octet-stream';
+
+		$this->output
+			->set_content_type($mime)
+			->set_header('Content-Disposition: attachment; filename="' . $filename . '"')
+			->set_output($data);
 	}
+
+
+
 
 }

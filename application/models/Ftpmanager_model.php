@@ -18,26 +18,36 @@ class Ftpmanager_model extends CI_Model
 			return ['__error' => 'Chyba pri prihlasovaní.'];
 		}
 
-		ftp_pasv($conn, true); // pasívny režim
+		ftp_pasv($conn, true); // pasívny mód
 
 		$path = trim($path ?? '', '/');
-
-		$list = @ftp_nlist($conn, $path === '' ? '.' : $path);
-		if ($list === false) {
+		$raw_list = @ftp_rawlist($conn, $path === '' ? '.' : $path);
+		if ($raw_list === false) {
 			ftp_close($conn);
 			return ['__error' => 'Nepodarilo sa získať zoznam súborov v adresári: ' . $path];
 		}
 
-		// Odstráň ./ a ../ z výpisu
-		$list = array_filter($list, function($item) {
-			return basename($item) !== '.' && basename($item) !== '..';
-		});
+		$list = [];
+		foreach ($raw_list as $item) {
+			$info = preg_split("/\s+/", $item, 9);
+			if (count($info) < 9) continue;
 
-		// Vyber len názvy (nie cesty)
-		$list = array_map('basename', $list);
+			$type = $info[0][0] === 'd' ? 'dir' : 'file';
+			$name = $info[8];
+			if ($name === '.' || $name === '..') continue;
+
+			$full_path = $path === '' ? $name : $path . '/' . $name;
+			$size = $type === 'file' ? ftp_size($conn, $full_path) : null;
+
+			$list[] = [
+				'name' => $name,
+				'type' => $type,
+				'path' => $full_path,
+				'size' => $size
+			];
+		}
 
 		ftp_close($conn);
 		return $list;
 	}
 }
-
