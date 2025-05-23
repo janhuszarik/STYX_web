@@ -67,7 +67,10 @@ $parent_path = $parent_path === '.' ? '' : $parent_path;
 	<?php endif; ?>
 </section>
 <script>
-		function loadFolder(path = '') {
+	function loadFolder(path = '') {
+		// Zobraz loading hlášku ešte pred načítaním
+		$('#ftpContent').html('<p>🔄 Načítavam...</p>');
+
 		$.post('<?= base_url('admin/ftpmanager/ajax_list') ?>', { path }, function(response) {
 			if (response.__error) {
 				$('#ftpContent').html('<div class="alert alert-danger">' + response.__error + '</div>');
@@ -93,7 +96,6 @@ $parent_path = $parent_path === '.' ? '' : $parent_path;
 		}, 'json');
 	}
 
-		$(document).ready(() => loadFolder());
 </script>
 
 
