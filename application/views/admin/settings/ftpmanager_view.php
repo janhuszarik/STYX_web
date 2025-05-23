@@ -44,7 +44,7 @@ $http_url_base = 'https://styx.styxnatur.at/';
 					<?php if (isset($files['__error'])): ?>
 						<div class="alert alert-danger">❌ <?= $files['__error'] ?></div>
 					<?php elseif (empty($files)): ?>
-						<div class="alert alert-warning">⚠️ No records.</div>
+						<div class="alert alert-warning">⚠️ Leer | Keine Data.</div>
 					<?php else: ?>
 						<div class="table-responsive">
 							<table class="table table-responsive-md table-hover table-bordered mb-0">

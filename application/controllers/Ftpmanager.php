@@ -86,7 +86,7 @@ class Ftpmanager extends CI_Controller
 		$full_path = ($path ? $path . '/' : '') . $name;
 
 		if ($name === '') {
-			$this->session->set_flashdata('error', 'Názov priečinka nemôže byť prázdny.');
+			$this->session->set_flashdata('error', 'Der Ordnername darf nicht leer sein.');
 			redirect('admin/ftpmanager?path=' . urlencode($path));
 			return;
 		}
@@ -95,11 +95,12 @@ class Ftpmanager extends CI_Controller
 		if (isset($result['__error'])) {
 			$this->session->set_flashdata('error', $result['__error']);
 		} else {
-			$this->session->set_flashdata('success', 'Priečinok bol vytvorený.');
+			$this->session->set_flashdata('success', 'Ordner wurde erfolgreich erstellt.');
 		}
 
 		redirect('admin/ftpmanager?path=' . urlencode($path));
 	}
+
 
 
 	public function move_file()
@@ -125,12 +126,12 @@ class Ftpmanager extends CI_Controller
 			$filename = basename($_FILES['image']['name']);
 			$remote_path = ($current_path ? $current_path . '/' : '') . $filename;
 
-			// ✅ Povolené prípony
+			// ✅ Erlaubte Dateiendungen
 			$allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'];
 			$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
 			if (!in_array($ext, $allowed_extensions)) {
-				$this->session->set_flashdata('error', 'Nepovolený typ súboru. Povolené sú: ' . implode(', ', $allowed_extensions));
+				$this->session->set_flashdata('error', 'Nicht erlaubter Dateityp. Erlaubt sind: ' . implode(', ', $allowed_extensions));
 				redirect('admin/ftpmanager?path=' . urlencode($current_path));
 				return;
 			}
@@ -140,14 +141,15 @@ class Ftpmanager extends CI_Controller
 			if (isset($result['__error'])) {
 				$this->session->set_flashdata('error', $result['__error']);
 			} else {
-				$this->session->set_flashdata('success', 'Súbor bol úspešne nahratý.');
+				$this->session->set_flashdata('success', 'Datei wurde erfolgreich hochgeladen.');
 			}
 		} else {
-			$this->session->set_flashdata('error', 'Nebolo vybraté žiadne súbor alebo nastala chyba pri nahrávaní.');
+			$this->session->set_flashdata('error', 'Keine Datei ausgewählt oder ein Fehler ist beim Hochladen aufgetreten.');
 		}
 
 		redirect('admin/ftpmanager?path=' . urlencode($current_path));
 	}
+
 
 
 }
