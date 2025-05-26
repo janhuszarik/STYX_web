@@ -58,7 +58,10 @@
 			<h4 class="mb-2 text-success">IHTN – Cruelty free cosmetics</h4>
 			<p>STYX is a member of the Internationalen Herstellerverband für tierschutzgeprüfte Naturkosmetik, Kosmetik und Naturwaren e.V.
 				[International Manufactory Association against Animal Testing in Cosmetics] (IHTN). This guarantees that the product range is manufactured without animal testing.</p>
-			<a href="https://shop.styx.at" class="btn btn-outline-success btn-sm">Our Certificate</a>
+			<div class="d-flex gap-2 mt-2">
+				<a href="#" class="btn btn-outline-success btn-sm">Our Certificate</a>
+				<a href="#" class="btn btn-outline-success btn-sm">IHTN Guidelines</a>
+			</div>
 		</div>
 		<div class="col-md-3 text-center">
 			<img src="img/cert/Trusted_Shops.png" class="img-fluid" alt="Trusted Shops">
