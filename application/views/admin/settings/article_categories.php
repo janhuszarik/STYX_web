@@ -1,8 +1,14 @@
-<div class="row mb-3">
-	<div class="col-md-6">
-		<input type="text" id="categorySearch" class="form-control" placeholder="Suchen...">
+<form method="get" action="<?= base_url('admin/article_categories') ?>">
+	<div class="row mb-3">
+		<div class="col-md-6">
+			<input type="text" name="search" value="<?= $this->input->get('search') ?>" class="form-control" placeholder="Suchen...">
+		</div>
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-primary">Suchen</button>
+		</div>
 	</div>
-</div>
+</form>
+
 
 <div class="row">
 	<div class="col-lg-12">
@@ -13,7 +19,7 @@
 					<p class="card-subtitle">Anzahl: <?= isset($articleCategories) && is_array($articleCategories) ? count($articleCategories) : 0 ?></p>
 				</div>
 				<div>
-					<a href="<?= base_url('admin/article_categories/add') ?>" class="btn btn-sm btn-primary">+ Kategorie hinzufügen</a>
+					<a href="<?= base_url('admin/article_category_form') ?>" class="btn btn-sm btn-primary">+ Kategorie hinzufügen</a>
 				</div>
 			</header>
 			<div class="card-body">
@@ -25,6 +31,7 @@
 							<th></th>
 							<th>Name</th>
 							<th>Slug</th>
+							<th class="text-center">Typ</th> <!-- Nový stĺpec -->
 							<th class="text-center">Keywords</th>
 							<th class="text-center">Description</th>
 							<th class="text-center">Artikel</th>
@@ -32,6 +39,7 @@
 							<th class="text-center">Aktionen</th>
 						</tr>
 						</thead>
+
 						<tbody>
 						<?php if (!empty($articleCategories)): ?>
 							<?php foreach ($articleCategories as $index => $cat): ?>
@@ -40,6 +48,18 @@
 									<td class="text-center"><img src="<?= langInfo($cat->lang)['flag'] ?>" width="24px" alt="flag"></td>
 									<td><?= htmlspecialchars($cat->name) ?></td>
 									<td><?= $cat->slug ?></td>
+									<td class="text-center">
+										<?php
+										if (!empty($cat->menu_id)) {
+											echo isset($cat->parent) && $cat->parent > 0 ? 'Submenu' : 'Hlavné menu';
+										} elseif (!empty($cat->submenu_id)) {
+											echo 'Submenu';
+										} else {
+											echo 'Vlastná kategória';
+										}
+										?>
+									</td>
+
 									<td class="text-center"><?= checkTextIcon($cat->keywords) ?></td>
 									<td class="text-center"><?= checkTextIcon($cat->description) ?></td>
 									<td class="text-center align-middle">
@@ -51,17 +71,24 @@
 									</td>
 									<td class="text-center"><?= active($cat->active) ?></td>
 									<td class="text-center">
-										<a href="<?= base_url('admin/article_categories/edit/' . $cat->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
-										<?php if ($cat->article_count == 0): ?>
-											<a href="<?= base_url('admin/article_categories/del/' . $cat->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Möchten Sie wirklich löschen?')"><i class="fa fa-trash"></i></a>
+										<?php if (empty($cat->menu_id) && empty($cat->submenu_id)): ?>
+											<a href="<?= base_url('admin/article_categories/edit/' . $cat->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
+											<?php if ($cat->article_count == 0): ?>
+												<a href="<?= base_url('admin/article_categories/del/' . $cat->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Möchten Sie wirklich löschen?')"><i class="fa fa-trash"></i></a>
+											<?php endif; ?>
+										<?php else: ?>
+											<span class="text-muted">Automatisch</span>
 										<?php endif; ?>
 									</td>
+
 								</tr>
 							<?php endforeach; ?>
 						<?php else: ?>
-							<tr><td colspan="9" class="text-center">Keine Daten</td></tr>
+							<tr><td colspan="10" class="text-center">Keine Daten</td></tr>
 						<?php endif; ?>
 						</tbody>
+
+
 					</table>
 				</div>
 				<div class="mt-3">

@@ -11,7 +11,7 @@ class Article extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Article_model');
+		$this->load->model(array('Article_model', 'Admin_model'));
 	}
 
 	public function articleCategoriesSave()
@@ -19,8 +19,31 @@ class Article extends CI_Controller
 		$post = $this->input->post();
 		$id = $this->uri->segment(4);
 		$segment2 = $this->uri->segment(3);
+		$search = $this->input->get('search'); // <- presunuté vyššie
 
+		// Automatická synchronizácia menu položiek do článkových kategórií
+		$this->Article_model->syncMenuWithArticleCategories();
+
+		// Spracovanie POST
 		if (!empty($post)) {
+			// Zákaz úpravy systémovej kategórie (prepojenej s menu)
+			if (!empty($post['id'])) {
+				$existing = $this->Article_model->getArticleCategories($post['id']);
+				if (!empty($existing->menu_id) || !empty($existing->submenu_id)) {
+					$this->session->set_flashdata('error', 'Diese Kategorie wird automatisch vom Menü verwaltet und kann nicht bearbeitet werden.');
+					redirect(BASE_URL . 'admin/article_categories');
+				}
+			}
+
+			// Ak je to položka z menu/submenu, nastavíme menu_id alebo submenu_id a slug
+			if (!empty($post['menu_id'])) {
+				$post['menu_id'] = (int)$post['menu_id'];
+				$post['slug'] = $this->Admin_model->getSlugById($post['menu_id']);
+			} elseif (!empty($post['submenu_id'])) {
+				$post['submenu_id'] = (int)$post['submenu_id'];
+				$post['slug'] = $this->Admin_model->getSlugBySubId($post['submenu_id']);
+			}
+
 			if (!empty($post['id'])) {
 				if ($this->Article_model->saveArticleCategory($post)) {
 					$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich bearbeitet.');
@@ -40,7 +63,14 @@ class Article extends CI_Controller
 			}
 		}
 
+		// Zákaz mazania systémovej kategórie (prepojenej s menu)
 		if ($segment2 == 'del' && is_numeric($id)) {
+			$category = $this->Article_model->getArticleCategories($id);
+			if (!empty($category->menu_id) || !empty($category->submenu_id)) {
+				$this->session->set_flashdata('error', 'Diese Kategorie wird automatisch vom Menü verwaltet und kann nicht gelöscht werden.');
+				redirect(BASE_URL . 'admin/article_categories');
+			}
+
 			if ($this->Article_model->deleteArticleCategory($id)) {
 				$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich gelöscht.');
 				redirect(BASE_URL . 'admin/article_categories');
@@ -49,10 +79,11 @@ class Article extends CI_Controller
 			}
 		}
 
+		// Výpis paginovaných kategórií s vyhľadávaním
 		$this->load->library('pagination');
 		$config['base_url'] = base_url('admin/article_categories');
-		$config['total_rows'] = $this->Article_model->countCategories();
-		$config['per_page'] = 15;
+		$config['total_rows'] = $this->Article_model->countCategoriesFiltered($search);
+		$config['per_page'] = 30;
 		$config['uri_segment'] = 3;
 		$config['full_tag_open'] = '<ul class="pagination justify-content-center">';
 		$config['full_tag_close'] = '</ul>';
@@ -71,13 +102,16 @@ class Article extends CI_Controller
 		$this->pagination->initialize($config);
 		$offset = $this->uri->segment(3) ?? 0;
 
-		$data['articleCategories'] = $this->Article_model->getPaginatedCategories($config['per_page'], $offset);
+		$data['articleCategories'] = $this->Article_model->getPaginatedCategoriesFiltered($config['per_page'], $offset, $search);
 		$data['pagination'] = $this->pagination->create_links();
 		$data['articleCategory'] = $this->Article_model->getArticleCategories($id);
 		$data['title'] = 'Artikelkategorien';
 		$data['page'] = 'admin/settings/article_categories';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
+
+
 
 	public function articleCategoryForm($id = null)
 	{
@@ -99,7 +133,7 @@ class Article extends CI_Controller
 		$this->load->library('pagination');
 		$config['base_url'] = base_url('admin/articles_in_category/' . $categoryId);
 		$config['total_rows'] = $this->Article_model->countArticlesByCategory($categoryId);
-		$config['per_page'] = 15;
+		$config['per_page'] = 30;
 		$config['uri_segment'] = 4;
 		$config['full_tag_open'] = '<ul class="pagination justify-content-center">';
 		$config['full_tag_close'] = '</ul>';
@@ -173,4 +207,11 @@ class Article extends CI_Controller
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
 	}
+	public function syncCategories()
+	{
+		$this->Article_model->syncMenuWithArticleCategories();
+		$this->session->set_flashdata('success', 'Menu a submenu boli synchronizované s kategóriami článkov.');
+		redirect(BASE_URL . 'admin/article_categories');
+	}
+
 }

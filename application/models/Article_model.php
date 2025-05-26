@@ -52,21 +52,33 @@ class Article_model extends CI_Model
 		$this->db->group_by('ac.id');
 		return $this->db->get()->result();
 	}
-	public function countCategories()
+	public function countCategoriesFiltered($search = null)
 	{
-		return $this->db->count_all('article_categories');
+		if (!empty($search)) {
+			$this->db->group_start();
+			$this->db->like('name', $search);
+			$this->db->or_like('slug', $search);
+			$this->db->or_like('keywords', $search);
+			$this->db->or_like('description', $search);
+			$this->db->group_end();
+		}
+		return $this->db->count_all_results('article_categories');
 	}
+
+
 
 	public function getPaginatedCategories($limit, $offset)
 	{
-		$this->db->select('ac.*, COUNT(a.id) as article_count');
+		$this->db->select('ac.*, COUNT(a.id) as article_count, m.parent');
 		$this->db->from('article_categories ac');
 		$this->db->join('articles a', 'a.category_id = ac.id', 'left');
+		$this->db->join('menu m', 'ac.menu_id = m.id', 'left'); // pridanie parent stĺpca
 		$this->db->group_by('ac.id');
 		$this->db->order_by('ac.id', 'DESC');
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
+
 	public function countArticlesByCategory($categoryId)
 	{
 		$this->db->where('category_id', $categoryId);
@@ -197,4 +209,63 @@ class Article_model extends CI_Model
 	{
 		return $this->db->delete('articles', ['id' => $id]);
 	}
+	public function syncMenuWithArticleCategories()
+	{
+		$menuItems = $this->db->get('menu')->result();
+
+		foreach ($menuItems as $menu) {
+			// Preskoč ak nemá názov
+			if (empty($menu->name)) continue;
+
+			// Priprav dáta
+			$data = [
+				'name' => $menu->name,
+				'slug' => !empty($menu->url) ? $menu->url : url_title($menu->name, 'dash', true),
+				'lang' => $menu->lang ?? 'de',
+				'active' => 1,
+				'created_at' => date('Y-m-d H:i:s'),
+			];
+
+			// Rozlíš medzi hlavným a submenu záznamom
+			if ((int)$menu->parent === 0) {
+				$data['menu_id'] = $menu->id;
+				$exists = $this->db->get_where('article_categories', ['menu_id' => $menu->id])->row();
+			} else {
+				$data['submenu_id'] = $menu->id;
+				$exists = $this->db->get_where('article_categories', ['submenu_id' => $menu->id])->row();
+			}
+
+			// Ak ešte neexistuje, zapíš
+			if (!$exists) {
+				$this->db->insert('article_categories', $data);
+			}
+		}
+	}
+	public function getPaginatedCategoriesFiltered($limit, $offset, $search = null)
+	{
+		$this->db->select('ac.*, COUNT(a.id) as article_count, m.parent');
+		$this->db->from('article_categories ac');
+		$this->db->join('articles a', 'a.category_id = ac.id', 'left');
+		$this->db->join('menu m', 'ac.menu_id = m.id', 'left');
+
+		if (!empty($search)) {
+			$this->db->group_start();
+			$this->db->like('ac.name', $search);
+			$this->db->or_like('ac.slug', $search);
+			$this->db->or_like('ac.keywords', $search);
+			$this->db->or_like('ac.description', $search);
+			$this->db->group_end();
+		}
+
+		$this->db->group_by('ac.id');
+		$this->db->order_by('ac.lang', 'ASC');
+		$this->db->order_by('ac.id', 'DESC');
+		$this->db->limit($limit, $offset);
+		return $this->db->get()->result();
+	}
+
+
+
+
+
 }
