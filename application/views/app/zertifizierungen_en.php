@@ -68,4 +68,41 @@
 		</div>
 	</section>
 
-	<section class="r
+	<section class="row mb-5 align-items-center">
+		<div class="col-md-9">
+			<h4 class="mb-2 text-success">Trusted Shops</h4>
+			<p>Trusted Shops is the leading seal of approval for online shops in europe which includes buyer protection for consumers and a rating system. Since 2017 our webshop is
+				certified with this quality seal. We fulfill all quality criteria in terms of data security, transparent customer communication and our reliable customer service.</p>
+			<a href="https://www.trustedshops.com/" class="btn btn-outline-success btn-sm">More Information</a>
+		</div>
+		<div class="col-md-3 text-center">
+			<img src="img/cert/ECOCERT.png" class="img-fluid" alt="ECOCERT COSMOS">
+		</div>
+	</section>
+	<section class="row mb-5 align-items-center">
+		<div class="col-md-9">
+			<h4 class="mb-2 text-success">Making visible - we are ORGANIC</h4>
+			<p>It is important to us to inform customers about the ingredients of our products in the best possible way. That is why we mark ecologically particularly high-quality products with our own labels:
+
+				<ul>
+					<li>with BIO active ingredients: This label indicates ingredients in natural cosmetic products that are of organic origin and/or wildcrafted.</li>
+					<li>100% certified natural cosmetics: This label identifies natural cosmetic products that have been tested according to the standards of established, international certification bodies such as ICADA or ECOCERT.</li>
+				</ul>
+
+			<a href="https://shop.styx.at/" class="btn btn-outline-success btn-sm">Web Shop</a>
+		</div>
+		<div class="col-md-3 text-center">
+			<img src="img/cert/ECOCERT.png" class="img-fluid" alt="ECOCERT COSMOS">
+		</div>
+	</section>
+	<section class="row mb-5 align-items-center">
+		<div class="col-md-9">
+			<h4 class="mb-2 text-success">The AUSTRIA Sign (WKO)</h4>
+			<p>The Austria sign is a strong brand that has been a symbol of the Austrian economy at home and abroad for over 30 years. It stands for the quality and innovative strength of Austrian products.</p>
+			<a href="https://www.wko.at/aussenwirtschaft/austria-zeichen" class="btn btn-outline-success btn-sm">More Information</a>
+		</div>
+		<div class="col-md-3 text-center">
+			<img src="img/cert/ECOCERT.png" class="img-fluid" alt="ECOCERT COSMOS">
+		</div>
+	</section>
+</section>
