@@ -243,10 +243,10 @@ class Article_model extends CI_Model
 	}
 	public function getPaginatedCategoriesFiltered($limit, $offset, $search = null)
 	{
-		$this->db->select('ac.*, COUNT(a.id) as article_count, m.parent');
+		$this->db->select('ac.*, COUNT(a.id) as article_count, m.parent, m.orderBy');
 		$this->db->from('article_categories ac');
 		$this->db->join('articles a', 'a.category_id = ac.id', 'left');
-		$this->db->join('menu m', 'ac.menu_id = m.id', 'left');
+		$this->db->join('menu m', 'ac.menu_id = m.id', 'left'); // spojenie kvôli zoradeniu podľa menu.parent
 
 		if (!empty($search)) {
 			$this->db->group_start();
@@ -258,11 +258,19 @@ class Article_model extends CI_Model
 		}
 
 		$this->db->group_by('ac.id');
-		$this->db->order_by('ac.lang', 'ASC');
-		$this->db->order_by('ac.id', 'DESC');
+
+		// Zoradenie presne ako menu:
+		$this->db->order_by('(CASE WHEN ac.menu_id IS NULL AND ac.submenu_id IS NULL THEN 1 ELSE 0 END)', 'ASC'); // vlastné na koniec
+		$this->db->order_by('m.parent', 'ASC');      // zoradenie podľa nadradenej položky
+		$this->db->order_by('m.orderBy', 'ASC');     // poradie podľa nastaveného orderBy
+		$this->db->order_by('ac.lang', 'ASC');       // najprv DE, potom EN
+		$this->db->order_by('ac.id', 'ASC');         // stabilné zoradenie
+
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
+
+
 
 
 

@@ -1,7 +1,7 @@
 <form method="get" action="<?= base_url('admin/article_categories') ?>">
 	<div class="row mb-3">
 		<div class="col-md-6">
-			<input type="text" name="search" value="<?= $this->input->get('search') ?>" class="form-control" placeholder="Suchen...">
+			<input type="text" id="categorySearch" name="search" value="<?= $this->input->get('search') ?>" class="form-control" placeholder="Suchen...">
 		</div>
 		<div class="col-md-2">
 			<button type="submit" class="btn btn-primary">Suchen</button>
@@ -113,4 +113,5 @@
 			});
 		});
 	});
+
 </script>
