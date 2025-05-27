@@ -96,7 +96,7 @@ $titleSub = isset($article)
 			<?php if (!empty($article->image)): ?>
 				<label>Aktuelles Bild (Upload)</label>
 				<div>
-					<img src="<?= base_url('Uploads/articles/' . $article->image) ?>" class="img-fluid">
+					<img src="<?= base_url('uploads/articles/' . $article->image) ?>" class="img-fluid">
 				</div>
 			<?php endif; ?>
 		</div>
@@ -293,7 +293,7 @@ $titleSub = isset($article)
 		};
 
 		sectionsData.forEach(sec => {
-			const img = sec.image ? BASE_URL + 'Uploads/articles/sections/' + sec.image : null;
+			const img = sec.image ? BASE_URL + 'uploads/articles/sections/' + sec.image : null;
 			const ftpImage = sec.ftp_image || ''; // Predpokladáme, že sekcie majú pole ftp_image
 			addSection(sec.content, img, ftpImage);
 		});
