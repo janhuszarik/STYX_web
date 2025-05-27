@@ -149,6 +149,91 @@ class Ftpmanager extends CI_Controller
 
 		redirect('admin/ftpmanager?path=' . urlencode($current_path));
 	}
+	public function get_article_images()
+	{
+		$this->load->library('ftp');
+		$config = [
+			'hostname' => 'ftp.styxnatur.at',
+			'username' => 'testujem@styxnatur.at',
+			'password' => '***',
+			'port'     => 21,
+			'passive'  => TRUE,
+			'debug'    => FALSE,
+		];
+		$this->ftp->connect($config);
+		$list = $this->ftp->list_files('/articles');
+		$this->ftp->close();
+
+		header('Content-Type: application/json');
+		echo json_encode($list);
+	}
+	public function modal()
+	{
+		$this->load->helper('directory');
+
+		$path = './uploads/articles/'; // ✅ správna cesta podľa tvojho projektu
+		$files = directory_map($path);
+
+		$data['images'] = [];
+
+		if (!empty($files)) {
+			foreach ($files as $file) {
+				if (is_string($file) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $file)) {
+					$data['images'][] = [
+						'url' => base_url('uploads/articles/' . $file),
+						'path' => 'uploads/articles/' . $file,
+					];
+				}
+			}
+		}
+
+		$this->load->view('admin/settings/ftp_modal', $data);
+	}
+
+
+
+	public function browser()
+	{
+		$data['start_path'] = './uploads/articles/';
+		$this->load->view('admin/ftp_browser', $data);
+	}
+
+	public function load_folder()
+	{
+		$folder = $this->input->post('folder') ?? '';
+		$folder = trim($folder, '/');
+
+		// Získame zoznam súborov a priečinkov z FTP
+		$files = $this->Ftpmanager_model->connect_to_ftp($folder);
+
+		if (isset($files['__error'])) {
+			header('Content-Type: application/json');
+			echo json_encode(['error' => $files['__error']]);
+			return;
+		}
+
+		$list = [];
+		foreach ($files as $file) {
+			$full_path = $file['path'];
+			$url = null;
+			if ($file['type'] === 'file') {
+				$url = 'https://styx.styxnatur.at/' . $full_path;
+			}
+			$list[] = [
+				'name' => $file['name'],
+				'type' => $file['type'],
+				'url' => $url,
+				'path' => $full_path,
+				'size' => $file['size'] // Veľkosť je už zahrnutá z modelu
+			];
+		}
+
+		header('Content-Type: application/json');
+		echo json_encode($list);
+	}
+
+
+
 
 
 

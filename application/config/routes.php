@@ -97,12 +97,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/update_calendar_note'] 						= 'admin/update_calendar_note';
 	$route['admin/delete_calendar_note/(:num)']					= 'admin/delete_calendar_note/$1';
 
-	$route['admin/ftpmanager'] 									= 'Ftpmanager/index';
+	$route['admin/ftpmanager'] 									= 'ftpmanager/index';
 	$route['admin/ftpmanager/download'] 						= 'ftpmanager/download';
 	$route['admin/ftpmanager/create_folder'] 					= 'ftpmanager/create_folder';
 	$route['admin/ftpmanager/move_file'] 						= 'ftpmanager/move_file';
 	$route['admin/ftpmanager/delete'] 							= 'ftpmanager/delete';
 	$route['admin/ftpmanager/upload'] 							= 'ftpmanager/upload';
+	$route['admin/ftpmanager/modal'] 							= 'ftpmanager/modal';
+	$route['admin/ftpmanager/browser'] 							= 'ftpmanager/browser';
+
+
+$route['admin/ftpmanager/modal'] = 'ftpmanager/modal';
+$route['admin/ftpmanager/load_folder'] = 'ftpmanager/load_folder';
 
 	$route['admin/slider'] 										= 'admin/sliderSave';
 	$route['admin/sliderSave'] 									= 'admin/sliderSave';
