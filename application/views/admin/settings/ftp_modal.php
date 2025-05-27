@@ -9,7 +9,7 @@
 
 <div id="ftp-browser-container">
 	<div class="mb-2 d-flex align-items-center">
-		<button id="ftp-back-btn" class="btn btn-sm btn-secondary me-2" style="display: none;">
+		<button type="button" id="ftp-back-btn" class="btn btn-sm btn-secondary me-2" style="display: none;">
 			<i class="bi bi-arrow-left"></i> Zurück
 		</button>
 		<strong>Aktueller Ordner:</strong>
@@ -93,13 +93,13 @@
 								: '-');
 
 						html += `
-                    <tr>
-                        <td style="text-align: center; vertical-align: middle;">${typeContent}</td>
-                        <td>${item.name}</td>
-                        <td>${item.path}</td>
-                        <td>${size}</td>
-                        <td>${action}</td>
-                    </tr>`;
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle;">${typeContent}</td>
+                            <td>${item.name}</td>
+                            <td>${item.path}</td>
+                            <td>${size}</td>
+                            <td>${action}</td>
+                        </tr>`;
 					});
 					browserContainer.innerHTML = html || '<tr><td colspan="5">Der Ordner ist leer.</td></tr>';
 
@@ -128,13 +128,15 @@
 		}
 
 		// Navigation zurück
-		backBtn.addEventListener('click', () => {
+		backBtn.addEventListener('click', (e) => {
+			e.preventDefault(); // Zabránenie odoslaniu formulára
 			const parentPath = currentPath.includes('/') ? currentPath.substring(0, currentPath.lastIndexOf('/')) : '';
 			loadFolder(parentPath);
 		});
 
 		// Öffnen des Modals und Laden des Wurzelordners
-		btn.addEventListener("click", () => {
+		btn.addEventListener("click", (e) => {
+			e.preventDefault(); // Zabránenie odoslaniu formulára pri otváraní modálu
 			modal.show();
 			loadFolder(currentPath);
 		});
