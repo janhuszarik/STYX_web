@@ -1,4 +1,12 @@
-<!-- ftp_modal.php -->
+<style>
+	/* Aby všetky preview obrázky vo ftpImagePreview boli max. 150×150px */
+	#ftpImagePreview img {
+		max-width: 150px;
+		max-height: 150px;
+		object-fit: contain; /* zachová proporcie */
+	}
+</style>
+
 <div id="ftp-browser-container">
 	<div class="mb-2 d-flex align-items-center">
 		<button id="ftp-back-btn" class="btn btn-sm btn-secondary me-2" style="display: none;">
