@@ -1,3 +1,8 @@
+<style>.current-image {
+		max-width: 40%;
+		height: auto;
+	}
+</style>
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -96,7 +101,7 @@ $titleSub = isset($article)
 			<?php if (!empty($article->image)): ?>
 				<label>Aktuelles Bild (Upload)</label>
 				<div>
-					<img src="<?= base_url('uploads/articles/' . $article->image) ?>" class="img-fluid">
+					<img src="<?= base_url('uploads/articles/' . $article->image) ?>" class="img-fluid current-image">
 				</div>
 			<?php endif; ?>
 		</div>
