@@ -107,6 +107,7 @@ class Article_model extends CI_Model
 
 	public function saveArticle($post)
 	{
+		// 1) Zpracování klasického uploadu hlavního obrázku
 		$image = null;
 		if (!empty($_FILES['image']['name'])) {
 			$this->load->helper('app_helper');
@@ -116,93 +117,111 @@ class Article_model extends CI_Model
 			}
 		}
 
+		// 2) Sestavení pole pro uložení
 		$data = [
-			'category_id' => $post['category_id'],
-			'title' => $post['title'],
-			'subtitle' => $post['subtitle'],
-			'slug' => url_title($post['title'], 'dash', true),
-			'image' => $image ?? ($post['old_image'] ?? null),
-			'keywords' => $post['keywords'],
-			'meta' => $post['meta'],
-			'active' => isset($post['active']) ? 1 : 0,
+			'category_id'     => $post['category_id'],
+			'title'           => $post['title'],
+			'subtitle'        => $post['subtitle'],
+			'slug'            => url_title($post['title'], 'dash', true),
+			'image'           => $image ?? ($post['old_image'] ?? null),
+			'keywords'        => $post['keywords'],
+			'meta'            => $post['meta'],
+			'active'          => isset($post['active']) ? 1 : 0,
 			'start_date_from' => !empty($post['start_date_from']) ? $post['start_date_from'] : null,
-			'end_date_to' => !empty($post['end_date_to']) ? $post['end_date_to'] : null,
-			'updated_at' => date('Y-m-d H:i:s'),
-			'product_name1' => $post['product_name1'] ?? null,
-			'product_description1' => $post['product_description1'] ?? null,
-			'product_url1' => $post['product_url1'] ?? null,
-			'product_image1' => null,
-			'product_name2' => $post['product_name2'] ?? null,
-			'product_description2' => $post['product_description2'] ?? null,
-			'product_url2' => $post['product_url2'] ?? null,
-			'product_image2' => null,
-			'product_name3' => $post['product_name3'] ?? null,
-			'product_description3' => $post['product_description3'] ?? null,
-			'product_url3' => $post['product_url3'] ?? null,
-			'product_image3' => null,
+			'end_date_to'     => !empty($post['end_date_to'])    ? $post['end_date_to']   : null,
+			'updated_at'      => date('Y-m-d H:i:s'),
+			'product_name1'           => $post['product_name1']           ?? null,
+			'product_description1'    => $post['product_description1']    ?? null,
+			'product_url1'            => $post['product_url1']            ?? null,
+			'product_image1'          => null,
+			'product_name2'           => $post['product_name2']           ?? null,
+			'product_description2'    => $post['product_description2']    ?? null,
+			'product_url2'            => $post['product_url2']            ?? null,
+			'product_image2'          => null,
+			'product_name3'           => $post['product_name3']           ?? null,
+			'product_description3'    => $post['product_description3']    ?? null,
+			'product_url3'            => $post['product_url3']            ?? null,
+			'product_image3'          => null,
 			'empfohlen_name1' => $post['empfohlen_name1'] ?? null,
-			'empfohlen_url1' => $post['empfohlen_url1'] ?? null,
+			'empfohlen_url1'  => $post['empfohlen_url1']  ?? null,
 			'empfohlen_name2' => $post['empfohlen_name2'] ?? null,
-			'empfohlen_url2' => $post['empfohlen_url2'] ?? null,
+			'empfohlen_url2'  => $post['empfohlen_url2']  ?? null,
 			'empfohlen_name3' => $post['empfohlen_name3'] ?? null,
-			'empfohlen_url3' => $post['empfohlen_url3'] ?? null
+			'empfohlen_url3'  => $post['empfohlen_url3']  ?? null,
 		];
 
-		// Produktbilder verarbeiten
+		// 3) Pokud byl vybrán obrázek z FTP, použijeme jeho basename
+		if (!empty($post['ftp_image'])) {
+			// $post['ftp_image'] očekává cestu jako "uploads/articles/nazev.jpg"
+			$data['image'] = basename($post['ftp_image']);
+		}
+
+		// 4) Zpracování obrázků produktů (upload + případné FTP)
 		for ($i = 1; $i <= 3; $i++) {
-			$field = 'product_image' . $i;
+			$field = 'product_image'.$i;
+
+			// a) standardní upload
 			if (!empty($_FILES[$field]['name'])) {
 				$upload = uploadImg($field, 'uploads/articles/products');
 				if (!empty($upload)) {
 					$data[$field] = basename($upload);
 				}
-			} else {
-				$data[$field] = $post['old_' . $field] ?? null;
+			}
+			// b) případný výběr z FTP (pokud máte ve formuláři input name="ftp_product_imageX")
+			elseif (!empty($post['ftp_product_image'.$i])) {
+				$data[$field] = basename($post['ftp_product_image'.$i]);
+			}
+			// c) fallback na staré jméno
+			else {
+				$data[$field] = $post['old_'.$field] ?? null;
 			}
 		}
 
+		// 5) Uložení záznamu (insert / update)
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
-			$success = $this->db->update('articles', $data);
+			$success   = $this->db->update('articles', $data);
 			$articleId = $post['id'];
 		} else {
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$this->db->insert('articles', $data);
 			$articleId = $this->db->insert_id();
-			$success = true;
+			$success   = true;
 		}
 
+		// 6) Zpracování sekcí článku
 		if ($success && isset($post['sections']) && is_array($post['sections'])) {
+			// smažeme staré sekce
 			$this->db->delete('article_sections', ['article_id' => $articleId]);
 
 			foreach ($post['sections'] as $index => $text) {
 				$imageName = null;
 				if (!empty($_FILES['section_images']['name'][$index])) {
+					// přemapujeme na jednorázové pole pro upload
 					$_FILES['single_section'] = [
-						'name' => $_FILES['section_images']['name'][$index],
-						'type' => $_FILES['section_images']['type'][$index],
+						'name'     => $_FILES['section_images']['name'][$index],
+						'type'     => $_FILES['section_images']['type'][$index],
 						'tmp_name' => $_FILES['section_images']['tmp_name'][$index],
-						'error' => $_FILES['section_images']['error'][$index],
-						'size' => $_FILES['section_images']['size'][$index],
+						'error'    => $_FILES['section_images']['error'][$index],
+						'size'     => $_FILES['section_images']['size'][$index],
 					];
-					$this->load->helper('app_helper');
 					$upload = uploadImg('single_section', 'uploads/articles/sections');
 					if (!empty($upload)) {
 						$imageName = basename($upload);
 					}
 				}
-
 				$this->db->insert('article_sections', [
 					'article_id' => $articleId,
-					'content' => $text,
-					'image' => $imageName,
-					'order' => $index
+					'content'    => $text,
+					'image'      => $imageName,
+					'order'      => $index,
 				]);
 			}
 		}
 
 		return $success;
 	}
+
 
 
 	public function deleteArticle($id)
