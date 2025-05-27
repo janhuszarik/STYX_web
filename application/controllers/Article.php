@@ -164,8 +164,13 @@ class Article extends CI_Controller
 	public function articlesSave()
 	{
 		$post = $this->input->post();
-		$id = $this->uri->segment(4);
-		$segment2 = $this->uri->segment(3);
+		$id = $this->uri->segment(4); // ID článku (pre editáciu)
+		$segment2 = $this->uri->segment(3); // Pre 'del' alebo iné akcie
+
+		// Načítanie kategórií
+		$this->load->model('Article_model');
+		$articleCategories = $this->Article_model->getArticleCategories();
+		log_message('debug', 'Loaded articleCategories: ' . print_r($articleCategories, true));
 
 		// Konfigurácia pre nahrávanie súborov
 		$config['upload_path'] = './Uploads/articles/';
@@ -173,7 +178,6 @@ class Article extends CI_Controller
 		$config['max_size'] = 2048; // 2MB v KB
 		$config['overwrite'] = FALSE;
 
-		// Vytvorenie priečinka, ak neexistuje
 		if (!file_exists($config['upload_path'])) {
 			mkdir($config['upload_path'], 0777, TRUE);
 		}
@@ -181,23 +185,39 @@ class Article extends CI_Controller
 		$this->load->library('upload');
 
 		if (!empty($post)) {
+			// Spracovanie category_id
+			if (!empty($id)) {
+				// Editácia: Použijeme category_id z existujúceho článku
+				$article = $this->Article_model->getArticle($id);
+				if ($article) {
+					$post['category_id'] = $article->category_id;
+				} else {
+					$this->session->set_flashdata('error', 'Článok nebol nájdený.');
+					redirect(BASE_URL . 'admin/articles_in_category/0');
+				}
+			} else {
+				// Nový článok: Použijeme category_id z POST
+				$post['category_id'] = $post['category_id'];
+				if (empty($post['category_id'])) {
+					$this->session->set_flashdata('error', 'Kategória nebola zadaná.');
+					redirect(BASE_URL . 'admin/articles_in_category/0');
+				}
+			}
+
 			// Spracovanie hlavného obrázka
 			if (!empty($_FILES['image']['name'])) {
 				$this->upload->initialize($config);
 				if ($this->upload->do_upload('image')) {
 					$upload_data = $this->upload->data();
-					$post['image'] = $upload_data['file_name']; // Uloží názov súboru do $post
+					$post['image'] = $upload_data['file_name'];
 				} else {
 					$this->session->set_flashdata('error', 'Fehler beim Hochladen des Hauptbildes: ' . $this->upload->display_errors());
 				}
+			} elseif (!empty($post['ftp_image'])) {
+				$post['image'] = $post['ftp_image'];
 			}
 
-			// Spracovanie FTP obrázka (ak je vybraný)
-			if (!empty($post['ftp_image'])) {
-				$post['image'] = $post['ftp_image']; // FTP má prednosť, ak je vybrané
-			}
-
-			// Spracovanie obrázkov pre odporúčané produkty
+			// Spracovanie produktových obrázkov
 			for ($i = 1; $i <= 3; $i++) {
 				$file_key = "product_image$i";
 				if (!empty($_FILES[$file_key]['name'])) {
@@ -208,24 +228,21 @@ class Article extends CI_Controller
 					} else {
 						$this->session->set_flashdata('error', "Fehler beim Hochladen des Produktbildes $i: " . $this->upload->display_errors());
 					}
-				}
-				// Spracovanie FTP obrázka pre produkt
-				if (!empty($post["ftp_product_image$i"])) {
+				} elseif (!empty($post["ftp_product_image$i"])) {
 					$post["product_image$i"] = $post["ftp_product_image$i"];
 				}
 			}
 
-			// Spracovanie obrázkov pre sekcie
+			// Spracovanie sekčných obrázkov
 			if (!empty($post['sections'])) {
 				$sections = $post['sections'];
 				$ftp_section_images = $post['ftp_section_image'] ?? [];
 				foreach ($_FILES['section_images']['name'] as $key => $section_image) {
 					if (!empty($section_image)) {
-						$section_config = $config; // Kopírujeme konfiguráciu
-						$section_config['file_name'] = time() . '_' . $section_image; // Unikátny názov súboru
+						$section_config = $config;
+						$section_config['file_name'] = time() . '_' . $section_image;
 						$this->upload->initialize($section_config);
 
-						// Dočasne presunieme dáta pre konkrétny súbor
 						$_FILES['temp_image']['name'] = $_FILES['section_images']['name'][$key];
 						$_FILES['temp_image']['type'] = $_FILES['section_images']['type'][$key];
 						$_FILES['temp_image']['tmp_name'] = $_FILES['section_images']['tmp_name'][$key];
@@ -239,7 +256,6 @@ class Article extends CI_Controller
 							$this->session->set_flashdata('error', "Fehler beim Hochladen des Sektionsbildes $key: " . $this->upload->display_errors());
 						}
 					}
-					// Spracovanie FTP obrázka pre sekciu
 					if (!empty($ftp_section_images[$key])) {
 						$post['section_images'][$key] = $ftp_section_images[$key];
 					}
@@ -247,41 +263,50 @@ class Article extends CI_Controller
 			}
 
 			// Uloženie do databázy
-			if (!empty($post['id'])) {
-				if ($this->Article_model->saveArticle($post)) {
-					$this->session->set_flashdata('success', 'Artikel wurde erfolgreich bearbeitet.');
-					redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
-				} else {
-					$this->session->set_flashdata('error', 'Fehler beim Speichern.');
-					$data['article'] = (object)$post;
-				}
+			if ($this->Article_model->saveArticle($post)) {
+				$message = !empty($post['id']) ? 'Artikel wurde erfolgreich bearbeitet.' : 'Artikel wurde erfolgreich hinzugefügt.';
+				$this->session->set_flashdata('success', $message);
+				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			} else {
-				if ($this->Article_model->saveArticle($post)) {
-					$this->session->set_flashdata('success', 'Artikel wurde erfolgreich hinzugefügt.');
-					redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
-				} else {
-					$this->session->set_flashdata('error', 'Fehler beim Speichern.');
-					$data['article'] = (object)$post;
-				}
+				$this->session->set_flashdata('error', 'Fehler beim Speichern.');
+				$data['article'] = (object)$post;
+				$data['categoryId'] = $post['category_id'];
+				$data['articleCategories'] = $articleCategories;
+				$data['sections'] = $post['sections'] ? array_map(function($content, $idx) use ($post) {
+					return (object)[
+						'content' => $content,
+						'image' => $post['section_images'][$idx] ?? null,
+						'image_title' => $post['section_image_titles'][$idx] ?? null,
+						'ftp_image' => $post['ftp_section_image'][$idx] ?? null,
+						'order' => $idx
+					];
+				}, $post['sections'], array_keys($post['sections'])) : [];
+				$data['title'] = 'Artikel verwalten';
+				$data['page'] = 'admin/settings/article_form';
+				$this->load->view('admin/layout/normal', $data);
+				return;
 			}
 		}
 
+		// Načítanie dát pre formulár
+		$article = $this->Article_model->getArticle($id);
+		$categoryId = $article ? $article->category_id : 0; // Použijeme category_id z článku, ak editujeme
+		log_message('debug', 'Category ID for view: ' . $categoryId);
+
 		if ($segment2 == 'del' && is_numeric($id)) {
 			$article = $this->Article_model->getArticle($id);
-
-			if ($this->Article_model->deleteArticle($id)) {
+			if ($article && $this->Article_model->deleteArticle($id)) {
 				$this->session->set_flashdata('success', 'Artikel wurde erfolgreich gelöscht.');
-				$categoryId = $article->category_id ?? 0;
-				redirect(BASE_URL . 'admin/articles_in_category/' . $categoryId);
+				redirect(BASE_URL . 'admin/articles_in_category/' . ($article->category_id ?? 0));
 			} else {
 				$this->session->set_flashdata('error', 'Fehler beim Löschen.');
 			}
 		}
 
-		$data['article'] = $this->Article_model->getArticle($id);
-		$data['categoryId'] = $data['article']->category_id ?? $id;
-		$data['articleCategories'] = $this->Article_model->getArticleCategories();
-		$data['sections'] = $this->Article_model->getSections($id);
+		$data['article'] = $article;
+		$data['categoryId'] = $categoryId; // Použijeme category_id z článku
+		$data['articleCategories'] = $articleCategories;
+		$data['sections'] = $article ? $this->Article_model->getSections($id) : [];
 		$data['title'] = 'Artikel verwalten';
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);

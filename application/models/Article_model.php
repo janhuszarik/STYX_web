@@ -22,14 +22,10 @@ class Article_model extends CI_Model
 		}
 	}
 
-	public function getArticleCategories($id = false)
+	public function getArticleCategories()
 	{
-		if ($id === false) {
-			return $this->db->get('article_categories')->result();
-		} else {
-			$this->db->where('id', $id);
-			return $this->db->get('article_categories')->row();
-		}
+		$query = $this->db->get('article_categories');
+		return $query->result();
 	}
 
 	public function deleteArticleCategory($id)
@@ -105,172 +101,192 @@ class Article_model extends CI_Model
 		return $this->db->get('article_sections')->result();
 	}
 
-	public function saveArticle($post)
+	public function saveArticle(array $post)
 	{
 		$this->load->helper('app_helper');
 
-		// 1) Zpracování klasického uploadu hlavního obrázku
+		// 1) HLAVNÍ OBÁZEK – upload nebo FTP
 		$image = null;
+		$image_title = $post['image_title'] ?? null;
+
+		// a) klasický upload
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'uploads/articles');
-			if (!empty($uploadPath) && file_exists($uploadPath)) {
+			$uploadPath = uploadImg('image', 'Uploads/articles');
+			if ($uploadPath && file_exists($uploadPath)) {
 				$image = basename($uploadPath);
 			} else {
-				log_message('error', 'Chyba pri nahrávaní hlavného obrázka: ' . (isset($uploadPath) ? $uploadPath : 'Žiadny súbor'));
+				log_message('error', 'Chyba při nahrávání hlavního obrázku: ' . ($uploadPath ?: 'Žádný soubor'));
 			}
 		}
 
-		// 2) Použitie FTP obrázka, ak je vybraný
+		// b) vybráno z FTP
 		if (!empty($post['ftp_image'])) {
-			$ftpImagePath = $post['ftp_image'];
-			// Ak je to vzdialená URL (napr. ftp:// alebo http://), stiahneme súbor
-			if (filter_var($ftpImagePath, FILTER_VALIDATE_URL)) {
-				$localPath = 'uploads/articles/' . basename($ftpImagePath);
-				// Vytvorenie priečinka, ak neexistuje
-				if (!is_dir('uploads/articles/')) {
-					mkdir('uploads/articles/', 0755, true);
-				}
-				if (copy($ftpImagePath, $localPath)) {
-					$image = basename($ftpImagePath);
+			$ftpPath = $post['ftp_image'];
+			$localDir = FCPATH . 'Uploads/articles/';
+			@mkdir($localDir, 0755, true);
+
+			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+				$localFile = $localDir . basename($ftpPath);
+				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
+					$image = basename($ftpPath);
 				} else {
-					log_message('error', "Nepodarilo sa skopírovať FTP obrázok: $ftpImagePath");
+					log_message('error', "Nelze stáhnout FTP obrázek: $ftpPath");
+				}
+			} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+				$src = FCPATH . ltrim($ftpPath, '/');
+				$dst = $localDir . basename($ftpPath);
+				if (@copy($src, $dst)) {
+					$image = basename($ftpPath);
+				} else {
+					log_message('error', "Nelze kopírovat lokální FTP obrázek: $src");
 				}
 			} else {
-				// Predpokladáme, že je to lokálna cesta (napr. uploads/articles/nazev.jpg)
-				$image = basename($ftpImagePath);
+				$image = basename($ftpPath);
 			}
 		}
 
-		// 3) Sestavení pole pro uložení
+		// 2) PŘÍPRAVA DAT PRO ULOŽENÍ
 		$data = [
-			'category_id'     => $post['category_id'],
+			'category_id'     => $post['category_id'], // Používame priamo category_id z hidden inputu
 			'title'           => $post['title'],
 			'subtitle'        => $post['subtitle'],
 			'slug'            => url_title($post['title'], 'dash', true),
 			'image'           => $image ?? ($post['old_image'] ?? null),
-			'keywords'        => $post['keywords'],
-			'meta'            => $post['meta'],
-			'active'          => isset($post['active']) ? 1 : 0,
-			'start_date_from' => !empty($post['start_date_from']) ? $post['start_date_from'] : null,
-			'end_date_to'     => !empty($post['end_date_to']) ? $post['end_date_to'] : null,
+			'image_title'     => $image_title,
+			'keywords'        => $post['keywords'] ?? null,
+			'meta'            => $post['meta'] ?? null,
+			'active'          => !empty($post['active']) ? 1 : 0,
+			'start_date_from' => $post['start_date_from'] ?: null,
+			'end_date_to'     => $post['end_date_to']   ?: null,
 			'updated_at'      => date('Y-m-d H:i:s'),
-			'product_name1'   => $post['product_name1'] ?? null,
-			'product_description1' => $post['product_description1'] ?? null,
-			'product_url1'    => $post['product_url1'] ?? null,
-			'product_image1'  => null,
-			'product_name2'   => $post['product_name2'] ?? null,
-			'product_description2' => $post['product_description2'] ?? null,
-			'product_url2'    => $post['product_url2'] ?? null,
-			'product_image2'  => null,
-			'product_name3'   => $post['product_name3'] ?? null,
-			'product_description3' => $post['product_description3'] ?? null,
-			'product_url3'    => $post['product_url3'] ?? null,
-			'product_image3'  => null,
-			'empfohlen_name1' => $post['empfohlen_name1'] ?? null,
-			'empfohlen_url1'  => $post['empfohlen_url1'] ?? null,
-			'empfohlen_name2' => $post['empfohlen_name2'] ?? null,
-			'empfohlen_url2'  => $post['empfohlen_url2'] ?? null,
-			'empfohlen_name3' => $post['empfohlen_name3'] ?? null,
-			'empfohlen_url3'  => $post['empfohlen_url3'] ?? null,
 		];
 
-		// 4) Zpracování obrázků produktů (upload + FTP)
+		// Produkty
 		for ($i = 1; $i <= 3; $i++) {
-			$field = 'product_image' . $i;
+			$data["product_name{$i}"] = $post["product_name{$i}"] ?? null;
+			$data["product_description{$i}"] = $post["product_description{$i}"] ?? null;
+			$data["product_url{$i}"] = $post["product_url{$i}"] ?? null;
+			$data["product_image{$i}_title"] = $post["product_image{$i}_title"] ?? null;
+			$data["product_image{$i}"] = null;
 
-			// a) Standardný upload
-			if (!empty($_FILES[$field]['name'])) {
-				$uploadPath = uploadImg($field, 'uploads/articles/products');
-				if (!empty($uploadPath) && file_exists($uploadPath)) {
-					$data[$field] = basename($uploadPath);
+			// upload
+			if (!empty($_FILES["product_image{$i}"]['name'])) {
+				$up = uploadImg("product_image{$i}", 'Uploads/articles/products');
+				if ($up && file_exists($up)) {
+					$data["product_image{$i}"] = basename($up);
 				} else {
-					log_message('error', "Chyba pri nahrávaní produktu $i: " . (isset($uploadPath) ? $uploadPath : 'Žiadny súbor'));
+					log_message('error', "Chyba při nahrávání produktu $i: " . ($up ?: 'Žádný soubor'));
 				}
 			}
-			// b) Výber z FTP
-			elseif (!empty($post['ftp_product_image' . $i])) {
-				$ftpImagePath = $post['ftp_product_image' . $i];
-				if (filter_var($ftpImagePath, FILTER_VALIDATE_URL)) {
-					$localPath = 'uploads/articles/products/' . basename($ftpImagePath);
-					if (!is_dir('uploads/articles/products/')) {
-						mkdir('uploads/articles/products/', 0755, true);
-					}
-					if (copy($ftpImagePath, $localPath)) {
-						$data[$field] = basename($ftpImagePath);
+			// FTP
+			elseif (!empty($post["ftp_product_image{$i}"])) {
+				$ftpPath = $post["ftp_product_image{$i}"];
+				$localDir = FCPATH . 'Uploads/articles/products/';
+				@mkdir($localDir, 0755, true);
+
+				if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+					$dst = $localDir . basename($ftpPath);
+					if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
+						$data["product_image{$i}"] = basename($ftpPath);
 					} else {
-						log_message('error', "Nepodarilo sa skopírovať FTP obrázok produktu $i: $ftpImagePath");
+						log_message('error', "Nelze stáhnout FTP produktový obrázek $i: $ftpPath");
+					}
+				} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+					$src = FCPATH . ltrim($ftpPath, '/');
+					$dst = $localDir . basename($ftpPath);
+					if (@copy($src, $dst)) {
+						$data["product_image{$i}"] = basename($ftpPath);
+					} else {
+						log_message('error', "Nelze kopírovat FTP produktový obrázek $i: $src");
 					}
 				} else {
-					$data[$field] = basename($ftpImagePath);
+					$data["product_image{$i}"] = basename($ftpPath);
 				}
-			}
-			// c) Fallback na staré jméno
-			else {
-				$data[$field] = $post['old_' . $field] ?? null;
+			} else {
+				$data["product_image{$i}"] = $post["old_product_image{$i}"] ?? null;
 			}
 		}
 
-		// 5) Uložení záznamu (insert / update)
-		if (!empty($post['id']) && is_numeric($post['id'])) {
-			$this->db->where('id', $post['id']);
-			$success = $this->db->update('articles', $data);
-			$articleId = $post['id'];
-		} else {
-			$data['created_at'] = date('Y-m-d H:i:s');
-			$this->db->insert('articles', $data);
-			$articleId = $this->db->insert_id();
-			$success = true;
+		// Doporučené odkazy
+		for ($i = 1; $i <= 3; $i++) {
+			$data["empfohlen_name{$i}"] = $post["empfohlen_name{$i}"] ?? null;
+			$data["empfohlen_url{$i}"] = $post["empfohlen_url{$i}"] ?? null;
 		}
 
-		// 6) Zpracování sekcí článku
-		if ($success && isset($post['sections']) && is_array($post['sections'])) {
-			$this->db->delete('article_sections', ['article_id' => $articleId]);
+		// 3) SEKCIOVÉ OBRÁZKY a TEXTY
+		if (isset($post['sections']) && is_array($post['sections'])) {
+			if (!empty($post['id'])) {
+				$this->db->delete('article_sections', ['article_id' => $post['id']]);
+			}
+			foreach ($post['sections'] as $idx => $text) {
+				$secImg = null;
+				$secImgTitle = $post['section_image_titles'][$idx] ?? null;
 
-			foreach ($post['sections'] as $index => $text) {
-				$imageName = null;
-				if (!empty($_FILES['section_images']['name'][$index])) {
-					$_FILES['single_section'] = [
-						'name'     => $_FILES['section_images']['name'][$index],
-						'type'     => $_FILES['section_images']['type'][$index],
-						'tmp_name' => $_FILES['section_images']['tmp_name'][$index],
-						'error'    => $_FILES['section_images']['error'][$index],
-						'size'     => $_FILES['section_images']['size'][$index],
-					];
-					$uploadPath = uploadImg('single_section', 'uploads/articles/sections');
-					if (!empty($uploadPath) && file_exists($uploadPath)) {
-						$imageName = basename($uploadPath);
+				// upload
+				if (!empty($_FILES['section_images']['name'][$idx])) {
+					$_FILES['tmp_sec']['name']     = $_FILES['section_images']['name'][$idx];
+					$_FILES['tmp_sec']['tmp_name'] = $_FILES['section_images']['tmp_name'][$idx];
+					$_FILES['tmp_sec']['error']    = $_FILES['section_images']['error'][$idx];
+					$_FILES['tmp_sec']['size']     = $_FILES['section_images']['size'][$idx];
+
+					$up = uploadImg('tmp_sec', 'Uploads/articles/sections');
+					if ($up && file_exists($up)) {
+						$secImg = basename($up);
 					} else {
-						log_message('error', "Chyba pri nahrávaní sekcie $index: " . (isset($uploadPath) ? $uploadPath : 'Žiadny súbor'));
+						log_message('error', "Chyba nahrávání sekce $idx: " . ($up ?: 'Žádný soubor'));
 					}
 				}
-				elseif (!empty($post['ftp_section_image'][$index])) {
-					$ftpImagePath = $post['ftp_section_image'][$index];
-					if (filter_var($ftpImagePath, FILTER_VALIDATE_URL)) {
-						$localPath = 'uploads/articles/sections/' . basename($ftpImagePath);
-						if (!is_dir('uploads/articles/sections/')) {
-							mkdir('uploads/articles/sections/', 0755, true);
-						}
-						if (copy($ftpImagePath, $localPath)) {
-							$imageName = basename($ftpImagePath);
+				// FTP
+				elseif (!empty($post['ftp_section_image'][$idx])) {
+					$ftpPath = $post['ftp_section_image'][$idx];
+					$localDir = FCPATH . 'Uploads/articles/sections/';
+					@mkdir($localDir, 0755, true);
+
+					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+						$dst = $localDir . basename($ftpPath);
+						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
+							$secImg = basename($ftpPath);
 						} else {
-							log_message('error', "Nepodarilo sa skopírovať FTP obrázok sekcie $index: $ftpImagePath");
+							log_message('error', "Nelze stáhnout FTP obrázek sekce $idx: $ftpPath");
+						}
+					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+						$src = FCPATH . ltrim($ftpPath, '/');
+						$dst = $localDir . basename($ftpPath);
+						if (@copy($src, $dst)) {
+							$secImg = basename($ftpPath);
+						} else {
+							log_message('error', "Nelze kopírovat FTP obrázek sekce $idx: $src");
 						}
 					} else {
-						$imageName = basename($ftpImagePath);
+						$secImg = basename($ftpPath);
 					}
 				}
 
+				// Uloženie sekcie
 				$this->db->insert('article_sections', [
-					'article_id' => $articleId,
+					'article_id' => $post['id'] ?? $this->db->insert_id(),
 					'content'    => $text,
-					'image'      => $imageName,
-					'order'      => $index,
+					'image'      => $secImg,
+					'image_title' => $secImgTitle,
+					'order'      => $idx,
 				]);
 			}
 		}
 
-		return $success;
+		// 4) VLASTNÍ ULOŽENÍ ČLÁNKU
+		if (!empty($post['id']) && is_numeric($post['id'])) {
+			$this->db->where('id', $post['id']);
+			$ok = $this->db->update('articles', $data);
+			$articleId = $post['id'];
+		} else {
+			$data['created_at'] = date('Y-m-d H:i:s');
+			$ok = $this->db->insert('articles', $data);
+			$articleId = $this->db->insert_id();
+		}
+
+		return $ok;
 	}
+
 
 
 

@@ -103,6 +103,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/ftpmanager/move_file'] 						= 'ftpmanager/move_file';
 	$route['admin/ftpmanager/delete'] 							= 'ftpmanager/delete';
 	$route['admin/ftpmanager/upload'] 							= 'ftpmanager/upload';
+	$route['admin/ftpmanager/upload'] 							= 'ftpmanager/upload';
 	$route['admin/ftpmanager/modal'] 							= 'ftpmanager/modal';
 	$route['admin/ftpmanager/browser'] 							= 'ftpmanager/browser';
 

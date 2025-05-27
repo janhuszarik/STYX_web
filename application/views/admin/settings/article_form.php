@@ -1,8 +1,4 @@
-<style>.current-image {
-		max-width: 40%;
-		height: auto;
-	}
-</style>
+
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -11,15 +7,46 @@ $actionUrl = isset($article)
 	? 'admin/article_save/edit/' . $article->id
 	: 'admin/article_save';
 $titleHeadline = isset($article)
-	? 'Artikel bearbeiten: ' . htmlspecialchars($article->title)
+	? 'Artikel bearbeiten: ' . htmlspecialchars($article->title ?? '')
 	: 'Neuen Artikel erstellen';
 $titleSub = isset($article)
 	? 'Bestehenden Artikel nach Bedarf anpassen.'
 	: 'Neuen Artikel nach Bedarf erstellen.';
+
+// Fallback pre category_name, ak categoryId nie je nájdené
+$categoryName = 'Kategória nenájdená';
+if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCategories)) {
+	// Logovanie pre ladenie
+	log_message('debug', 'Category ID: ' . $categoryId);
+	log_message('debug', 'Article Categories: ' . print_r($articleCategories, true));
+
+	// Konverzia typov pre istotu
+	$categoryId = (int)$categoryId;
+	$keys = array_column($articleCategories, 'id'); // Získame pole ID
+	$key = array_search($categoryId, $keys);
+	if ($key !== false) {
+		$categoryName = htmlspecialchars($articleCategories[$key]->name);
+		log_message('debug', 'Found category name: ' . $categoryName);
+	} else {
+		log_message('debug', 'Category ID ' . $categoryId . ' not found in articleCategories');
+	}
+} else {
+	log_message('debug', 'categoryId or articleCategories is empty/invalid');
+	log_message('debug', 'categoryId: ' . ($categoryId ?? 'undefined'));
+	log_message('debug', 'articleCategories: ' . print_r($articleCategories, true));
+}
 ?>
 
+<style>
+	.current-image {
+		max-width: 40%;
+		height: auto;
+	}
+</style>
+
 <form method="post" action="<?= base_url($actionUrl) ?>" enctype="multipart/form-data">
-	<input type="hidden" name="id" value="<?= $article->id ?? '' ?>">
+	<input type="hidden" name="id" value="<?= htmlspecialchars($article->id ?? '') ?>">
+	<input type="hidden" name="category_id" value="<?= htmlspecialchars($categoryId ?? '') ?>">
 
 	<!-- Überschrift -->
 	<div class="mb-3">
@@ -46,20 +73,14 @@ $titleSub = isset($article)
 	<!-- Kategorie / Slug -->
 	<div class="row form-group pb-3">
 		<div class="col-md-6">
-			<label for="category_id">Kategorie</label>
-			<select name="category_id" class="form-control" required>
-				<?php foreach ($articleCategories as $cat): ?>
-					<option value="<?= $cat->id ?>"
-						<?= (isset($article) && $article->category_id == $cat->id) ? 'selected' : '' ?>>
-						<?= htmlspecialchars($cat->name) ?>
-					</option>
-				<?php endforeach; ?>
-			</select>
+			<label for="category_name">Kategorie</label>
+			<input type="text" class="form-control" id="category_name" name="category_name"
+				   value="<?= $categoryName ?>" readonly>
 		</div>
 		<div class="col-md-6">
 			<label for="slug">Slug</label>
 			<input type="text" class="form-control" id="slug"
-				   value="<?= $article->slug ?? '' ?>" readonly>
+				   value="<?= htmlspecialchars($article->slug ?? '') ?>" readonly>
 		</div>
 	</div>
 
@@ -68,7 +89,9 @@ $titleSub = isset($article)
 		<div class="col-md-8">
 			<label for="image">Hauptbild hochladen</label>
 			<input type="file" class="form-control mb-1" name="image">
-			<input type="hidden" name="old_image" value="<?= $article->image ?? '' ?>">
+			<input type="text" class="form-control mb-1" name="image_title" placeholder="Titel des Bildes (SEO)"
+				   value="<?= htmlspecialchars($article->image_title ?? '') ?>">
+			<input type="hidden" name="old_image" value="<?= htmlspecialchars($article->image ?? '') ?>">
 			<input type="hidden" name="ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
 			<button type="button"
 					class="btn btn-outline-secondary btn-sm ftp-picker mb-1"
@@ -101,7 +124,7 @@ $titleSub = isset($article)
 			<?php if (!empty($article->image)): ?>
 				<label>Aktuelles Bild (Upload)</label>
 				<div>
-					<img src="<?= base_url('uploads/articles/' . $article->image) ?>" class="img-fluid current-image">
+					<img src="<?= base_url('Uploads/articles/' . htmlspecialchars($article->image)) ?>" class="img-fluid current-image">
 				</div>
 			<?php endif; ?>
 		</div>
@@ -161,6 +184,10 @@ $titleSub = isset($article)
 							  placeholder="Beschreibung"><?= htmlspecialchars($article->{'product_description' . $i} ?? '') ?></textarea>
 					<input type="file" class="form-control mb-1"
 						   name="product_image<?= $i ?>">
+					<input type="text" class="form-control mb-1"
+						   name="product_image<?= $i ?>_title"
+						   placeholder="Titel des Bildes (SEO)"
+						   value="<?= htmlspecialchars($article->{'product_image' . $i . '_title'} ?? '') ?>">
 					<input type="hidden" name="ftp_product_image<?= $i ?>"
 						   id="ftp_product_image<?= $i ?>"
 						   value="<?= htmlspecialchars($article->{'ftp_product_image' . $i} ?? '') ?>">
@@ -223,12 +250,12 @@ $titleSub = isset($article)
 		<div class="col-md-4">
 			<label for="start_date_from">Startdatum</label>
 			<input type="date" class="form-control" name="start_date_from"
-				   value="<?= $article->start_date_from ?? '' ?>">
+				   value="<?= htmlspecialchars($article->start_date_from ?? '') ?>">
 		</div>
 		<div class="col-md-4">
 			<label for="end_date_to">Enddatum</label>
 			<input type="date" class="form-control" name="end_date_to"
-				   value="<?= $article->end_date_to ?? '' ?>">
+				   value="<?= htmlspecialchars($article->end_date_to ?? '') ?>">
 		</div>
 		<div class="col-md-4">
 			<label for="active">Status</label>
@@ -243,7 +270,7 @@ $titleSub = isset($article)
 	<!-- Submit -->
 	<div class="form-group">
 		<button type="submit" class="btn btn-primary">Speichern</button>
-		<a href="<?= base_url('admin/articles_in_category/' . $categoryId) ?>"
+		<a href="<?= base_url('admin/articles_in_category/' . ($categoryId ?? 0)) ?>"
 		   class="btn btn-secondary">Zurück</a>
 	</div>
 </form>
@@ -253,7 +280,7 @@ $titleSub = isset($article)
 <script>
 	let sectionCount = 0, maxSections = 6, sectionsData = <?= json_encode($sections ?? []) ?>;
 
-	function addSection(content = '', img = null, ftpImage = '') {
+	function addSection(content = '', img = null, ftpImage = '', imageTitle = '') {
 		if (sectionCount >= maxSections) return;
 		sectionCount++;
 		const id = sectionCount;
@@ -264,6 +291,7 @@ $titleSub = isset($article)
       </div>
       <div class="col-md-3">
         <input type="file" name="section_images[]" class="form-control mb-1">
+        <input type="text" name="section_image_titles[]" class="form-control mb-1" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
         <input type="hidden" name="ftp_section_image[]" id="ftp_section_image${id}" value="${ftpImage}">
         <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1"
                 data-ftp-target="ftp_section_image${id}"
@@ -298,9 +326,10 @@ $titleSub = isset($article)
 		};
 
 		sectionsData.forEach(sec => {
-			const img = sec.image ? BASE_URL + 'uploads/articles/sections/' + sec.image : null;
-			const ftpImage = sec.ftp_image || ''; // Predpokladáme, že sekcie majú pole ftp_image
-			addSection(sec.content, img, ftpImage);
+			const img = sec.image ? BASE_URL + 'Uploads/articles/sections/' + sec.image : null;
+			const ftpImage = sec.ftp_image || '';
+			const imageTitle = sec.image_title || '';
+			addSection(sec.content, img, ftpImage, imageTitle);
 		});
 		initSummer();
 	});
@@ -345,12 +374,12 @@ $titleSub = isset($article)
 								? `<a href="#" class="ftp-image-choose" data-path="${item.url}">Auswählen</a>`
 								: '-';
 						html += `<tr>
-                    <td class="text-center">${icon}</td>
-                    <td>${item.name}</td>
-                    <td>${item.path}</td>
-                    <td>${size}</td>
-                    <td>${action}</td>
-                </tr>`;
+                        <td class="text-center">${icon}</td>
+                        <td>${item.name}</td>
+                        <td>${item.path}</td>
+                        <td>${size}</td>
+                        <td>${action}</td>
+                    </tr>`;
 					});
 					tableBody.innerHTML = html || '<tr><td colspan="5">Ordner ist leer.</td></tr>';
 					tableBody.querySelectorAll('.ftp-folder').forEach(a => {
