@@ -167,7 +167,86 @@ class Article extends CI_Controller
 		$id = $this->uri->segment(4);
 		$segment2 = $this->uri->segment(3);
 
+		// Konfigurácia pre nahrávanie súborov
+		$config['upload_path'] = './Uploads/articles/';
+		$config['allowed_types'] = 'jpg|jpeg|png|gif|webp';
+		$config['max_size'] = 2048; // 2MB v KB
+		$config['overwrite'] = FALSE;
+
+		// Vytvorenie priečinka, ak neexistuje
+		if (!file_exists($config['upload_path'])) {
+			mkdir($config['upload_path'], 0777, TRUE);
+		}
+
+		$this->load->library('upload');
+
 		if (!empty($post)) {
+			// Spracovanie hlavného obrázka
+			if (!empty($_FILES['image']['name'])) {
+				$this->upload->initialize($config);
+				if ($this->upload->do_upload('image')) {
+					$upload_data = $this->upload->data();
+					$post['image'] = $upload_data['file_name']; // Uloží názov súboru do $post
+				} else {
+					$this->session->set_flashdata('error', 'Fehler beim Hochladen des Hauptbildes: ' . $this->upload->display_errors());
+				}
+			}
+
+			// Spracovanie FTP obrázka (ak je vybraný)
+			if (!empty($post['ftp_image'])) {
+				$post['image'] = $post['ftp_image']; // FTP má prednosť, ak je vybrané
+			}
+
+			// Spracovanie obrázkov pre odporúčané produkty
+			for ($i = 1; $i <= 3; $i++) {
+				$file_key = "product_image$i";
+				if (!empty($_FILES[$file_key]['name'])) {
+					$this->upload->initialize($config);
+					if ($this->upload->do_upload($file_key)) {
+						$upload_data = $this->upload->data();
+						$post["product_image$i"] = $upload_data['file_name'];
+					} else {
+						$this->session->set_flashdata('error', "Fehler beim Hochladen des Produktbildes $i: " . $this->upload->display_errors());
+					}
+				}
+				// Spracovanie FTP obrázka pre produkt
+				if (!empty($post["ftp_product_image$i"])) {
+					$post["product_image$i"] = $post["ftp_product_image$i"];
+				}
+			}
+
+			// Spracovanie obrázkov pre sekcie
+			if (!empty($post['sections'])) {
+				$sections = $post['sections'];
+				$ftp_section_images = $post['ftp_section_image'] ?? [];
+				foreach ($_FILES['section_images']['name'] as $key => $section_image) {
+					if (!empty($section_image)) {
+						$section_config = $config; // Kopírujeme konfiguráciu
+						$section_config['file_name'] = time() . '_' . $section_image; // Unikátny názov súboru
+						$this->upload->initialize($section_config);
+
+						// Dočasne presunieme dáta pre konkrétny súbor
+						$_FILES['temp_image']['name'] = $_FILES['section_images']['name'][$key];
+						$_FILES['temp_image']['type'] = $_FILES['section_images']['type'][$key];
+						$_FILES['temp_image']['tmp_name'] = $_FILES['section_images']['tmp_name'][$key];
+						$_FILES['temp_image']['error'] = $_FILES['section_images']['error'][$key];
+						$_FILES['temp_image']['size'] = $_FILES['section_images']['size'][$key];
+
+						if ($this->upload->do_upload('temp_image')) {
+							$upload_data = $this->upload->data();
+							$post['section_images'][$key] = $upload_data['file_name'];
+						} else {
+							$this->session->set_flashdata('error', "Fehler beim Hochladen des Sektionsbildes $key: " . $this->upload->display_errors());
+						}
+					}
+					// Spracovanie FTP obrázka pre sekciu
+					if (!empty($ftp_section_images[$key])) {
+						$post['section_images'][$key] = $ftp_section_images[$key];
+					}
+				}
+			}
+
+			// Uloženie do databázy
 			if (!empty($post['id'])) {
 				if ($this->Article_model->saveArticle($post)) {
 					$this->session->set_flashdata('success', 'Artikel wurde erfolgreich bearbeitet.');
