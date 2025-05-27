@@ -173,6 +173,13 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 		</small>
 		<div class="row mt-2">
 			<?php for ($i = 1; $i <= 3; $i++): ?>
+				<?php
+				// Inicializácia ftp_product_imageX na základe product_imageX, ak nie je nastavené
+				$ftpProductImage = $article->{'ftp_product_image' . $i} ?? '';
+				if (empty($ftpProductImage) && !empty($article->{'product_image' . $i})) {
+					$ftpProductImage = base_url('Uploads/articles/products/' . $article->{'product_image' . $i});
+				}
+				?>
 				<div class="col-md-4 mb-3">
 					<input type="text" class="form-control mb-1"
 						   name="product_name<?= $i ?>"
@@ -190,7 +197,9 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 						   value="<?= htmlspecialchars($article->{'product_image' . $i . '_title'} ?? '') ?>">
 					<input type="hidden" name="ftp_product_image<?= $i ?>"
 						   id="ftp_product_image<?= $i ?>"
-						   value="<?= htmlspecialchars($article->{'ftp_product_image' . $i} ?? '') ?>">
+						   value="<?= htmlspecialchars($ftpProductImage) ?>">
+					<input type="hidden" name="old_product_image<?= $i ?>"
+						   value="<?= htmlspecialchars($article->{'product_image' . $i} ?? '') ?>">
 					<button type="button"
 							class="btn btn-outline-secondary btn-sm ftp-picker mb-1"
 							data-ftp-target="ftp_product_image<?= $i ?>"
@@ -198,8 +207,8 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 						Bild aus FTP wählen
 					</button>
 					<div id="productImagePreview<?= $i ?>" class="mb-2">
-						<?php if (!empty($article->{'ftp_product_image' . $i})): ?>
-							<img src="<?= htmlspecialchars($article->{'ftp_product_image' . $i}) ?>" style="max-width:150px;max-height:150px;object-fit:contain;">
+						<?php if (!empty($ftpProductImage)): ?>
+							<img src="<?= htmlspecialchars($ftpProductImage) ?>" style="max-width:150px;max-height:150px;object-fit:contain;">
 						<?php endif; ?>
 					</div>
 					<input type="text" class="form-control"
