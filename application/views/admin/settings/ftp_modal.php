@@ -1,37 +1,69 @@
+
 <style>
-	/* Aby všetky preview obrázky vo ftpImagePreview boli max. 150×150px */
 	#ftpImagePreview img {
 		max-width: 150px;
 		max-height: 150px;
-		object-fit: contain; /* zachová proporcie */
+		object-fit: contain;
+	}
+	#ftp-browser-container {
+		max-height: 400px;
+		overflow-y: auto;
+	}
+	.ftp-item {
+		padding: 8px;
+		cursor: pointer;
+		border-bottom: 1px solid #dee2e6;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.ftp-item:hover {
+		background-color: #f8f9fa;
+	}
+	.ftp-item i {
+		font-size: 20px;
+	}
+	.ftp-item img {
+		width: 40px;
+		height: 40px;
+		object-fit: cover;
+		border: 1px solid #ddd;
+	}
+	.ftp-breadcrumb {
+		font-size: 14px;
+		margin-bottom: 10px;
+	}
+	.ftp-breadcrumb a {
+		color: #007bff;
+		text-decoration: none;
+	}
+	.ftp-breadcrumb a:hover {
+		text-decoration: underline;
+	}
+	#ftp-back-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+	.ftp-loading {
+		text-align: center;
+		padding: 20px;
+		color: #666;
 	}
 </style>
 
 <div id="ftp-browser-container">
 	<div class="mb-2 d-flex align-items-center">
-		<button type="button" id="ftp-back-btn" class="btn btn-sm btn-secondary me-2" style="display: none;">
+		<button type="button" id="ftp-back-btn" class="btn btn-sm btn-secondary me-2">
 			<i class="bi bi-arrow-left"></i> Zurück
 		</button>
-		<strong>Aktueller Ordner:</strong>
-		<span id="current-folder" class="ms-2">/</span>
+		<button type="button" id="ftp-home-btn" class="btn btn-sm btn-secondary me-2">
+			<i class="bi bi-house"></i> Start
+		</button>
+		<strong>Aktueller Pfad:</strong>
+		<span id="ftp-breadcrumb" class="ms-2"></span>
 	</div>
 	<div id="ftp-folder-contents">
-		<table class="table table-bordered">
-			<thead>
-			<tr>
-				<th style="text-align: center;">Typ</th>
-				<th>Name</th>
-				<th>Pfad</th>
-				<th>Größe</th>
-				<th>Aktionen</th>
-			</tr>
-			</thead>
-			<tbody id="ftp-table-body">
-			<tr>
-				<td colspan="5">Lade...</td>
-			</tr>
-			</tbody>
-		</table>
+		<div id="ftp-items-list"></div>
 	</div>
 </div>
 
@@ -39,29 +71,45 @@
 	const BASE_URL = "<?= base_url() ?>";
 
 	document.addEventListener("DOMContentLoaded", () => {
-		const btn = document.getElementById("chooseFtpImage"),
-			modalEl = document.getElementById("ftpModal"),
+		const modalEl = document.getElementById("ftpModal"),
 			modal = new bootstrap.Modal(modalEl),
-			browserContainer = document.getElementById("ftp-table-body"),
-			currentFolderLabel = document.getElementById("current-folder"),
+			itemsList = document.getElementById("ftp-items-list"),
+			breadcrumb = document.getElementById("ftp-breadcrumb"),
 			backBtn = document.getElementById("ftp-back-btn"),
-			preview = document.getElementById("ftpImagePreview"),
-			hiddenInput = document.getElementById("ftpImageInput");
+			homeBtn = document.getElementById("ftp-home-btn");
 
-		let currentPath = "";
+		let pathHistory = [''];
+		let currentPathIndex = 0;
 
-		// Funktion zum Laden des Ordnerinhalts von FTP
+		function updateBreadcrumb(path) {
+			const parts = path ? path.split('/') : [];
+			let html = '<a href="#" data-path="">/</a>';
+			let currentPath = '';
+			parts.forEach((part, index) => {
+				if (part) {
+					currentPath += (currentPath ? '/' : '') + part;
+					html += ` / <a href="#" data-path="${currentPath}">${part}</a>`;
+				}
+			});
+			breadcrumb.innerHTML = html;
+
+			breadcrumb.querySelectorAll('a').forEach(link => {
+				link.addEventListener('click', e => {
+					e.preventDefault();
+					const newPath = link.dataset.path;
+					while (pathHistory.length - 1 > currentPathIndex) {
+						pathHistory.pop();
+					}
+					pathHistory.push(newPath);
+					currentPathIndex = pathHistory.length - 1;
+					loadFolder(newPath);
+				});
+			});
+		}
+
 		function loadFolder(path) {
-			currentPath = path;
-			currentFolderLabel.textContent = '/' + (path || '');
-			browserContainer.innerHTML = '<tr><td colspan="5">Lade...</td></tr>';
-
-			// Aktualisierung des "Zurück"-Buttons
-			if (path) {
-				backBtn.style.display = 'inline-block';
-			} else {
-				backBtn.style.display = 'none';
-			}
+			itemsList.innerHTML = '<div class="ftp-loading">Lade...</div>';
+			backBtn.disabled = currentPathIndex === 0;
 
 			fetch(BASE_URL + "admin/ftpmanager/load_folder", {
 				method: "POST",
@@ -71,74 +119,93 @@
 				.then(res => res.json())
 				.then(data => {
 					if (data.error) {
-						browserContainer.innerHTML = `<tr><td colspan="5"><div class="alert alert-danger">Fehler: ${data.error}</div></td></tr>`;
+						itemsList.innerHTML = `<div class="alert alert-danger">Fehler: ${data.error}</div>`;
 						return;
 					}
 
 					let html = '';
 					data.forEach(item => {
-						let typeContent = '';
-						if (item.type === 'dir') {
-							typeContent = '<i class="bi bi-folder-fill text-warning" style="font-size: 24px;"></i>';
-						} else if (item.type === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(item.name)) {
-							typeContent = `<img src="${item.url}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">`;
-						} else {
-							typeContent = '<i class="bi bi-file-earmark-fill text-primary" style="font-size: 24px;"></i>';
-						}
+						const isImage = item.type === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(item.name);
+						const icon = item.type === 'dir'
+							? '<i class="bi bi-folder-fill text-warning"></i>'
+							: (isImage
+								? `<img src="${item.url}" alt="${item.name}">`
+								: '<i class="bi bi-file-earmark-fill text-primary"></i>');
+						const actionClass = item.type === 'dir' ? 'ftp-folder' : (isImage ? 'ftp-image-choose' : '');
 						const size = item.size && item.size !== -1 ? (item.size / 1024).toFixed(2) + ' KB' : '-';
-						const action = item.type === 'dir'
-							? `<a href="#" class="ftp-folder" data-path="${item.path}">Öffnen</a>`
-							: (/\.(jpg|jpeg|png|gif|webp)$/i.test(item.name)
-								? `<a href="#" class="ftp-image-choose" data-path="${item.url}">Auswählen</a>`
-								: '-');
 
 						html += `
-                        <tr>
-                            <td style="text-align: center; vertical-align: middle;">${typeContent}</td>
-                            <td>${item.name}</td>
-                            <td>${item.path}</td>
-                            <td>${size}</td>
-                            <td>${action}</td>
-                        </tr>`;
+                            <div class="ftp-item ${actionClass}" data-path="${item.path}" data-url="${item.url || ''}">
+                                <div>${icon}</div>
+                                <div>${item.name}</div>
+                                <div style="margin-left: auto;">${size}</div>
+                            </div>`;
 					});
-					browserContainer.innerHTML = html || '<tr><td colspan="5">Der Ordner ist leer.</td></tr>';
+					itemsList.innerHTML = html || '<div class="ftp-loading">Der Ordner ist leer.</div>';
 
-					// Navigation für Ordner
-					browserContainer.querySelectorAll('.ftp-folder').forEach(a => {
-						a.addEventListener('click', e => {
+					itemsList.querySelectorAll('.ftp-folder').forEach(item => {
+						item.addEventListener('click', e => {
 							e.preventDefault();
-							loadFolder(a.dataset.path);
+							const newPath = item.dataset.path;
+							pathHistory.push(newPath);
+							currentPathIndex++;
+							loadFolder(newPath);
 						});
 					});
 
-					// Auswahl von Bildern
-					browserContainer.querySelectorAll('.ftp-image-choose').forEach(img => {
+					itemsList.querySelectorAll('.ftp-image-choose').forEach(img => {
 						img.addEventListener('click', e => {
 							e.preventDefault();
-							const path = img.dataset.path;
-							hiddenInput.value = path;
-							preview.innerHTML = `<img src="${path}" class="img-fluid border mt-2">`;
+							const path = img.dataset.url;
+							const targetInput = document.getElementById(lastTarget);
+							const previewDiv = document.getElementById(lastPreview);
+							targetInput.value = path;
+							previewDiv.innerHTML = `<img src="${path}" class="img-fluid border mt-2">`;
 							modal.hide();
 						});
 					});
 				})
 				.catch(err => {
-					browserContainer.innerHTML = `<tr><td colspan="5"><div class="alert alert-danger">Fehler: ${err.message}</div></td></tr>`;
+					itemsList.innerHTML = `<div class="alert alert-danger">Fehler: ${err.message}</div>`;
 				});
+
+			updateBreadcrumb(path);
 		}
 
-		// Navigation zurück
-		backBtn.addEventListener('click', (e) => {
-			e.preventDefault(); // Zabránenie odoslaniu formulára
-			const parentPath = currentPath.includes('/') ? currentPath.substring(0, currentPath.lastIndexOf('/')) : '';
-			loadFolder(parentPath);
+		backBtn.addEventListener('click', e => {
+			e.preventDefault();
+			if (currentPathIndex > 0) {
+				currentPathIndex--;
+				loadFolder(pathHistory[currentPathIndex]);
+			}
 		});
 
-		// Öffnen des Modals und Laden des Wurzelordners
-		btn.addEventListener("click", (e) => {
-			e.preventDefault(); // Zabránenie odoslaniu formulára pri otváraní modálu
+		homeBtn.addEventListener('click', e => {
+			e.preventDefault();
+			pathHistory = [''];
+			currentPathIndex = 0;
+			loadFolder('');
+		});
+
+		modalEl.addEventListener('hidden.bs.modal', () => {
+			// Odstránenie backdropu po zatvorení modálu
+			const backdrop = document.querySelector('.modal-backdrop');
+			if (backdrop) {
+				backdrop.remove();
+			}
+			// Odstránenie triedy modal-open z body
+			document.body.classList.remove('modal-open');
+			// Reset štýlu body
+			document.body.style.overflow = '';
+			document.body.style.paddingRight = '';
+		});
+
+		document.body.addEventListener('click', function (e) {
+			if (!e.target.matches('.ftp-picker')) return;
+			lastTarget = e.target.dataset.ftpTarget;
+			lastPreview = e.target.dataset.previewTarget;
 			modal.show();
-			loadFolder(currentPath);
+			loadFolder(pathHistory[currentPathIndex]);
 		});
 	});
 </script>
