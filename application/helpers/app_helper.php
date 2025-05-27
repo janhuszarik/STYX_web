@@ -1,34 +1,28 @@
 <?php
-	function dd($var_dump){
-
+function dd($var_dump) {
 	echo '<pre>';
 	var_dump($var_dump);
 	echo '</pre>';
 }
 
-	function ddd($var_dump){
-
+function ddd($var_dump) {
 	echo '<pre>';
 	var_dump($var_dump);
 	echo '</pre>';
 	die();
 }
 
-	function language(){
-
-
+function language() {
 	$CI = get_instance();
 	$lang = $CI->config->config['language'];
 	return $CI->config->config['languages'][$lang];
-
 }
 
-	function getLanguages(){
+function getLanguages() {
 	$ci = get_instance();
-
 	return $ci->config->config['languages'];
-
 }
+
 function langInfo($lang = false) {
 	$default = [
 		'text' => strtoupper($lang),
@@ -52,57 +46,27 @@ function langInfo($lang = false) {
 		];
 	}
 
-	// fallback pre neznámy jazykový kód
 	return $default;
 }
 
-
-
-// Skontroluje, či neexistuje funkcia s názvom 'lang'
-	if ( ! function_exists('lang'))
-
-		// Ak neexistuje, definuje funkciu 'lang'
-{
-		/**
-	 * Lang
-	 *
-	 * Načítava jazykovú premennú a voliteľne vypisuje štítok formulára
-	 *
-	 * @param	string	$line		Jazyková hodnota
-	 * @param	string	$for		Hodnota atribútu "for" (id prvku formulára)
-	 * @param	array	$attributes	Ďalšie HTML atribúty
-	 * @return	string
-	 */
-	function lang($line, $for = '', $attributes = array())
-	{
-		// Načíta jazykovú hodnotu z frameworku
+if (!function_exists('lang')) {
+	function lang($line, $for = '', $attributes = array()) {
 		$line = get_instance()->lang->line($line);
-
-		// Ak je 'for' zadané, vygeneruje HTML štítok
-		if ($for !== '')
-		{
-			$line = '<label for="'.$for.'"'._stringify_attributes($attributes).'>'.$line.'</label>';
+		if ($for !== '') {
+			$line = '<label for="' . $for . '"' . _stringify_attributes($attributes) . '>' . $line . '</label>';
 		}
-
-		// Vráti jazykovú hodnotu alebo vygenerovaný HTML štítok
 		return $line;
 	}
 }
-	//--------------------------------------------------------
 
-	// Skontroluje, či neexistuje funkcia s názvom 'get_http_referer'
-	if (!function_exists('get_http_referer')) {
-			// Ak neexistuje, definuje funkciu 'get_http_referer'
-			function get_http_referer() {
-				// Načíta inštanciu frameworku
-				$CI =& get_instance();
-				// Vráti hodnotu HTTP_REFERER zo serverových premenných
-				return $CI->input->server('HTTP_REFERER');
-			}
-		}
-	//--------------------------------------------------------
+if (!function_exists('get_http_referer')) {
+	function get_http_referer() {
+		$CI =& get_instance();
+		return $CI->input->server('HTTP_REFERER');
+	}
+}
 
-	function active($option) {
+function active($option) {
 	if ($option == '1') {
 		return '<i style="color: green; font-weight: bold; font-size: 17px" class="fa fa-check color_green"></i>';
 	} else {
@@ -110,11 +74,11 @@ function langInfo($lang = false) {
 	}
 }
 
-	function getCurrentUrl() {
+function getCurrentUrl() {
 	return current_url();
 }
 
-	function getMenu() {
+function getMenu() {
 	$ci = get_instance();
 	$language = language();
 
@@ -175,74 +139,70 @@ function langInfo($lang = false) {
 	return $formattedMenu;
 }
 
-
-
-
-
-
-function redirectIfEmpty($data = false,$urlRedirect = 'admin',$chybovaHlaska = 'Fehler!'){
-
-		if (empty($data) || $data == NULL){
-
-			$CI = & get_instance();
-			$CI->session->set_flashdata('error', $chybovaHlaska);
-			redirect(BASE_URL.$urlRedirect);
-
-		}
+function redirectIfEmpty($data = false, $urlRedirect = 'admin', $chybovaHlaska = 'Fehler!') {
+	if (empty($data) || $data == NULL) {
+		$CI =& get_instance();
+		$CI->session->set_flashdata('error', $chybovaHlaska);
+		redirect(BASE_URL . $urlRedirect);
 	}
-
-	function tage($datetime_in_DB){
-
-		$tage = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
-		return $tage[date('w', strtotime($datetime_in_DB))];
-
 }
 
-	function user($user_id = false){
-	$CI = & get_instance();
-	if ( $user_id > 0) {
+function tage($datetime_in_DB) {
+	$tage = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
+	return $tage[date('w', strtotime($datetime_in_DB))];
+}
 
-
+function user($user_id = false) {
+	$CI =& get_instance();
+	if ($user_id > 0) {
 		$CI->db->select('*');
 		$CI->db->from('users');
 		$CI->db->where('id', $user_id);
-		$user = $CI->db->get();
-		$user = $user->result();
+		$user = $CI->db->get()->result();
 
-		if ( !$user == 0 ) {
-			echo $user[0]->first_name.' '.$user[0]->last_name;
-		}   else {
+		if (!empty($user)) {
+			echo $user[0]->first_name . ' ' . $user[0]->last_name;
+		} else {
 			echo 'Neexistuje!';
 		}
-
-
 	} else {
 		$user = $CI->ion_auth->user()->row();
-
-
-		return $user->first_name.'&nbsp;'.$user->last_name.'&nbsp;'."<br>".$user->email.'&nbsp;'."<br>".$user->phone;
-
-
+		return $user->first_name . ' ' . $user->last_name . ' <br>' . $user->email . ' <br>' . $user->phone;
 	}
-
-
 }
 
-function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false){
+function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false) {
 	unset($_FILES['files']);
 
-	$CI = & get_instance();
+	$CI =& get_instance();
 	$CI->load->library('image_lib');
-	if ($dir == false){
+
+	// Nastavenie priečinka
+	if ($dir === false) {
 		$dir = 'uploads/';
-		if (!is_dir($dir)) mkdir($dir, 0755, true);
 	} else {
-		if (!is_dir($dir)) mkdir($dir, 0755, true);
 		$dir = rtrim($dir, '/') . '/';
 	}
 
-	if ($saveAsNameFile == false) { $saveAsNameFile = 'img'; }
+	// Vytvorenie priečinka s kontrolou
+	if (!is_dir($dir)) {
+		if (!mkdir($dir, 0755, true)) {
+			log_message('error', "Nepodarilo sa vytvoriť priečinok: $dir");
+			return false;
+		}
+	}
 
+	// Kontrola oprávnení priečinka
+	if (!is_writable($dir)) {
+		log_message('error', "Priečinok nie je zapisovateľný: $dir");
+		return false;
+	}
+
+	if ($saveAsNameFile == false) {
+		$saveAsNameFile = 'img';
+	}
+
+	// Spracovanie viacerých súborov (napr. sekcie)
 	if (is_array($_FILES[$file]['name'])) {
 		$data = array();
 		foreach ($_FILES[$file]['name'] as $k => $name) {
@@ -257,15 +217,20 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 						if (move_uploaded_file($tmpName, $urlimg)) {
 							$data[$k] = $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
 						} else {
+							log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $urlimg");
 							$data[$k] = '';
 						}
+					} else {
+						log_message('error', "Nepodporovaný formát súboru alebo súbor nie je nahratý: $name");
+						$data[$k] = '';
 					}
 				}
 			}
 		}
 		return $data;
 	} else {
-		if (empty($_FILES[$file]['name'])){
+		// Spracovanie jedného súboru (napr. hlavný obrázok, produkty)
+		if (empty($_FILES[$file]['name'])) {
 			return '';
 		}
 
@@ -278,157 +243,154 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 			if (in_array(strtolower($typ), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
 				if (move_uploaded_file($tmpName, $urlimg)) {
 					return $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
+				} else {
+					log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $urlimg");
+					return '';
 				}
+			} else {
+				log_message('error', "Nepodporovaný formát súboru alebo súbor nie je nahratý: " . $_FILES[$file]['name']);
+				return '';
 			}
 		}
 		return '';
 	}
 }
 
-	function obrazokfinal ($adresaimg,$offLogo = true, $defaultWidthImage = 1600){
-
-	$CI = & get_instance();
+function obrazokfinal($adresaimg, $offLogo = true, $defaultWidthImage = 1600) {
+	$CI =& get_instance();
 	$CI->load->library('image_lib');
 
-	if ($adresaimg) {
+	if ($adresaimg && file_exists($adresaimg)) {
+		// Resize obrázka
 		$configi['image_library'] = 'gd2';
-		$configi['source_image'] =  $adresaimg;
+		$configi['source_image'] = $adresaimg;
 		$configi['create_thumb'] = FALSE;
 		$configi['maintain_ratio'] = TRUE;
 		$configi['master_dim'] = 'width';
 		$configi['max_size'] = '0';
 		$configi['quality'] = "70%";
-		$configi[ 'x_axis' ]  =  100 ;
-		$configi[ 'y_axis' ]  =  40 ;
+		$configi['x_axis'] = 100;
+		$configi['y_axis'] = 40;
 		$configi['width'] = $defaultWidthImage;
 		$configi['height'] = $defaultWidthImage;
 
-
-
 		$CI->image_lib->initialize($configi);
-		$CI->image_lib->resize();
-	}
+		if (!$CI->image_lib->resize()) {
+			log_message('error', "Chyba pri zmene veľkosti obrázka: " . $CI->image_lib->display_errors());
+		}
 
-	if($offLogo == true){
-		// vnor vodotlač
-		if ($adresaimg) {
-
-			$configw['wm_text'] = DOMAIN;
+		// Vodoznak
+		if ($offLogo == true) {
 			$configw['wm_type'] = 'overlay';
-			$configw['wm_overlay_path'] = APP_PATH.'/'.LOGO_PNG;
+			$configw['wm_overlay_path'] = APP_PATH . '/' . LOGO_PNG;
 			$configw['wm_opacity'] = '50';
 			$configw['wm_vrt_alignment'] = 'bottom';
 			$configw['wm_hor_alignment'] = 'right';
 			$configw['wm_padding'] = '-20';
 			$CI->image_lib->initialize($configw);
-			$CI->image_lib->watermark();
+			if (!$CI->image_lib->watermark()) {
+				log_message('error', "Chyba pri pridávaní vodoznaku: " . $CI->image_lib->display_errors());
+			}
 		}
-	}
-	if ($adresaimg) {
 
+		// Vytvorenie náhľadu (thumbnail)
 		$config['image_library'] = 'gd2';
 		$config['source_image'] = $adresaimg;
 		$config['thumb_marker'] = '_thumb';
 		$config['create_thumb'] = TRUE;
-		$config['maintain_ration'] = TRUE;
-		$config['width']         = 500;
-		$config['height']       = 400;
+		$config['maintain_ratio'] = TRUE;
+		$config['width'] = 500;
+		$config['height'] = 400;
 
 		$CI->image_lib->initialize($config);
-
-		$CI->image_lib->resize();
+		if (!$CI->image_lib->resize()) {
+			log_message('error', "Chyba pri vytváraní náhľadu: " . $CI->image_lib->display_errors());
+		}
 	}
 
 	return $adresaimg;
 }
 
-	function url_oprava($str, $separator = '-', $lowercase = FALSE){
-	if ($separator === 'dash')
-	{
+function url_oprava($str, $separator = '-', $lowercase = FALSE) {
+	if ($separator === 'dash') {
 		$separator = '-';
-	}
-	elseif ($separator === 'underscore')
-	{
+	} elseif ($separator === 'underscore') {
 		$separator = '_';
 	}
 
 	$q_separator = preg_quote($separator, '#');
 
 	$trans = array(
-		"'"									=> '&#039;',
-		'"'									=> '&#34;',
-		'ľ'									=> 'l',
-		'š'									=> 's',
-		'č'									=> 'c',
-		'ť'									=> 't',
-		'ž'									=> 'z',
-		'ý'									=> 'y',
-		'á'									=> 'a',
-		'í'									=> 'i',
-		'é'									=> 'e',
-		'ú'									=> 'u',
-		'ä'									=> 'a',
-		'ň'									=> 'n',
-		'ô'									=> 'o',
-		'ó'									=> 'o',
-		'ĺ'									=> 'l',
-		'ď'									=> 'd',
-		'Ľ'									=> 'l',
-		'Š'									=> 's',
-		'Č'									=> 'c',
-		'Ť'									=> 't',
-		'Ž'									=> 'z',
-		'Ý'									=> 'y',
-		'Á'									=> 'a',
-		'Í'									=> 'i',
-		'É'									=> 'e',
-		'Ú'									=> 'u',
-		'Ä'									=> 'a',
-		'Ň'									=> 'n',
-		'Ô'									=> 'o',
-		'Ó'									=> 'o',
-		'Ĺ'									=> 'l',
-		'ě'									=> 'e',
-		'ö'									=> 'o',
-		'Ď'									=> 'd',
-		'ř'									=> 'r',
-		'ŕ'									=> 'r',
-		'Ŕ'									=> 'R',
-		'ů'									=> 'u',
-		'Ř'									=> 'r',
-		'Ě'									=> 'e',
-		'&.+?;'			=> '',
-		'[^\w\d _-]'		=> '',
-		'\s+'			=> $separator,
-		'('.$q_separator.')+'	=> $separator
+		"'" => '',
+		'"' => '"',
+		'ľ' => 'l',
+		'š' => 's',
+		'č' => 'c',
+		'ť' => 't',
+		'ž' => 'z',
+		'ý' => 'y',
+		'á' => 'a',
+		'í' => 'i',
+		'é' => 'e',
+		'ú' => 'u',
+		'ä' => 'a',
+		'ň' => 'n',
+		'ô' => 'o',
+		'ó' => 'o',
+		'ĺ' => 'l',
+		'ď' => 'd',
+		'Ľ' => 'l',
+		'Š' => 's',
+		'Č' => 'c',
+		'Ť' => 't',
+		'Ž' => 'z',
+		'Ý' => 'y',
+		'Á' => 'a',
+		'Í' => 'i',
+		'É' => 'e',
+		'Ú' => 'u',
+		'Ä' => 'a',
+		'Ň' => 'n',
+		'Ô' => 'o',
+		'Ó' => 'o',
+		'Ĺ' => 'l',
+		'ě' => 'e',
+		'ö' => 'o',
+		'Ď' => 'd',
+		'ř' => 'r',
+		'ŕ' => 'r',
+		'Ŕ' => 'R',
+		'ů' => 'u',
+		'Ř' => 'r',
+		'Ě' => 'e',
+		'&.+?;' => '',
+		'[^\w\d _-]' => '',
+		'\s+' => $separator,
+		'(' . $q_separator . ')+' => $separator
 	);
+
 	$str = strip_tags($str);
-	foreach ($trans as $key => $val)
-	{
-		$str = preg_replace('#'.$key.'#i'.(UTF8_ENABLED ? 'u' : ''), $val, $str);
+	foreach ($trans as $key => $val) {
+		$str = preg_replace('#' . $key . '#i' . (UTF8_ENABLED ? 'u' : ''), $val, $str);
 	}
 
-	if ($lowercase === TRUE)
-	{
+	if ($lowercase === TRUE) {
 		$str = strtolower($str);
 	}
 
 	return trim(trim($str, $separator));
 }
 
-	function obrpridajthumb($vstup = false){
-
-
-	if($vstup){
-		$urlimgthumb = explode('.',$vstup );
-		$urlimgthumb = ($urlimgthumb[0]).'_thumb'.'.'.($urlimgthumb[1]);
+function obrpridajthumb($vstup = false) {
+	if ($vstup) {
+		$urlimgthumb = explode('.', $vstup);
+		$urlimgthumb = ($urlimgthumb[0]) . '_thumb' . '.' . ($urlimgthumb[1]);
 		return $urlimgthumb;
 	} else {
-		$urlimgthumb = false;
-		return $urlimgthumb;
+		return false;
 	}
 }
-//funkcia pre Admin na zobrazenie stavu keywords a description
+
 if (!function_exists('checkTextIcon')) {
 	function checkTextIcon($value = '') {
 		if (!empty(trim($value))) {
@@ -438,11 +400,3 @@ if (!function_exists('checkTextIcon')) {
 		}
 	}
 }
-
-
-
-
-
-
-
-

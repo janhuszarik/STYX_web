@@ -107,29 +107,41 @@ class Article_model extends CI_Model
 
 	public function saveArticle($post)
 	{
-		// 1) Načítanie pomocnej funkcie pre nahrávanie
 		$this->load->helper('app_helper');
 
-		// 2) Zpracování klasického uploadu hlavního obrázku
+		// 1) Zpracování klasického uploadu hlavního obrázku
 		$image = null;
 		if (!empty($_FILES['image']['name'])) {
 			$uploadPath = uploadImg('image', 'uploads/articles');
 			if (!empty($uploadPath) && file_exists($uploadPath)) {
-				$image = basename($uploadPath); // Uloží iba názov súboru
+				$image = basename($uploadPath);
 			} else {
 				log_message('error', 'Chyba pri nahrávaní hlavného obrázka: ' . (isset($uploadPath) ? $uploadPath : 'Žiadny súbor'));
 			}
 		}
 
-		// 3) Použitie FTP obrázka, ak je vybraný
+		// 2) Použitie FTP obrázka, ak je vybraný
 		if (!empty($post['ftp_image'])) {
 			$ftpImagePath = $post['ftp_image'];
-			// Ak je to plná URL, extrahujeme iba názov súboru
-			$image = basename($ftpImagePath);
-			// Ak chcete FTP súbor skopírovať na server, pridajte logiku (napr. file_get_contents a file_put_contents)
+			// Ak je to vzdialená URL (napr. ftp:// alebo http://), stiahneme súbor
+			if (filter_var($ftpImagePath, FILTER_VALIDATE_URL)) {
+				$localPath = 'uploads/articles/' . basename($ftpImagePath);
+				// Vytvorenie priečinka, ak neexistuje
+				if (!is_dir('uploads/articles/')) {
+					mkdir('uploads/articles/', 0755, true);
+				}
+				if (copy($ftpImagePath, $localPath)) {
+					$image = basename($ftpImagePath);
+				} else {
+					log_message('error', "Nepodarilo sa skopírovať FTP obrázok: $ftpImagePath");
+				}
+			} else {
+				// Predpokladáme, že je to lokálna cesta (napr. uploads/articles/nazev.jpg)
+				$image = basename($ftpImagePath);
+			}
 		}
 
-		// 4) Sestavení pole pre uložení
+		// 3) Sestavení pole pro uložení
 		$data = [
 			'category_id'     => $post['category_id'],
 			'title'           => $post['title'],
@@ -162,7 +174,7 @@ class Article_model extends CI_Model
 			'empfohlen_url3'  => $post['empfohlen_url3'] ?? null,
 		];
 
-		// 5) Zpracování obrázků produktů (upload + FTP)
+		// 4) Zpracování obrázků produktů (upload + FTP)
 		for ($i = 1; $i <= 3; $i++) {
 			$field = 'product_image' . $i;
 
@@ -178,8 +190,19 @@ class Article_model extends CI_Model
 			// b) Výber z FTP
 			elseif (!empty($post['ftp_product_image' . $i])) {
 				$ftpImagePath = $post['ftp_product_image' . $i];
-				$data[$field] = basename($ftpImagePath);
-				// Pridajte logiku na kopírovanie FTP súboru, ak je potrebné
+				if (filter_var($ftpImagePath, FILTER_VALIDATE_URL)) {
+					$localPath = 'uploads/articles/products/' . basename($ftpImagePath);
+					if (!is_dir('uploads/articles/products/')) {
+						mkdir('uploads/articles/products/', 0755, true);
+					}
+					if (copy($ftpImagePath, $localPath)) {
+						$data[$field] = basename($ftpImagePath);
+					} else {
+						log_message('error', "Nepodarilo sa skopírovať FTP obrázok produktu $i: $ftpImagePath");
+					}
+				} else {
+					$data[$field] = basename($ftpImagePath);
+				}
 			}
 			// c) Fallback na staré jméno
 			else {
@@ -187,7 +210,7 @@ class Article_model extends CI_Model
 			}
 		}
 
-		// 6) Uložení záznamu (insert / update)
+		// 5) Uložení záznamu (insert / update)
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
 			$success = $this->db->update('articles', $data);
@@ -199,15 +222,13 @@ class Article_model extends CI_Model
 			$success = true;
 		}
 
-		// 7) Zpracování sekcí článku
+		// 6) Zpracování sekcí článku
 		if ($success && isset($post['sections']) && is_array($post['sections'])) {
-			// Smažeme staré sekcie
 			$this->db->delete('article_sections', ['article_id' => $articleId]);
 
 			foreach ($post['sections'] as $index => $text) {
 				$imageName = null;
 				if (!empty($_FILES['section_images']['name'][$index])) {
-					// Přemapujeme na jednorázové pole pro upload
 					$_FILES['single_section'] = [
 						'name'     => $_FILES['section_images']['name'][$index],
 						'type'     => $_FILES['section_images']['type'][$index],
@@ -222,11 +243,21 @@ class Article_model extends CI_Model
 						log_message('error', "Chyba pri nahrávaní sekcie $index: " . (isset($uploadPath) ? $uploadPath : 'Žiadny súbor'));
 					}
 				}
-				// Pridanie podpory pre FTP obrázky v sekciách
 				elseif (!empty($post['ftp_section_image'][$index])) {
 					$ftpImagePath = $post['ftp_section_image'][$index];
-					$imageName = basename($ftpImagePath);
-					// Pridajte logiku na kopírovanie FTP súboru, ak je potrebné
+					if (filter_var($ftpImagePath, FILTER_VALIDATE_URL)) {
+						$localPath = 'uploads/articles/sections/' . basename($ftpImagePath);
+						if (!is_dir('uploads/articles/sections/')) {
+							mkdir('uploads/articles/sections/', 0755, true);
+						}
+						if (copy($ftpImagePath, $localPath)) {
+							$imageName = basename($ftpImagePath);
+						} else {
+							log_message('error', "Nepodarilo sa skopírovať FTP obrázok sekcie $index: $ftpImagePath");
+						}
+					} else {
+						$imageName = basename($ftpImagePath);
+					}
 				}
 
 				$this->db->insert('article_sections', [
