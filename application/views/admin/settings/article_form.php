@@ -2,7 +2,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Určení URL akce a nadpisů
 $actionUrl = isset($article)
 	? 'admin/article_save/edit/' . $article->id
 	: 'admin/article_save';
@@ -13,27 +12,14 @@ $titleSub = isset($article)
 	? 'Bestehenden Artikel nach Bedarf anpassen.'
 	: 'Neuen Artikel nach Bedarf erstellen.';
 
-// Fallback pre category_name, ak categoryId nie je nájdené
-$categoryName = 'Kategória nenájdená';
+$categoryName = 'Kategorie nicht gefunden';
 if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCategories)) {
-	// Logovanie pre ladenie
-	log_message('debug', 'Category ID: ' . $categoryId);
-	log_message('debug', 'Article Categories: ' . print_r($articleCategories, true));
-
-	// Konverzia typov pre istotu
 	$categoryId = (int)$categoryId;
-	$keys = array_column($articleCategories, 'id'); // Získame pole ID
+	$keys = array_column($articleCategories, 'id');
 	$key = array_search($categoryId, $keys);
 	if ($key !== false) {
 		$categoryName = htmlspecialchars($articleCategories[$key]->name);
-		log_message('debug', 'Found category name: ' . $categoryName);
-	} else {
-		log_message('debug', 'Category ID ' . $categoryId . ' not found in articleCategories');
 	}
-} else {
-	log_message('debug', 'categoryId or articleCategories is empty/invalid');
-	log_message('debug', 'categoryId: ' . ($categoryId ?? 'undefined'));
-	log_message('debug', 'articleCategories: ' . print_r($articleCategories, true));
 }
 ?>
 
@@ -48,7 +34,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 	<input type="hidden" name="id" value="<?= htmlspecialchars($article->id ?? '') ?>">
 	<input type="hidden" name="category_id" value="<?= htmlspecialchars($categoryId ?? '') ?>">
 
-	<!-- Überschrift -->
 	<div class="mb-3">
 		<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
 			<?= $titleHeadline ?>
@@ -56,7 +41,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 		<small class="text-muted ms-3"><?= $titleSub ?></small>
 	</div>
 
-	<!-- Titel / Untertitel -->
 	<div class="row form-group pb-3">
 		<div class="col-md-6">
 			<label for="title">Titel</label>
@@ -70,7 +54,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 		</div>
 	</div>
 
-	<!-- Kategorie / Slug -->
 	<div class="row form-group pb-3">
 		<div class="col-md-6">
 			<label for="category_name">Kategorie</label>
@@ -84,7 +67,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 		</div>
 	</div>
 
-	<!-- Hauptbild + FTP-Auswahl -->
 	<div class="row form-group pb-3">
 		<div class="col-md-8">
 			<label for="image">Hauptbild hochladen</label>
@@ -105,7 +87,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 				<?php endif; ?>
 			</div>
 
-			<!-- FTP-Modal -->
 			<div class="modal fade" id="ftpModal" tabindex="-1" aria-hidden="true">
 				<div class="modal-dialog modal-xl modal-dialog-scrollable">
 					<div class="modal-content">
@@ -130,7 +111,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 		</div>
 	</div>
 
-	<!-- Inhaltssektionen -->
 	<div class="form-group pb-3">
 		<label>Inhaltssektionen</label>
 		<div id="sections-container"></div>
@@ -140,7 +120,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 	</div>
 	<hr class="my-4 border-dark">
 
-	<!-- SEO -->
 	<div class="mb-3">
 		<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
 			SEO-Einstellungen des Artikels
@@ -163,7 +142,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 	</div>
 	<hr class="my-4 border-dark">
 
-	<!-- Empfohlene Produkte -->
 	<div class="form-group pb-3">
 		<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
 			Sektion Empfohlene Produkte
@@ -174,7 +152,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 		<div class="row mt-2">
 			<?php for ($i = 1; $i <= 3; $i++): ?>
 				<?php
-				// Inicializácia ftp_product_imageX na základe product_imageX, ak nie je nastavené
 				$ftpProductImage = $article->{'ftp_product_image' . $i} ?? '';
 				if (empty($ftpProductImage) && !empty($article->{'product_image' . $i})) {
 					$ftpProductImage = base_url('Uploads/articles/products/' . $article->{'product_image' . $i});
@@ -221,7 +198,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 	</div>
 	<hr class="my-4 border-dark">
 
-	<!-- Das könnte Sie interessieren -->
 	<div class="form-group pb-3">
 		<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
 			Sektion „Das könnte Sie interessieren“
@@ -246,7 +222,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 	</div>
 	<hr class="my-4 border-dark">
 
-	<!-- Veröffentlichung -->
 	<div class="mb-3">
 		<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
 			Veröffentlichungseinstellungen
@@ -276,7 +251,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 	</div>
 	<hr class="my-4 border-dark">
 
-	<!-- Submit -->
 	<div class="form-group">
 		<button type="submit" class="btn btn-primary">Speichern</button>
 		<a href="<?= base_url('admin/articles_in_category/' . ($categoryId ?? 0)) ?>"
@@ -285,7 +259,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 </form>
 
 <script>const BASE_URL = "<?= base_url() ?>";</script>
-<!-- Dynamické sekce + Summernote -->
 <script>
 	let sectionCount = 0, maxSections = 6, sectionsData = <?= json_encode($sections ?? []) ?>;
 
@@ -344,7 +317,6 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 	});
 </script>
 
-<!-- FTP–Picker (statické i dynamické) -->
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
 		const modalEl = document.getElementById('ftpModal'),
@@ -383,12 +355,12 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 								? `<a href="#" class="ftp-image-choose" data-path="${item.url}">Auswählen</a>`
 								: '-';
 						html += `<tr>
-                        <td class="text-center">${icon}</td>
-                        <td>${item.name}</td>
-                        <td>${item.path}</td>
-                        <td>${size}</td>
-                        <td>${action}</td>
-                    </tr>`;
+                            <td class="text-center">${icon}</td>
+                            <td>${item.name}</td>
+                            <td>${item.path}</td>
+                            <td>${size}</td>
+                            <td>${action}</td>
+                        </tr>`;
 					});
 					tableBody.innerHTML = html || '<tr><td colspan="5">Ordner ist leer.</td></tr>';
 					tableBody.querySelectorAll('.ftp-folder').forEach(a => {
