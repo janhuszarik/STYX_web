@@ -168,14 +168,13 @@ function getNewsletters(){
 
 	function newsSave($post = false, $image = false, $old_image = false) {
 		$data = array(
-			'lang'=> $this->input->post('lang'),
+			'lang' => $this->input->post('lang'),
 			'name' => $this->input->post('name'),
 			'name1' => $this->input->post('name1'),
 			'buttonUrl' => $this->input->post('buttonUrl'),
 			'active' => $this->input->post('active'),
-			'start_date' => $this->input->post('start_date'),
-			'end_date' => $this->input->post('end_date'),
-			'content' => $this->input->post('content'),
+			'start_date' => $this->input->post('start_date') ?: date('Y-М-d'), // Ak nie je zadaný, použije aktuálny dátum
+			'end_date' => $this->input->post('end_date') ?: NULL // Ak nie je zadaný, nastaví NULL
 		);
 
 		// Ak je nahraná nová fotka a neobsahuje chybu, nastavíme ju do dát
@@ -194,7 +193,6 @@ function getNewsletters(){
 			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('news', $data);
 		}
-
 	}
 
 

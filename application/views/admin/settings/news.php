@@ -9,97 +9,76 @@
 					<p class="card-subtitle">Erstellen Sie Text für News im Abschnitt unter dem Banner</p>
 				</header>
 				<div class="card-body">
-					<form action="<?=BASE_URL?>admin/newsSave" method="post" id="form" enctype="multipart/form-data">
-						<?php if (!empty($news->id)) { ?>
-							<input type="hidden" name="id" value="<?=$news->id?>">
-						<?php } ?>
-						<div class="row form-group pb-3">
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label class="col-form-label" for="inputLang">Sprache</label>
-									<select class="form-control" name="lang" id="inputLang">
-										<option value="de" <?php echo ($menu->lang == 'de') ? 'selected' : ''; ?>>Deutsch</option>
-										<option value="en" <?php echo ($menu->lang == 'en') ? 'selected' : ''; ?>>English</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<label class="col-form-label" for="active">Ist Aktiv?</label>
-								<select name="active" class="form-control" id="activeSelect">
-									<option value="1" <?php echo isset($news->active) && $news->active ? 'selected' : ''; ?>>Aktiv</option>
-									<option value="0" <?php echo isset($news->active) && !$news->active ? 'selected' : ''; ?>>Inaktiv</option>
+					<form.ConcurrentModificationExceptionaction="<?=BASE_URL?>admin/newsSave" method="post" id="form" enctype="multipart/form-data">
+					<?php if (!empty($news->id)) { ?>
+						<input type="hidden" name="id" value="<?=$news->id?>">
+					<?php } ?>
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="col-form-label" for="inputLang">Sprache</label>
+								<select class="form-control" name="lang" id="inputLang">
+									<option value="de" <?php echo ($menu->lang == 'de') ? 'selected' : ''; ?>>Deutsch</option>
+									<option value="en" <?php echo ($menu->lang == 'en') ? 'selected' : ''; ?>>English</option>
 								</select>
 							</div>
 						</div>
-						<div class="row form-group pb-3">
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label class="col-form-label" for="Input1">Hauptüberschrift</label>
-									<input placeholder="Hauptüberschrift/Kurztext" type="text" name="name" class="form-control" id="Input1" value="<?=!empty($news->name)?$news->name: ''?>" required>
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label class="col-form-label" for="Input1">Kurztext</label>
-									<input placeholder="Text unter einer großen Überschrift" type="text" name="name1" class="form-control" id="Input1" value="<?=!empty($news->name1)?$news->name1: ''?>" required>
-								</div>
+						<div class="col-lg-6">
+							<label class="col-form-label" for="active">Ist Aktiv?</label>
+							<select name="active" class="form-control" id="activeSelect">
+								<option value="1" <?php echo isset($news->active) && $news->active ? 'selected' : ''; ?>>Aktiv</option>
+								<option value="0" <?php echo isset($news->active) && !$news->active ? 'selected' : ''; ?>>Inaktiv</option>
+							</select>
+						</div>
+					</div>
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="col-form-label" for="Input1">Hauptüberschrift</label>
+								<input placeholder="Hauptüberschrift/Kurztext" type="text" name="name" class="form-control" id="Input1" value="<?=!empty($news->name)?$news->name: ''?>" required>
 							</div>
 						</div>
-						<div class="row form-group pb-3">
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label class="col-form-label" for="Input1">URL link</label>
-									<input placeholder="Internetverbindung" type="text" name="buttonUrl" class="form-control" id="Input1" value="<?=!empty($news->buttonUrl)?$news->buttonUrl: ''?>">
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<label class="col-form-label" for="image">Bild hochladen</label>
-								<input type="file" name="image" class="form-control" id="image">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="col-form-label" for="Input1">Kurztext</label>
+								<input placeholder="Text unter einer großen Überschrift" type="text" name="name1" class="form-control" id="Input1" value="<?=!empty($news->name1)?$news->name1: ''?>" required>
 							</div>
 						</div>
-						<!-- Pridanie nahrávania obrázkov -->
-						<!-- Pridanie dátumu a času -->
-						<div class="row form-group pb-3">
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label class="col-form-label" for="start_date">Startdatum*</label>
-									<input type="date" name="start_date" class="form-control" id="start_date" value="<?=!empty($news->start_date)?$news->start_date: ''?>">
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label class="col-form-label" for="end_date">Enddatum*</label>
-									<input type="date" name="end_date" class="form-control" id="end_date" value="<?=!empty($news->end_date)?$news->end_date: ''?>">
-								</div>
+					</div>
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="col-form-label" for="Input1">URL link</label>
+								<input placeholder="Internetverbindung" type="text" name="buttonUrl" class="form-control" id="Input1" value="<?=!empty($news->buttonUrl)?$news->buttonUrl: ''?>">
 							</div>
 						</div>
-						<div class="row form-group pb-3">
-							<div class="col-lg-12">
-								<div class="form-group">
-									<label for="layoutSelect">Wählen Sie ein Design</label>
-									<select class="form-control" id="layoutSelect">
-										<option selected>Auswählen eines Vorlagentyps</option>
-										<option value="layout1">Dizajn 1</option>
-										<option value="layout2">Dizajn 2</option>
-										<option value="layout3">Dizajn 3</option>
-									</select>
-								</div>
+						<div class="col-lg-6">
+							<label class="col-form-label" for="image">Bild hochladen</label>
+							<input type="file" name="image" class="form-control" id="image">
+						</div>
+					</div>
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="col-form-label" for="start_date">Startdatum*</label>
+								<input type="date" name="start_date" class="form-control" id="start_date" value="<?=!empty($news->start_date)?$news->start_date: ''?>">
 							</div>
 						</div>
-						<div class="row form-group pb-3">
-							<div class="col-lg-12">
-								<div id="summernote"><?=!empty($news->content) ? htmlspecialchars_decode($news->content) : ''?></div>
-								<input type="hidden" name="content" id="content">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="col-form-label" for="end_date">Enddatum (optional)</label>
+								<input type="date" name="end_date" class="form-control" id="end_date" value="<?=!empty($news->end_date)?$news->end_date: ''?>">
 							</div>
 						</div>
-						<footer class="card-footer text-end">
-							<?php if (!empty($news->id)) { ?>
-								<input type="hidden" name="id" value="<?=$news->id?>">
-								<button type="submit" class="btn btn-primary">Bearbeiten</button>
-							<?php } else { ?>
-								<button type="submit" class="btn btn-primary">Speichern</button>
-							<?php } ?>
-						</footer>
+					</div>
+					<footer class="card-footer text-end">
+						<?php if (!empty($news->id)) { ?>
+							<input type="hidden" name="id" value="<?=$news->id?>">
+							<button type="submit" class="btn btn-primary">Bearbeiten</button>
+						<?php } else { ?>
+							<button type="submit" class="btn btn-primary">Speichern</button>
+						<?php } ?>
+					</footer>
 					</form>
 				</div>
 			</section>
