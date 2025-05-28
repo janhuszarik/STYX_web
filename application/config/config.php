@@ -21,6 +21,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     define ( 'PHONE_HREF','+436648478034' );
     define ( 'PHONE_FIRMA','+43(0)27 473 250' );
     define ( 'PHONE_FIRMA_HREF','+4327473250' );
+    define ( 'FAX',' +43 2747 32 50-10' );
 
     
     define ( 'LANG','de' );
