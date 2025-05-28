@@ -1,19 +1,13 @@
-</div>
-
 <section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading">
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-lg-8">
 				<h1 id="newsletter-heading" class="text-center font-weight-bold mb-4"><?= lang('NEWSLETTER_TITLE') ?></h1>
-
 				<form id="newsletterForm" onsubmit="return validateNewsletterForm()" action="https://mailworx.marketingsuite.info/sys/form-submit.aspx" method="post" class="newsletter-form">
-
-					<!-- Povinné skryté polia pre eworx -->
 					<input type="hidden" name="frm" value="3ebb53d5-0afb-489c-b75a-493990d2e4af">
-					<input type="hidden" name="acc" value="7ad42b71-86b9-450b-bfae-a9e0d961dc8c"> <!-- zmeniť podľa eworx účtu -->
+					<input type="hidden" name="acc" value="7ad42b71-86b9-450b-bfae-a9e0d961dc8c">
 					<input type="hidden" name="mxCFF_empty" value="">
 					<input type="hidden" name="dpl" value="email">
-
 					<div class="row">
 						<div class="col-md-4 mb-3">
 							<select name="salutation" class="form-control" required>
@@ -40,28 +34,18 @@
 								</label>
 							</div>
 						</div>
-
-						<!-- Nepovinné pre eworx, ale užitočné na ochranu -->
 						<div class="col-md-12 mb-3">
 							<div class="g-recaptcha" data-sitekey="<?= RECAPTCHA ?>"></div>
 						</div>
-
 						<div class="col-md-12 text-center">
 							<button type="submit" class="btn btn-primary"><?= lang('SUBSCRIBE') ?></button>
 						</div>
 					</div>
 				</form>
-
 			</div>
 		</div>
 	</div>
 </section>
-
-
-
-
-
-
 
 <footer id="footer">
 	<div class="container">
@@ -72,8 +56,6 @@
 			<div class="col-md-9 mb-4 mb-lg-0">
 				<h5 class="text-3 mb-3"><?= lang('ABOUT_US')?></h5>
 				<p class="mt-3 mb-3 text-white"><?=$description?></p>
-
-
 				<div class="row pt-3 footer-menu">
 					<?php
 					$currentUrl = getCurrentUrl();
@@ -82,7 +64,6 @@
 					$total = count($menuItems);
 					$perColumn = ceil($total / $columnCount);
 					$chunks = array_chunk($menuItems, $perColumn);
-
 					foreach ($chunks as $column) {
 						foreach ($column as $menu) {
 							?>
@@ -106,21 +87,18 @@
 					}
 					?>
 				</div>
-
-
 			</div>
-
 			<div class="col-md-3 mb-4 mb-lg-0 footer-block">
 				<h5 class="text-3 mb-3 pb-1"><?= lang('KONTAKT') ?></h5>
 				<p class="text-8 font-weight-bold">
-					<a href="<?= PHONE_HREF ?>" class=" text-white"><?= PHONE ?></a>
+					<a href="<?= PHONE_HREF ?>" class="text-white"><?= PHONE ?></a>
 				</p>
 				<br>
-				<ul class="list list-icons list-icons-lg  ">
+				<ul class="list list-icons list-icons-lg">
 					<li class="mb-1"><i class="far fa-dot-circle"></i>
 						<p class="m-0 text-white"><?= COMPANY . '<br>' . ADRESS . '<br>' . ZIP . ' ' . CITY . '<br>' . COUNTRY ?></p>
 					</li>
-					<li class="mb-1 "><i class="far fa-envelope"></i>
+					<li class="mb-1"><i class="far fa-envelope"></i>
 						<p class="m-0"><a class="text-white" href="mailto:<?= MAIL_ADMIN ?>"><?= MAIL_ADMIN ?></a></p>
 					</li>
 				</ul>
@@ -128,14 +106,11 @@
 					<li class="social-icons-facebook"><a href="https://www.facebook.com/www.styx.at/" target="_blank" title="Facebook"><i class="fab fa-facebook-f text-2"></i></a></li>
 					<li class="social-icons-instagram"><a href="https://www.instagram.com/styx.naturcosmetic/" target="_blank" title="Instagram"><i class="fab fa-instagram text-2"></i></a></li>
 					<li class="social-icons-youtube"><a href="https://www.youtube.com/channel/UCxpLOYYahcENUfVnacBvagA" target="_blank" title="YouTube"><i class="fab fa-youtube text-2"></i></a></li>
-					<li class="social-icons-pinterest"><a href="https://www.pinterest.com/styxnaturcosmetic/" target="_blank" title="Pinterest"><i class="fab fa-pinterest text-2"></i></a>
-					</li>
+					<li class="social-icons-pinterest"><a href="https://www.pinterest.com/styxnaturcosmetic/" target="_blank" title="Pinterest"><i class="fab fa-pinterest text-2"></i></a></li>
 				</ul>
 			</div>
-
 		</div>
 	</div>
-
 	<div class="footer-copyright">
 		<div class="container py-2">
 			<div class="row py-4">
@@ -144,8 +119,8 @@
 						<img alt="<?= COMPANY ?>" src="<?= BASE_URL . LOGO1 ?>" height="32">
 					</a>
 				</div>
-				<div class="col-lg-7 d-flex align-items-center justify-content-center justify-content-lg-start mb-4 mb-lg-0 ">
-					<p class="text-white">© <?= date('Y') ?> <?= COMPANY ?>. All Rights Reserved. Powered by <?=COMPANY?> | Marketing & Grafik</p>
+				<div class="col-lg-7 d-flex align-items-center justify-content-center justify-content-lg-start mb-4 mb-lg-0">
+					<p class="text-white">© <?= date('Y') ?> <?= COMPANY ?>. Alle Rechte vorbehalten. Powered by <?=COMPANY?> | Marketing & Grafik</p>
 				</div>
 				<div class="col-lg-4 d-flex align-items-center justify-content-center justify-content-lg-end">
 					<nav id="sub-menu">
@@ -161,41 +136,20 @@
 	</div>
 </footer>
 
-</div>
 <script>
-	<script>
-		function validateNewsletterForm() {
-		// skontroluj či existuje grecaptcha
-		if (typeof grecaptcha === "undefined") {
-		console.error("reCAPTCHA not loaded!");
-		alert("reCAPTCHA sa nenačítalo. Skúste to znova.");
-		return false;
-	}
-
+	function validateNewsletterForm() {
 		const recaptcha = grecaptcha.getResponse();
 		if (!recaptcha) {
-		alert("Bitte bestätigen Sie das reCAPTCHA-Feld.");
-		return false;
-	}
-
-		return true; // všetko OK, pokračuj v odoslaní
+			alert("Bitte bestätigen Sie das reCAPTCHA-Feld.");
+			return false;
+		}
+		return true;
 	}
 </script>
 
-</script>
-
-
-<!-- Vendor -->
 <script src="<?=BASE_URL?>assets/vendor/plugins/js/plugins.min.js"></script>
-
-<!-- Theme Base, Components and Settings -->
 <script src="<?=BASE_URL?>assets/js/theme.js"></script>
-
-<!-- Theme Custom -->
 <script src="<?=BASE_URL?>assets/js/custom.js"></script>
-
-<!-- Theme Initialization Files -->
 <script src="<?=BASE_URL?>assets/js/theme.init.js"></script>
-
 </body>
 </html>
