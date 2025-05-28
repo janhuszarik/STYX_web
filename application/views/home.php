@@ -185,7 +185,7 @@
 					 data-appear-animation-delay="200">
 				<div class="card">
 					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/logo/Styx-Naturcosmetic.jpg"
+						 src="<?= BASE_URL ?>img/image/naturkosmetik_styx.jpg"
 						 alt="STYX Naturkosmetik logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('STYX_NATURKOSMETIK_TEXT_HEADER') ?></h3>
@@ -213,7 +213,7 @@
 					 data-appear-animation-delay="200">
 				<div class="card">
 					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/logo/Aroma-Derm.jpg"
+						 src="<?= BASE_URL ?>img/image/massage.jpg"
 						 alt="Aroma Derm logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('AROMA_DERM_TEXT_HEADER') ?></h3>
@@ -232,7 +232,7 @@
 					 data-appear-animation-delay="200">
 				<div class="card">
 					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/logo/Styx-Schokoladenmanufaktur.jpg"
+						 src="<?= BASE_URL ?>img/image/schokolade_produktion.jpg"
 						 alt="STYX Schokoladenmanufaktur logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('SCHOKOLADE_TEXT_HEADER') ?></h3>
@@ -251,7 +251,7 @@
 					 data-appear-animation-delay="200">
 				<div class="card">
 					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/logo/World-of-Styx.jpg"
+						 src="<?= BASE_URL ?>img/image/welcomecenter.jpg"
 						 alt="World of STYX logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('WORLD_OF_STYX_TEXT_HEADER') ?></h3>
@@ -272,7 +272,7 @@
 					 data-appear-animation-delay="200">
 				<div class="card">
 					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/logo/PL.jpg"
+						 src="<?= BASE_URL ?>img/image/privateLabeling.jpg"
 						 alt="Private Labeling logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('PRIVATE_LABELING_TEXT_HEADER') ?></h3>
@@ -291,7 +291,7 @@
 					 data-appear-animation-delay="200">
 				<div class="card">
 					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/logo/Werbegeschenke.jpg"
+						 src="<?= BASE_URL ?>img/image/werbegeschenke.jpg"
 						 alt="Werbegeschenke logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('WERBE_TEXT_HEADER') ?></h3>
@@ -310,7 +310,7 @@
 					 data-appear-animation-delay="200">
 				<div class="card">
 					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/logo/STYX-Remise.jpg"
+						 src="<?= BASE_URL ?>img/image/remise.jpg"
 						 alt="STYX Remise logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('STYX_REMISE_TEXT_HEADER') ?></h3>
@@ -329,7 +329,7 @@
 					 data-appear-animation-delay="200">
 				<div class="card">
 					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/logo/STYX-Academy.jpg"
+						 src="<?= BASE_URL ?>img/image/workshop_styx.jpg"
 						 alt="STYX Academy logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('ACADEMY_TEXT_HEADER') ?></h3>
