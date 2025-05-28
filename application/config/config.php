@@ -25,7 +25,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     
     define ( 'LANG','de' );
 
-    
+	define ( 'RECAPTCHA','' );
+	define ( 'SECRETKEY','' );
+
+
     define ( 'COMPANY','STYX Naturcosmetic' );
     define ( 'ADRESS','Am Kräutergarten 6,' );
     define ( 'ZIP','3200' );

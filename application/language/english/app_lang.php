@@ -374,3 +374,16 @@ $lang['ACCESSIBILITY_MODE'] 									= 'Accessibility';
 
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový
+
+
+//Newsletter- footer
+
+$lang['NEWSLETTER_TITLE'] = 'Newsletter Subscription';
+$lang['SELECT_ANREDE'] = 'Select salutation';
+$lang['VORNAME'] = 'First name';
+$lang['NACHNAME'] = 'Last name';
+$lang['EMAIL_PLACEHOLDER'] = 'Email address*';
+$lang['SUBSCRIBE'] = 'Subscribe';
+$lang['NEWSLETTER_PRIVACY_TEXT'] = 'I agree that my personal data may be stored and processed by Styx Naturcosmetic. Styx Naturcosmetic will not share this data with third parties and will use it solely to keep me informed about news and offers from Styx Naturcosmetic. I can revoke my consent at any time by post or email to Styx Naturcosmetic.';
+
+

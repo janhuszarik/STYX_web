@@ -1,4 +1,55 @@
 </div>
+
+<section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<h1 id="newsletter-heading" class="text-center font-weight-bold mb-4"><?= lang('NEWSLETTER_TITLE') ?></h1>
+
+				<form action="<?= base_url('newsletter/subscribe') ?>" method="post" class="newsletter-form">
+					<div class="row">
+						<div class="col-md-4 mb-3">
+							<select name="anrede" class="form-control" required>
+								<option value=""><?= lang('SELECT_ANREDE') ?? 'Anrede wählen' ?></option>
+								<option value="Frau">Frau</option>
+								<option value="Herr">Herr</option>
+								<option value="Divers">Divers</option>
+							</select>
+						</div>
+						<div class="col-md-4 mb-3">
+							<input type="text" name="vorname" class="form-control" placeholder="<?= lang('VORNAME') ?? 'Vorname' ?>">
+						</div>
+						<div class="col-md-4 mb-3">
+							<input type="text" name="nachname" class="form-control" placeholder="<?= lang('NACHNAME') ?? 'Nachname' ?>">
+						</div>
+						<div class="col-md-12 mb-3">
+							<input type="email" name="email" class="form-control" placeholder="<?= lang('EMAIL_PLACEHOLDER') ?>" required>
+						</div>
+						<div class="col-md-12 mb-3">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="privacy" id="privacyCheck" required>
+								<label class="form-check-label" for="privacyCheck">
+									<?= lang('NEWSLETTER_PRIVACY_TEXT') ?>
+								</label>
+							</div>
+						</div>
+						<div class="col-md-12 mb-3">
+							<div class="g-recaptcha" data-sitekey=<?=RECAPTCHA?></div>
+						</div>
+						<div class="col-md-12 text-center">
+							<button type="submit" class="btn btn-primary"><?= lang('SUBSCRIBE') ?></button>
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+
 <footer id="footer">
 	<div class="container">
 		<div class="footer-ribbon">
@@ -9,16 +60,17 @@
 				<a href="<?=BASE_URL?>" class="logo pe-0 pe-lg-3">
 					<img alt="STYX Logo" src="<?=BASE_URL.LOGO1?>" class="opacity-7 bottom-4" height="80">
 				</a>
-				<p class="mt-2 mb-2"><?=lang('HOME_DESCRIPTION')?></p>
+				
+				<p class="mt-2 mb-2 white-footer"><?=lang('HOME_DESCRIPTION')?></p>
 			</div>
 			<div class="col-md-6">
 				<h5 class="text-3 mb-3"><?=lang('KONTAKT')?></h5>
 				<div class="row">
 					<div class="col-md-6">
-						<ul class="list list-icons list-icons-lg">
-							<li class="mb-1"><i class="far fa-dot-circle text-color-primary"></i><p class="m-0"><?=COMPANY.ADRESS.'<br>'.ZIP.' '.CITY.'<br>'.COUNTRY?></p></li>
-							<li class="mb-1"><i class="fab fa-whatsapp text-color-primary"></i><p class="m-0"><a href="<?=PHONE_HREF?>"><?=PHONE?></a></p></li>
-							<li class="mb-1"><i class="far fa-envelope text-color-primary"></i><p class="m-0"><a href="mailto:<?=MAIL_ADMIN?>"><?=MAIL_ADMIN?></a></p></li>
+						<ul class="list list-icons list-icons-lg ">
+							<li class="mb-1 "><i class="far fa-dot-circle text-color-primary"></i><p class="m-0"><?=COMPANY.ADRESS.'<br>'.ZIP.' '.CITY.'<br>'.COUNTRY?></p></li>
+							<li class="mb-1 "><i class="fab fa-whatsapp text-color-primary"></i><p class="m-0"><a href="<?=PHONE_HREF?>"><?=PHONE?></a></p></li>
+							<li class="mb-1 "><i class="far fa-envelope text-color-primary"></i><p class="m-0"><a href="mailto:<?=MAIL_ADMIN?>"><?=MAIL_ADMIN?></a></p></li>
 						</ul>
 					</div>
 					<?php
