@@ -3,6 +3,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col">
+					
 					<h1 id="news-heading" class="text-center font-weight-bold"><?= lang('AKTUELL') ?></h1>
 					<div class="owl-carousel owl-theme show-nav-title show-nav-title-both-sides news-carousel"
 						 role="region"

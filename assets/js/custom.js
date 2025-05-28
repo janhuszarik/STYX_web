@@ -1,11 +1,23 @@
 // -----------------------------------------------------------------------------------------------------------------------
 // Nastavenie karuselu s lazy loading
 // Tento kód inicializuje dva karusely s rôznymi počtami kariet pri načítaní okna
+// Aktivovanie / deaktivovanie režimu + uloženie do localStorage
 document.getElementById('accessibilityToggle')?.addEventListener('click', function () {
 	document.body.classList.toggle('accessibility-mode');
 	const isActive = document.body.classList.contains('accessibility-mode');
+	localStorage.setItem('accessibility-mode', isActive ? 'on' : 'off');
 	this.setAttribute('aria-pressed', isActive ? 'true' : 'false');
 });
+
+// Po načítaní stránky – ak je režim zapnutý, aktivuj ho
+document.addEventListener('DOMContentLoaded', function () {
+	if (localStorage.getItem('accessibility-mode') === 'on') {
+		document.body.classList.add('accessibility-mode');
+		const btn = document.getElementById('accessibilityToggle');
+		if (btn) btn.setAttribute('aria-pressed', 'true');
+	}
+});
+
 
 $(document).ready(function(){
 	$('.news-carousel').owlCarousel({

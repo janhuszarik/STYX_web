@@ -43,9 +43,15 @@
 									</li>
 									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
 										<div class="container">
-											<a href="https://shop.styx.at/"><button class="pulse-button"><span style="font-weight: bold"></span> SHOP</button></a>
+											<a href="https://shop.styx.at/">
+												<button class="pulse-button">
+													<i class="fas fa-shopping-cart me-2"></i>
+													<span style="font-weight: bold">SHOP</span>
+												</button>
+											</a>
 										</div>
 									</li>
+
 
 								</ul>
 							</nav>
