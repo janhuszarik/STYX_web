@@ -635,7 +635,25 @@ body.accessibility-mode .pulse-button {
 	outline: none;
 }
 
+.news-carousel .thumb-info-wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	border-radius: 6px;
+}
 
+.news-carousel .thumb-info-wrapper img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+
+.news-carousel .thumb-info-bottom-info-custom {
+	text-align: center;
+}
 
 
 
