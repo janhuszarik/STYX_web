@@ -115,7 +115,7 @@
 										<td data-title="ab"><?= $r->start_date ? date('d.m.Y', strtotime($r->start_date)) : '-' ?></td>
 										<td data-title="bis"><?= $r->end_date ? date('d.m.Y', strtotime($r->end_date)) : 'Unbegrenzt' ?></td>
 										<td data-title="Aktiv" class="text-center"><?=active($r->active)?></td>
-										<td data-title="Bild" class="text-center"><img src="<?=BASE_URL?>Uploads/news/<?=$r->image?>" style="width: 50px;"></td>
+										<td data-title="Bild" class="text-center"><img src="<?=BASE_URL?>uploads/news/<?=$r->image?>" style="width: 50px;"></td>
 										<td data-title="Editovať" class="text-center"><a href="<?=BASE_URL.'admin/news/edit/'.$r->id?>"><i style="color: green" class="fa fa-edit"></i></a></td>
 										<td data-title="Zmazať" class="text-center"><a href="<?=BASE_URL.'admin/news/del/'.$r->id?>" onclick="return confirm('Ste si istý/(á), že to chcete zmazať?!?')"><i style="color: red" class="fa fa-trash"></i></a></td>
 									</tr>
