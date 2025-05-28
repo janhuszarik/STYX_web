@@ -9,7 +9,7 @@
 						 role="region"
 						 aria-roledescription="carousel"
 						 aria-label="News carousel"
-						 data-plugin-options="{'items': 4, 'margin': 10, 'loop': true, 'nav': true, 'dots': false, 'autoplay': false}">
+						 data-plugin-options="{'items': 1, 'margin': 10, 'loop': true, 'nav': true, 'dots': false, 'autoplay': false}"
 						<?php foreach ($news as $news_item): ?>
 							<?php
 							$href = "";
