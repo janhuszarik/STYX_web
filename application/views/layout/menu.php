@@ -28,16 +28,6 @@
 									</li>
 									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
 										<div class="container">
-											<button id="accessibilityToggle"
-													aria-pressed="false"
-													class="aroma-button"
-													title="<?= lang('ACCESSIBILITY_MODE') ?>">
-												♿ <?= lang('ACCESSIBILITY_MODE') ?>
-											</button>
-										</div>
-									</li>
-									<li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show nav-item-hide">
-										<div class="container">
 											<a href="<?=lang('HÄNDLER_URL')?>"><button class="aroma-button"><?=lang('HÄNDLER_TEXT')?></button></a>
 										</div>
 									</li>

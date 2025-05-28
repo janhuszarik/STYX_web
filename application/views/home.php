@@ -117,56 +117,56 @@
 					<ul class="list-unstyled d-flex flex-wrap justify-content-center" role="list">
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4" role="listitem">
 							<a class="lightbox"
-							   href="<?= BASE_URL . 'img/webImage/staat.png' ?>"
+							   href="<?= BASE_URL . 'img/logo/staatliche_auszeichnung.jpg' ?>"
 							   data-plugin-options="{'type':'image'}"
 							   aria-label="View Staatliche Auszeichnung certificate">
 								<img loading="lazy"
 									 class="img-fluid"
-									 src="<?= BASE_URL . 'img/webImage/staat.png' ?>"
+									 src="<?= BASE_URL . 'img/logo/staatliche_auszeichnung.jpg' ?>"
 									 alt="Staatliche Auszeichnung certificate">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4" role="listitem">
 							<a class="lightbox"
-							   href="<?= BASE_URL . 'img/webImage/eco-cert_start.png' ?>"
+							   href="<?= BASE_URL . 'img/logo/eco-cert_start.jpg' ?>"
 							   data-plugin-options="{'type':'image'}"
 							   aria-label="View Eco-Cert certificate">
 								<img loading="lazy"
 									 class="img-fluid"
-									 src="<?= BASE_URL . 'img/webImage/eco-cert_start.png' ?>"
+									 src="<?= BASE_URL . 'img/logo/eco-cert_start.jpg' ?>"
 									 alt="Eco-Cert certificate">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4" role="listitem">
 							<a class="lightbox"
-							   href="<?= BASE_URL . 'img/webImage/Bio-Austria_start.png' ?>"
+							   href="<?= BASE_URL . 'img/logo/Bio-Austria_start.jpg' ?>"
 							   data-plugin-options="{'type':'image'}"
 							   aria-label="View Bio Austria certificate">
 								<img loading="lazy"
 									 class="img-fluid"
-									 src="<?= BASE_URL . 'img/webImage/Bio-Austria_start.png' ?>"
+									 src="<?= BASE_URL . 'img/logo/Bio-Austria_start.jpg' ?>"
 									 alt="Bio Austria certificate">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4" role="listitem">
 							<a class="lightbox"
-							   href="<?= BASE_URL . 'img/webImage/top_rated_company_24.png' ?>"
+							   href="<?= BASE_URL . 'img/logo/top_rated.jpg' ?>"
 							   data-plugin-options="{'type':'image'}"
 							   aria-label="View Top Rated Company 2024 award">
 								<img loading="lazy"
 									 class="img-fluid"
-									 src="<?= BASE_URL . 'img/webImage/top_rated_company_24.png' ?>"
+									 src="<?= BASE_URL . 'img/logo/top_rated.jpg' ?>"
 									 alt="Top Rated Company 2024 award">
 							</a>
 						</li>
 						<li class="col-lg-2 col-md-4 col-sm-6 mb-4" role="listitem">
 							<a class="lightbox"
-							   href="<?= BASE_URL . 'img/webImage/trusted-shop_start.png' ?>"
+							   href="<?= BASE_URL . 'img/logo/trusted_shop.jpg' ?>"
 							   data-plugin-options="{'type':'image'}"
 							   aria-label="View Trusted Shop certificate">
 								<img loading="lazy"
 									 class="img-fluid"
-									 src="<?= BASE_URL . 'img/webImage/trusted-shop_start.png' ?>"
+									 src="<?= BASE_URL . 'img/logo/trusted_shop.jpg' ?>"
 									 alt="Trusted Shop certificate">
 							</a>
 						</li>
