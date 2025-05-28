@@ -163,23 +163,27 @@
 
 </div>
 <script>
-	function validateNewsletterForm() {
+	<script>
+		function validateNewsletterForm() {
+		// skontroluj či existuje grecaptcha
+		if (typeof grecaptcha === "undefined") {
+		console.error("reCAPTCHA not loaded!");
+		alert("reCAPTCHA sa nenačítalo. Skúste to znova.");
+		return false;
+	}
+
 		const recaptcha = grecaptcha.getResponse();
 		if (!recaptcha) {
-			alert("Bitte bestätigen Sie das reCAPTCHA-Feld.");
-			return false;
-		}
+		alert("Bitte bestätigen Sie das reCAPTCHA-Feld.");
+		return false;
+	}
 
-		// ✅ presmerovanie po krátkom čase (alebo rovno vo forme cez ?r=thankyou)
-		setTimeout(function () {
-			window.location.href = "<?= base_url('newsletter/danke') ?>";
-		}, 1500);
-
-		return true; // pokračuj v submitnutí
+		return true; // všetko OK, pokračuj v odoslaní
 	}
 </script>
 
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</script>
+
 
 <!-- Vendor -->
 <script src="<?=BASE_URL?>assets/vendor/plugins/js/plugins.min.js"></script>
