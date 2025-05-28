@@ -40,7 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     define ( 'LOGO1','img/logo/STYX_logo_green.svg' );
     define ( 'LOGO2','img/logo/STYX_logo_white.svg' );
 
-
+// Doména a info
     define ( 'TELEFON','+432747325039' );
     define ( 'DOMAIN','styx.at' );
     define ( 'NAME','STYX' );
@@ -48,6 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     define ( 'AUTHOR','Jan Huszarik | Marketing / Desing, Web-Developer' );
 
 
+//SMTP nastavenia
     define ('SMTP','smtp.hostcreators.sk');
     define ('SMTP_NAME','info@uctovnictvoaustria.eu');
     define ('SMTP_PASS','_4U!y4Ax5i_JK3s!');
