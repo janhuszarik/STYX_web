@@ -4708,7 +4708,7 @@ html[dir="rtl"] #header .tip-light:before {
 
 @media (min-width: 992px) {
 	#header .header-nav-main nav > ul > li > a {
-		color: #6ebe41;
+		color: #000000;
 	}
 
 	#header .header-nav-main nav > ul > li.open > a,

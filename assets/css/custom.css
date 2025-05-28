@@ -258,27 +258,28 @@
 /* Nastavenie css pre buttony */
 
 .pulse-button {
-	background-color: #13814d;
+	background-color: #61a83e;
 	color: white;
 	border: none;
 	border-radius: 5px;
-	padding: 0px 49px;
+	padding: 10px 49px; /* zvýšená výška cez padding-top a padding-bottom */
 	font-size: 15px;
 	cursor: pointer;
 	outline: none;
-	animation: pulse 3s infinite;
 	display: flex;
 	align-items: center;
 	position: relative;
 	overflow: hidden;
+	/* animation: pulse 3s infinite;  <-- toto je zakomentované / odstránené */
 }
 
+
 .aroma-button {
-	background-color: #13814d;
+	background-color: #61a83e;
 	color: white;
 	border: none;
 	border-radius: 5px;
-	padding: 0px 20px;
+	padding: 2px 25px;
 	font-size: 13px;
 	cursor: pointer;
 	outline: none;
@@ -288,20 +289,6 @@
 	overflow: hidden;
 }
 
-@keyframes pulse {
-	0% {
-		transform: scale(1);
-		box-shadow: 0 0 0 0 rgb(107, 188, 75);
-	}
-	70% {
-		transform: scale(1.1);
-		box-shadow: 0 0 10px 20px rgba(0, 123, 255, 0);
-	}
-	100% {
-		transform: scale(1);
-		box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
-	}
-}
 
 .lang img {
 	vertical-align: middle;
