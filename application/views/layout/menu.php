@@ -51,11 +51,8 @@
 											</a>
 										</div>
 									</li>
-
-
 								</ul>
 							</nav>
-
 							<div class="header-nav-features header-nav-hide">
 								<div class="header-nav-feature header-nav-features-search d-inline-flex">
 									<a href="#" class="header-nav-features-toggle text-decoration-none" data-focus="headerSearch" aria-label="Search">
