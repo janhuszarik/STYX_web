@@ -173,15 +173,13 @@ function getNewsletters(){
 			'name1' => $this->input->post('name1'),
 			'buttonUrl' => $this->input->post('buttonUrl'),
 			'active' => $this->input->post('active'),
-			'start_date' => $this->input->post('start_date') ?: date('Y-М-d'), // Ak nie je zadaný, použije aktuálny dátum
+			'start_date' => $this->input->post('start_date') ?: date('Y-m-d'), // Ak nie je zadaný, použije aktuálny dátum
 			'end_date' => $this->input->post('end_date') ?: NULL // Ak nie je zadaný, nastaví NULL
 		);
 
-		// Ak je nahraná nová fotka a neobsahuje chybu, nastavíme ju do dát
 		if ($image && !isset($image['error'])) {
 			$data['image'] = $image['file_name'];
 		} else if ($old_image) {
-			// Ak nie je nahraná nová fotka, ponecháme starú
 			$data['image'] = $old_image;
 		}
 
