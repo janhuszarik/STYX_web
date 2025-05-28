@@ -23,7 +23,7 @@
 								<article class="thumb-info thumb-info-no-borders thumb-info-no-borders-rounded thumb-info-lighten thumb-info-bottom-info thumb-info-bottom-info-custom thumb-info-bottom-info-show-more thumb-info-no-zoom">
 									<a href="<?= $href ?>" aria-label="Read more about <?= htmlspecialchars($news_item->name) ?>">
                                         <span class="thumb-info-wrapper">
-                                            <img src="<?= BASE_URL ?>Uploads/news/<?= $news_item->image ?>"
+                                            <img src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>"
 												 class="img-fluid"
 												 alt="<?= htmlspecialchars($news_item->name) ?>"
 												 style="padding: 0 0 114px 0">
@@ -38,7 +38,7 @@
 							<?php else: ?>
 								<article class="thumb-info thumb-info-no-borders thumb-info-no-borders-rounded thumb-info-lighten thumb-info-bottom-info thumb-info-bottom-info-custom thumb-info-bottom-info-show-more thumb-info-no-zoom">
                                     <span class="thumb-info-wrapper">
-                                        <img src="<?= BASE_URL ?>Uploads/news/<?= $news_item->image ?>"
+                                        <img src="<?= BASE_URL ?>uploads/news/<?= $news_item->image ?>"
 											 class="img-fluid"
 											 alt="<?= htmlspecialchars($news_item->name) ?>"
 											 style="padding: 0 0 114px 0">
@@ -77,7 +77,7 @@
                         <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
                             <span class="thumb-info-wrapper">
                                 <img loading="lazy"
-									 src="<?= BASE_URL ?>Uploads/product/<?= $product_item->image ?>"
+									 src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>"
 									 class="img-fluid"
 									 alt="<?= htmlspecialchars($product_item->name) ?>">
                             </span>
