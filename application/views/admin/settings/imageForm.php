@@ -57,24 +57,14 @@
 				<div class="thumbnails" id="thumbnails">
 					<?php foreach ($images as $image): ?>
 						<?php
-						// Generovanie cesty k náhľadu
-						$thumb_path = obrpridajthumb($image->image_path);
-						$thumb_webp_path = str_replace('.' . pathinfo($thumb_path, PATHINFO_EXTENSION), '.webp', $thumb_path);
-						// Úplná cesta na serveri pre file_exists()
-						$server_thumb_webp_path = FCPATH . ltrim($thumb_webp_path, './');
-						$server_thumb_path = FCPATH . ltrim($thumb_path, './');
-						// Cesta pre base_url()
-						$thumb_webp_url = ltrim($thumb_webp_path, './');
-						$thumb_url = ltrim($thumb_path, './');
-						// Použijeme WebP, ak existuje, inak fallback na thumbnail
-						$final_url = file_exists($server_thumb_webp_path) ? $thumb_webp_url : (file_exists($server_thumb_path) ? $thumb_url : '');
+						$original_path = $image->image_path;
+						$parts = pathinfo($original_path);
+						$thumb_name = $parts['filename'] . '_thumb.' . $parts['extension'];
+						$clean_dirname = ltrim($parts['dirname'], './'); // odstráni ./ alebo /
+						$thumb_url = base_url($clean_dirname . '/' . $thumb_name);
 						?>
 						<div class="thumbnail" data-id="<?= $image->id ?>" data-order="<?= $image->order_position ?>">
-							<?php if ($final_url): ?>
-								<img src="<?= base_url($final_url) ?>" alt="Thumbnail">
-							<?php else: ?>
-								<img src="<?= base_url('uploads/placeholder.jpg') ?>" alt="Placeholder" title="Bild nicht gefunden">
-							<?php endif; ?>
+							<img src="<?= $thumb_url ?>" alt="Thumbnail">
 							<button class="delete-btn" onclick="deleteImage(<?= $image->id ?>)">X</button>
 						</div>
 					<?php endforeach; ?>
@@ -104,8 +94,7 @@
 	dropzone.addEventListener('drop', (e) => {
 		e.preventDefault();
 		dropzone.classList.remove('dragover');
-		const files = e.dataTransfer.files;
-		handleFiles(files);
+		handleFiles(e.dataTransfer.files);
 	});
 
 	dropzone.addEventListener('click', () => {
@@ -113,8 +102,7 @@
 	});
 
 	fileInput.addEventListener('change', () => {
-		const files = fileInput.files;
-		handleFiles(files);
+		handleFiles(fileInput.files);
 	});
 
 	function handleFiles(files) {
@@ -150,86 +138,76 @@
 		}
 
 		const formData = new FormData();
-		filesToUpload.forEach((file) => {
-			formData.append('images[]', file);
-		});
+		filesToUpload.forEach(file => formData.append('images[]', file));
 		formData.append('gallery_id', <?= $gallery->id ?>);
 
 		fetch('<?= base_url('admin/image/save') ?>', {
 			method: 'POST',
 			body: formData
 		})
-			.then(response => response.json())
+			.then(res => res.json())
 			.then(data => {
 				if (data.success) {
 					filesToUpload = [];
 					data.files.forEach(file => {
-						const thumbnail = document.createElement('div');
-						thumbnail.classList.add('thumbnail');
-						thumbnail.setAttribute('data-id', 'new');
-						thumbnail.setAttribute('data-order', '0');
-						// Generovanie cesty k náhľadu
-						const thumbPath = file.path.replace(/(\.[^.]+)$/, '_thumb.webp');
-						const correctedThumbPath = thumbPath.replace(/^\.\//, '');
-						// Fallback na _thumb.jpg
-						const thumbFallbackPath = file.path.replace(/(\.[^.]+)$/, '_thumb.jpg').replace(/^\.\//, '');
-						const finalThumbPath = correctedThumbPath; // Môžete pridať kontrolu existencie súboru cez AJAX, ak je potrebné
-						thumbnail.innerHTML = `
-                            <img src="<?= base_url() ?>${finalThumbPath}" alt="Thumbnail">
-                            <button class="delete-btn" onclick="deleteImage('new')">X</button>
-                        `;
-						thumbnails.appendChild(thumbnail);
+						const parts = file.path.split('/');
+						const fullName = parts.pop();
+						const dir = parts.join('/');
+						const nameParts = fullName.split('.');
+						const thumbName = nameParts[0] + '_thumb.' + nameParts[1];
+						const fullThumb = `https://styx.styxnatur.at/${dir}/${thumbName}`;
+
+						const thumbEl = document.createElement('div');
+						thumbEl.classList.add('thumbnail');
+						thumbEl.setAttribute('data-id', 'new');
+						thumbEl.setAttribute('data-order', '0');
+						thumbEl.innerHTML = `
+							<img src="${fullThumb}" alt="Thumbnail">
+							<button class="delete-btn" onclick="deleteImage('new')">X</button>
+						`;
+						thumbnails.appendChild(thumbEl);
 					});
 					location.reload();
 				} else {
 					alert('Fehler beim Hochladen: ' + data.message);
 				}
 			})
-			.catch(error => {
-				console.error('Error:', error);
+			.catch(err => {
+				console.error(err);
 				alert('Fehler beim Hochladen der Bilder.');
 			});
 	});
 
 	function deleteImage(imageId) {
-		fetch('<?= base_url('admin/image/delete/') ?>' + imageId, {
-			method: 'POST'
-		})
-			.then(response => response.json())
+		fetch('<?= base_url('admin/image/delete/') ?>' + imageId, { method: 'POST' })
+			.then(res => res.json())
 			.then(data => {
 				if (data.success) {
-					const thumbnail = document.querySelector(`.thumbnail[data-id="${imageId}"]`);
-					if (thumbnail) {
-						thumbnail.remove();
-					}
+					const el = document.querySelector(`.thumbnail[data-id="${imageId}"]`);
+					if (el) el.remove();
 				} else {
 					alert('Fehler beim Löschen: ' + data.message);
 				}
 			})
-			.catch(error => {
-				console.error('Error:', error);
+			.catch(err => {
+				console.error(err);
 				alert('Fehler beim Löschen des Bildes.');
 			});
 	}
 
 	new Sortable(thumbnails, {
 		animation: 150,
-		onEnd: (evt) => {
-			const thumbnailsList = document.querySelectorAll('.thumbnail');
-			thumbnailsList.forEach((thumbnail, index) => {
-				const imageId = thumbnail.getAttribute('data-id');
+		onEnd: () => {
+			document.querySelectorAll('.thumbnail').forEach((el, idx) => {
+				const imageId = el.getAttribute('data-id');
 				if (imageId !== 'new') {
 					fetch('<?= base_url('admin/image/update_order') ?>', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-						body: `image_id=${imageId}&order_position=${index + 1}`
-					})
-						.then(response => response.json())
-						.then(data => {
-							if (data.success) {
-								thumbnail.setAttribute('data-order', index + 1);
-							}
-						});
+						body: `image_id=${imageId}&order_position=${idx + 1}`
+					}).then(res => res.json()).then(data => {
+						if (data.success) el.setAttribute('data-order', idx + 1);
+					});
 				}
 			});
 		}
