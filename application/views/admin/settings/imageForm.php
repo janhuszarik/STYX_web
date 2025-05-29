@@ -60,13 +60,21 @@
 						// Generovanie cesty k náhľadu
 						$thumb_path = obrpridajthumb($image->image_path);
 						$thumb_webp_path = str_replace('.' . pathinfo($thumb_path, PATHINFO_EXTENSION), '.webp', $thumb_path);
-						// Odstránime ./ z cesty, aby base_url() fungoval správne
-						$thumb_webp_path = ltrim($thumb_webp_path, './');
-						// Fallback na _thumb.jpg, ak WebP neexistuje
-						$thumb_fallback_path = ltrim($thumb_path, './');
+						// Úplná cesta na serveri pre file_exists()
+						$server_thumb_webp_path = FCPATH . ltrim($thumb_webp_path, './');
+						$server_thumb_path = FCPATH . ltrim($thumb_path, './');
+						// Cesta pre base_url()
+						$thumb_webp_url = ltrim($thumb_webp_path, './');
+						$thumb_url = ltrim($thumb_path, './');
+						// Použijeme WebP, ak existuje, inak fallback na thumbnail
+						$final_url = file_exists($server_thumb_webp_path) ? $thumb_webp_url : (file_exists($server_thumb_path) ? $thumb_url : ''); // Ak ani jeden súbor neexistuje, prázdna cesta
 						?>
 						<div class="thumbnail" data-id="<?= $image->id ?>" data-order="<?= $image->order_position ?>">
-							<img src="<?= base_url(file_exists($thumb_webp_path) ? $thumb_webp_path : $thumb_fallback_path) ?>" alt="Thumbnail">
+							<?php if ($final_url): ?>
+								<img src="<?= base_url($final_url) ?>" alt="Thumbnail">
+							<?php else: ?>
+								<img src="<?= base_url('assets/images/placeholder.jpg') ?>" alt="Placeholder" title="Bild nicht gefunden">
+							<?php endif; ?>
 							<button class="delete-btn" onclick="deleteImage(<?= $image->id ?>)">X</button>
 						</div>
 					<?php endforeach; ?>
