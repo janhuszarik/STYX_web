@@ -32,11 +32,11 @@
 							<th class="text-center">Sprache</th>
 							<th class="text-center">Keywords</th>
 							<th class="text-center">Beschreibung</th>
+							<th class="text-center">Galerien</th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Aktionen</th>
 						</tr>
 						</thead>
-
 						<tbody>
 						<?php if (!empty($categories)): ?>
 							<?php foreach ($categories as $index => $cat): ?>
@@ -49,6 +49,13 @@
 									<td class="text-center"><?= strtoupper($cat->lang) ?></td>
 									<td class="text-center"><?= checkTextIcon($cat->keywords) ?></td>
 									<td class="text-center"><?= checkTextIcon($cat->description) ?></td>
+									<td class="text-center align-middle">
+										<a href="<?= base_url('admin/galleries_in_category/' . $cat->id) ?>"
+										   class="btn btn-outline-primary d-inline-flex justify-content-center align-items-center"
+										   style="width: 30px; height: 30px; font-size: 12px; padding: 0;">
+											<?= $cat->gallery_count ?>
+										</a>
+									</td>
 									<td class="text-center"><?= active($cat->active) ?></td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/galleryCategory/edit/' . $cat->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
@@ -57,13 +64,10 @@
 								</tr>
 							<?php endforeach; ?>
 						<?php else: ?>
-							<tr><td colspan="8" class="text-center">Keine Daten</td></tr>
+							<tr><td colspan="9" class="text-center">Keine Daten</td></tr>
 						<?php endif; ?>
 						</tbody>
 					</table>
-				</div>
-				<div class="mt-3">
-					<?= $pagination ?? '' ?>
 				</div>
 			</div>
 		</section>

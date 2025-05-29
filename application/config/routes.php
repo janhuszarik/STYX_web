@@ -125,13 +125,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/bestProduct/del/:num']						= 'admin/bestProductSave';
 
 $route['admin/galleryCategory']                      = 'gallery/galleryCategorySave';
-$route['admin/galleryCategory/edit/(:num)']          = 'gallery/galleryCategorySave/edit/$1'; // Editácia v galleryCategorySave
+$route['admin/galleryCategory/edit/(:num)']          = 'gallery/galleryCategorySave/edit/$1';
 $route['admin/galleryCategory/form']                 = 'gallery/galleryCategoryForm';
 $route['admin/galleryCategory/form/(:num)']          = 'gallery/galleryCategoryForm/$1';
 $route['admin/galleryCategory/save']                 = 'gallery/galleryCategorySave';
 $route['admin/galleryCategory/delete/(:num)']        = 'gallery/deleteCategory/$1';
-
-
+$route['admin/galleries_in_category/(:num)']         = 'gallery/galleriesInCategory/$1';
+$route['admin/gallery/form/category/(:num)']         = 'gallery/galleryForm/$1';
+$route['admin/gallery/save']                         = 'gallery/saveGallery';
+$route['admin/images_in_gallery/(:num)']             = 'gallery/imagesInGallery/$1';
+$route['admin/gallery/edit/(:num)']                  = 'gallery/editGallery/$1';
+$route['admin/gallery/delete/(:num)']                = 'gallery/deleteGallery/$1';
 
 
 
