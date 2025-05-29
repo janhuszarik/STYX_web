@@ -164,8 +164,10 @@ class Gallery extends CI_Controller
 			redirect(BASE_URL . 'admin/galleryCategory');
 		}
 
+		$category = $this->Gallery_model->getCategory($gallery->category_id);
+		$category_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($category->name));
 		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
-		$gallery_path = './Gallery/' . $gallery_name . '/';
+		$gallery_path = './uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
 
 		// Odstránenie priečinka galérie a jej obsahu
 		if (is_dir($gallery_path)) {
@@ -210,9 +212,16 @@ class Gallery extends CI_Controller
 			return;
 		}
 
-		// Hlavný priečinok Gallery a podpriečinok podľa galérie
+		$category = $this->Gallery_model->getCategory($gallery->category_id);
+		if (!$category) {
+			echo json_encode(['success' => false, 'message' => 'Kategorie nicht gefunden.']);
+			return;
+		}
+
+		// Nová štruktúra priečinkov: uploads/gallery/[category_name]/[gallery_name]/
+		$category_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($category->name));
 		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
-		$base_path = './Gallery/' . $gallery_name . '/';
+		$base_path = './uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
 
 		if (!is_dir($base_path)) {
 			mkdir($base_path, 0755, TRUE);
@@ -248,13 +257,11 @@ class Gallery extends CI_Controller
 					$this->convertToWebp($image_path, $webp_path);
 					$this->convertToWebp($thumb_path, $thumb_webp_path);
 
-					// Získanie poradia
 					$this->db->select_max('order_position');
 					$this->db->where('gallery_id', $gallery_id);
 					$result = $this->db->get('gallery_images')->row();
 					$order_position = $result->order_position ? $result->order_position + 1 : 1;
 
-					// Uloženie do databázy
 					$this->Gallery_model->saveImage($gallery_id, $image_path, $order_position);
 					$uploaded_files[] = ['path' => $image_path];
 				} else {
@@ -276,9 +283,11 @@ class Gallery extends CI_Controller
 		}
 
 		$gallery_id = $image->gallery_id;
-		$gallery = $this->Gallery_model->getGallery($gallery_id);
+		$JOHN = $this->Gallery_model->getGallery($gallery_id);
+		$category = $this->Gallery_model->getCategory($gallery->category_id);
+		$category_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($category->name));
 		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
-		$base_path = './Gallery/' . $gallery_name . '/';
+		$base_path = './uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
 
 		// Odstránenie súborov
 		$filename = basename($image->image_path);
