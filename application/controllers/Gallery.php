@@ -7,6 +7,7 @@ class Gallery extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Gallery_model');
+		$this->load->helper('App_helper'); // Načítanie vášho helpera
 
 		if (!$this->ion_auth->is_admin()) {
 			$this->session->set_flashdata('error', 'Zugriff verweigert.');
@@ -139,22 +140,6 @@ class Gallery extends CI_Controller
 		}
 	}
 
-	function imagesInGallery($gallery_id)
-	{
-		$data['gallery'] = $this->db->where('id', $gallery_id)->get('galleries')->row();
-		if (!$data['gallery']) {
-			$this->session->set_flashdata('error', 'Galerie nicht gefunden.');
-			redirect(BASE_URL . 'admin/galleryCategory');
-		}
-
-		$data['category'] = $this->Gallery_model->getCategory($data['gallery']->category_id);
-		$data['images'] = $this->Gallery_model->getImagesByGalleryId($gallery_id);
-		$data['title'] = 'Bilder in Galerie: ' . htmlspecialchars($data['gallery']->name);
-		$data['page'] = 'admin/settings/imagesInGallery';
-
-		$this->load->view('admin/layout/normal', $data);
-	}
-
 	function editGallery($id)
 	{
 		$data['gallery'] = $this->Gallery_model->getGallery($id);
@@ -179,11 +164,192 @@ class Gallery extends CI_Controller
 			redirect(BASE_URL . 'admin/galleryCategory');
 		}
 
+		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
+		$gallery_path = './Gallery/' . $gallery_name . '/';
+
+		// Odstránenie priečinka galérie a jej obsahu
+		if (is_dir($gallery_path)) {
+			$this->deleteDirectory($gallery_path);
+		}
+
 		if ($this->Gallery_model->deleteGallery($id)) {
 			$this->session->set_flashdata('success', 'Galerie erfolgreich gelöscht.');
 		} else {
 			$this->session->set_flashdata('error', 'Fehler beim Löschen.');
 		}
 		redirect(BASE_URL . 'admin/galleries_in_category/' . $gallery->category_id);
+	}
+
+	function imageForm($gallery_id)
+	{
+		$data['gallery'] = $this->Gallery_model->getGallery($gallery_id);
+		if (!$data['gallery']) {
+			$this->session->set_flashdata('error', 'Galerie nicht gefunden.');
+			redirect(BASE_URL . 'admin/galleryCategory');
+		}
+
+		$data['category'] = $this->Gallery_model->getCategory($data['gallery']->category_id);
+		$data['images'] = $this->Gallery_model->getImagesByGalleryId($gallery_id);
+		$data['title'] = 'Bild hinzufügen zu Galerie: ' . htmlspecialchars($data['gallery']->name);
+		$data['page'] = 'admin/settings/imageForm';
+
+		$this->load->view('admin/layout/normal', $data);
+	}
+
+	function saveImage()
+	{
+		$gallery_id = $this->input->post('gallery_id');
+		if (!$gallery_id) {
+			echo json_encode(['success' => false, 'message' => 'Galerie nicht gefunden.']);
+			return;
+		}
+
+		$gallery = $this->Gallery_model->getGallery($gallery_id);
+		if (!$gallery) {
+			echo json_encode(['success' => false, 'message' => 'Galerie nicht gefunden.']);
+			return;
+		}
+
+		// Hlavný priečinok Gallery a podpriečinok podľa galérie
+		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
+		$base_path = './Gallery/' . $gallery_name . '/';
+
+		if (!is_dir($base_path)) {
+			mkdir($base_path, 0755, TRUE);
+		}
+
+		$uploaded_files = [];
+		$files = $_FILES['images'];
+		$count = count($_FILES['images']['name']);
+
+		for ($i = 0; $i < $count; $i++) {
+			if (!empty($files['name'][$i])) {
+				$image_number = $this->Gallery_model->getMaxImageNumber($gallery_id);
+				$save_as_name = $gallery_name . '_' . $image_number;
+
+				// Nahrávanie pomocou helpera uploadImg
+				$_FILES['image'] = [
+					'name' => $files['name'][$i],
+					'type' => $files['type'][$i],
+					'tmp_name' => $files['tmp_name'][$i],
+					'error' => $files['error'][$i],
+					'size' => $files['size'][$i]
+				];
+
+				$image_path = uploadImg('image', $base_path, $save_as_name, TRUE, FALSE);
+				if ($image_path) {
+					// Vytvorenie WebP formátu pre originál a thumbnail
+					$extension = pathinfo($image_path, PATHINFO_EXTENSION);
+					$basename = str_replace('.' . $extension, '', $image_path);
+					$thumb_path = obrpridajthumb($image_path);
+					$webp_path = $basename . '.webp';
+					$thumb_webp_path = $basename . '_thumb.webp';
+
+					$this->convertToWebp($image_path, $webp_path);
+					$this->convertToWebp($thumb_path, $thumb_webp_path);
+
+					// Získanie poradia
+					$this->db->select_max('order_position');
+					$this->db->where('gallery_id', $gallery_id);
+					$result = $this->db->get('gallery_images')->row();
+					$order_position = $result->order_position ? $result->order_position + 1 : 1;
+
+					// Uloženie do databázy
+					$this->Gallery_model->saveImage($gallery_id, $image_path, $order_position);
+					$uploaded_files[] = ['path' => $image_path];
+				} else {
+					echo json_encode(['success' => false, 'message' => 'Fehler beim Hochladen des Bildes.']);
+					return;
+				}
+			}
+		}
+
+		echo json_encode(['success' => true, 'files' => $uploaded_files]);
+	}
+
+	function deleteImage($id)
+	{
+		$image = $this->db->where('id', $id)->get('gallery_images')->row();
+		if (!$image) {
+			echo json_encode(['success' => false, 'message' => 'Bild nicht gefunden.']);
+			return;
+		}
+
+		$gallery_id = $image->gallery_id;
+		$gallery = $this->Gallery_model->getGallery($gallery_id);
+		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
+		$base_path = './Gallery/' . $gallery_name . '/';
+
+		// Odstránenie súborov
+		$filename = basename($image->image_path);
+		$extension = pathinfo($filename, PATHINFO_EXTENSION);
+		$basename = str_replace('.' . $extension, '', $filename);
+		$thumb_path = obrpridajthumb($image->image_path);
+		$files_to_delete = [
+			$image->image_path,
+			$base_path . $basename . '.webp',
+			$thumb_path,
+			$base_path . $basename . '_thumb.webp'
+		];
+
+		foreach ($files_to_delete as $file) {
+			if (file_exists($file)) {
+				unlink($file);
+			}
+		}
+
+		if ($this->Gallery_model->deleteImage($id)) {
+			echo json_encode(['success' => true]);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Fehler beim Löschen.']);
+		}
+	}
+
+	function updateImageOrder()
+	{
+		$image_id = $this->input->post('image_id');
+		$order_position = $this->input->post('order_position');
+
+		if ($this->Gallery_model->updateImageOrder($image_id, $order_position)) {
+			echo json_encode(['success' => true]);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Fehler beim Aktualisieren des Reihenfolge.']);
+		}
+	}
+
+	private function convertToWebp($source, $destination)
+	{
+		$image = NULL;
+		$extension = pathinfo($source, PATHINFO_EXTENSION);
+		switch (strtolower($extension)) {
+			case 'jpg':
+			case 'jpeg':
+				$image = imagecreatefromjpeg($source);
+				break;
+			case 'png':
+				$image = imagecreatefrompng($source);
+				break;
+			case 'gif':
+				$image = imagecreatefromgif($source);
+				break;
+		}
+
+		if ($image) {
+			imagewebp($image, $destination, 80);
+			imagedestroy($image);
+		}
+	}
+
+	private function deleteDirectory($dir)
+	{
+		if (!is_dir($dir)) {
+			return;
+		}
+		$files = array_diff(scandir($dir), ['.', '..']);
+		foreach ($files as $file) {
+			$path = "$dir/$file";
+			is_dir($path) ? $this->deleteDirectory($path) : unlink($path);
+		}
+		rmdir($dir);
 	}
 }

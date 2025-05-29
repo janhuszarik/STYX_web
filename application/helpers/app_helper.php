@@ -1,4 +1,6 @@
 <?php
+defined('BASEPATH') OR exit('Kein direkter Skriptzugriff erlaubt');
+
 function dd($var_dump) {
 	echo '<pre>';
 	var_dump($var_dump);
@@ -26,7 +28,7 @@ function getLanguages() {
 function langInfo($lang = false) {
 	$default = [
 		'text' => strtoupper($lang),
-		'flag' => BASE_URL . 'img/flag/default.png' // fallback obrázok
+		'flag' => BASE_URL . 'img/flag/default.png'
 	];
 
 	if ($lang === 'sk') {
@@ -173,13 +175,12 @@ function user($user_id = false) {
 
 function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false) {
 	unset($_FILES['files']);
-
 	$CI =& get_instance();
 	$CI->load->library('image_lib');
 
 	// Nastavenie priečinka
 	if ($dir === false) {
-		$dir = 'uploads/';
+		$dir = 'Gallery/';
 	} else {
 		$dir = rtrim($dir, '/') . '/';
 	}
@@ -202,58 +203,30 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 		$saveAsNameFile = 'img';
 	}
 
-	// Spracovanie viacerých súborov (napr. sekcie)
-	if (is_array($_FILES[$file]['name'])) {
-		$data = array();
-		foreach ($_FILES[$file]['name'] as $k => $name) {
-			if (!empty($name)) {
-				$tmpName = $_FILES[$file]['tmp_name'][$k];
-				if (isset($tmpName) && is_string($tmpName) && file_exists($tmpName)) {
-					$nazovAkoURL = trim(url_oprava($saveAsNameFile));
-					$typ = pathinfo($name, PATHINFO_EXTENSION);
-					$urlimg = $dir . $nazovAkoURL . '-' . uniqid() . '.' . $typ;
-
-					if (in_array(strtolower($typ), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
-						if (move_uploaded_file($tmpName, $urlimg)) {
-							$data[$k] = $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
-						} else {
-							log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $urlimg");
-							$data[$k] = '';
-						}
-					} else {
-						log_message('error', "Nepodporovaný formát súboru alebo súbor nie je nahratý: $name");
-						$data[$k] = '';
-					}
-				}
-			}
-		}
-		return $data;
-	} else {
-		// Spracovanie jedného súboru (napr. hlavný obrázok, produkty)
-		if (empty($_FILES[$file]['name'])) {
-			return '';
-		}
-
-		$tmpName = $_FILES[$file]['tmp_name'];
-		if (isset($tmpName) && is_string($tmpName) && file_exists($tmpName)) {
-			$nazovAkoURL = trim(url_oprava($saveAsNameFile));
-			$typ = pathinfo($_FILES[$file]['name'], PATHINFO_EXTENSION);
-			$urlimg = $dir . $nazovAkoURL . '-' . uniqid() . '.' . $typ;
-
-			if (in_array(strtolower($typ), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
-				if (move_uploaded_file($tmpName, $urlimg)) {
-					return $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
-				} else {
-					log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $urlimg");
-					return '';
-				}
-			} else {
-				log_message('error', "Nepodporovaný formát súboru alebo súbor nie je nahratý: " . $_FILES[$file]['name']);
-				return '';
-			}
-		}
+	// Spracovanie jedného súboru
+	if (empty($_FILES[$file]['name'])) {
 		return '';
 	}
+
+	$tmpName = $_FILES[$file]['tmp_name'];
+	if (isset($tmpName) && is_string($tmpName) && file_exists($tmpName)) {
+		$nazovAkoURL = trim(url_oprava($saveAsNameFile));
+		$typ = pathinfo($_FILES[$file]['name'], PATHINFO_EXTENSION);
+		$urlimg = $dir . $nazovAkoURL . '.' . $typ;
+
+		if (in_array(strtolower($typ), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
+			if (move_uploaded_file($tmpName, $urlimg)) {
+				return $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
+			} else {
+				log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $urlimg");
+				return '';
+			}
+		} else {
+			log_message('error', "Nepodporovaný formát súboru alebo súbor nie je nahratý: " . $_FILES[$file]['name']);
+			return '';
+		}
+	}
+	return '';
 }
 
 function obrazokfinal($adresaimg, $offLogo = true, $defaultWidthImage = 1600) {
@@ -400,3 +373,4 @@ if (!function_exists('checkTextIcon')) {
 		}
 	}
 }
+?>

@@ -36,7 +36,7 @@ class Gallery_model extends CI_Model
 	function getImagesByGalleryId($gallery_id)
 	{
 		$this->db->where('gallery_id', $gallery_id);
-		$this->db->order_by('id', 'DESC');
+		$this->db->order_by('order_position', 'ASC');
 		return $this->db->get('gallery_images')->result();
 	}
 
@@ -44,6 +44,14 @@ class Gallery_model extends CI_Model
 	{
 		$this->db->where('id', $id);
 		return $this->db->get('galleries')->row();
+	}
+
+	function getMaxImageNumber($gallery_id)
+	{
+		$this->db->select_max('CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(image_path, "_", -1), ".", 1) AS UNSIGNED)', 'max_number');
+		$this->db->where('gallery_id', $gallery_id);
+		$result = $this->db->get('gallery_images')->row();
+		return $result->max_number ? $result->max_number + 1 : 1;
 	}
 
 	function saveCategory($post)
@@ -99,5 +107,27 @@ class Gallery_model extends CI_Model
 	{
 		$this->db->where('id', $id);
 		return $this->db->delete('galleries');
+	}
+
+	function saveImage($gallery_id, $image_path, $order_position)
+	{
+		$data = [
+			'gallery_id' => $gallery_id,
+			'image_path' => $image_path,
+			'order_position' => $order_position
+		];
+		return $this->db->insert('gallery_images', $data);
+	}
+
+	function deleteImage($id)
+	{
+		$this->db->where('id', $id);
+		return $this->db->delete('gallery_images');
+	}
+
+	function updateImageOrder($image_id, $order_position)
+	{
+		$this->db->where('id', $image_id);
+		return $this->db->update('gallery_images', ['order_position' => $order_position]);
 	}
 }

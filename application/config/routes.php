@@ -133,10 +133,12 @@ $route['admin/galleryCategory/delete/(:num)']        = 'gallery/deleteCategory/$
 $route['admin/galleries_in_category/(:num)']         = 'gallery/galleriesInCategory/$1';
 $route['admin/gallery/form/category/(:num)']         = 'gallery/galleryForm/$1';
 $route['admin/gallery/save']                         = 'gallery/saveGallery';
-$route['admin/images_in_gallery/(:num)']             = 'gallery/imagesInGallery/$1';
 $route['admin/gallery/edit/(:num)']                  = 'gallery/editGallery/$1';
 $route['admin/gallery/delete/(:num)']                = 'gallery/deleteGallery/$1';
-
+$route['admin/image/form/gallery/(:num)']            = 'gallery/imageForm/$1';
+$route['admin/image/save']                           = 'gallery/saveImage';
+$route['admin/image/delete/(:num)']                  = 'gallery/deleteImage/$1';
+$route['admin/image/update_order']                   = 'gallery/updateImageOrder';
 
 
 

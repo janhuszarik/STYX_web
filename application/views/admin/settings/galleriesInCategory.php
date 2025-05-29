@@ -29,7 +29,7 @@
 									<td class="text-center"><?= $index + 1 ?></td>
 									<td><?= htmlspecialchars($gallery->name) ?></td>
 									<td class="text-center align-middle">
-										<a href="<?= base_url('admin/images_in_gallery/' . $gallery->id) ?>"
+										<a href="<?= base_url('admin/image/form/gallery/' . $gallery->id) ?>"
 										   class="btn btn-outline-primary d-inline-flex justify-content-center align-items-center"
 										   style="width: 30px; height: 30px; font-size: 12px; padding: 0;">
 											<?= $gallery->image_count ?? 0 ?>
