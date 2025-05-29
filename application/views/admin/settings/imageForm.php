@@ -67,13 +67,13 @@
 						$thumb_webp_url = ltrim($thumb_webp_path, './');
 						$thumb_url = ltrim($thumb_path, './');
 						// Použijeme WebP, ak existuje, inak fallback na thumbnail
-						$final_url = file_exists($server_thumb_webp_path) ? $thumb_webp_url : (file_exists($server_thumb_path) ? $thumb_url : ''); // Ak ani jeden súbor neexistuje, prázdna cesta
+						$final_url = file_exists($server_thumb_webp_path) ? $thumb_webp_url : (file_exists($server_thumb_path) ? $thumb_url : '');
 						?>
 						<div class="thumbnail" data-id="<?= $image->id ?>" data-order="<?= $image->order_position ?>">
 							<?php if ($final_url): ?>
 								<img src="<?= base_url($final_url) ?>" alt="Thumbnail">
 							<?php else: ?>
-								<img src="<?= base_url('assets/images/placeholder.jpg') ?>" alt="Placeholder" title="Bild nicht gefunden">
+								<img src="<?= base_url('uploads/placeholder.jpg') ?>" alt="Placeholder" title="Bild nicht gefunden">
 							<?php endif; ?>
 							<button class="delete-btn" onclick="deleteImage(<?= $image->id ?>)">X</button>
 						</div>
