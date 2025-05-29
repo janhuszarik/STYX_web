@@ -106,10 +106,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/ftpmanager/upload'] 							= 'ftpmanager/upload';
 	$route['admin/ftpmanager/modal'] 							= 'ftpmanager/modal';
 	$route['admin/ftpmanager/browser'] 							= 'ftpmanager/browser';
-
-
-$route['admin/ftpmanager/modal'] = 'ftpmanager/modal';
-$route['admin/ftpmanager/load_folder'] = 'ftpmanager/load_folder';
+	$route['admin/ftpmanager/modal'] 							= 'ftpmanager/modal';
+	$route['admin/ftpmanager/load_folder'] 						= 'ftpmanager/load_folder';
 
 	$route['admin/slider'] 										= 'admin/sliderSave';
 	$route['admin/sliderSave'] 									= 'admin/sliderSave';
@@ -126,7 +124,22 @@ $route['admin/ftpmanager/load_folder'] = 'ftpmanager/load_folder';
 	$route['admin/bestProduct/edit/:num'] 						= 'admin/bestProductSave';
 	$route['admin/bestProduct/del/:num']						= 'admin/bestProductSave';
 
-	$route['Unternehmen/AboutStyx']								= 'App/aboutStyx';
+$route['admin/galleryCategory']                      = 'gallery/galleryCategorySave';
+$route['admin/galleryCategory/edit/(:num)']          = 'gallery/galleryCategorySave/edit/$1'; // Editácia v galleryCategorySave
+$route['admin/galleryCategory/form']                 = 'gallery/galleryCategoryForm';
+$route['admin/galleryCategory/form/(:num)']          = 'gallery/galleryCategoryForm/$1';
+$route['admin/galleryCategory/save']                 = 'gallery/galleryCategorySave';
+$route['admin/galleryCategory/delete/(:num)']        = 'gallery/deleteCategory/$1';
+
+
+
+
+
+
+
+
+
+$route['Unternehmen/AboutStyx']								= 'App/aboutStyx';
 	$route['Company/AboutStyx']									= 'App/aboutStyx';
 
 	$route['Naturkosmetik']										= 'App/naturkosmetik';
