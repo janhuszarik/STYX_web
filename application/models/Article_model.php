@@ -147,7 +147,7 @@ class Article_model extends CI_Model
 
 		// 2) PŘÍPRAVA DAT PRO ULOŽENÍ
 		$data = [
-			'category_id'     => $post['category_id'], // Používame priamo category_id z hidden inputu
+			'category_id'     => $post['category_id'],
 			'title'           => $post['title'],
 			'subtitle'        => $post['subtitle'],
 			'slug'            => url_title($post['title'], 'dash', true),
@@ -155,6 +155,7 @@ class Article_model extends CI_Model
 			'image_title'     => $image_title,
 			'keywords'        => $post['keywords'] ?? null,
 			'meta'            => $post['meta'] ?? null,
+			'gallery_id'      => !empty($post['gallery_id']) ? $post['gallery_id'] : null, // Pridanie gallery_id
 			'active'          => !empty($post['active']) ? 1 : 0,
 			'start_date_from' => $post['start_date_from'] ?: null,
 			'end_date_to'     => $post['end_date_to']   ?: null,

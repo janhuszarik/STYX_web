@@ -1,4 +1,3 @@
-
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -224,6 +223,42 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 
 	<div class="mb-3">
 		<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
+			Verknüpfte Galerie
+		</h3>
+		<small class="text-muted ms-3">
+			Wählen Sie eine Galerie aus, die mit diesem Artikel verknüpft werden soll.
+		</small>
+	</div>
+	<div class="row form-group pb-3">
+		<div class="col-md-6">
+			<label for="gallery_category_id">Galerie-Kategorie</label>
+			<select name="gallery_category_id" id="gallery_category_id" class="form-control">
+				<option value="">-- Kategorie auswählen --</option>
+				<?php foreach ($galleryCategories as $cat): ?>
+					<option value="<?= htmlspecialchars($cat->id) ?>" <?= isset($article->gallery_id) && $galleryCategoryId == $cat->id ? 'selected' : '' ?>>
+						<?= htmlspecialchars($cat->name) ?>
+					</option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+		<div class="col-md-6">
+			<label for="gallery_id">Galerie</label>
+			<select name="gallery_id" id="gallery_id" class="form-control">
+				<option value="">-- Zuerst Kategorie auswählen --</option>
+				<?php if (isset($article->gallery_id) && !empty($selectedGalleries)): ?>
+					<?php foreach ($selectedGalleries as $gal): ?>
+						<option value="<?= htmlspecialchars($gal->id) ?>" <?= $article->gallery_id == $gal->id ? 'selected' : '' ?>>
+							<?= htmlspecialchars($gal->name) ?>
+						</option>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			</select>
+		</div>
+	</div>
+	<hr class="my-4 border-dark">
+
+	<div class="mb-3">
+		<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
 			Veröffentlichungseinstellungen
 		</h3>
 		<small class="text-muted ms-3">
@@ -314,6 +349,38 @@ if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCatego
 			addSection(sec.content, img, ftpImage, imageTitle);
 		});
 		initSummer();
+
+		// Dynamické načítanie galérií
+		const categorySelect = document.getElementById('gallery_category_id');
+		const gallerySelect = document.getElementById('gallery_id');
+
+		if (categorySelect && gallerySelect) {
+			categorySelect.addEventListener('change', function () {
+				const categoryId = this.value;
+				if (!categoryId) {
+					gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen --</option>';
+					return;
+				}
+
+				fetch(BASE_URL + 'admin/article/getGalleriesByCategory', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+					body: new URLSearchParams({ category_id: categoryId })
+				})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							gallerySelect.innerHTML = data.options;
+						} else {
+							gallerySelect.innerHTML = '<option value="">-- Keine Galerien verfügbar --</option>';
+						}
+					})
+					.catch(error => {
+						console.error('Fehler:', error);
+						gallerySelect.innerHTML = '<option value="">-- Fehler beim Laden --</option>';
+					});
+			});
+		}
 	});
 </script>
 

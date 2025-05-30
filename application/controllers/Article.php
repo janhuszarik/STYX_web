@@ -164,18 +164,21 @@ class Article extends CI_Controller
 	public function articlesSave()
 	{
 		$post = $this->input->post();
-		$id = $this->uri->segment(4); // ID článku (pre editáciu)
-		$segment2 = $this->uri->segment(3); // Pre 'del' alebo iné akcie
+		$id = $this->uri->segment(4);
+		$segment2 = $this->uri->segment(3);
 
-		// Načítanie kategórií
+		// Načítanie kategórií článkov
 		$this->load->model('Article_model');
 		$articleCategories = $this->Article_model->getArticleCategories();
-		log_message('debug', 'Loaded articleCategories: ' . print_r($articleCategories, true));
+
+		// Načítanie kategórií galérií
+		$this->load->model('Gallery_model');
+		$galleryCategories = $this->Gallery_model->getAllCategories();
 
 		// Konfigurácia pre nahrávanie súborov
 		$config['upload_path'] = './Uploads/articles/';
 		$config['allowed_types'] = 'jpg|jpeg|png|gif|webp';
-		$config['max_size'] = 2048; // 2MB v KB
+		$config['max_size'] = 2048;
 		$config['overwrite'] = FALSE;
 
 		if (!file_exists($config['upload_path'])) {
@@ -187,7 +190,6 @@ class Article extends CI_Controller
 		if (!empty($post)) {
 			// Spracovanie category_id
 			if (!empty($id)) {
-				// Editácia: Použijeme category_id z existujúceho článku
 				$article = $this->Article_model->getArticle($id);
 				if ($article) {
 					$post['category_id'] = $article->category_id;
@@ -196,7 +198,6 @@ class Article extends CI_Controller
 					redirect(BASE_URL . 'admin/articles_in_category/0');
 				}
 			} else {
-				// Nový článok: Použijeme category_id z POST
 				$post['category_id'] = $post['category_id'];
 				if (empty($post['category_id'])) {
 					$this->session->set_flashdata('error', 'Kategória nebola zadaná.');
@@ -272,6 +273,9 @@ class Article extends CI_Controller
 				$data['article'] = (object)$post;
 				$data['categoryId'] = $post['category_id'];
 				$data['articleCategories'] = $articleCategories;
+				$data['galleryCategories'] = $galleryCategories;
+				$data['selectedGalleries'] = !empty($post['gallery_category_id']) ? $this->Gallery_model->getGalleriesByCategoryId($post['gallery_category_id']) : [];
+				$data['galleryCategoryId'] = $post['gallery_category_id'] ?? null;
 				$data['sections'] = $post['sections'] ? array_map(function($content, $idx) use ($post) {
 					return (object)[
 						'content' => $content,
@@ -290,26 +294,46 @@ class Article extends CI_Controller
 
 		// Načítanie dát pre formulár
 		$article = $this->Article_model->getArticle($id);
-		$categoryId = $article ? $article->category_id : 0; // Použijeme category_id z článku, ak editujeme
-		log_message('debug', 'Category ID for view: ' . $categoryId);
+		$categoryId = $article ? $article->category_id : 0;
+		$galleryCategoryId = null;
+		$selectedGalleries = [];
 
-		if ($segment2 == 'del' && is_numeric($id)) {
-			$article = $this->Article_model->getArticle($id);
-			if ($article && $this->Article_model->deleteArticle($id)) {
-				$this->session->set_flashdata('success', 'Artikel wurde erfolgreich gelöscht.');
-				redirect(BASE_URL . 'admin/articles_in_category/' . ($article->category_id ?? 0));
-			} else {
-				$this->session->set_flashdata('error', 'Fehler beim Löschen.');
+		if ($article && $article->gallery_id) {
+			$gallery = $this->Gallery_model->getGallery($article->gallery_id);
+			if ($gallery) {
+				$galleryCategoryId = $gallery->category_id;
+				$selectedGalleries = $this->Gallery_model->getGalleriesByCategoryId($galleryCategoryId);
 			}
 		}
 
 		$data['article'] = $article;
-		$data['categoryId'] = $categoryId; // Použijeme category_id z článku
+		$data['categoryId'] = $categoryId;
 		$data['articleCategories'] = $articleCategories;
+		$data['galleryCategories'] = $galleryCategories;
+		$data['selectedGalleries'] = $selectedGalleries;
+		$data['galleryCategoryId'] = $galleryCategoryId;
 		$data['sections'] = $article ? $this->Article_model->getSections($id) : [];
 		$data['title'] = 'Artikel verwalten';
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
+	}
+	public function getGalleriesByCategory()
+	{
+		$categoryId = $this->input->post('category_id');
+		if (!$categoryId) {
+			echo json_encode(['success' => false, 'message' => 'Kategorie nicht angegeben.']);
+			return;
+		}
+
+		$this->load->model('Gallery_model');
+		$galleries = $this->Gallery_model->getGalleriesByCategoryId($categoryId);
+
+		$options = '<option value="">-- Galerie auswählen --</option>';
+		foreach ($galleries as $gallery) {
+			$options .= '<option value="' . htmlspecialchars($gallery->id) . '">' . htmlspecialchars($gallery->name) . '</option>';
+		}
+
+		echo json_encode(['success' => true, 'options' => $options]);
 	}
 	public function syncCategories()
 	{
