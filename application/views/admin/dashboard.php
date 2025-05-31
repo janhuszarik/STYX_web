@@ -1,5 +1,5 @@
 <div class="row">
-	<!-- ĽAVÁ strana: 6 kariet rozdelených do 3 riadkov -->
+	<!-- ĽAVÁ strana: 8 kariet rozdelených do 4 riadkov -->
 	<div class="col-md-6">
 		<div class="row">
 			<?php
@@ -10,7 +10,13 @@
 				'newsStats' => ['label' => 'Aktuelles', 'link' => 'admin/news'],
 				'articleCategoryStats' => ['label' => 'Artikelkategorien', 'link' => 'admin/article_categories'],
 				'articleStats' => ['label' => 'Artikel', 'link' => 'admin/article'],
+				'galleryStats' => ['label' => 'Galerien', 'link' => 'admin/galleries'],
+				'emptyStats' => ['label' => 'Zukünftige Daten', 'link' => '#'],
 			];
+
+			// Načítaj dáta pre galérie
+			$galleryStats = $this->Admin_model->getGalleryStats();
+			$emptyStats = ['total' => 0, 'last_title' => '', 'last_date' => '', 'recent' => []]; // Prázdna karta
 
 			foreach ($cards as $key => $info):
 				$data = $$key;
@@ -47,56 +53,9 @@
 		</div>
 	</div>
 
-	<!-- PRAVÁ strana: 2 karty nad kalendárom -->
+	<!-- PRAVÁ strana: Kalendár (pôvodná veľkosť) -->
 	<div class="col-md-6 d-flex flex-column">
-		<!-- Nové karty nad kalendárom -->
-		<div class="row mb-3">
-			<?php
-			$extraCards = [
-				'galleryStats' => ['label' => 'Galerien', 'link' => 'admin/galleries'],
-				'emptyStats' => ['label' => 'Zukünftige Daten', 'link' => '#'],
-			];
-
-			// Načítaj dáta pre galérie
-			$galleryStats = $this->Admin_model->getGalleryStats();
-			$emptyStats = ['total' => 0, 'last_title' => '', 'last_date' => '', 'recent' => []]; // Prázdna karta
-
-			foreach ($extraCards as $key => $info):
-				$data = $$key;
-				$has_last = !empty($data['last_title']);
-				?>
-				<div class="col-md-6 mb-3">
-					<a href="<?= base_url($info['link']) ?>" class="card card-featured-left card-featured-primary h-100 text-dark text-decoration-none">
-						<div class="card-body d-flex flex-column justify-content-between">
-							<div>
-								<div class="d-flex justify-content-between align-items-center mb-2">
-									<h4 class="fw-bold mb-0" style="border-left: 4px solid #28a745; padding-left: 10px;"><?= $info['label'] ?></h4>
-									<span class="text-muted">gesamt: <strong class="text-dark number_custom"><?= $data['total'] ?? 0 ?></strong></span>
-								</div>
-								<div class="info mb-2" style="<?= !$has_last ? 'margin-bottom: 1.5rem;' : '' ?>">
-									<?php if ($has_last): ?>
-										<span class="text-muted">
-                                            Letzter: <?= $data['last_title'] ?>
-											<?= !empty($data['last_date']) ? '(' . $data['last_date'] . ')' : '' ?>
-                                        </span>
-									<?php endif; ?>
-								</div>
-								<?php if (!empty($data['recent'])): ?>
-									<ul>
-										<?php foreach ($data['recent'] as $item): ?>
-											<li><?= $item->title ?? '[kein Titel]' ?></li>
-										<?php endforeach; ?>
-									</ul>
-								<?php endif; ?>
-							</div>
-						</div>
-					</a>
-				</div>
-			<?php endforeach; ?>
-		</div>
-
-		<!-- Kalendár s obmedzenou výškou -->
-		<section class="card card-calendar flex-grow-1" style="max-height: 400px; overflow-y: auto;">
+		<section class="card card-calendar flex-grow-1">
 			<div class="card-body">
 				<h4 class="title">Kalender</h4>
 				<div id="calendar-placeholder">
@@ -107,7 +66,7 @@
 	</div>
 </div>
 
-<!-- Modal a JavaScript kód pre kalendár (bez zmien) -->
+<!-- Modal a JavaScript kód pre kalendár -->
 <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<form id="noteForm" novalidate>
