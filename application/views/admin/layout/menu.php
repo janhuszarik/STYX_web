@@ -1,4 +1,11 @@
 <?php $user = $this->ion_auth->user()->row(); ?>
+<style>.nav-main li.active {
+		background-color: rgba(0, 135, 202, 0.27); /* Jemná modrá farba */
+	}
+	.nav-main li.active a.nav-link {
+		color: #000000; /* Zachová farbu textu pre čitateľnosť */
+	}</style>
+<?php $user = $this->ion_auth->user()->row(); ?>
 <section class="body">
 
 	<header class="header">
@@ -10,11 +17,9 @@
 			<div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
 				<i class="fas fa-bars" aria-label="Toggle sidebar"></i>
 			</div>
-
 		</div>
 
 		<div class="header-right">
-
 			<span class="separator"></span>
 
 			<div id="userbox" class="userbox">
@@ -26,7 +31,6 @@
 						<span class="name"><?=$user->first_name.' '.$user->last_name?></span>
 						<span class="role">Administrator</span>
 					</div>
-
 					<i class="fa custom-caret"></i>
 				</a>
 
@@ -48,7 +52,6 @@
 	<div class="inner-wrapper">
 		<!-- start: sidebar -->
 		<aside id="sidebar-left" class="sidebar-left">
-
 			<div class="sidebar-header">
 				<div class="sidebar-title">
 					Navigation
@@ -61,58 +64,57 @@
 			<div class="nano">
 				<div class="nano-content">
 					<nav id="menu" class="nav-main" role="navigation">
-
+						<?php $current_url = current_url(); ?>
 						<ul class="nav nav-main">
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin'?>">
 									<i class="bx bx-home-alt" aria-hidden="true"></i>
 									<span>Dashboard</span>
 								</a>
 							</li>
-
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin/menu') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin/menu'?>">
 									<i class="bx bx-menu" aria-hidden="true"></i>
 									<span>Menü</span>
 								</a>
 							</li>
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin/slider') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin/slider'?>">
 									<i class="bx bx-slider" aria-hidden="true"></i>
 									<span>Slider</span>
 								</a>
 							</li>
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin/news') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin/news'?>">
 									<i class="bx bx-carousel" aria-hidden="true"></i>
 									<span>Aktuell</span>
 								</a>
 							</li>
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin/article_categories') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin/article_categories'?>">
 									<i class="bx bx-news" aria-hidden="true"></i>
 									<span>Beiträge manager</span>
 								</a>
 							</li>
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin/bestProduct') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin/bestProduct'?>">
 									<i class="bx bx-history" aria-hidden="true"></i>
 									<span>Beliebte produkte</span>
 								</a>
 							</li>
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin/galleryCategory') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin/galleryCategory'?>">
 									<i class="bx bx-image" aria-hidden="true"></i>
 									<span>Galerie Manager</span>
 								</a>
 							</li>
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin/ftpmanager') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin/ftpmanager'?>">
 									<i class="bx bx-layer" aria-hidden="true"></i>
 									<span>Daten Manager</span>
 								</a>
 							</li>
-							<li>
+							<li class="<?= ($current_url == BASE_URL.'admin/mailbox-folder') ? 'active' : '' ?>">
 								<a class="nav-link" href="mailbox-folder.html">
 									<span class="float-end badge badge-primary"></span>
 									<i class="bx bx-envelope" aria-hidden="true"></i>
@@ -136,7 +138,6 @@
 						if (localStorage.getItem('sidebar-left-position') !== null) {
 							var initialPosition = localStorage.getItem('sidebar-left-position'),
 								sidebarLeft = document.querySelector('#sidebar-left .nano-content');
-
 							sidebarLeft.scrollTop = initialPosition;
 						}
 					}
@@ -147,23 +148,15 @@
 		<section role="main" class="content-body">
 			<header class="page-header">
 				<h2><?=$title?></h2>
-
 				<div class="right-wrapper text-end">
 					<ol class="breadcrumbs">
-
-
 						<li><span><a style="color: green; font-weight: 600" href="<?=BASE_URL?>">www.styx.at</a></span></li>
-
 						<li><span><?=$title?></span></li>
-
 					</ol>
-
 					<a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
 				</div>
 			</header>
 			<div class="content-wrapper">
-
-
 				<!-- Content Header (Page header) -->
 				<div class="content-header">
 					<div class="container-fluid">
@@ -199,7 +192,6 @@
 							</div>
 							<?php unset($_SESSION['success']);
 						} ?>
-
 					</div><!-- /.container-fluid -->
 				</div>
 				<!-- /.content-header -->
