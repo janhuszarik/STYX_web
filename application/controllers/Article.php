@@ -1,11 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * @property CI_Input $input
- * @property CI_URI $uri
- * @property CI_Session $session
- * @property Article_model $Article_model
- */
 class Article extends CI_Controller
 {
 	public function __construct()
@@ -19,14 +13,11 @@ class Article extends CI_Controller
 		$post = $this->input->post();
 		$id = $this->uri->segment(4);
 		$segment2 = $this->uri->segment(3);
-		$search = $this->input->get('search'); // <- presunuté vyššie
+		$search = $this->input->get('search');
 
-		// Automatická synchronizácia menu položiek do článkových kategórií
 		$this->Article_model->syncMenuWithArticleCategories();
 
-		// Spracovanie POST
 		if (!empty($post)) {
-			// Zákaz úpravy systémovej kategórie (prepojenej s menu)
 			if (!empty($post['id'])) {
 				$existing = $this->Article_model->getArticleCategories($post['id']);
 				if (!empty($existing->menu_id) || !empty($existing->submenu_id)) {
@@ -35,7 +26,6 @@ class Article extends CI_Controller
 				}
 			}
 
-			// Ak je to položka z menu/submenu, nastavíme menu_id alebo submenu_id a slug
 			if (!empty($post['menu_id'])) {
 				$post['menu_id'] = (int)$post['menu_id'];
 				$post['slug'] = $this->Admin_model->getSlugById($post['menu_id']);
@@ -63,7 +53,6 @@ class Article extends CI_Controller
 			}
 		}
 
-		// Zákaz mazania systémovej kategórie (prepojenej s menu)
 		if ($segment2 == 'del' && is_numeric($id)) {
 			$category = $this->Article_model->getArticleCategories($id);
 			if (!empty($category->menu_id) || !empty($category->submenu_id)) {
@@ -79,7 +68,6 @@ class Article extends CI_Controller
 			}
 		}
 
-		// Výpis paginovaných kategórií s vyhľadávaním
 		$this->load->library('pagination');
 		$config['base_url'] = base_url('admin/article_categories');
 		$config['total_rows'] = $this->Article_model->countCategoriesFiltered($search);
@@ -109,9 +97,6 @@ class Article extends CI_Controller
 		$data['page'] = 'admin/settings/article_categories';
 		$this->load->view('admin/layout/normal', $data);
 	}
-
-
-
 
 	public function articleCategoryForm($id = null)
 	{
@@ -167,15 +152,14 @@ class Article extends CI_Controller
 		$id = $this->uri->segment(4);
 		$segment2 = $this->uri->segment(3);
 
-		// Načítanie kategórií článkov
+		log_message('debug', 'Post data: ' . print_r($post, true));
+
 		$this->load->model('Article_model');
 		$articleCategories = $this->Article_model->getArticleCategories();
 
-		// Načítanie kategórií galérií
 		$this->load->model('Gallery_model');
 		$galleryCategories = $this->Gallery_model->getAllCategories();
 
-		// Konfigurácia pre nahrávanie súborov
 		$config['upload_path'] = './Uploads/articles/';
 		$config['allowed_types'] = 'jpg|jpeg|png|gif|webp';
 		$config['max_size'] = 2048;
@@ -188,7 +172,6 @@ class Article extends CI_Controller
 		$this->load->library('upload');
 
 		if (!empty($post)) {
-			// Spracovanie category_id
 			if (!empty($id)) {
 				$article = $this->Article_model->getArticle($id);
 				if ($article) {
@@ -205,7 +188,6 @@ class Article extends CI_Controller
 				}
 			}
 
-			// Spracovanie hlavného obrázka
 			if (!empty($_FILES['image']['name'])) {
 				$this->upload->initialize($config);
 				if ($this->upload->do_upload('image')) {
@@ -213,12 +195,12 @@ class Article extends CI_Controller
 					$post['image'] = $upload_data['file_name'];
 				} else {
 					$this->session->set_flashdata('error', 'Fehler beim Hochladen des Hauptbildes: ' . $this->upload->display_errors());
+					log_message('error', 'Upload error for main image: ' . $this->upload->display_errors());
 				}
 			} elseif (!empty($post['ftp_image'])) {
 				$post['image'] = $post['ftp_image'];
 			}
 
-			// Spracovanie produktových obrázkov
 			for ($i = 1; $i <= 3; $i++) {
 				$file_key = "product_image$i";
 				if (!empty($_FILES[$file_key]['name'])) {
@@ -228,16 +210,25 @@ class Article extends CI_Controller
 						$post["product_image$i"] = $upload_data['file_name'];
 					} else {
 						$this->session->set_flashdata('error', "Fehler beim Hochladen des Produktbildes $i: " . $this->upload->display_errors());
+						log_message('error', "Upload error for product image $i: " . $this->upload->display_errors());
 					}
 				} elseif (!empty($post["ftp_product_image$i"])) {
 					$post["product_image$i"] = $post["ftp_product_image$i"];
 				}
 			}
 
-			// Spracovanie sekčných obrázkov
 			if (!empty($post['sections'])) {
 				$sections = $post['sections'];
 				$ftp_section_images = $post['ftp_section_image'] ?? [];
+				$button_names = $post['button_names'] ?? [];
+				$subpages = $post['subpages'] ?? [];
+				$external_urls = $post['external_urls'] ?? [];
+
+				log_message('debug', 'Sections: ' . print_r($sections, true));
+				log_message('debug', 'Button names: ' . print_r($button_names, true));
+				log_message('debug', 'Subpages: ' . print_r($subpages, true));
+				log_message('debug', 'External URLs: ' . print_r($external_urls, true));
+
 				foreach ($_FILES['section_images']['name'] as $key => $section_image) {
 					if (!empty($section_image)) {
 						$section_config = $config;
@@ -255,21 +246,26 @@ class Article extends CI_Controller
 							$post['section_images'][$key] = $upload_data['file_name'];
 						} else {
 							$this->session->set_flashdata('error', "Fehler beim Hochladen des Sektionsbildes $key: " . $this->upload->display_errors());
+							log_message('error', "Upload error for section image $key: " . $this->upload->display_errors());
 						}
 					}
 					if (!empty($ftp_section_images[$key])) {
 						$post['section_images'][$key] = $ftp_section_images[$key];
 					}
 				}
+				$post['button_names'] = $button_names;
+				$post['subpages'] = $subpages;
+				$post['external_urls'] = $external_urls;
 			}
 
-			// Uloženie do databázy
 			if ($this->Article_model->saveArticle($post)) {
 				$message = !empty($post['id']) ? 'Artikel wurde erfolgreich bearbeitet.' : 'Artikel wurde erfolgreich hinzugefügt.';
 				$this->session->set_flashdata('success', $message);
 				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			} else {
-				$this->session->set_flashdata('error', 'Fehler beim Speichern.');
+				$this->session->set_flashdata('error', 'Fehler beim Speichern. Skontrolujte logy pre viac informácií.');
+				log_message('error', 'Failed to save article. Post data: ' . print_r($post, true));
+
 				$data['article'] = (object)$post;
 				$data['categoryId'] = $post['category_id'];
 				$data['articleCategories'] = $articleCategories;
@@ -282,6 +278,9 @@ class Article extends CI_Controller
 						'image' => $post['section_images'][$idx] ?? null,
 						'image_title' => $post['section_image_titles'][$idx] ?? null,
 						'ftp_image' => $post['ftp_section_image'][$idx] ?? null,
+						'button_name' => $post['button_names'][$idx] ?? null,
+						'subpage' => $post['subpages'][$idx] ?? null,
+						'external_url' => $post['external_urls'][$idx] ?? null,
 						'order' => $idx
 					];
 				}, $post['sections'], array_keys($post['sections'])) : [];
@@ -292,7 +291,6 @@ class Article extends CI_Controller
 			}
 		}
 
-		// Načítanie dát pre formulár
 		$article = $this->Article_model->getArticle($id);
 		$categoryId = $article ? $article->category_id : 0;
 		$galleryCategoryId = null;
@@ -317,6 +315,7 @@ class Article extends CI_Controller
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
 	public function getGalleriesByCategory()
 	{
 		$categoryId = $this->input->post('category_id');
@@ -335,6 +334,7 @@ class Article extends CI_Controller
 
 		echo json_encode(['success' => true, 'options' => $options]);
 	}
+
 	public function syncCategories()
 	{
 		$this->Article_model->syncMenuWithArticleCategories();
@@ -342,4 +342,11 @@ class Article extends CI_Controller
 		redirect(BASE_URL . 'admin/article_categories');
 	}
 
+	public function getMenuItems()
+	{
+		$result = $this->Article_model->getMenuItems();
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($result));
+	}
 }
