@@ -32,7 +32,7 @@ class Admin extends CI_Controller
 		$data['newsStats'] = $this->Admin_model->getNewsStats();
 		$data['productStats'] = $this->Admin_model->getBestProductStats();
 		$data['articleCategoryStats'] = $this->Admin_model->getArticleCategoryStats();
-
+		$data['galleryStats'] = $this->Admin_model->getGalleryStats();
 		// Získanie udalostí do kalendára
 		$data['calendar_events'] = array_map(function($n) {
 			return [

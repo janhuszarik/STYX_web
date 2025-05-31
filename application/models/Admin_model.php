@@ -483,7 +483,42 @@ function getNewsletters(){
 	{
 		return $this->db->get('calendar_notes')->result();
 	}
+	public function getGalleryStats() {
+		// Celkový počet galérií
+		$this->db->select('COUNT(*) as total');
+		$query = $this->db->get('galleries');
+		$total = $query->row()->total;
 
+		// Posledná galéria
+		$this->db->select('name, created_at');
+		$this->db->order_by('created_at', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get('galleries');
+		$last = $query->row();
+
+		$last_title = $last ? $last->name : '';
+		$last_date = $last && $last->created_at ? date('d.m.Y', strtotime($last->created_at)) : '';
+
+		// Nedávne galérie (napr. posledné 3)
+		$this->db->select('name');
+		$this->db->order_by('created_at', 'DESC');
+		$this->db->limit(3);
+		$recent = $this->db->get('galleries')->result();
+
+		// Premenujeme 'name' na 'title' vo výstupe, aby zodpovedal štruktúre očakávanej v šablóne
+		$recent = array_map(function($item) {
+			$item->title = $item->name;
+			unset($item->name);
+			return $item;
+		}, $recent);
+
+		return [
+			'total' => $total,
+			'last_title' => $last_title,
+			'last_date' => $last_date,
+			'recent' => $recent
+		];
+	}
 
 
 
