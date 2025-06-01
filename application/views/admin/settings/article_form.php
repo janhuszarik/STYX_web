@@ -216,7 +216,7 @@ $menuOptionsJson = json_encode($menuOptions);
 							<small class="text-muted ms-3">
 								Diese Sektion kann leer bleiben, falls nicht benötigt.							</small>
 						</div>
-						
+
 						<div class="row mt-2">
 							<?php for ($i = 1; $i <= 3; $i++): ?>
 								<div class="col-md-4 mb-3">

@@ -375,33 +375,36 @@ class Admin extends CI_Controller
 		echo json_encode($response);
 	}
 
-	function newsSave() {
+	public function newsSave() {
 		$post = $this->input->post();
-		$id = $this->uri->segment('4');
-		$segment2 = $this->uri->segment('3');
+		$id = $this->uri->segment(4);
+		$segment3 = $this->uri->segment(3);
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/news/');
-			if (isset($image['error']) && !$image['error']) {
+			$image = $this->upload_image('image', 'Uploads/news/');
+			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
-				$data['edit'] = (object)$post;
+				$data['news'] = (object)$post;
+				$data['title'] = !empty($id) ? 'News bearbeiten' : 'News hinzufügen';
+				$data['page'] = 'admin/settings/news_form';
 				$this->load->view('admin/layout/normal', $data);
 				return;
 			}
 
 			if (!empty($id)) {
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error'])) {
-						if ($old_image && file_exists(FCPATH . 'uploads/news/' . $old_image)) {
-							unlink(FCPATH . 'uploads/news/' . $old_image);
-						}
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/news/' . $old_image)) {
+						unlink(FCPATH . 'Uploads/news/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
-					redirect(BASE_URL . 'admin/news/');
+					redirect(BASE_URL . 'admin/news');
 				} else {
 					$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
-					$data['edit'] = (object)$post;
+					$data['news'] = (object)$post;
+					$data['title'] = 'News bearbeiten';
+					$data['page'] = 'admin/settings/news_form';
+					$this->load->view('admin/layout/normal', $data);
 				}
 			} else {
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
@@ -409,29 +412,40 @@ class Admin extends CI_Controller
 					redirect(BASE_URL . 'admin/news');
 				} else {
 					$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
-					$data['edit'] = (object)$post;
+					$data['news'] = (object)$post;
+					$data['title'] = 'News hinzufügen';
+					$data['page'] = 'admin/settings/news_form';
+					$this->load->view('admin/layout/normal', $data);
 				}
 			}
 		}
 
-		if ($segment2 == 'del' && is_numeric($id)) {
+		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->newsDelete($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
 				redirect(BASE_URL . 'admin/news');
 			} else {
 				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
+				redirect(BASE_URL . 'admin/news');
 			}
 		}
 
-		if (empty($id)) {
-			$data['newss'] = $this->Admin_model->getNews();
+		if ($segment3 == 'edit' && is_numeric($id)) {
 			$data['news'] = $this->Admin_model->getNews($id);
-			$data['title'] = 'Nachrichten';
-			$data['page'] = 'admin/settings/news';
+			if (!$data['news']) {
+				$this->session->set_flashdata('error', 'News nicht gefunden');
+				redirect(BASE_URL . 'admin/news');
+			}
+			$data['title'] = 'News bearbeiten';
+			$data['page'] = 'admin/settings/news_form';
+			$this->load->view('admin/layout/normal', $data);
+		} elseif ($segment3 == 'add') {
+			$data['news'] = new stdClass(); // Empty object for new news
+			$data['title'] = 'News hinzufügen';
+			$data['page'] = 'admin/settings/news_form';
 			$this->load->view('admin/layout/normal', $data);
 		} else {
 			$data['newss'] = $this->Admin_model->getNews();
-			$data['news'] = $this->Admin_model->getNews($id);
 			$data['title'] = 'Nachrichten';
 			$data['page'] = 'admin/settings/news';
 			$this->load->view('admin/layout/normal', $data);

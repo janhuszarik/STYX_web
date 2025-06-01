@@ -119,6 +119,7 @@ $route['admin/article_categories'] 							= 'article/articleCategoriesSave';
 
 	$route['admin/news'] 										= 'admin/newsSave';
 	$route['admin/newsSave'] 									= 'admin/newsSave';
+	$route['admin/news/add'] 									= 'admin/newsSave';
 	$route['admin/news/edit/:num'] 								= 'admin/newsSave';
 	$route['admin/news/del/:num']								= 'admin/newsSave';
 

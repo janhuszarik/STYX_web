@@ -36,14 +36,15 @@
 						</thead>
 						<tbody>
 						<?php if (!empty($menus)): ?>
-							<?php foreach ($menus as $i => $m): ?>
+							<?php $mainIndex = 1; ?>
+							<?php foreach ($menus as $m): ?>
 								<tr class="<?= $m->parent == 0 ? 'main-menu' : '' ?>">
-									<td class="text-center"><?= $i + 1 ?></td>
+									<td class="text-center"><?= $mainIndex ?></td>
 									<td class="text-center">
 										<img src="<?= langInfo($m->lang)['flag'] ?>" width="24px" alt="lang">
 									</td>
-									<td><?= $m->parent == 0 ? '<strong>' . $m->name . '</strong>' : '– ' . $m->name ?></td>
-									<td class="text-center" title="<?= $m->url ?>"><?= substr($m->url, 0, 12) ?>...</td>
+									<td><strong><?= $m->name ?></strong></td>
+									<td class="text-center"><?= $m->url ?></td>
 									<td class="text-center"><?= $m->orderBy ?></td>
 									<td class="text-center"><?= active($m->active) ?></td>
 									<td class="text-center">
@@ -53,14 +54,15 @@
 								</tr>
 
 								<?php if (!empty($m->submenu)): ?>
+									<?php $subIndex = 1; ?>
 									<?php foreach ($m->submenu as $s): ?>
 										<tr>
-											<td class="text-center">–</td>
+											<td class="text-center"><?= $mainIndex . '.' . $subIndex ?></td>
 											<td class="text-center">
 												<img src="<?= langInfo($s->lang)['flag'] ?>" width="24px" alt="lang">
 											</td>
 											<td>– <?= $s->name ?></td>
-											<td class="text-center" title="<?= $s->url ?>"><?= substr($s->url, 0, 12) ?>...</td>
+											<td class="text-center"><?= $s->url ?></td>
 											<td class="text-center"><?= $s->orderBy ?></td>
 											<td class="text-center"><?= active($s->active) ?></td>
 											<td class="text-center">
@@ -68,13 +70,16 @@
 												<a href="<?= base_url('admin/menu/del/' . $s->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Möchten Sie wirklich löschen?')"><i class="fa fa-trash"></i></a>
 											</td>
 										</tr>
+										<?php $subIndex++; ?>
 									<?php endforeach; ?>
 								<?php endif; ?>
+								<?php $mainIndex++; ?>
 							<?php endforeach; ?>
 						<?php else: ?>
 							<tr><td colspan="7" class="text-center">Keine Daten</td></tr>
 						<?php endif; ?>
 						</tbody>
+
 					</table>
 				</div>
 				<div class="mt-3">
