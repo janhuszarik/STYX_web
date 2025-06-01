@@ -1,31 +1,43 @@
 <?php
-$actionUrl = isset($article) ? 'admin/article_save/edit/' . $article->id : 'admin/article_save';
-$titleHeadline = isset($article) ? 'Artikel bearbeiten: ' . htmlspecialchars($article->title ?? '') : 'Neuen Artikel erstellen';
-$titleSub = isset($article) ? 'Bestehenden Artikel nach Bedarf anpassen.' : 'Neuen Artikel nach Bedarf erstellen.';
+$CI =& get_instance(); // For accessing URI segments if needed
 
-$categoryName = 'Kategorie nicht gefunden';
-if (!empty($categoryId) && is_array($articleCategories) && !empty($articleCategories)) {
-$categoryId = (int)$categoryId;
-$keys = array_column($articleCategories, 'id');
-$key = array_search($categoryId, $keys);
-if ($key !== false) {
-$categoryName = htmlspecialchars($articleCategories[$key]->name);
-} else {
-log_message('debug', "Category not found for categoryId: $categoryId. Available categories: " . print_r($articleCategories, true));
-}
-} else {
-log_message('debug', "Invalid categoryId or articleCategories. categoryId: $categoryId, articleCategories: " . print_r($articleCategories, true));
-}
+$actionUrl = isset($article)
+	? 'admin/article_save/edit/' . $article->id
+	: 'admin/article_save';
 
-$this->load->helper('app_helper');
+$titleHeadline = isset($article)
+	? 'Artikel bearbeiten: ' . htmlspecialchars($article->title ?? '')
+	: 'Neuen Artikel erstellen';
+
+$titleSub = isset($article)
+	? 'Bestehenden Artikel nach Bedarf anpassen.'
+	: 'Neuen Artikel nach Bedarf erstellen.';
+
+// 🟢 Use categoryId from controller, fallback to URI segment if needed
+$categoryId = isset($article) ? $article->category_id : ($categoryId ?? $CI->uri->segment(3));
+
+// 🟢 Debug the categoryName and categoryId
+log_message('debug', 'Category ID in view: ' . $categoryId);
+log_message('debug', 'Category Name in view: ' . ($categoryName ?? 'Not set'));
+
+// 🟢 Vygenerovanie výberu podstránok
+$CI->load->helper('app_helper');
 $menuItems = getMenu();
 $menuOptions = [];
+
 foreach ($menuItems as $menu) {
-$menuOptions[] = ['value' => $menu['url'], 'label' => $menu['name']];
-foreach ($menu['children'] as $submenu) {
-$menuOptions[] = ['value' => $submenu['url'], 'label' => ' - ' . $submenu['name']];
+	$menuOptions[] = [
+		'value' => $menu['url'],
+		'label' => $menu['name']
+	];
+	foreach ($menu['children'] as $submenu) {
+		$menuOptions[] = [
+			'value' => $submenu['url'],
+			'label' => ' - ' . $submenu['name']
+		];
+	}
 }
-}
+
 $menuOptionsJson = json_encode($menuOptions);
 ?>
 
@@ -35,7 +47,7 @@ $menuOptionsJson = json_encode($menuOptions);
 
 <form method="post" action="<?= base_url($actionUrl) ?>" enctype="multipart/form-data" id="articleForm">
 	<input type="hidden" name="id" value="<?= htmlspecialchars($article->id ?? '') ?>">
-	<input type="hidden" name="category_id" value="<?= htmlspecialchars($categoryId ?? '') ?>">
+	<input type="hidden" name="category_id" value="<?= htmlspecialchars($categoryId) ?>">
 
 	<div class="mb-3">
 		<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
@@ -58,7 +70,16 @@ $menuOptionsJson = json_encode($menuOptions);
 	<div class="row form-group pb-3">
 		<div class="col-md-6">
 			<label for="category_name">Kategorie</label>
-			<input type="text" class="form-control" id="category_name" name="category_name" value="<?= $categoryName ?>" readonly>
+			<?php if ($categoryName === 'Kategorie nicht gefunden'): ?>
+				<input type="text" class="form-control is-invalid" id="category_name" name="category_name" value="Kategorie nicht gefunden (ID: <?= htmlspecialchars($categoryId) ?>) - Bitte wählen Sie eine gültige Kategorie" readonly>
+				<?php if ($this->session->flashdata('error')): ?>
+					<div class="invalid-feedback">
+						<?= $this->session->flashdata('error') ?>
+					</div>
+				<?php endif; ?>
+			<?php else: ?>
+				<input type="text" class="form-control" id="category_name" name="category_name" value="<?= htmlspecialchars($categoryName) ?>" readonly>
+			<?php endif; ?>
 		</div>
 		<div class="col-md-6">
 			<label for="slug">Slug</label>
