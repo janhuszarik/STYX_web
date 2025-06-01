@@ -147,6 +147,7 @@ class Article_model extends CI_Model
 
 		$data = [
 			'category_id'     => $post['category_id'],
+			'lang'            => $post['lang'] ?? 'de', // Add language field, default to 'de'
 			'title'           => $post['title'],
 			'subtitle'        => $post['subtitle'],
 			'slug'            => url_title($post['title'], 'dash', true),
@@ -300,7 +301,6 @@ class Article_model extends CI_Model
 
 		return $ok;
 	}
-
 	public function deleteArticle($id)
 	{
 		return $this->db->delete('articles', ['id' => $id]);

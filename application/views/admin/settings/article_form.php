@@ -57,11 +57,18 @@ $menuOptionsJson = json_encode($menuOptions);
 	</div>
 
 	<div class="row form-group pb-3">
-		<div class="col-md-6">
+		<div class="col-md-2">
+			<label for="lang">Sprache</label>
+			<select name="lang" id="lang" class="form-control" required>
+				<option value="de" <?= (isset($article) && $article->lang == 'de') ? 'selected' : '' ?>>Deutsch</option>
+				<option value="en" <?= (isset($article) && $article->lang == 'en') ? 'selected' : '' ?>>English</option>
+			</select>
+		</div>
+		<div class="col-md-5">
 			<label for="title">Titel</label>
 			<input type="text" class="form-control" name="title" id="title" value="<?= htmlspecialchars($article->title ?? '') ?>" required>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-5">
 			<label for="subtitle">Untertitel</label>
 			<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>">
 		</div>

@@ -1,3 +1,10 @@
+<?php
+/**
+ * View file for displaying articles in a category with pagination and search functionality.
+ * Now includes a language flag column to indicate the language of each article.
+ */
+?>
+
 <div class="row">
 	<div class="col-lg-12">
 		<section class="card card-yellow">
@@ -18,6 +25,7 @@
 						<thead>
 						<tr>
 							<th class="text-center">#</th>
+							<th class="text-center">Sprache</th> <!-- New column for language flag -->
 							<th>Titel</th>
 							<th>Slug</th>
 							<th class="text-center">Keywords</th>
@@ -33,15 +41,20 @@
 							<?php foreach ($articles as $index => $article): ?>
 								<tr>
 									<td class="text-center"><?= $index + 1 ?></td>
-									<td><?= $article->title?></td>
+									<td class="text-center">
+										<?php
+										// Get language info using the langInfo helper
+										$langInfo = langInfo($article->lang);
+										?>
+										<img src="<?= htmlspecialchars($langInfo['flag']) ?>" alt="<?= htmlspecialchars($langInfo['text']) ?>" title="<?= htmlspecialchars($langInfo['text']) ?>" style="width: 24px; height: 16px;">
+									</td>
+									<td><?= $article->title ?></td>
 									<td><?= $article->slug ?></td>
 									<td class="text-center"><?= checkTextIcon($article->keywords) ?></td>
 									<td class="text-center"><?= checkTextIcon($article->text) ?></td>
 									<td class="text-center"><?= checkTextIcon($article->meta) ?></td>
 									<td class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
-									<td class="text-center">
-										<?= $article->active == 'J' ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>' ?>
-									</td>
+									<td class="text-center"><?= active($article->active)?></td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/article_save/edit/' . $article->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
 										<a href="<?= base_url('admin/article_save/del/' . $article->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Wirklich löschen?')"><i class="fa fa-trash"></i></a>
@@ -49,23 +62,23 @@
 								</tr>
 							<?php endforeach; ?>
 						<?php else: ?>
-							<tr><td colspan="9" class="text-center">Keine Artikel gefunden.</td></tr>
+							<tr><td colspan="10" class="text-center">Keine Artikel gefunden.</td></tr>
 						<?php endif; ?>
 						</tbody>
 						<tfoot>
 						<tr>
-							<td colspan="9" class="text-center">
+							<td colspan="10" class="text-center">
 								<?= $pagination ?? '' ?>
 							</td>
 						</tr>
 						</tfoot>
-
 					</table>
 				</div>
 			</div>
 		</section>
 	</div>
 </div>
+
 <script>
 	document.getElementById('searchInput').addEventListener('keyup', function () {
 		const filter = this.value.toLowerCase();
