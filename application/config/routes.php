@@ -74,15 +74,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // administrator
 
 
-$route['admin'] 												= 'admin';
-$route['admin/menu'] 											= 'admin/menuSave';
-$route['admin/menu/create'] 									= 'admin/menuSave';
-$route['admin/menu/edit/(:num)'] 								= 'admin/menuSave/$1';
-$route['admin/menu/del/(:num)'] 								= 'admin/menuSave/del/$1';
-$route['admin/menuSave'] 										= 'admin/menuSave';
+	$route['admin'] 											= 'admin';
+	$route['admin/menu'] 										= 'admin/menuSave';
+	$route['admin/menu/create'] 								= 'admin/menuSave';
+	$route['admin/menu/edit/(:num)'] 							= 'admin/menuSave/$1';
+	$route['admin/menu/del/(:num)'] 							= 'admin/menuSave/del/$1';
+	$route['admin/menuSave'] 									= 'admin/menuSave';
 
 
-$route['admin/article_categories'] 							= 'article/articleCategoriesSave';
+	$route['admin/article_categories'] 							= 'article/articleCategoriesSave';
 	$route['admin/article_categories/(:num)'] 					= 'article/articleCategoriesSave/$1';
 
 	$route['admin/article_category_form'] 						= 'article/articleCategoryForm';
@@ -113,9 +113,10 @@ $route['admin/article_categories'] 							= 'article/articleCategoriesSave';
 	$route['admin/ftpmanager/load_folder'] 						= 'ftpmanager/load_folder';
 
 	$route['admin/slider'] 										= 'admin/sliderSave';
+	$route['admin/slider/add'] 									= 'admin/sliderSave';
+	$route['admin/slider/edit/(:num)'] 							= 'admin/sliderSave';
+	$route['admin/slider/del/(:num)'] 							= 'admin/sliderSave';
 	$route['admin/sliderSave'] 									= 'admin/sliderSave';
-	$route['admin/sliderSave/(:num)'] 							= 'admin/sliderSave/$1';
-	$route['admin/delete_slider/(:num)'] 						= 'admin/delete_slider/$1';
 
 	$route['admin/news'] 										= 'admin/newsSave';
 	$route['admin/newsSave'] 									= 'admin/newsSave';
@@ -128,27 +129,24 @@ $route['admin/article_categories'] 							= 'article/articleCategoriesSave';
 	$route['admin/bestProduct/edit/:num'] 						= 'admin/bestProductSave';
 	$route['admin/bestProduct/del/:num']						= 'admin/bestProductSave';
 
-$route['admin/galleryCategory']                      = 'gallery/galleryCategorySave';
-$route['admin/galleryCategory/edit/(:num)']          = 'gallery/galleryCategorySave/edit/$1';
-$route['admin/galleryCategory/form']                 = 'gallery/galleryCategoryForm';
-$route['admin/galleryCategory/form/(:num)']          = 'gallery/galleryCategoryForm/$1';
-$route['admin/galleryCategory/save']                 = 'gallery/galleryCategorySave';
-$route['admin/galleryCategory/delete/(:num)']        = 'gallery/deleteCategory/$1';
-$route['admin/galleries_in_category/(:num)']         = 'gallery/galleriesInCategory/$1';
-$route['admin/gallery/form/category/(:num)']         = 'gallery/galleryForm/$1';
-$route['admin/gallery/save']                         = 'gallery/saveGallery';
-$route['admin/gallery/edit/(:num)']                  = 'gallery/editGallery/$1';
-$route['admin/gallery/delete/(:num)']                = 'gallery/deleteGallery/$1';
-$route['admin/image/form/gallery/(:num)']            = 'gallery/imageForm/$1';
-$route['admin/image/save']                           = 'gallery/saveImage';
-$route['admin/image/delete/(:num)']                  = 'gallery/deleteImage/$1';
-$route['admin/image/update_order']                   = 'gallery/updateImageOrder';
+	$route['admin/galleryCategory']                      		= 'gallery/galleryCategorySave';
+	$route['admin/galleryCategory/edit/(:num)']          		= 'gallery/galleryCategorySave/edit/$1';
+	$route['admin/galleryCategory/form']                 		= 'gallery/galleryCategoryForm';
+	$route['admin/galleryCategory/form/(:num)']          		= 'gallery/galleryCategoryForm/$1';
+	$route['admin/galleryCategory/save']                 		= 'gallery/galleryCategorySave';
+	$route['admin/galleryCategory/delete/(:num)']        		= 'gallery/deleteCategory/$1';
+	$route['admin/galleries_in_category/(:num)']         		= 'gallery/galleriesInCategory/$1';
+	$route['admin/gallery/form/category/(:num)']         		= 'gallery/galleryForm/$1';
+	$route['admin/gallery/save']                         		= 'gallery/saveGallery';
+	$route['admin/gallery/edit/(:num)']                  		= 'gallery/editGallery/$1';
+	$route['admin/gallery/delete/(:num)']                		= 'gallery/deleteGallery/$1';
+	$route['admin/image/form/gallery/(:num)']            		= 'gallery/imageForm/$1';
+	$route['admin/image/save']                           		= 'gallery/saveImage';
+	$route['admin/image/delete/(:num)']                  		= 'gallery/deleteImage/$1';
+	$route['admin/image/update_order']                   		= 'gallery/updateImageOrder';
 
 
-
-
-
-$route['Unternehmen/AboutStyx']								= 'App/aboutStyx';
+	$route['Unternehmen/AboutStyx']								= 'App/aboutStyx';
 	$route['Company/AboutStyx']									= 'App/aboutStyx';
 
 	$route['Naturkosmetik']										= 'App/naturkosmetik';

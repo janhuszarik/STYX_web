@@ -105,35 +105,61 @@ function getNewsletters(){
 
 
 	public function get_all_sliders() {
+		$this->db->select('*');
+		$this->db->from('slider');
 		$this->db->order_by('orderBy', 'ASC');
-		return $this->db->get('slider')->result_array();
+		return $this->db->get()->result(); // Returns objects for consistency with views
 	}
 
 	public function get_slider($id) {
-		return $this->db->get_where('slider', array('id' => $id))->row_array();
+		if (!is_numeric($id)) {
+			return null;
+		}
+		$this->db->select('*');
+		$this->db->from('slider');
+		$this->db->where('id', $id);
+		$query = $this->db->get();
+		return $query->num_rows() > 0 ? $query->row() : null; // Returns object or null
 	}
 
-	public function save_slider_full($post = false, $image = false, $old_image = false, $id = null) {
+	public function get_slider_image_by_id($id) {
+		if (!is_numeric($id)) {
+			return null;
+		}
+		$this->db->select('image');
+		$this->db->from('sliders');
+		$this->db->where('id', $id);
+		$query = $this->db->get();
+		return $query->num_rows() > 0 ? $query->row()->image : null; // Returns image or null
+	}
+
+	public function save_slider_full($post, $image = false, $old_image = false, $id = null) {
+		// Sanitize input data
 		$data = array(
-			'lang' => $post['lang'],
-			'title' => $post['title'],
-			'name1' => $post['name1'],
-			'name2' => $post['name2'],
-			'name3' => $post['name3'],
-			'button_link' => $post['button_link'],
-			'bg_color' => $post['bg_color'],
-			'text_color' => $post['text_color'],
-			'orderBy' => $post['orderBy'],
-			'active' => $this->input->post('active'),
+			'lang' => $this->db->escape_str($post['lang'] ?? 'de'),
+			'title' => $this->db->escape_str($post['title'] ?? ''),
+			'name1' => $this->db->escape_str($post['name1'] ?? ''),
+			'name2' => $this->db->escape_str($post['name2'] ?? ''),
+			'name3' => $this->db->escape_str($post['name3'] ?? ''),
+			'button_link' => $this->db->escape_str($post['button_link'] ?? ''),
+			'bg_color' => $this->db->escape_str($post['bg_color'] ?? '#ffffff'),
+			'text_color' => $this->db->escape_str($post['text_color'] ?? '#000000'),
+			'orderBy' => (int)($post['orderBy'] ?? 0),
+			'active' => (int)($post['active'] ?? 0)
 		);
 
-		if ($image && !isset($image['error'])) {
-			$data['image'] = basename($image);
-		} else if ($old_image) {
+		// Handle image
+		if ($image && !isset($image['error']) && isset($image['file_name'])) {
+			$data['image'] = $image['file_name'];
+		} elseif ($old_image) {
 			$data['image'] = $old_image;
 		}
 
-		if (!empty($id)) {
+		if (!empty($id) && is_numeric($id)) {
+			// Verify slider exists before updating
+			if (!$this->get_slider($id)) {
+				return false;
+			}
 			$data['updated_at'] = date('Y-m-d H:i:s');
 			$this->db->where('id', $id);
 			return $this->db->update('slider', $data);
@@ -141,20 +167,22 @@ function getNewsletters(){
 			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('slider', $data);
 		}
-
 	}
-
-	public function get_slider_image_by_id($id) {
-		$this->db->select('image');
-		$this->db->where('id', $id);
-		$row = $this->db->get('slider')->row();
-		return $row ? $row->image : false;
-	}
-
-
 
 	public function delete_slider($id) {
-		return $this->db->delete('slider', array('id' => $id));
+		if (!is_numeric($id)) {
+			return false;
+		}
+		// Get slider to delete its image
+		$slider = $this->get_slider($id);
+		if (!$slider) {
+			return false;
+		}
+		if ($slider->image && file_exists(FCPATH . 'Uploads/sliders/' . $slider->image)) {
+			unlink(FCPATH . 'Uploads/sliders/' . $slider->image);
+		}
+		$this->db->where('id', $id);
+		return $this->db->delete('slider');
 	}
 
 

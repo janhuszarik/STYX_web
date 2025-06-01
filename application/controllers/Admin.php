@@ -102,7 +102,6 @@ class Admin extends CI_Controller
 	}
 
 
-
 	public function menuSave()
 	{
 		$post = $this->input->post();
@@ -180,7 +179,6 @@ class Admin extends CI_Controller
 	}
 
 
-
 	function getMenuParentName($menus, $parentId)
 	{
 		foreach ($menus as $menu) {
@@ -191,54 +189,69 @@ class Admin extends CI_Controller
 		return '';
 	}
 
-	function sliderSave()
-	{
+	public function sliderSave() {
 		$post = $this->input->post();
-		$id = $this->uri->segment(3);
-		$segment2 = $this->uri->segment(2);
+		$id = $this->uri->segment(4);
+		$segment3 = $this->uri->segment(3);
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
-			$image = uploadImg('image', 'uploads/sliders', 'slider_' . time(), true);
-
-			if (isset($image['error']) && !$image['error']) {
+			$image = $this->upload_image('image', 'Uploads/sliders/');
+			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
-				$data['slider'] = (array)$post;
-				$data['sliders'] = $this->Admin_model->get_all_sliders();
-				$data['title'] = 'Slider';
-				$data['page'] = 'admin/settings/sliders';
+				$data['slider'] = (object)$post;
+				$data['title'] = !empty($id) ? 'Slider bearbeiten' : 'Slider hinzufügen';
+				$data['page'] = 'admin/settings/slider_form';
 				$this->load->view('admin/layout/normal', $data);
 				return;
 			}
 
 			if ($this->Admin_model->save_slider_full($post, $image, $old_image, $id)) {
-				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/sliders/' . $old_image)) {
-					unlink(FCPATH . 'uploads/sliders/' . $old_image);
+				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/sliders/' . $old_image)) {
+					unlink(FCPATH . 'Uploads/sliders/' . $old_image);
 				}
 				$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 				redirect(BASE_URL . 'admin/slider');
 			} else {
 				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
-				$data['slider'] = (array)$post;
+				$data['slider'] = (object)$post;
+				$data['title'] = !empty($id) ? 'Slider bearbeiten' : 'Slider hinzufügen';
+				$data['page'] = 'admin/settings/slider_form';
+				$this->load->view('admin/layout/normal', $data);
 			}
 		}
 
-		if ($segment2 == 'delete_slider' && is_numeric($id)) {
+		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->delete_slider($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
+				redirect(BASE_URL . 'admin/slider');
 			} else {
-				$this->session->set_flashdata('error', 'Fehler beim Löschen');
+				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
+				redirect(BASE_URL . 'admin/slider');
 			}
-			redirect(BASE_URL . 'admin/slider');
 		}
 
-		$data['sliders'] = $this->Admin_model->get_all_sliders();
-		$data['slider'] = !empty($id) ? $this->Admin_model->get_slider($id) : array();
-		$data['title'] = 'Slider';
-		$data['page'] = 'admin/settings/sliders';
-		$this->load->view('admin/layout/normal', $data);
+		if ($segment3 == 'edit' && is_numeric($id)) {
+			$data['slider'] = $this->Admin_model->get_slider($id);
+			if (!$data['slider']) {
+				$this->session->set_flashdata('error', 'Slider nicht gefunden');
+				redirect(BASE_URL . 'admin/slider');
+			}
+			$data['title'] = 'Slider bearbeiten';
+			$data['page'] = 'admin/settings/slider_form';
+			$this->load->view('admin/layout/normal', $data);
+		} elseif ($segment3 == 'add') {
+			$data['slider'] = new stdClass(); // Empty object for new slider
+			$data['title'] = 'Slider hinzufügen';
+			$data['page'] = 'admin/settings/slider_form';
+			$this->load->view('admin/layout/normal', $data);
+		} else {
+			$data['sliders'] = $this->Admin_model->get_all_sliders();
+			$data['title'] = 'Slider';
+			$data['page'] = 'admin/settings/sliders';
+			$this->load->view('admin/layout/normal', $data);
+		}
 	}
-
 
 
 	private function saveSlider($post, $id = null) {

@@ -1,0 +1,98 @@
+<?php
+/**
+ * View file for adding or editing a slider item.
+ */
+?>
+
+<div class="row">
+	<div class="col-lg-12">
+		<section class="card">
+			<header class="card-header">
+				<h2 class="card-title"><?= isset($slider->id) ? 'Slider bearbeiten: ' . htmlspecialchars($slider->title) : 'Slider hinzufügen' ?></h2>
+				<p class="card-subtitle">
+					<?= isset($slider->id) ? 'Bearbeiten Sie bestehende Slider nach Bedarf.' : 'Geben Sie die Daten für den Slider ein' ?>
+				</p>
+			</header>
+
+			<div class="card-body">
+				<form method="post" action="<?= base_url('admin/sliderSave') ?>" enctype="multipart/form-data">
+					<?php if (!empty($slider->id)): ?>
+						<input type="hidden" name="id" value="<?= $slider->id ?>">
+					<?php endif; ?>
+
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<label class="col-form-label">Sprache</label>
+							<select class="form-control" name="lang">
+								<option value="de" <?= ($slider->lang ?? '') == 'de' ? 'selected' : '' ?>>Deutsch</option>
+								<option value="en" <?= ($slider->lang ?? '') == 'en' ? 'selected' : '' ?>>English</option>
+							</select>
+						</div>
+						<div class="col-lg-6">
+							<label class="col-form-label">Aktiv?</label>
+							<select name="active" class="form-control">
+								<option value="1" <?= !empty($slider->active) ? 'selected' : '' ?>>Ja</option>
+								<option value="0" <?= empty($slider->active) ? 'selected' : '' ?>>Nein</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group pb-3">
+						<label class="col-form-label">Titel für Inhalt</label>
+						<input type="text" name="title" class="form-control" value="<?= htmlspecialchars($slider->title ?? '') ?>">
+					</div>
+
+					<div class="form-group pb-3">
+						<label class="col-form-label">Hauptüberschrift</label>
+						<input type="text" name="name1" class="form-control" value="<?= htmlspecialchars($slider->name1 ?? '') ?>">
+					</div>
+
+					<div class="form-group pb-3">
+						<label class="col-form-label">Unterüberschrift</label>
+						<input type="text" name="name2" class="form-control" value="<?= htmlspecialchars($slider->name2 ?? '') ?>">
+					</div>
+
+					<div class="form-group pb-3">
+						<label class="col-form-label">Kleingeschriebener Text</label>
+						<input type="text" name="name3" class="form-control" value="<?= htmlspecialchars($slider->name3 ?? '') ?>">
+					</div>
+
+					<div class="form-group pb-3">
+						<label class="col-form-label">Slider Bild</label>
+						<input type="file" name="image" class="form-control">
+						<?php if (!empty($slider->image)): ?>
+							<small class="text-muted">Aktuelles Bild: <img src="<?= base_url('Uploads/sliders/' . $slider->image) ?>" style="width: 50px; margin-top: 5px;"></small>
+						<?php endif; ?>
+					</div>
+
+					<div class="form-group pb-3">
+						<label class="col-form-label">Schaltflächenlink (optional)</label>
+						<input type="text" name="button_link" class="form-control" value="<?= htmlspecialchars($slider->button_link ?? '') ?>">
+						<small class="text-muted">Für externe Links das gesamte https:// angeben</small>
+					</div>
+
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<label class="col-form-label">Hintergrundfarbe</label>
+							<input type="color" name="bg_color" class="form-control" style="height: 38px; padding: 4px 6px;" value="<?= htmlspecialchars($slider->bg_color ?? '#ffffff') ?>">
+						</div>
+						<div class="col-lg-6">
+							<label class="col-form-label">Textfarbe</label>
+							<input type="color" name="text_color" class="form-control" style="height: 38px; padding: 4px 6px;" value="<?= htmlspecialchars($slider->text_color ?? '#000000') ?>">
+						</div>
+					</div>
+
+					<div class="form-group pb-3">
+						<label class="col-form-label">Sortierung</label>
+						<input type="number" name="orderBy" class="form-control" required value="<?= htmlspecialchars($slider->orderBy ?? '') ?>">
+					</div>
+
+					<footer class="card-footer text-end">
+						<button type="submit" class="btn btn-primary"><?= isset($slider->id) ? 'Änderungen speichern' : 'Speichern' ?></button>
+						<a href="<?= base_url('admin/slider') ?>" class="btn btn-danger">Zurück zur Liste</a>
+					</footer>
+				</form>
+			</div>
+		</section>
+	</div>
+</div>
