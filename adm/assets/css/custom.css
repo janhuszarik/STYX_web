@@ -59,9 +59,19 @@
 }
 .number_custom {
   font-size: 25px;
-  
+
 }
 #calendar {
   min-height: 400px;
 }
 /*dashboard kalendar end*/
+
+/*menu zfarbenie*/
+.nav-main li.active {
+  background-color: rgba(173, 222, 253, 0.32); /* Jemná modrá farba */
+  font-weight: 600;
+}
+.nav-main li.active a.nav-link {
+  color: #000000; /* Zachová farbu textu pre čitateľnosť */
+}
+/*menu zfarbenie end*/

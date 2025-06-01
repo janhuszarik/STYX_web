@@ -114,13 +114,30 @@ class Admin extends CI_Controller
 			$post['lang'] = isset($post['lang']) ? $post['lang'] : 'de';
 			$post['base'] = isset($post['base']) ? $post['base'] : '0';
 
+			// ✨ Automaticky vygeneruj URL len ak nebola zadaná
+			if (empty($post['url']) && !empty($post['name'])) {
+				$slug = url_oprava($post['name']);
+				$baseUrl = $post['lang'] . '/app/' . $slug;
+
+				// Overíme či už taká URL neexistuje
+				$this->load->model('Admin_model');
+				$uniqueUrl = $baseUrl;
+				$counter = 1;
+				while ($this->Admin_model->urlExists($uniqueUrl, $post['id'] ?? null)) {
+					$uniqueUrl = $baseUrl . '-' . $counter;
+					$counter++;
+				}
+				$post['url'] = $uniqueUrl;
+			}
+
+			// 🔄 Update alebo Insert
 			if (!empty($id)) {
 				if ($this->Admin_model->menuSave($post)) {
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect(BASE_URL . 'admin/menu/');
 				} else {
 					$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
-					$data['edit'] = (object)$post;
+					$data['menu'] = (object)$post;
 				}
 			} else {
 				if ($this->Admin_model->menuSave($post)) {
@@ -128,11 +145,12 @@ class Admin extends CI_Controller
 					redirect(BASE_URL . 'admin/menu/');
 				} else {
 					$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
-					$data['edit'] = (object)$post;
+					$data['menu'] = (object)$post;
 				}
 			}
 		}
 
+		// 🗑️ Mazanie
 		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->menuDelete($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
@@ -142,13 +160,26 @@ class Admin extends CI_Controller
 			}
 		}
 
+		// 📝 Formulár edit/create
+		if ($segment3 == 'edit' || $segment3 == 'create') {
+			$data['menu'] = $this->Admin_model->getMenu($id);
+			$data['menuparent'] = $this->Admin_model->getMenu(false, true);
+			$data['title'] = !empty($id) && isset($data['menu']->name)
+				? 'Menüpunkt bearbeiten: ' . $data['menu']->name
+				: 'Neues Menüelement erstellen';
+			$data['page'] = 'admin/settings/menu_form';
+			$this->load->view('admin/layout/normal', $data);
+			return;
+		}
+
+		// 📋 Výpis
 		$data['menus'] = $this->Admin_model->getFullMenu();
-		$data['menu'] = $this->Admin_model->getMenu($id);
-		$data['menuparent'] = $this->Admin_model->getMenu(false, true);
-		$data['title'] = isset($menu->name) ? 'Menüpunkt bearbeiten: ' . $menu->name : 'Menüpunkte';
+		$data['title'] = 'Menüpunkte';
 		$data['page'] = 'admin/settings/menu';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
+
 
 	function getMenuParentName($menus, $parentId)
 	{

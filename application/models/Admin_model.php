@@ -93,6 +93,15 @@ function getNewsletters(){
 		return $this->db->delete('menu');
 
 	}
+	public function urlExists($url, $excludeId = null)
+	{
+		$this->db->where('url', $url);
+		if ($excludeId) {
+			$this->db->where('id !=', $excludeId);
+		}
+		$query = $this->db->get('menu');
+		return $query->num_rows() > 0;
+	}
 
 
 	public function get_all_sliders() {

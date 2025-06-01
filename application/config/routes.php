@@ -73,14 +73,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['translate_uri_dashes'] 								= FALSE;
 // administrator
 
-    
-    $route['admin'] 											= 'admin';
-    $route['admin/menu'] 										= 'admin/menuSave';
-    $route['admin/menuSave']									= 'admin/menuSave';
-    $route['admin/menu/edit/:num'] 								= 'admin/menuSave';
-    $route['admin/menu/del/:num'] 								= 'admin/menuSave';
 
-	$route['admin/article_categories'] 							= 'article/articleCategoriesSave';
+$route['admin'] 												= 'admin';
+$route['admin/menu'] 											= 'admin/menuSave';
+$route['admin/menu/create'] 									= 'admin/menuSave';
+$route['admin/menu/edit/(:num)'] 								= 'admin/menuSave/$1';
+$route['admin/menu/del/(:num)'] 								= 'admin/menuSave/del/$1';
+$route['admin/menuSave'] 										= 'admin/menuSave';
+
+
+$route['admin/article_categories'] 							= 'article/articleCategoriesSave';
 	$route['admin/article_categories/(:num)'] 					= 'article/articleCategoriesSave/$1';
 
 	$route['admin/article_category_form'] 						= 'article/articleCategoryForm';

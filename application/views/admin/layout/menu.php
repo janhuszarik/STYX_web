@@ -1,11 +1,5 @@
 <?php $user = $this->ion_auth->user()->row(); ?>
-<style>.nav-main li.active {
-		background-color: rgba(0, 135, 202, 0.27); /* Jemná modrá farba */
-	}
-	.nav-main li.active a.nav-link {
-		color: #000000; /* Zachová farbu textu pre čitateľnosť */
-	}</style>
-<?php $user = $this->ion_auth->user()->row(); ?>
+
 <section class="body">
 
 	<header class="header">
