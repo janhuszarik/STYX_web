@@ -362,7 +362,7 @@ class Article extends CI_Controller
     $data['article'] = $article;
     $data['categoryId'] = $categoryId;
     $data['categoryName'] = $categoryName;
-    $data['articleCategories'] = $articleCategories;
+	$data['articleCategories'] = $articleCategories;
     $data['galleryCategories'] = $galleryCategories;
     $data['selectedGalleries'] = $selectedGalleries;
     $data['galleryCategoryId'] = $galleryCategoryId;

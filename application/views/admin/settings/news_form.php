@@ -85,7 +85,7 @@
 						</div>
 						<div class="col-lg-4">
 							<label class="col-form-label">Aktiv?
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl, ob der Menüpunkt aktiv sein soll oder verborgen bleibt und für die Öffentlichkeit nicht sichtbar ist."></i>
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl, ob der News karte aktiv sein soll oder verborgen bleibt und für die Öffentlichkeit nicht sichtbar ist."></i>
 							</label>
 							<select name="active" class="form-control">
 								<option value="1" <?= !empty($news->active) ? 'selected' : '' ?>>Ja</option>

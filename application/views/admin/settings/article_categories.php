@@ -32,8 +32,7 @@
 							<th>Name</th>
 							<th>Slug</th>
 							<th class="text-center">Typ</th> <!-- Nový stĺpec -->
-							<th class="text-center">Keywords</th>
-							<th class="text-center">Description</th>
+
 							<th class="text-center">Artikel</th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Aktionen</th>
@@ -59,9 +58,6 @@
 										}
 										?>
 									</td>
-
-									<td class="text-center"><?= checkTextIcon($cat->keywords) ?></td>
-									<td class="text-center"><?= checkTextIcon($cat->description) ?></td>
 									<td class="text-center align-middle">
 										<a href="<?= base_url('admin/articles_in_category/' . $cat->id) ?>"
 										   class="btn btn-outline-primary d-inline-flex justify-content-center align-items-center"

@@ -1,8 +1,12 @@
+
 <?php
-/**
- * View file for displaying articles in a category with pagination and search functionality.
- * Now includes a language flag column to indicate the language of each article.
- */
+$categoryName = 'Neznáma kategória';
+foreach ($articleCategories as $category) {
+    if ($category->id == $categoryId) {
+        $categoryName = $category->name;
+        break;
+    }
+}
 ?>
 
 <div class="row">
@@ -13,7 +17,7 @@
 			<header class="card-header d-flex justify-content-between align-items-center">
 				<div>
 					<h3 class="card-title mb-0">Artikel in Kategorie</h3>
-					<p class="card-subtitle">Kategorie ID: <?= $categoryId ?></p>
+					<a href="<?=BASE_URL.'admin/article_categories'?>"><p class="card-subtitle">Kategorie ID: <?= htmlspecialchars($categoryId) ?> | <strong style="color: green"><?= htmlspecialchars($categoryName) ?></strong> </p></a>
 				</div>
 				<div>
 					<a href="<?= base_url('admin/add_article/' . $categoryId) ?>" class="btn btn-sm btn-primary">+ Artikel hinzufügen</a>
@@ -29,10 +33,9 @@
 							<th>Titel</th>
 							<th>Slug</th>
 							<th class="text-center">Keywords</th>
-							<th class="text-center">Beschreibung</th>
 							<th class="text-center">Meta</th>
-							<th class="text-center">Erstellt</th>
 							<th class="text-center">Status</th>
+							<th class="text-center">Erstellt</th>
 							<th class="text-center">Aktionen</th>
 						</tr>
 						</thead>
@@ -51,10 +54,9 @@
 									<td><?= $article->title ?></td>
 									<td><?= $article->slug ?></td>
 									<td class="text-center"><?= checkTextIcon($article->keywords) ?></td>
-									<td class="text-center"><?= checkTextIcon($article->text) ?></td>
 									<td class="text-center"><?= checkTextIcon($article->meta) ?></td>
-									<td class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
 									<td class="text-center"><?= active($article->active)?></td>
+									<td class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/article_save/edit/' . $article->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
 										<a href="<?= base_url('admin/article_save/del/' . $article->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Wirklich löschen?')"><i class="fa fa-trash"></i></a>

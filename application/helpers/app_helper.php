@@ -369,9 +369,9 @@ function obrpridajthumb($vstup = false) {
 if (!function_exists('checkTextIcon')) {
 	function checkTextIcon($value = '') {
 		if (!empty(trim($value))) {
-			return '<i class="fa fa-check text-success"></i>';
+			return '<i style="color: green; font-weight: bold; font-size: 17px" class="fa fa-check color_green"></i>';
 		} else {
-			return '<i class="fa fa-times text-danger"></i>';
+			return '<i style="color: red; font-weight: bold; font-size: 17px" class="fa fa-times trash_icon_color"></i>';
 		}
 	}
 }

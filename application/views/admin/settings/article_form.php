@@ -214,7 +214,9 @@ $menuOptionsJson = json_encode($menuOptions);
 								Sektion „Das könnte Sie interessieren“
 							</h3>
 							<small class="text-muted ms-3">
-								Diese Sektion kann leer bleiben, falls nicht benötigt.							</small>
+								Diese Sektion kann leer bleiben, falls nicht benötigt.
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Abschnitt, in dem Verlinkungen zu verwandten Artikeln oder Unterseiten angezeigt werden sollen, die inhaltlich an den aktuellen Artikel anknüpfen."></i>
+							</small>
 						</div>
 
 						<div class="row mt-2">
@@ -236,7 +238,9 @@ $menuOptionsJson = json_encode($menuOptions);
 					</div>
 					<div class="row form-group pb-3">
 						<div class="col-md-6">
-							<label for="gallery_category_id" class="col-form-label">Galerie-Kategorie</label>
+							<label for="gallery_category_id" class="col-form-label">Galerie-Kategorie
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl einer Galerie-Kategorie, aus der wir Bilder auswählen möchten."></i>
+							</label>
 							<select name="gallery_category_id" id="gallery_category_id" class="form-control">
 								<option value="">-- Kategorie auswählen --</option>
 								<?php foreach ($galleryCategories as $cat): ?>
@@ -247,7 +251,9 @@ $menuOptionsJson = json_encode($menuOptions);
 							</select>
 						</div>
 						<div class="col-md-6">
-							<label for="gallery_id" class="col-form-label">Galerie</label>
+							<label for="gallery_id" class="col-form-label">Galerie
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl einer konkreten Galerie, die diesem Artikel zugewiesen wird. Jedem Artikel kann nur eine Galerie zugeordnet werden.Wenn mehrere Bilder aus anderen Galeriekategorien benötigt werden, muss **eine neue Galerie** in der entsprechenden Kategorie erstellt werden, die bereits alle benötigten Bilder enthält."></i>
+							</label>
 							<select name="gallery_id" id="gallery_id" class="form-control">
 								<option value="">-- Zuerst Kategorie auswählen --</option>
 								<?php if (isset($article->gallery_id) && !empty($selectedGalleries)): ?>
@@ -270,15 +276,21 @@ $menuOptionsJson = json_encode($menuOptions);
 					</div>
 					<div class="row form-group pb-3">
 						<div class="col-md-4">
-							<label for="start_date_from" class="col-form-label">Startdatum</label>
+							<label for="start_date_from" class="col-form-label">Startdatum
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Startdatum der Artikel. Nach Eingabe des Datums wird die Artikel am angegebenen Datum automatisch aktiviert.Das bedeutet: Wenn z. B. der 28.01.2025 eingegeben wird, erscheint die Karte am 28.01.2025 um 00:00 Uhr. Wenn kein Datum eingegeben wird, läuft der Beitrag ohne zeitliche Begrenzung** und wird sofort nach dem Speichern** angezeigt."></i>
+							</label>
 							<input type="date" class="form-control" name="start_date_from" value="<?= htmlspecialchars($article->start_date_from ?? '') ?>">
 						</div>
 						<div class="col-md-4">
-							<label for="end_date_to" class="col-form-label">Enddatum</label>
+							<label for="end_date_to" class="col-form-label">Enddatum
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Enddatum der Artikel. Nach Eingabe des Datums wird die Artikel am angegebenen Datum automatisch deaktiviert.Das bedeutet: Wenn z. B. der 30.01.2025 eingegeben wird, wird die Karte am 30.01.2025 um 23:59 Uhr automatisch abgeschaltet. Wichtig: Der Beitrag muss als „Aktiv“ markiert sein, selbst wenn ein Start- und Enddatum definiert ist."></i>
+							</label>
 							<input type="date" class="form-control" name="end_date_to" value="<?= htmlspecialchars($article->end_date_to ?? '') ?>">
 						</div>
 						<div class="col-md-4">
-							<label for="active" class="col-form-label">Status</label>
+							<label for="active" class="col-form-label">Status
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl, ob der Artikel aktiv sein soll oder verborgen bleibt und für die Öffentlichkeit nicht sichtbar ist."></i>
+							</label>
 							<select name="active" class="form-control">
 								<option value="1" <?= (isset($article) && $article->active == '1') ? 'selected' : '' ?>>Aktiv</option>
 								<option value="0" <?= (isset($article) && $article->active == '0') ? 'selected' : '' ?>>Inaktiv</option>
