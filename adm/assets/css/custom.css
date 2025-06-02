@@ -75,3 +75,13 @@
   color: #000000; /* Zachová farbu textu pre čitateľnosť */
 }
 /*menu zfarbenie end*/
+
+/*nastavenie inputov a vysvetliviek*/
+
+.tooltip-inner {
+  max-width: 600px !important;
+  white-space: normal;
+  text-align: left;
+  font-weight: 500;
+}
+/*koniec nastavenie inputov a vysvetliviek*/

@@ -1,3 +1,5 @@
+
+
 <div class="row">
 	<div class="col-lg-12">
 		<section class="card">
@@ -16,14 +18,18 @@
 
 					<div class="row form-group pb-3">
 						<div class="col-lg-6">
-							<label class="col-form-label">Sprache</label>
+							<label class="col-form-label">Sprache
+							<i class="fas fa-info-circle text-primary " data-bs-toggle="tooltip" data-bs-placement="right" title="Sprachauswahl, in der dieser Menüpunkt angezeigt wird."></i>
+							</label>
 							<select class="form-control" name="lang">
 								<option value="de" <?= ($menu->lang ?? '') == 'de' ? 'selected' : '' ?>>Deutsch</option>
 								<option value="en" <?= ($menu->lang ?? '') == 'en' ? 'selected' : '' ?>>English</option>
 							</select>
 						</div>
 						<div class="col-lg-6">
-							<label class="col-form-label">Aktiv?</label>
+							<label class="col-form-label">Aktiv?
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl, ob der Menüpunkt aktiv sein soll oder verborgen bleibt und für die Öffentlichkeit nicht sichtbar ist."></i>
+							</label>
 							<select name="active" class="form-control">
 								<option value="1" <?= !empty($menu->active) ? 'selected' : '' ?>>Ja</option>
 								<option value="0" <?= empty($menu->active) ? 'selected' : '' ?>>Nein</option>
@@ -31,15 +37,19 @@
 						</div>
 					</div>
 
-					<div class="form-group pb-3">
-						<label class="col-form-label">Name des Menüelements</label>
-						<input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($menu->name ?? '') ?>">
-					</div>
-
-					<div class="form-group pb-3">
-						<label class="col-form-label">URL (interne oder externe)</label>
-						<input type="text" name="url" class="form-control" value="<?= htmlspecialchars($menu->url ?? '') ?>" readonly>
-						<small class="text-muted">Für externe Links das gesamte https:// angeben</small>
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<label class="col-form-label">Name des Menüpunkt
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Hauptname des Menüpunktes. Aus diesem Namen wird auch die URL generiert, auf die der Benutzer nach dem Klick weitergeleitet wird. Daher bitte korrekt und ohne Sonderzeichen ausfüllen!"></i>
+							</label>
+							<input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($menu->name ?? '') ?>">
+						</div>
+						<div class="col-lg-6">
+							<label class="col-form-label">URL (interne oder externe)
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wenn dieses Feld leer bleibt, wird die URL automatisch generiert. Falls eine externe URL hinzugefügt werden soll, muss sie im Format https://www.styx.at eingegeben werden. Das Wichtigste ist, dass die URL mit https:// beginnt."></i>
+							</label>
+							<input type="text" name="url" class="form-control" value="<?= htmlspecialchars($menu->url ?? '') ?>">
+						</div>
 					</div>
 
 					<div class="row form-group pb-3">
@@ -78,3 +88,4 @@
 		</section>
 	</div>
 </div>
+
