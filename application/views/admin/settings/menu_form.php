@@ -54,7 +54,9 @@
 
 					<div class="row form-group pb-3">
 						<div class="col-lg-6">
-							<label class="col-form-label">Hauptmenüpunkt?</label>
+							<label class="col-form-label">Hauptmenüpunkt?
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="In diesem Abschnitt muss ausgewählt werden, ob es sich um einen Hauptmenüpunkt oder um einen Unterpunkt eines bestehenden Menüs handelt."></i>
+							</label>
 							<select name="parent" class="form-control">
 								<option value="0" <?= ($menu->parent ?? 0) == 0 ? 'selected' : '' ?>>Ja, Hauptmenü</option>
 								<?php foreach ($menuparent as $parentItem): ?>
@@ -67,15 +69,19 @@
 							</select>
 						</div>
 						<div class="col-lg-6">
-							<label class="col-form-label">Position</label>
+							<label class="col-form-label">Position
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Position, an der sich der Menüpunkt befinden wird. Das bedeutet die Reihenfolge von oben nach unten – oder in einer Zeile, wenn es sich um einen Hauptmenüpunkt handelt. Die Nummerierung sollte immer bei 0 beginnen. Position 0 ist stets die erste und hat Vorrang vor allen anderen Nummern."></i>
+							</label>
 							<input type="number" name="orderBy" class="form-control" min="0" value="<?= htmlspecialchars($menu->orderBy ?? '') ?>">
 						</div>
 					</div>
 
 					<div class="form-group pb-3">
-						<div class="checkbox-custom checkbox-primary">
+						<div class="checkbox-custom">
 							<input type="checkbox" id="base" name="base" value="1" <?= !empty($menu->base) ? 'checked' : '' ?>>
-							<label for="base">Leerer Menü-Button (nicht klickbar)</label>
+							<label for="base">Leerer Menü-Button
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Durch das Aktivieren dieses Feldes wird der aktuelle Menüpunkt in eine nicht anklickbare Form versetzt. Das bedeutet, dass der Menüpunkt keine Weiterleitung ausführt – zum Beispiel, wenn er nur als Informations- oder Trennpunkt dient. Wenn ein Menüpunkt ein Hauptpunkt ist und weitere Unterpunkte unter sich hat, wird er automatisch nicht anklickbar."></i>
+							</label>
 						</div>
 					</div>
 

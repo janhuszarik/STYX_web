@@ -84,13 +84,13 @@ function getMenu() {
 	$ci = get_instance();
 	$language = language();
 
-	$ci->db->select('*');
+	$ci->db->select('id, name, url, lang, parent, base'); // Pridajte 'base' do selectu
 	$ci->db->where('active', '1');
 	$ci->db->where('lang', $language);
 	$ci->db->order_by('orderBy', 'ASC');
 	$mainMenuItems = $ci->db->get('menu')->result();
 
-	$ci->db->select('*');
+	$ci->db->select('id, name, url, lang, parent, base'); // Pridajte 'base' aj tu
 	$ci->db->where('parent !=', '0');
 	$ci->db->where('active', '1');
 	$ci->db->where('lang', $language);
@@ -112,6 +112,7 @@ function getMenu() {
 			'name' => $mainItem->name,
 			'url' => $url,
 			'lang' => $mainItem->lang,
+			'base' => $mainItem->base, // Pridajte base
 			'children' => array(),
 			'has_child' => false,
 			'is_external' => $isExternal
@@ -130,6 +131,7 @@ function getMenu() {
 					'name' => $subItem->name,
 					'url' => $subUrl,
 					'lang' => $subItem->lang,
+					'base' => $subItem->base, // Pridajte base aj pre podpoložky, ak je potrebné
 					'is_external' => $isSubExternal
 				);
 

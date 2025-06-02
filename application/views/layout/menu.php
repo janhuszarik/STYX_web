@@ -72,19 +72,27 @@
 											<?php $currentUrl = getCurrentUrl(); ?>
 											<?php foreach (getMenu() as $menu) { ?>
 												<li class="nav-item dropdown <?= $menu['url'] == $currentUrl ? 'active' : '' ?>">
-													<?php if ($menu['base'] !== 0) { ?>
-														<a class="nav-link dropdown-toggle no-link" href="javascript:void(0);">
+													<?php
+													// Položka je klikateľná, ak nemá deti (has_child == false) a base != 1
+													if (!$menu['has_child'] && $menu['base'] != 1) { ?>
+														<a class="nav-link" href="<?= $menu['is_external'] ? $menu['url'] : BASE_URL . $menu['url'] ?>" target="<?= $menu['is_external'] ? '_blank' : '_self' ?>">
 															<?= $menu['name'] ?>
 														</a>
 													<?php } else { ?>
-														<a class="nav-link dropdown-toggle" href="<?= $menu['is_external'] ? $menu['url'] : BASE_URL . $menu['url'] ?>" target="<?= $menu['is_external'] ? '_blank' : '_self' ?>">
+														<!-- Neklikateľná položka (má deti alebo base == 1) -->
+														<a class="nav-link dropdown-toggle no-link" href="javascript:void(0);">
 															<?= $menu['name'] ?>
 														</a>
 													<?php } ?>
 													<?php if ($menu['has_child']) { ?>
 														<ul class="dropdown-menu">
 															<?php foreach ($menu['children'] as $subMenu) { ?>
-																<li><a class="dropdown-item" href="<?= $subMenu['is_external'] ? $subMenu['url'] : BASE_URL . $subMenu['url'] ?>" target="<?= $subMenu['is_external'] ? '_blank' : '_self' ?>"><?= $subMenu['name'] ?></a></li>
+																<!-- Podpoložky sú vždy klikateľné -->
+																<li>
+																	<a class="dropdown-item" href="<?= $subMenu['is_external'] ? $subMenu['url'] : BASE_URL . $subMenu['url'] ?>" target="<?= $subMenu['is_external'] ? '_blank' : '_self' ?>">
+																		<?= $subMenu['name'] ?>
+																	</a>
+																</li>
 															<?php } ?>
 														</ul>
 													<?php } ?>
