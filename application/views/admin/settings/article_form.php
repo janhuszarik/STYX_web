@@ -36,6 +36,17 @@ foreach ($menuItems as $menu) {
 }
 
 $menuOptionsJson = json_encode($menuOptions);
+
+// Načítame kategóriu, aby sme určili predvolenú menu položku
+$category = $CI->db->get_where('article_categories', ['id' => $categoryId])->row();
+$defaultMenuUrl = '';
+if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) {
+	$menuId = $category->menu_id ?: $category->submenu_id;
+	$menu = $CI->db->get_where('menu', ['id' => $menuId])->row();
+	if ($menu && !empty($menu->url)) {
+		$defaultMenuUrl = $menu->url;
+	}
+}
 ?>
 
 <style>
@@ -102,9 +113,26 @@ $menuOptionsJson = json_encode($menuOptions);
 							<?php endif; ?>
 						</div>
 						<div class="col-md-6">
-							<label for="slug" class="col-form-label">Slug</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-freundliche Adresse des Artikels. Wird automatisch aus dem Titel generiert und ist schreibgeschützt."></i>
-							<input type="text" class="form-control" id="slug" value="<?= htmlspecialchars($article->slug ?? '') ?>" readonly>
+							<label for="menu_select" class="col-form-label">Menu oder Submenu</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpfen Sie den Artikel mit einer Menü- oder Submenüpunkt, um den Slug automatisch zu übernehmen."></i>
+							<select class="form-control" id="menuSelect">
+								<option value="">-- Kein Menü --</option>
+								<?php foreach ($menuOptions as $option): ?>
+									<option value="<?= htmlspecialchars($option['value']) ?>"
+										<?= ($defaultMenuUrl == $option['value']) ? 'selected' : '' ?>>
+										<?= htmlspecialchars($option['label']) ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? '') ?>">
+						</div>
+					</div>
+
+					<div class="row form-group pb-3">
+						<div class="col-md-6">
+							<label for="slug_display" class="col-form-label">Slug</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-freundliche Adresse des Artikels. Wird automatisch aus dem Menü übernommen, wenn ein Menüpunkt ausgewählt ist."></i>
+							<input type="text" class="form-control" id="slug_display" value="<?= htmlspecialchars($article->slug ?? '') ?>" readonly>
 						</div>
 					</div>
 
@@ -180,7 +208,7 @@ $menuOptionsJson = json_encode($menuOptions);
 						<div class="col-md-6">
 							<label for="meta" class="col-form-label">Meta-Beschreibung</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Eine kurze Beschreibung des Artikels für Suchmaschinen. Wird in den Suchergebnissen angezeigt und sollte 50-160 Zeichen lang sein."></i>
-							<input type="text" class="form-control" name="meta" id="meta" value="<?= htmlspecialchars($article->meta ?? '') ?>">
+							<textarea class="form-control" name="meta" id="meta" rows="3"><?= htmlspecialchars($article->meta ?? '') ?></textarea>
 						</div>
 					</div>
 					<hr class="my-4 border-dark">
@@ -493,6 +521,34 @@ $menuOptionsJson = json_encode($menuOptions);
 						gallerySelect.innerHTML = '<option value="">-- Fehler beim Laden --</option>';
 					});
 			});
+		}
+
+		// Automatické generovanie slug-u na základe vybranej menu položky
+		const menuSelect = document.getElementById('menuSelect');
+		const slugInput = document.querySelector("input[name='slug']");
+		const slugDisplay = document.getElementById('slug_display');
+
+		if (menuSelect && slugInput && slugDisplay) {
+			menuSelect.addEventListener("change", function () {
+				const selectedOption = menuSelect.options[menuSelect.selectedIndex];
+				if (selectedOption.value) {
+					// Odstrániť jazykový prefix z URL
+					const parts = selectedOption.value.split('/').filter(part => part && !['de', 'en'].includes(part));
+					const newSlug = parts.join('/');
+					slugInput.value = newSlug;
+					slugDisplay.value = newSlug;
+					console.log('Slug updated to:', newSlug);
+				} else {
+					slugInput.value = '';
+					slugDisplay.value = '';
+					console.log('Slug cleared');
+				}
+			});
+
+			// Spustiť pri načítaní stránky
+			menuSelect.dispatchEvent(new Event('change'));
+		} else {
+			console.error('Menu select, slug input, or slug display not found');
 		}
 
 		document.getElementById('articleForm').addEventListener('submit', function (e) {

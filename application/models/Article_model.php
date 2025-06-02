@@ -147,10 +147,10 @@ class Article_model extends CI_Model
 
 		$data = [
 			'category_id'     => $post['category_id'],
-			'lang'            => $post['lang'] ?? 'de', // Add language field, default to 'de'
+			'lang'            => $post['lang'] ?? 'de',
 			'title'           => $post['title'],
 			'subtitle'        => $post['subtitle'],
-			'slug'            => url_title($post['title'], 'dash', true),
+			'slug'            => $post['slug'], // Použijeme slug priamo z formulára
 			'image'           => $image ?? ($post['old_image'] ?? null),
 			'image_title'     => $image_title,
 			'keywords'        => $post['keywords'] ?? null,
@@ -288,15 +288,19 @@ class Article_model extends CI_Model
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
 			$ok = $this->db->update('articles', $data);
+			if (!$ok) {
+				log_message('error', "Failed to update article: " . $this->db->last_query());
+				log_message('error', "Error: " . $this->db->error()['message']);
+			}
 			$articleId = $post['id'];
 		} else {
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$ok = $this->db->insert('articles', $data);
+			if (!$ok) {
+				log_message('error', "Failed to insert article: " . $this->db->last_query());
+				log_message('error', "Error: " . $this->db->error()['message']);
+			}
 			$articleId = $this->db->insert_id();
-		}
-
-		if (!$ok) {
-			log_message('error', "Failed to save article into articles table: " . $this->db->last_query());
 		}
 
 		return $ok;
