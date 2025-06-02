@@ -20,11 +20,11 @@
 						<input type="hidden" name="id" value="<?= $slider->id ?>">
 					<?php endif; ?>
 
-					
+
 					<div class="row form-group pb-3">
 						<div class="col-lg-4">
 							<label class="col-form-label">Sprache
-								<i class="fas fa-info-circle text-primary " data-bs-toggle="tooltip" data-bs-placement="right" title="Sprachauswahl, in der dieser Menüpunkt angezeigt wird."></i>
+								<i class="fas fa-info-circle text-primary " data-bs-toggle="tooltip" data-bs-placement="right" title="Sprache, unter der der Inhalt angezeigt wird."></i>
 							</label>
 							<select class="form-control" name="lang">
 								<option value="de" <?= ($slider->lang ?? '') == 'de' ? 'selected' : '' ?>>Deutsch</option>
