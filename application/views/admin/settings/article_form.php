@@ -40,7 +40,9 @@ $menuOptionsJson = json_encode($menuOptions);
 
 <style>
 	.current-image { max-width: 40%; height: auto; }
-
+	.section-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
+	.form-group .col-form-label { font-weight: 500; margin-bottom: 0.25rem; }
+	.form-group .form-control { margin-bottom: 0.5rem; }
 </style>
 
 <div class="row">
@@ -104,8 +106,9 @@ $menuOptionsJson = json_encode($menuOptions);
 					<div class="row form-group pb-3">
 						<div class="col-md-8">
 							<label for="image" class="col-form-label">Hauptbild hochladen</label>
-							<input type="file" class="form-control mb-1" name="image">
-							<input type="text" class="form-control mb-1" name="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>">
+							<input type="file" class="form-control mb-1" name="image" id="image">
+							<label for="image_title" class="col-form-label">Titel des Bildes (SEO)</label>
+							<input type="text" class="form-control mb-1" name="image_title" id="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>">
 							<input type="hidden" name="old_image" value="<?= htmlspecialchars($article->image ?? '') ?>">
 							<input type="hidden" name="ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
 							<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_image" data-preview-target="ftpImagePreview">
@@ -116,7 +119,6 @@ $menuOptionsJson = json_encode($menuOptions);
 									<img src="<?= htmlspecialchars($article->ftp_image) ?>" style="max-width:150px;max-height:150px;object-fit:contain;">
 								<?php endif; ?>
 							</div>
-
 							<div class="modal fade" id="ftpModal" tabindex="-1" aria-hidden="true">
 								<div class="modal-dialog modal-xl modal-dialog-scrollable">
 									<div class="modal-content">
@@ -144,7 +146,8 @@ $menuOptionsJson = json_encode($menuOptions);
 					<div class="form-group pb-3">
 						<div class="section-heading mb-3">
 							<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
-								Inhaltsbereich							</h3>
+								Inhaltsbereich
+							</h3>
 							<small class="text-muted ms-3">
 								Durch das Ausfüllen der Angaben in diesem Bereich wird ein Abschnitt als ‚SEKTION‘ zum Beitrag hinzugefügt.
 							</small>
@@ -163,17 +166,16 @@ $menuOptionsJson = json_encode($menuOptions);
 					<div class="row form-group pb-3">
 						<div class="col-md-6">
 							<label for="keywords" class="col-form-label">Schlüsselwörter</label>
-							<input type="text" class="form-control" name="keywords" value="<?= htmlspecialchars($article->keywords ?? '') ?>">
+							<input type="text" class="form-control" name="keywords" id="keywords" value="<?= htmlspecialchars($article->keywords ?? '') ?>">
 						</div>
 						<div class="col-md-6">
 							<label for="meta" class="col-form-label">Meta-Beschreibung</label>
-							<input type="text" class="form-control" name="meta" value="<?= htmlspecialchars($article->meta ?? '') ?>">
+							<input type="text" class="form-control" name="meta" id="meta" value="<?= htmlspecialchars($article->meta ?? '') ?>">
 						</div>
 					</div>
 					<hr class="my-4 border-dark">
 
 					<div class="form-group pb-3">
-
 						<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
 							Sektion Empfohlene Produkte
 						</h3>
@@ -187,21 +189,38 @@ $menuOptionsJson = json_encode($menuOptions);
 								}
 								?>
 								<div class="col-md-4 mb-3">
-									<input type="text" class="form-control mb-1" name="product_name<?= $i ?>" placeholder="Name" value="<?= htmlspecialchars($article->{'product_name' . $i} ?? '') ?>">
-									<textarea class="form-control mb-1" name="product_description<?= $i ?>" rows="2" placeholder="Beschreibung"><?= htmlspecialchars($article->{'product_description' . $i} ?? '') ?></textarea>
-									<input type="file" class="form-control mb-1" name="product_image<?= $i ?>">
-									<input type="text" class="form-control mb-1" name="product_image<?= $i ?>_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->{'product_image' . $i . '_title'} ?? '') ?>">
+									<div class="mb-2">
+										<label for="product_name<?= $i ?>" class="col-form-label">Produktname</label>
+										<input type="text" class="form-control" id="product_name<?= $i ?>" name="product_name<?= $i ?>" placeholder="Name" value="<?= htmlspecialchars($article->{'product_name' . $i} ?? '') ?>">
+									</div>
+									<div class="mb-2">
+										<label for="product_description<?= $i ?>" class="col-form-label">Beschreibung</label>
+										<textarea class="form-control" id="product_description<?= $i ?>" name="product_description<?= $i ?>" rows="2" placeholder="Beschreibung"><?= htmlspecialchars($article->{'product_description' . $i} ?? '') ?></textarea>
+									</div>
+									<div class="mb-2">
+										<label for="product_image<?= $i ?>" class="col-form-label">Produktbild hochladen</label>
+										<input type="file" class="form-control" id="product_image<?= $i ?>" name="product_image<?= $i ?>">
+									</div>
+									<div class="mb-2">
+										<label for="product_image<?= $i ?>_title" class="col-form-label">Titel des Bildes (SEO)</label>
+										<input type="text" class="form-control" id="product_image<?= $i ?>_title" name="product_image<?= $i ?>_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->{'product_image' . $i . '_title'} ?? '') ?>">
+									</div>
 									<input type="hidden" name="ftp_product_image<?= $i ?>" id="ftp_product_image<?= $i ?>" value="<?= htmlspecialchars($ftpProductImage) ?>">
 									<input type="hidden" name="old_product_image<?= $i ?>" value="<?= htmlspecialchars($article->{'product_image' . $i} ?? '') ?>">
-									<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_product_image<?= $i ?>" data-preview-target="productImagePreview<?= $i ?>">
-										Bild aus FTP wählen
-									</button>
+									<div class="mb-2">
+										<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_product_image<?= $i ?>" data-preview-target="productImagePreview<?= $i ?>">
+											Bild aus FTP wählen
+										</button>
+									</div>
 									<div id="productImagePreview<?= $i ?>" class="mb-2">
 										<?php if (!empty($ftpProductImage)): ?>
 											<img src="<?= htmlspecialchars($ftpProductImage) ?>" style="max-width:150px;max-height:150px;object-fit:contain;">
 										<?php endif; ?>
 									</div>
-									<input type="text" class="form-control" name="product_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'product_url' . $i} ?? '') ?>">
+									<div class="mb-2">
+										<label for="product_url<?= $i ?>" class="col-form-label">Produkt-URL</label>
+										<input type="text" class="form-control" id="product_url<?= $i ?>" name="product_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'product_url' . $i} ?? '') ?>">
+									</div>
 								</div>
 							<?php endfor; ?>
 						</div>
@@ -218,12 +237,17 @@ $menuOptionsJson = json_encode($menuOptions);
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Abschnitt, in dem Verlinkungen zu verwandten Artikeln oder Unterseiten angezeigt werden sollen, die inhaltlich an den aktuellen Artikel anknüpfen."></i>
 							</small>
 						</div>
-
 						<div class="row mt-2">
 							<?php for ($i = 1; $i <= 3; $i++): ?>
 								<div class="col-md-4 mb-3">
-									<input type="text" class="form-control mb-1" name="empfohlen_name<?= $i ?>" placeholder="Titel" value="<?= htmlspecialchars($article->{'empfohlen_name' . $i} ?? '') ?>">
-									<input type="text" class="form-control" name="empfohlen_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'empfohlen_url' . $i} ?? '') ?>">
+									<div class="mb-2">
+										<label for="empfohlen_name<?= $i ?>" class="col-form-label">Titel</label>
+										<input type="text" class="form-control" id="empfohlen_name<?= $i ?>" name="empfohlen_name<?= $i ?>" placeholder="Titel" value="<?= htmlspecialchars($article->{'empfohlen_name' . $i} ?? '') ?>">
+									</div>
+									<div class="mb-2">
+										<label for="empfohlen_url<?= $i ?>" class="col-form-label">URL</label>
+										<input type="text" class="form-control" id="empfohlen_url<?= $i ?>" name="empfohlen_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'empfohlen_url' . $i} ?? '') ?>">
+									</div>
 								</div>
 							<?php endfor; ?>
 						</div>
@@ -252,17 +276,17 @@ $menuOptionsJson = json_encode($menuOptions);
 						</div>
 						<div class="col-md-6">
 							<label for="gallery_id" class="col-form-label">Galerie
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl einer konkreten Galerie, die diesem Artikel zugewiesen wird. Jedem Artikel kann nur eine Galerie zugeordnet werden.Wenn mehrere Bilder aus anderen Galeriekategorien benötigt werden, muss **eine neue Galerie** in der entsprechenden Kategorie erstellt werden, die bereits alle benötigten Bilder enthält."></i>
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl einer konkreten Galerie, die diesem Artikel zugewiesen wird. Jedem Artikel kann nur eine Galerie zugeordnet werden. Wenn mehrere Bilder aus anderen Galeriekategorien benötigt werden, muss **eine neue Galerie** in der entsprechenden Kategorie erstellt werden, die bereits alle benötigten Bilder enthält."></i>
 							</label>
 							<select name="gallery_id" id="gallery_id" class="form-control">
 								<option value="">-- Zuerst Kategorie auswählen --</option>
-								<?php if (isset($article->gallery_id) && !empty($selectedGalleries)): ?>
-									<?php foreach ($selectedGalleries as $gal): ?>
+								<?php if (isset($article->gallery_id) && !empty($selectedGalleries)) { ?>
+									<?php foreach ($selectedGalleries as $gal) { ?>
 										<option value="<?= htmlspecialchars($gal->id) ?>" <?= $article->gallery_id == $gal->id ? 'selected' : '' ?>>
 											<?= htmlspecialchars($gal->name) ?>
 										</option>
-									<?php endforeach; ?>
-								<?php endif; ?>
+									<?php } ?>
+								<?php } ?>
 							</select>
 						</div>
 					</div>
@@ -277,21 +301,21 @@ $menuOptionsJson = json_encode($menuOptions);
 					<div class="row form-group pb-3">
 						<div class="col-md-4">
 							<label for="start_date_from" class="col-form-label">Startdatum
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Startdatum der Artikel. Nach Eingabe des Datums wird die Artikel am angegebenen Datum automatisch aktiviert.Das bedeutet: Wenn z. B. der 28.01.2025 eingegeben wird, erscheint die Karte am 28.01.2025 um 00:00 Uhr. Wenn kein Datum eingegeben wird, läuft der Beitrag ohne zeitliche Begrenzung** und wird sofort nach dem Speichern** angezeigt."></i>
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Startdatum der Artikel. Nach Eingabe des Datums wird die Artikel am angegebenen Datum automatisch aktiviert. Das bedeutet: Wenn z. B. der 28.01.2025 eingegeben wird, erscheint die Karte am 28.01.2025 um 00:00 Uhr. Wenn kein Datum eingegeben wird, läuft der Beitrag ohne zeitliche Begrenzung und wird sofort nach dem Speichern angezeigt."></i>
 							</label>
-							<input type="date" class="form-control" name="start_date_from" value="<?= htmlspecialchars($article->start_date_from ?? '') ?>">
+							<input type="date" class="form-control" name="start_date_from" id="start_date_from" value="<?= htmlspecialchars($article->start_date_from ?? '') ?>">
 						</div>
 						<div class="col-md-4">
 							<label for="end_date_to" class="col-form-label">Enddatum
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Enddatum der Artikel. Nach Eingabe des Datums wird die Artikel am angegebenen Datum automatisch deaktiviert.Das bedeutet: Wenn z. B. der 30.01.2025 eingegeben wird, wird die Karte am 30.01.2025 um 23:59 Uhr automatisch abgeschaltet. Wichtig: Der Beitrag muss als „Aktiv“ markiert sein, selbst wenn ein Start- und Enddatum definiert ist."></i>
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Enddatum der Artikel. Nach Eingabe des Datums wird die Artikel am angegebenen Datum automatisch deaktiviert. Das bedeutet: Wenn z. B. der 30.01.2025 eingegeben wird, wird die Karte am 30.01.2025 um 23:59 Uhr automatisch abgeschaltet. Wichtig: Der Beitrag muss als „Aktiv“ markiert sein, selbst wenn ein Start- und Enddatum definiert ist."></i>
 							</label>
-							<input type="date" class="form-control" name="end_date_to" value="<?= htmlspecialchars($article->end_date_to ?? '') ?>">
+							<input type="date" class="form-control" name="end_date_to" id="end_date_to" value="<?= htmlspecialchars($article->end_date_to ?? '') ?>">
 						</div>
 						<div class="col-md-4">
 							<label for="active" class="col-form-label">Status
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl, ob der Artikel aktiv sein soll oder verborgen bleibt und für die Öffentlichkeit nicht sichtbar ist."></i>
 							</label>
-							<select name="active" class="form-control">
+							<select name="active" id="active" class="form-control">
 								<option value="1" <?= (isset($article) && $article->active == '1') ? 'selected' : '' ?>>Aktiv</option>
 								<option value="0" <?= (isset($article) && $article->active == '0') ? 'selected' : '' ?>>Inaktiv</option>
 							</select>
@@ -307,13 +331,9 @@ $menuOptionsJson = json_encode($menuOptions);
 		</section>
 	</div>
 </div>
-<style>
-	.current-image { max-width: 40%; height: auto; }
-	.section-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
-</style>
+
 <script>const BASE_URL = "<?= base_url() ?>";</script>
 <script>
-	// JavaScript kód zostáva nezmenený, nakoľko sa týka funkcionality a nie dizajnu
 	let sectionCount = 0, maxSections = 6, sectionsData = <?= json_encode($sections ?? []) ?>;
 	const menuOptions = <?= $menuOptionsJson ?>;
 
@@ -328,44 +348,53 @@ $menuOptionsJson = json_encode($menuOptions);
 		});
 
 		const html = `
-    <div class="row align-items-start border p-2 mb-2" data-section="${id}">
-        <div class="col-md-9">
-            <textarea name="sections[]" class="form-control summernote" rows="3">${content}</textarea>
-        </div>
-        <div class="col-md-3">
-            <input type="file" name="section_images[]" class="form-control mb-1">
-            <input type="text" name="section_image_titles[]" class="form-control mb-1" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
-            <input type="hidden" name="ftp_section_image[]" id="ftp_section_image${id}" value="${ftpImage}">
-            <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image${id}" data-preview-target="sectionImagePreview${id}">
-                Bild aus FTP wählen
-            </button>
-            <div id="sectionImagePreview${id}" class="mb-2">
-                ${ftpImage ? `<img src="${ftpImage}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
-                ${img ? `<img src="${img}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
+        <div class="row align-items-start border p-2 mb-2" data-section="${id}">
+            <div class="col-md-9">
+                <label for="section_content${id}" class="col-form-label">Inhalt</label>
+                <textarea name="sections[]" id="section_content${id}" class="form-control summernote" rows="3">${content}</textarea>
             </div>
-        </div>
-        <div class="col-md-12 mt-2">
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="button_name${id}">Button-Name</label>
-                    <input type="text" name="button_names[]" class="form-control button-name" id="button_name${id}" placeholder="Name des Buttons" value="${buttonName}">
+            <div class="col-md-3">
+                <div class="mb-2">
+                    <label for="section_image${id}" class="col-form-label">Bild hochladen</label>
+                    <input type="file" name="section_images[]" id="section_image${id}" class="form-control">
                 </div>
-                <div class="col-md-4">
-                    <label for="subpage${id}">Unterseite</label>
-                    <select name="subpages[]" class="form-control subpage" id="subpage${id}" ${!buttonName ? 'disabled' : ''}>
-                        ${optionsHtml}
-                    </select>
+                <div class="mb-2">
+                    <label for="section_image_title${id}" class="col-form-label">Titel des Bildes (SEO)</label>
+                    <input type="text" name="section_image_titles[]" id="section_image_title${id}" class="form-control" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
                 </div>
-                <div class="col-md-4">
-                    <label for="external_url${id}">Externe URL</label>
-                    <input type="url" name="external_urls[]" class="form-control external-url" id="external_url${id}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
+                <input type="hidden" name="ftp_section_image[]" id="ftp_section_image${id}" value="${ftpImage}">
+                <div class="mb-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_section_image${id}" data-preview-target="sectionImagePreview${id}">
+                        Bild aus FTP wählen
+                    </button>
+                </div>
+                <div id="sectionImagePreview${id}" class="mb-2">
+                    ${ftpImage ? `<img src="${ftpImage}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
+                    ${img ? `<img src="${img}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
                 </div>
             </div>
-            <div class="section-actions">
-                <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+            <div class="col-md-12 mt-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="button_name${id}" class="col-form-label">Button-Name</label>
+                        <input type="text" name="button_names[]" class="form-control button-name" id="button_name${id}" placeholder="Name des Buttons" value="${buttonName}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="subpage${id}" class="col-form-label">Unterseite</label>
+                        <select name="subpages[]" class="form-control subpage" id="subpage${id}" ${!buttonName ? 'disabled' : ''}>
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="external_url${id}" class="col-form-label">Externe URL</label>
+                        <input type="url" name="external_urls[]" class="form-control external-url" id="external_url${id}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
+                    </div>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+                </div>
             </div>
-        </div>
-    </div>`;
+        </div>`;
 		document.querySelector('#sections-container').insertAdjacentHTML('beforeend', html);
 
 		$(`[data-section="${id}"] .summernote`).summernote({ height: 200 });
