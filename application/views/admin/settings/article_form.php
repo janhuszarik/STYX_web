@@ -68,6 +68,7 @@ $menuOptionsJson = json_encode($menuOptions);
 					<div class="row form-group pb-3">
 						<div class="col-md-2">
 							<label for="lang" class="col-form-label">Sprache</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestimmt die Sprache des Artikels. Wählen Sie zwischen Deutsch oder Englisch. Der Artikel wird in der gewählten Sprache gespeichert und angezeigt."></i>
 							<select name="lang" id="lang" class="form-control" required>
 								<option value="de" <?= (isset($article) && $article->lang == 'de') ? 'selected' : '' ?>>Deutsch</option>
 								<option value="en" <?= (isset($article) && $article->lang == 'en') ? 'selected' : '' ?>>English</option>
@@ -75,10 +76,12 @@ $menuOptionsJson = json_encode($menuOptions);
 						</div>
 						<div class="col-md-5">
 							<label for="title" class="col-form-label">Titel</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Haupttitel des Artikels. Dieser wird auf der Webseite angezeigt und ist für SEO relevant. Erforderliches Feld."></i>
 							<input type="text" class="form-control" name="title" id="title" value="<?= htmlspecialchars($article->title ?? '') ?>" required>
 						</div>
 						<div class="col-md-5">
 							<label for="subtitle" class="col-form-label">Untertitel</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ein optionaler Untertitel, der zusätzliche Informationen zum Artikel bereitstellt. Wird unter dem Haupttitel angezeigt."></i>
 							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>">
 						</div>
 					</div>
@@ -86,6 +89,7 @@ $menuOptionsJson = json_encode($menuOptions);
 					<div class="row form-group pb-3">
 						<div class="col-md-6">
 							<label for="category_name" class="col-form-label">Kategorie</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Zeigt die Kategorie des Artikels an. Dieses Feld ist schreibgeschützt und basiert auf der ausgewählten Kategorie-ID."></i>
 							<?php if ($categoryName === 'Kategorie nicht gefunden'): ?>
 								<input type="text" class="form-control is-invalid" id="category_name" name="category_name" value="Kategorie nicht gefunden (ID: <?= htmlspecialchars($categoryId) ?>) - Bitte wählen Sie eine gültige Kategorie" readonly>
 								<?php if ($this->session->flashdata('error')): ?>
@@ -99,6 +103,7 @@ $menuOptionsJson = json_encode($menuOptions);
 						</div>
 						<div class="col-md-6">
 							<label for="slug" class="col-form-label">Slug</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-freundliche Adresse des Artikels. Wird automatisch aus dem Titel generiert und ist schreibgeschützt."></i>
 							<input type="text" class="form-control" id="slug" value="<?= htmlspecialchars($article->slug ?? '') ?>" readonly>
 						</div>
 					</div>
@@ -106,14 +111,17 @@ $menuOptionsJson = json_encode($menuOptions);
 					<div class="row form-group pb-3">
 						<div class="col-md-8">
 							<label for="image" class="col-form-label">Hauptbild hochladen</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Hauptbildes für den Artikel. Das Bild wird in der Artikelansicht angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
 							<input type="file" class="form-control mb-1" name="image" id="image">
 							<label for="image_title" class="col-form-label">Titel des Bildes (SEO)</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Hauptbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
 							<input type="text" class="form-control mb-1" name="image_title" id="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>">
 							<input type="hidden" name="old_image" value="<?= htmlspecialchars($article->image ?? '') ?>">
 							<input type="hidden" name="ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
 							<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_image" data-preview-target="ftpImagePreview">
 								Bild aus FTP wählen
 							</button>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis. Das ausgewählte Bild wird als Hauptbild des Artikels gespeichert."></i>
 							<div id="ftpImagePreview" class="mb-2">
 								<?php if (!empty($article->ftp_image)): ?>
 									<img src="<?= htmlspecialchars($article->ftp_image) ?>" style="max-width:150px;max-height:150px;object-fit:contain;">
@@ -166,10 +174,12 @@ $menuOptionsJson = json_encode($menuOptions);
 					<div class="row form-group pb-3">
 						<div class="col-md-6">
 							<label for="keywords" class="col-form-label">Schlüsselwörter</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Durch Kommas getrennte Schlüsselwörter für die SEO des Artikels. Diese verbessern die Auffindbarkeit in Suchmaschinen."></i>
 							<input type="text" class="form-control" name="keywords" id="keywords" value="<?= htmlspecialchars($article->keywords ?? '') ?>">
 						</div>
 						<div class="col-md-6">
 							<label for="meta" class="col-form-label">Meta-Beschreibung</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Eine kurze Beschreibung des Artikels für Suchmaschinen. Wird in den Suchergebnissen angezeigt und sollte 50-160 Zeichen lang sein."></i>
 							<input type="text" class="form-control" name="meta" id="meta" value="<?= htmlspecialchars($article->meta ?? '') ?>">
 						</div>
 					</div>
@@ -191,18 +201,22 @@ $menuOptionsJson = json_encode($menuOptions);
 								<div class="col-md-4 mb-3">
 									<div class="mb-2">
 										<label for="product_name<?= $i ?>" class="col-form-label">Produktname</label>
+										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Name des empfohlenen Produkts. Wird in der Sektion ‚Empfohlene Produkte‘ angezeigt. Kann leer bleiben, wenn nicht benötigt."></i>
 										<input type="text" class="form-control" id="product_name<?= $i ?>" name="product_name<?= $i ?>" placeholder="Name" value="<?= htmlspecialchars($article->{'product_name' . $i} ?? '') ?>">
 									</div>
 									<div class="mb-2">
 										<label for="product_description<?= $i ?>" class="col-form-label">Beschreibung</label>
+										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Eine kurze Beschreibung des empfohlenen Produkts. Wird unter dem Produktnamen angezeigt. Kann leer bleiben, wenn nicht benötigt."></i>
 										<textarea class="form-control" id="product_description<?= $i ?>" name="product_description<?= $i ?>" rows="2" placeholder="Beschreibung"><?= htmlspecialchars($article->{'product_description' . $i} ?? '') ?></textarea>
 									</div>
 									<div class="mb-2">
 										<label for="product_image<?= $i ?>" class="col-form-label">Produktbild hochladen</label>
+										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Bildes für das empfohlene Produkt. Wird in der Sektion ‚Empfohlene Produkte‘ angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
 										<input type="file" class="form-control" id="product_image<?= $i ?>" name="product_image<?= $i ?>">
 									</div>
 									<div class="mb-2">
 										<label for="product_image<?= $i ?>_title" class="col-form-label">Titel des Bildes (SEO)</label>
+										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Produktbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
 										<input type="text" class="form-control" id="product_image<?= $i ?>_title" name="product_image<?= $i ?>_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->{'product_image' . $i . '_title'} ?? '') ?>">
 									</div>
 									<input type="hidden" name="ftp_product_image<?= $i ?>" id="ftp_product_image<?= $i ?>" value="<?= htmlspecialchars($ftpProductImage) ?>">
@@ -211,6 +225,7 @@ $menuOptionsJson = json_encode($menuOptions);
 										<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_product_image<?= $i ?>" data-preview-target="productImagePreview<?= $i ?>">
 											Bild aus FTP wählen
 										</button>
+										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis für das empfohlene Produkt. Das ausgewählte Bild wird in der Sektion ‚Empfohlene Produkte‘ angezeigt."></i>
 									</div>
 									<div id="productImagePreview<?= $i ?>" class="mb-2">
 										<?php if (!empty($ftpProductImage)): ?>
@@ -219,6 +234,7 @@ $menuOptionsJson = json_encode($menuOptions);
 									</div>
 									<div class="mb-2">
 										<label for="product_url<?= $i ?>" class="col-form-label">Produkt-URL</label>
+										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL, zu der das empfohlene Produkt verlinkt. Kann eine interne oder externe Seite sein. Kann leer bleiben, wenn kein Link benötigt wird."></i>
 										<input type="text" class="form-control" id="product_url<?= $i ?>" name="product_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'product_url' . $i} ?? '') ?>">
 									</div>
 								</div>
@@ -242,10 +258,12 @@ $menuOptionsJson = json_encode($menuOptions);
 								<div class="col-md-4 mb-3">
 									<div class="mb-2">
 										<label for="empfohlen_name<?= $i ?>" class="col-form-label">Titel</label>
+										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Titel des empfohlenen Artikels oder der Unterseite in der Sektion ‚Das könnte Sie interessieren‘. Kann leer bleiben, wenn nicht benötigt."></i>
 										<input type="text" class="form-control" id="empfohlen_name<?= $i ?>" name="empfohlen_name<?= $i ?>" placeholder="Titel" value="<?= htmlspecialchars($article->{'empfohlen_name' . $i} ?? '') ?>">
 									</div>
 									<div class="mb-2">
 										<label for="empfohlen_url<?= $i ?>" class="col-form-label">URL</label>
+										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL des empfohlenen Artikels oder der Unterseite. Kann eine interne oder externe Seite sein. Kann leer bleiben, wenn nicht benötigt."></i>
 										<input type="text" class="form-control" id="empfohlen_url<?= $i ?>" name="empfohlen_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'empfohlen_url' . $i} ?? '') ?>">
 									</div>
 								</div>
@@ -262,9 +280,8 @@ $menuOptionsJson = json_encode($menuOptions);
 					</div>
 					<div class="row form-group pb-3">
 						<div class="col-md-6">
-							<label for="gallery_category_id" class="col-form-label">Galerie-Kategorie
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl einer Galerie-Kategorie, aus der wir Bilder auswählen möchten."></i>
-							</label>
+							<label for="gallery_category_id" class="col-form-label">Galerie-Kategorie</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wählt die Kategorie der Galerie aus, aus der Bilder für den Artikel ausgewählt werden sollen. Bestimmt die verfügbaren Galerien im nächsten Feld."></i>
 							<select name="gallery_category_id" id="gallery_category_id" class="form-control">
 								<option value="">-- Kategorie auswählen --</option>
 								<?php foreach ($galleryCategories as $cat): ?>
@@ -275,9 +292,8 @@ $menuOptionsJson = json_encode($menuOptions);
 							</select>
 						</div>
 						<div class="col-md-6">
-							<label for="gallery_id" class="col-form-label">Galerie
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl einer konkreten Galerie, die diesem Artikel zugewiesen wird. Jedem Artikel kann nur eine Galerie zugeordnet werden. Wenn mehrere Bilder aus anderen Galeriekategorien benötigt werden, muss **eine neue Galerie** in der entsprechenden Kategorie erstellt werden, die bereits alle benötigten Bilder enthält."></i>
-							</label>
+							<label for="gallery_id" class="col-form-label">Galerie</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wählt eine konkrete Galerie aus, die diesem Artikel zugewiesen wird. Nur eine Galerie pro Artikel möglich. Für Bilder aus verschiedenen Kategorien muss eine neue Galerie erstellt werden, die alle benötigten Bilder enthält."></i>
 							<select name="gallery_id" id="gallery_id" class="form-control">
 								<option value="">-- Zuerst Kategorie auswählen --</option>
 								<?php if (isset($article->gallery_id) && !empty($selectedGalleries)) { ?>
@@ -300,21 +316,18 @@ $menuOptionsJson = json_encode($menuOptions);
 					</div>
 					<div class="row form-group pb-3">
 						<div class="col-md-4">
-							<label for="start_date_from" class="col-form-label">Startdatum
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Startdatum der Artikel. Nach Eingabe des Datums wird die Artikel am angegebenen Datum automatisch aktiviert. Das bedeutet: Wenn z. B. der 28.01.2025 eingegeben wird, erscheint die Karte am 28.01.2025 um 00:00 Uhr. Wenn kein Datum eingegeben wird, läuft der Beitrag ohne zeitliche Begrenzung und wird sofort nach dem Speichern angezeigt."></i>
-							</label>
+							<label for="start_date_from" class="col-form-label">Startdatum</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt das Startdatum des Artikels fest. Der Artikel wird ab diesem Datum um 00:00 Uhr automatisch aktiviert. Ohne Datum wird der Artikel sofort nach dem Speichern angezeigt."></i>
 							<input type="date" class="form-control" name="start_date_from" id="start_date_from" value="<?= htmlspecialchars($article->start_date_from ?? '') ?>">
 						</div>
 						<div class="col-md-4">
-							<label for="end_date_to" class="col-form-label">Enddatum
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Enddatum der Artikel. Nach Eingabe des Datums wird die Artikel am angegebenen Datum automatisch deaktiviert. Das bedeutet: Wenn z. B. der 30.01.2025 eingegeben wird, wird die Karte am 30.01.2025 um 23:59 Uhr automatisch abgeschaltet. Wichtig: Der Beitrag muss als „Aktiv“ markiert sein, selbst wenn ein Start- und Enddatum definiert ist."></i>
-							</label>
+							<label for="end_date_to" class="col-form-label">Enddatum</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt das Enddatum des Artikels fest. Der Artikel wird am angegebenen Datum um 23:59 Uhr automatisch deaktiviert. Der Status muss ‚Aktiv‘ sein, damit das Datum wirksam ist."></i>
 							<input type="date" class="form-control" name="end_date_to" id="end_date_to" value="<?= htmlspecialchars($article->end_date_to ?? '') ?>">
 						</div>
 						<div class="col-md-4">
-							<label for="active" class="col-form-label">Status
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl, ob der Artikel aktiv sein soll oder verborgen bleibt und für die Öffentlichkeit nicht sichtbar ist."></i>
-							</label>
+							<label for="active" class="col-form-label">Status</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestimmt, ob der Artikel aktiv (sichtbar) oder inaktiv (verborgen) ist. Inaktive Artikel sind für die Öffentlichkeit nicht sichtbar, unabhängig von Start- und Enddatum."></i>
 							<select name="active" id="active" class="form-control">
 								<option value="1" <?= (isset($article) && $article->active == '1') ? 'selected' : '' ?>>Aktiv</option>
 								<option value="0" <?= (isset($article) && $article->active == '0') ? 'selected' : '' ?>>Inaktiv</option>
@@ -351,15 +364,18 @@ $menuOptionsJson = json_encode($menuOptions);
         <div class="row align-items-start border p-2 mb-2" data-section="${id}">
             <div class="col-md-9">
                 <label for="section_content${id}" class="col-form-label">Inhalt</label>
+                <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Hauptinhalt der Sektion. Verwenden Sie den Texteditor, um formatierten Text, Bilder oder Links hinzuzufügen. Jede Sektion wird im Artikel als separater Abschnitt angezeigt."></i>
                 <textarea name="sections[]" id="section_content${id}" class="form-control summernote" rows="3">${content}</textarea>
             </div>
             <div class="col-md-3">
                 <div class="mb-2">
                     <label for="section_image${id}" class="col-form-label">Bild hochladen</label>
+                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Bildes für diese Sektion. Das Bild wird neben dem Inhalt der Sektion angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
                     <input type="file" name="section_images[]" id="section_image${id}" class="form-control">
                 </div>
                 <div class="mb-2">
                     <label for="section_image_title${id}" class="col-form-label">Titel des Bildes (SEO)</label>
+                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Sektionsbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
                     <input type="text" name="section_image_titles[]" id="section_image_title${id}" class="form-control" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
                 </div>
                 <input type="hidden" name="ftp_section_image[]" id="ftp_section_image${id}" value="${ftpImage}">
@@ -367,6 +383,7 @@ $menuOptionsJson = json_encode($menuOptions);
                     <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_section_image${id}" data-preview-target="sectionImagePreview${id}">
                         Bild aus FTP wählen
                     </button>
+                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis für diese Sektion. Das ausgewählte Bild wird in der Sektion angezeigt."></i>
                 </div>
                 <div id="sectionImagePreview${id}" class="mb-2">
                     ${ftpImage ? `<img src="${ftpImage}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
@@ -377,16 +394,19 @@ $menuOptionsJson = json_encode($menuOptions);
                 <div class="row">
                     <div class="col-md-4">
                         <label for="button_name${id}" class="col-form-label">Button-Name</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Text des Buttons in dieser Sektion. Wenn angegeben, wird ein Button angezeigt, der mit einer Unterseite oder externen URL verknüpft werden kann."></i>
                         <input type="text" name="button_names[]" class="form-control button-name" id="button_name${id}" placeholder="Name des Buttons" value="${buttonName}">
                     </div>
                     <div class="col-md-4">
                         <label for="subpage${id}" class="col-form-label">Unterseite</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer internen Unterseite aus dem Menü. Aktiviert, wenn ein Button-Name angegeben ist. Hat Vorrang vor einer externen URL."></i>
                         <select name="subpages[]" class="form-control subpage" id="subpage${id}" ${!buttonName ? 'disabled' : ''}>
                             ${optionsHtml}
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="external_url${id}" class="col-form-label">Externe URL</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer externen URL. Aktiviert, wenn ein Button-Name angegeben ist. Wird ignoriert, wenn eine Unterseite ausgewählt ist."></i>
                         <input type="url" name="external_urls[]" class="form-control external-url" id="external_url${id}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
                     </div>
                 </div>
