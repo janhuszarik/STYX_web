@@ -202,7 +202,7 @@ class Admin extends CI_Controller
 
 	public function sliderSave() {
 		$post = $this->input->post(NULL, TRUE); // Použi TRUE pre XSS filter
-		$id = isset($post['id']) ? $post['id'] : $this->uri->segment(4);
+		$id = $post['id'] ?? $this->uri->segment(4); // Priorita pre $post['id']
 		$segment3 = $this->uri->segment(3);
 
 		// === Zápis / editácia ===
@@ -211,11 +211,11 @@ class Admin extends CI_Controller
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
 
 			// Nahratie nového obrázku
-			$image = $this->upload_image('image', 'uploads/sliders/');
+			$image = $this->upload_image('image', 'Uploads/sliders/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['slider'] = (object)$post;
-				$data['slider']->image = $old_image; // zachová aktuálny obrázok pri chybe
+				$data['slider']->image = $old_image; // Zachová aktuálny obrázok pri chybe
 				$data['title'] = !empty($id) ? 'Slider bearbeiten' : 'Slider hinzufügen';
 				$data['page'] = 'admin/settings/slider_form';
 				$this->load->view('admin/layout/normal', $data);
@@ -223,17 +223,17 @@ class Admin extends CI_Controller
 			}
 
 			// Uloženie do DB
-			if ($this->Admin_model->save_slider_full($post, $image, $old_image, $id)) {
+			if ($this->Admin_model->save_slider_full($post, $image, $id)) {
 				// Zmazať pôvodný obrázok len ak bol nahratý nový
-				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/sliders/' . $old_image)) {
-					unlink(FCPATH . 'uploads/sliders/' . $old_image);
+				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/sliders/' . $old_image)) {
+					unlink(FCPATH . 'Uploads/sliders/' . $old_image);
 				}
 				$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 				redirect(BASE_URL . 'admin/slider');
 			} else {
 				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
 				$data['slider'] = (object)$post;
-				$data['slider']->image = $old_image; // zachovať starý obrázok pri chybe
+				$data['slider']->image = $old_image; // Zachovať starý obrázok pri chybe
 				$data['title'] = !empty($id) ? 'Slider bearbeiten' : 'Slider hinzufügen';
 				$data['page'] = 'admin/settings/slider_form';
 				$this->load->view('admin/layout/normal', $data);
@@ -241,6 +241,7 @@ class Admin extends CI_Controller
 			}
 		}
 
+		// Mazanie
 		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->delete_slider($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
@@ -250,6 +251,7 @@ class Admin extends CI_Controller
 			redirect(BASE_URL . 'admin/slider');
 		}
 
+		// Editácia
 		if ($segment3 == 'edit' && is_numeric($id)) {
 			$data['slider'] = $this->Admin_model->get_slider($id);
 			if (!$data['slider']) {
@@ -262,6 +264,7 @@ class Admin extends CI_Controller
 			return;
 		}
 
+		// Pridanie
 		if ($segment3 == 'add') {
 			$data['slider'] = new stdClass();
 			$data['title'] = 'Slider hinzufügen';
@@ -270,6 +273,7 @@ class Admin extends CI_Controller
 			return;
 		}
 
+		// Zoznam sliderov
 		$data['sliders'] = $this->Admin_model->get_all_sliders();
 		$data['title'] = 'Slider';
 		$data['page'] = 'admin/settings/sliders';

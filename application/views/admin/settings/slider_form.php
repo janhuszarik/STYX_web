@@ -1,8 +1,4 @@
-<?php
-/**
- * View file for adding or editing a slider item.
- */
-?>
+
 
 <div class="row">
 	<div class="col-lg-12">
@@ -17,7 +13,7 @@
 			<div class="card-body">
 				<form method="post" action="<?= base_url('admin/sliderSave') ?>" enctype="multipart/form-data">
 					<?php if (!empty($slider->id)): ?>
-						<input type="hidden" name="id" value="<?= $slider->id ?>">
+						<input type="hidden" name="id" value="<?= htmlspecialchars($slider->id) ?>">
 					<?php endif; ?>
 
 					<div class="row form-group pb-3">
@@ -86,10 +82,7 @@
 							</select>
 						</div>
 					</div>
-					<?php if (!empty($slider->id)): ?>
-						<input type="hidden" name="id" value="<?= $slider->id ?>">
-						<input type="hidden" name="old_image" value="<?= htmlspecialchars($slider->image ?? '') ?>">
-					<?php endif; ?>
+
 
 					<footer class="card-footer text-end">
 						<button type="submit" class="btn btn-primary"><?= isset($slider->id) ? 'Änderungen speichern' : 'Speichern' ?></button>
@@ -100,3 +93,16 @@
 		</section>
 	</div>
 </div>
+<script>
+	// Validácia typu súboru na strane klienta
+	document.querySelector('input[name="image"]').addEventListener('change', function(e) {
+		const file = e.target.files[0];
+		if (file) {
+			const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+			if (!validTypes.includes(file.type)) {
+				alert('Bitte wählen Sie ein gültiges Bildformat (JPG, PNG, GIF).');
+				e.target.value = '';
+			}
+		}
+	});
+</script>

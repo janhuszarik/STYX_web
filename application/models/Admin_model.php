@@ -178,26 +178,29 @@ function getNewsletters(){
 			'text_color' => $this->db->escape_str($post['text_color'] ?? '#000000'),
 			'orderBy' => is_numeric($post['orderBy']) ? (int)$post['orderBy'] : 0,
 			'active' => $post['active'],
-			);
+		);
 
 		if ($image && !isset($image['error']) && isset($image['file_name'])) {
 			$data['image'] = $image['file_name'];
 		}
 
-
 		if (!empty($id) && is_numeric($id)) {
-			if (!$this->get_slider($id)) {
+			// Overiť, či slider existuje
+			$existing_slider = $this->get_slider($id);
+			if (!$existing_slider) {
+				log_message('error', "Slider s ID $id neexistuje.");
 				return false;
 			}
+
 			$data['updated_at'] = date('Y-m-d H:i:s');
 			$this->db->where('id', $id);
 			return $this->db->update('slider', $data);
 		} else {
+			// Vytvorenie nového záznamu
 			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('slider', $data);
 		}
 	}
-
 
 	public function delete_slider($id) {
 		if (!is_numeric($id)) {
