@@ -162,11 +162,13 @@ for ($i = 1; $i <= 3; $i++) {
 			<div class="row g-4">
 				<?php foreach ($galleryImages as $image): ?>
 					<?php
-					$imgPath = base_url($image->image_path);
-					$thumbPath = base_url(obrpridajthumb($image->image_path));
+					$fullImg = base_url($image->image_path);
+
+					$thumbImg = preg_replace('/(\.\w+)$/', '_thumb$1', $image->image_path);
+					$thumbPath = base_url($thumbImg);
 					?>
 					<div class="col-6 col-sm-4 col-md-3">
-						<a href="<?= $imgPath ?>" target="_blank">
+						<a href="<?= $fullImg ?>" target="_blank">
 							<img src="<?= $thumbPath ?>" alt="Galerie Bild" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover; aspect-ratio: 4/3;">
 						</a>
 					</div>
@@ -175,6 +177,7 @@ for ($i = 1; $i <= 3; $i++) {
 		</div>
 	</section>
 <?php endif; ?>
+
 
 
 
