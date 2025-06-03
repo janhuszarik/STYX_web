@@ -170,14 +170,16 @@ class Article_model extends CI_Model
 			$data["product_image{$i}"] = null;
 
 			if (!empty($_FILES["product_image{$i}"]['name'])) {
-				$up = uploadImg("product_image{$i}", 'uploads/articles/products');
+				$nazov = url_oprava($post['title'] ?? 'product') . "_produkt{$i}_" . time();
+				$up = uploadImg("product_image{$i}", 'uploads/articles/products', $nazov);
 				if ($up && file_exists($up)) {
 					$data["product_image{$i}"] = $up;
 				} else {
 					log_message('error', "Failed to upload product image $i: " . ($up ?: 'No file'));
 					return false;
 				}
-			} elseif (!empty($post["ftp_product_image{$i}"])) {
+			}
+			elseif (!empty($post["ftp_product_image{$i}"])) {
 				$ftpPath = $post["ftp_product_image{$i}"];
 				$localDir = FCPATH . 'uploads/articles/products/';
 				@mkdir($localDir, 0755, true);
@@ -185,7 +187,7 @@ class Article_model extends CI_Model
 				if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 					$dst = $localDir . basename($ftpPath);
 					if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-						$data["product_image{$i}"] = basename($ftpPath);
+						$data["product_image{$i}"] = 'uploads/articles/products/' . basename($ftpPath);
 					} else {
 						log_message('error', "Failed to download FTP product image $i: $ftpPath");
 						return false;
@@ -194,13 +196,13 @@ class Article_model extends CI_Model
 					$src = FCPATH . ltrim($ftpPath, '/');
 					$dst = $localDir . basename($ftpPath);
 					if (@copy($src, $dst)) {
-						$data["product_image{$i}"] = basename($ftpPath);
+						$data["product_image{$i}"] = 'uploads/articles/products/' . basename($ftpPath);
 					} else {
 						log_message('error', "Failed to copy FTP product image $i: $src");
 						return false;
 					}
 				} else {
-					$data["product_image{$i}"] = basename($ftpPath);
+					$data["product_image{$i}"] = 'uploads/articles/products/' . basename($ftpPath);
 				}
 			} else {
 				$data["product_image{$i}"] = $post["old_product_image{$i}"] ?? null;
