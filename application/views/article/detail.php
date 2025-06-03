@@ -152,6 +152,30 @@ for ($i = 1; $i <= 3; $i++) {
 		</div>
 	</section>
 <?php endif; ?>
+<?php if (!empty($galleryImages)): ?>
+	<section class="article-gallery py-5">
+		<div class="container">
+			<div class="text-center mb-4">
+				<h2 class="fw-bold">Galerie</h2>
+				<p class="text-muted">In dieser Galerie finden Sie weitere Bilder zum Thema.</p>
+			</div>
+			<div class="row g-4">
+				<?php foreach ($galleryImages as $image): ?>
+					<?php
+					$imgPath = base_url($image->image_path);
+					$thumbPath = base_url(obrpridajthumb($image->image_path));
+					?>
+					<div class="col-6 col-sm-4 col-md-3">
+						<a href="<?= $imgPath ?>" target="_blank">
+							<img src="<?= $thumbPath ?>" alt="Galerie Bild" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover; aspect-ratio: 4/3;">
+						</a>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+<?php endif; ?>
+
 
 
 

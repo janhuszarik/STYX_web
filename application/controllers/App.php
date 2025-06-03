@@ -63,16 +63,24 @@ class App extends CI_Controller
 
 		$sections = $this->App_model->getSections($article->id);
 
+		$galleryImages = [];
+		if (!empty($article->gallery_id)) {
+			$this->load->model('Gallery_model');
+			$galleryImages = $this->Gallery_model->getImagesByGalleryId($article->gallery_id);
+		}
+
 		$data['article'] = $article;
-		$data['sections'] = $sections; // <-- sem doplň sekcie
+		$data['sections'] = $sections;
+		$data['galleryImages'] = $galleryImages; // odovzdáme do view
 		$data['title'] = $article->title;
 		$data['description'] = $article->description;
 		$data['keywords'] = $article->keywords;
 		$data['image'] = BASE_URL . LOGO;
-		$data['page'] = 'article/detail'; // univerzálne view
+		$data['page'] = 'article/detail';
 
 		$this->load->view('layout/normal', $data);
 	}
+
 
 
 	private function check_cookie_consent() {
