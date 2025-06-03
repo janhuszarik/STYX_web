@@ -47,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | controller and method URI segments.
 |
 | Examples:	my-controller/index	-> my_controller/index
-|		my-controller/my-method	-> my_controller/my_method
+| my-controller/my-method	-> my_controller/my_method
 */
 
     $route['default_controller'] 								= 'app';
@@ -57,15 +57,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['generate_data'] 									= 'Generate_data/index';
 	$route['auth/login'] 										= 'auth/login';
     $route['login'] 											= 'auth/login';
-	$route['register'] 											= '/auth/register';
-	$route['auth/register'] 									= '/auth/register';
     $route['auth/logout'] 										= 'auth/logout';
+	$route['auth/delete_user/(:num)'] 							= 'auth/delete_user/$1';
     $route['logout'] 											= 'auth/logout';
     $route['auth/activate'] 									= 'auth/activate';
     $route['auth/forgot_password'] 								= 'auth/forgot_password';
 	$route['change_password'] 									= 'auth/change_password';
 	$route['auth/change_password'] 								= 'auth/change_password';
-	$route['auth'] 												= 'auth';
+	$route['admin/auth'] 										= 'auth';
 	$route['xml/sitemap'] 										= 'xml/sitemap';
 	$route['error404only'] 										= 'app/error404only';
 	$route['sitemap'] 											= 'xml/sitemap';

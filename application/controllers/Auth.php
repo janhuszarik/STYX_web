@@ -9,11 +9,12 @@ class Auth extends CI_Controller
 {
 	public $data = [];
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->load->library(['ion_auth', 'form_validation']);
 		$this->load->helper(['url', 'language']);
-		$this->load->model('ion_auth_model');
+		$this->load->model('ion_auth_model', 'admin_model');;
 		$this->form_validation->set_error_delimiters(
 			$this->config->item('error_start_delimiter', 'ion_auth'),
 			$this->config->item('error_end_delimiter', 'ion_auth')
@@ -26,36 +27,32 @@ class Auth extends CI_Controller
 	 */
 	public function index()
 	{
-
 		if (!$this->ion_auth->logged_in())
 		{
-			// redirect them to the login page
-			redirect('auth', 'refresh');
+			redirect('auth/login', 'refresh');
 		}
-		else if (!$this->ion_auth->is_admin()) // remove this elseif if you want to enable this for non-admins
+		elseif (!$this->ion_auth->is_admin())
 		{
-			// redirect them to the home page because they must be an administrator to view this
-			show_error('You must be an administrator to view this page.');
+			return show_error('You must be an administrator to view this page.');
 		}
 		else
 		{
-			$this->data['title'] = $this->lang->line('index_heading');
-
-			// set the flash data error message if there is one
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-
-			//list the users
-			$this->data['users'] = $this->ion_auth->users()->result();
-
-			//USAGE NOTE - you can do more complicated queries like this
-			//$this->data['users'] = $this->ion_auth->where('field', 'value')->users()->result();
-
-			foreach ($this->data['users'] as $k => $user)
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$users = $this->ion_auth->users()->result();
+			// Filter out admin@admin user
+			$data['users'] = array_filter($users, function($user) {
+				return $user->email !== 'admin@admin.com';
+			});
+			foreach ($data['users'] as $k => $user)
 			{
-				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
+				$data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
 			}
 
-			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'index', $this->data);
+			// Admin layout data
+			$data['title'] = lang('index_heading');
+			$data['page'] = 'auth/index';
+
+			$this->load->view('admin/layout/normal', $data);
 		}
 	}
 
@@ -215,6 +212,45 @@ class Auth extends CI_Controller
 				redirect('auth/change_password', 'refresh');
 			}
 		}
+	}
+	public function delete_user($id)
+	{
+		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
+		{
+			redirect('auth', 'refresh');
+		}
+
+		$user = $this->ion_auth->user($id)->row();
+		if (!$user)
+		{
+			$this->session->set_flashdata('message', 'Benutzer nicht gefunden.');
+			redirect('auth', 'refresh');
+		}
+
+		// Prevent deletion of admin@admin user (for consistency with index filtering)
+		if ($user->email === 'admin@admin')
+		{
+			$this->session->set_flashdata('message', 'Der Benutzer admin@admin kann nicht gelöscht werden.');
+			redirect('auth', 'refresh');
+		}
+
+		// Prevent deletion of the currently logged-in user
+		if ($this->ion_auth->user()->row()->id == $id)
+		{
+			$this->session->set_flashdata('message', 'Sie können Ihren eigenen Benutzer nicht löschen.');
+			redirect('auth', 'refresh');
+		}
+
+		if ($this->ion_auth->delete_user($id))
+		{
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+		}
+		else
+		{
+			$this->session->set_flashdata('message', $this->ion_auth->errors());
+		}
+
+		redirect('auth', 'refresh');
 	}
 
 	/**
@@ -723,7 +759,7 @@ class Auth extends CI_Controller
 	/**
 	 * Redirect a user checking if is admin
 	 */
-	public function redirectUser(){
+	protected function redirectUser(){
 		if ($this->ion_auth->is_admin()){
 			redirect('auth', 'refresh');
 		}
@@ -737,8 +773,6 @@ class Auth extends CI_Controller
 	 */
 	public function edit_user($id)
 	{
-		$this->data['title'] = $this->lang->line('edit_user_heading');
-
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $id)))
 		{
 			redirect('auth', 'refresh');
@@ -748,29 +782,21 @@ class Auth extends CI_Controller
 		$groups = $this->ion_auth->groups()->result_array();
 		$currentGroups = $this->ion_auth->get_users_groups($id)->result_array();
 
-		//USAGE NOTE - you can do more complicated queries like this
-		//$groups = $this->ion_auth->where(['field' => 'value'])->groups()->result_array();
+		// Validate form input
+		$this->form_validation->set_rules('first_name', lang('edit_user_validation_fname_label'), 'trim|required');
+		$this->form_validation->set_rules('last_name', lang('edit_user_validation_lname_label'), 'trim|required');
+		$this->form_validation->set_rules('email', lang('edit_user_validation_email_label'), 'trim|required|valid_email');
+		$this->form_validation->set_rules('phone', lang('edit_user_validation_phone_label'), 'trim');
+		$this->form_validation->set_rules('company', lang('edit_user_validation_company_label'), 'trim');
+		$this->form_validation->set_rules('password', lang('edit_user_validation_password_label'), 'min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
+		$this->form_validation->set_rules('password_confirm', lang('edit_user_validation_password_confirm_label'), 'trim');
 
-
-		// validate form input
-		$this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'trim|required');
-		$this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'trim|required');
-		$this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'trim');
-		$this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'), 'trim');
-
-		if (isset($_POST) && !empty($_POST))
+		if ($this->input->post() && !empty($this->input->post()))
 		{
-			// do we have a valid request?
+			// Validate CSRF
 			if ($this->_valid_csrf_nonce() === FALSE || $id != $this->input->post('id'))
 			{
-				show_error($this->lang->line('error_csrf'));
-			}
-
-			// update the password if it was posted
-			if ($this->input->post('password'))
-			{
-				$this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
-				$this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
+				show_error(lang('error_csrf'));
 			}
 
 			if ($this->form_validation->run() === TRUE)
@@ -778,99 +804,107 @@ class Auth extends CI_Controller
 				$data = [
 					'first_name' => $this->input->post('first_name'),
 					'last_name' => $this->input->post('last_name'),
+					'email' => strtolower($this->input->post('email')),
 					'company' => $this->input->post('company'),
 					'phone' => $this->input->post('phone'),
 				];
 
-				// update the password if it was posted
+				// Update password if provided
 				if ($this->input->post('password'))
 				{
 					$data['password'] = $this->input->post('password');
 				}
 
-				// Only allow updating groups if user is admin
+				// Update groups if user is admin
 				if ($this->ion_auth->is_admin())
 				{
-					// Update the groups user belongs to
-					$this->ion_auth->remove_from_group('', $id);
-
 					$groupData = $this->input->post('groups');
+					$this->ion_auth->remove_from_group('', $id);
 					if (isset($groupData) && !empty($groupData))
 					{
 						foreach ($groupData as $grp)
 						{
 							$this->ion_auth->add_to_group($grp, $id);
 						}
-
 					}
 				}
 
-				// check to see if we are updating the user
+				// Update user
 				if ($this->ion_auth->update($user->id, $data))
 				{
-					// redirect them back to the admin page if admin, or to the base url if non admin
 					$this->session->set_flashdata('message', $this->ion_auth->messages());
-					$this->redirectUser();
-
+					if ($this->ion_auth->is_admin())
+					{
+						redirect('auth', 'refresh');
+					}
+					else
+					{
+						redirect('/', 'refresh');
+					}
 				}
 				else
 				{
-					// redirect them back to the admin page if admin, or to the base url if non admin
 					$this->session->set_flashdata('message', $this->ion_auth->errors());
-					$this->redirectUser();
-
+					redirect('auth/edit_user/' . $id, 'refresh');
 				}
-
 			}
 		}
 
-		// display the edit user form
-		$this->data['csrf'] = $this->_get_csrf_nonce();
+		// Prepare view data
+		$data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+		$data['user'] = $user;
+		$data['groups'] = $groups;
+		$data['currentGroups'] = $currentGroups;
 
-		// set the flash data error message if there is one
-		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-
-		// pass the user to the view
-		$this->data['user'] = $user;
-		$this->data['groups'] = $groups;
-		$this->data['currentGroups'] = $currentGroups;
-
-		$this->data['first_name'] = [
-			'name'  => 'first_name',
-			'id'    => 'first_name',
-			'type'  => 'text',
+		$data['first_name'] = [
+			'name' => 'first_name',
+			'id' => 'first_name',
+			'type' => 'text',
 			'value' => $this->form_validation->set_value('first_name', $user->first_name),
 		];
-		$this->data['last_name'] = [
-			'name'  => 'last_name',
-			'id'    => 'last_name',
-			'type'  => 'text',
+		$data['last_name'] = [
+			'name' => 'last_name',
+			'id' => 'last_name',
+			'type' => 'text',
 			'value' => $this->form_validation->set_value('last_name', $user->last_name),
 		];
-		$this->data['company'] = [
-			'name'  => 'company',
-			'id'    => 'company',
-			'type'  => 'text',
+		$data['email'] = [
+			'name' => 'email',
+			'id' => 'email',
+			'type' => 'email',
+			'value' => $this->form_validation->set_value('email', $user->email),
+		];
+		$data['company'] = [
+			'name' => 'company',
+			'id' => 'company',
+			'type' => 'text',
 			'value' => $this->form_validation->set_value('company', $user->company),
 		];
-		$this->data['phone'] = [
-			'name'  => 'phone',
-			'id'    => 'phone',
-			'type'  => 'text',
+		$data['phone'] = [
+			'name' => 'phone',
+			'id' => 'phone',
+			'type' => 'text',
 			'value' => $this->form_validation->set_value('phone', $user->phone),
 		];
-		$this->data['password'] = [
+		$data['password'] = [
 			'name' => 'password',
-			'id'   => 'password',
-			'type' => 'password'
+			'id' => 'password',
+			'type' => 'password',
+			'value' => '',
 		];
-		$this->data['password_confirm'] = [
+		$data['password_confirm'] = [
 			'name' => 'password_confirm',
-			'id'   => 'password_confirm',
-			'type' => 'password'
+			'id' => 'password_confirm',
+			'type' => 'password',
+			'value' => '',
 		];
+		$data['csrf'] = $this->_get_csrf_nonce();
 
-		$this->_render_page('auth/edit_user', $this->data);
+		// Admin layout data
+		$data['title'] = lang('edit_user_heading');
+		$data['page'] = 'auth/edit_user';
+
+		$this->load->view('admin/layout/normal', $data);
 	}
 
 	/**
@@ -999,21 +1033,21 @@ class Auth extends CI_Controller
 	/**
 	 * @return array A CSRF key-value pair
 	 */
-	public function _get_csrf_nonce()
+	protected function _get_csrf_nonce()
 	{
 		$this->load->helper('string');
 		$key = random_string('alnum', 8);
 		$value = random_string('alnum', 20);
 		$this->session->set_flashdata('csrfkey', $key);
 		$this->session->set_flashdata('csrfvalue', $value);
-
 		return [$key => $value];
 	}
 
 	/**
 	 * @return bool Whether the posted CSRF token matches
 	 */
-	public function _valid_csrf_nonce(){
+	protected function _valid_csrf_nonce()
+	{
 		$csrfkey = $this->input->post($this->session->flashdata('csrfkey'));
 		if ($csrfkey && $csrfkey === $this->session->flashdata('csrfvalue'))
 		{
