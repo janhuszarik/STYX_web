@@ -147,19 +147,31 @@ class Article extends CI_Controller
 	}
 
 
+
 	public function articlesSave()
 	{
 		$post = $this->input->post();
-		$id = $this->uri->segment(4); // For editing articles (e.g., admin/article_save/edit/<id>)
+		$segment3 = $this->uri->segment(3);
+		$id = $this->uri->segment(4);
 
-		// Load models and get article categories and gallery categories
+		if ($segment3 === 'del' && is_numeric($id)) {
+			$article = $this->Article_model->getArticle($id);
+			$categoryId = $article ? $article->category_id : 0;
+
+			if ($this->Article_model->deleteArticle($id)) {
+				$this->session->set_flashdata('success', 'Artikel wurde erfolgreich gelöscht.');
+			} else {
+				$this->session->set_flashdata('error', 'Fehler beim Löschen.');
+			}
+			redirect(BASE_URL . 'admin/articles_in_category/' . $categoryId);
+		}
+
 		$this->load->model('Article_model');
 		$articleCategories = $this->Article_model->getArticleCategories();
 
 		$this->load->model('Gallery_model');
 		$galleryCategories = $this->Gallery_model->getAllCategories();
 
-		// File upload configurations for different types
 		$config_article = [
 			'upload_path' => './Uploads/articles/',
 			'allowed_types' => 'jpg|jpeg|png|gif|webp',
@@ -181,35 +193,29 @@ class Article extends CI_Controller
 			'overwrite' => FALSE
 		];
 
-		// Create directories if they don't exist
 		foreach ([$config_article['upload_path'], $config_product['upload_path'], $config_section['upload_path']] as $path) {
-			if (!file_exists($path)) {
-				mkdir($path, 0777, TRUE);
-			}
+			if (!file_exists($path)) mkdir($path, 0777, TRUE);
 		}
 
 		$this->load->library('upload');
 
-		// Handle form submission
 		if (!empty($post)) {
-			// Set category_id for new or existing articles
 			if (!empty($id)) {
 				$article = $this->Article_model->getArticle($id);
 				if ($article) {
 					$post['category_id'] = $article->category_id;
 				} else {
-					$this->session->set_flashdata('error', 'Článok nebol nájdený.');
+					$this->session->set_flashdata('error', 'Artikel wurde nicht gefunden.');
 					redirect(BASE_URL . 'admin/articles_in_category/0');
 				}
 			} else {
-				$post['category_id'] = $post['category_id'] ?? $this->uri->segment(3); // For new articles (e.g., admin/add_article/<category_id>)
+				$post['category_id'] = $post['category_id'] ?? $this->uri->segment(3);
 				if (empty($post['category_id'])) {
-					$this->session->set_flashdata('error', 'Kategória nebola zadaná.');
+					$this->session->set_flashdata('error', 'Kategorie wurde nicht angegeben.');
 					redirect(BASE_URL . 'admin/articles_in_category/0');
 				}
 			}
 
-			// Handle main image upload or FTP image
 			if (!empty($_FILES['image']['name'])) {
 				$this->upload->initialize($config_article);
 				if ($this->upload->do_upload('image')) {
@@ -217,107 +223,46 @@ class Article extends CI_Controller
 					$post['image'] = $upload_data['file_name'];
 				} else {
 					$this->session->set_flashdata('error', 'Fehler beim Hochladen des Hauptbildes: ' . $this->upload->display_errors());
-					log_message('error', 'Upload error for main image: ' . $this->upload->display_errors());
-					$post['image'] = $post['old_image'] ?? null; // Fallback to old image if upload fails
+					$post['image'] = $post['old_image'] ?? null;
 				}
 			}
 
-			// Handle product images (up to 3)
 			for ($i = 1; $i <= 3; $i++) {
 				$file_key = "product_image$i";
 				if (!empty($_FILES[$file_key]['name'])) {
 					$this->upload->initialize($config_product);
 					if ($this->upload->do_upload($file_key)) {
 						$upload_data = $this->upload->data();
-						$post["product_image$i"] = $upload_data['file_name'];
+						$post[$file_key] = $upload_data['file_name'];
 					} else {
 						$this->session->set_flashdata('error', "Fehler beim Hochladen des Produktbildes $i: " . $this->upload->display_errors());
-						log_message('error', "Upload error for product image $i: " . $this->upload->display_errors());
-						$post["product_image$i"] = $post["old_product_image$i"] ?? null; // Fallback to old image
+						$post[$file_key] = $post["old_$file_key"] ?? null;
 					}
 				}
 			}
 
-			// Handle article sections
-			if (!empty($post['sections'])) {
-				$sections = $post['sections'];
-				$ftp_section_images = $post['ftp_section_image'] ?? [];
-				$button_names = $post['button_names'] ?? [];
-				$subpages = $post['subpages'] ?? [];
-				$external_urls = $post['external_urls'] ?? [];
-
-				log_message('debug', 'Sections: ' . print_r($sections, true));
-				log_message('debug', 'Button names: ' . print_r($button_names, true));
-				log_message('debug', 'Subpages: ' . print_r($subpages, true));
-				log_message('debug', 'External URLs: ' . print_r($external_urls, true));
-
-				foreach ($_FILES['section_images']['name'] as $key => $section_image) {
-					if (!empty($section_image)) {
-						$section_config = $config_section;
-						$section_config['file_name'] = time() . '_' . $section_image;
-						$this->upload->initialize($section_config);
-
-						$_FILES['temp_image']['name'] = $_FILES['section_images']['name'][$key] ?? '';
-						$_FILES['temp_image']['type'] = $_FILES['section_images']['type'][$key] ?? '';
-						$_FILES['temp_image']['tmp_name'] = $_FILES['section_images']['tmp_name'][$key] ?? '';
-						$_FILES['temp_image']['error'] = $_FILES['section_images']['error'][$key] ?? UPLOAD_ERR_NO_FILE;
-						$_FILES['temp_image']['size'] = $_FILES['section_images']['size'][$key] ?? 0;
-
-						if ($this->upload->do_upload('temp_image')) {
-							$upload_data = $this->upload->data();
-							$post['section_images'][$key] = $upload_data['file_name'];
-						} else {
-							$error = $this->upload->display_errors();
-							log_message('error', "Upload error for section image $key: " . $error);
-							$post['section_images'][$key] = null;
-						}
-					} elseif (!empty($ftp_section_images[$key])) {
-						$post['section_images'][$key] = $ftp_section_images[$key];
-					} else {
-						$post['section_images'][$key] = null;
-					}
-				}
-				$post['button_names'] = $button_names;
-				$post['subpages'] = $subpages;
-				$post['external_urls'] = $external_urls;
+			if (!empty($post['slug'])) {
+				$post['slug'] = url_title($post['slug'], 'dash', true);
+			} elseif (!empty($post['title'])) {
+				$post['slug'] = url_title($post['title'], 'dash', true);
+			} else {
+				$this->session->set_flashdata('error', 'Titel des Artikels fehlt.');
+				redirect(BASE_URL . 'admin/articles_in_category/' . ($post['category_id'] ?? 0));
 			}
 
-			// Slug je už spracovaný vo formulári, takže ho priamo použijeme
-			if (empty($post['slug'])) {
-				$post['slug'] = url_title($post['title'] ?? '', 'dash', true);
-				if (empty($post['title'])) {
-					$this->session->set_flashdata('error', 'Titel des Artikels fehlt.');
-					redirect(BASE_URL . 'admin/articles_in_category/' . ($post['category_id'] ?? 0));
-				}
-			}
-
-			// Save the article
 			if ($this->Article_model->saveArticle($post)) {
 				$message = !empty($post['id']) ? 'Artikel wurde erfolgreich bearbeitet.' : 'Artikel wurde erfolgreich hinzugefügt.';
 				$this->session->set_flashdata('success', $message);
 				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			} else {
-				$this->session->set_flashdata('error', 'Fehler beim Speichern. Skontrolujte logy pre viac informácií.');
-				log_message('error', 'Failed to save article. Post data: ' . print_r($post, true));
-
+				$this->session->set_flashdata('error', 'Fehler beim Speichern.');
 				$data['article'] = (object)$post;
 				$data['categoryId'] = $post['category_id'];
 				$data['articleCategories'] = $articleCategories;
 				$data['galleryCategories'] = $galleryCategories;
 				$data['selectedGalleries'] = !empty($post['gallery_category_id']) ? $this->Gallery_model->getGalleriesByCategoryId($post['gallery_category_id']) : [];
 				$data['galleryCategoryId'] = $post['gallery_category_id'] ?? null;
-				$data['sections'] = $post['sections'] ? array_map(function($content, $idx) use ($post) {
-					return (object)[
-						'content' => $content,
-						'image' => $post['section_images'][$idx] ?? null,
-						'image_title' => $post['section_image_titles'][$idx] ?? null,
-						'ftp_image' => $post['ftp_section_image'][$idx] ?? null,
-						'button_name' => $post['button_names'][$idx] ?? null,
-						'subpage' => $post['subpages'][$idx] ?? null,
-						'external_url' => $post['external_urls'][$idx] ?? null,
-						'order' => $idx
-					];
-				}, $post['sections'], array_keys($post['sections'])) : [];
+				$data['sections'] = [];
 				$data['title'] = 'Artikel verwalten';
 				$data['page'] = 'admin/settings/article_form';
 				$this->load->view('admin/layout/normal', $data);
@@ -325,42 +270,19 @@ class Article extends CI_Controller
 			}
 		}
 
-		// Load article data for editing or initialize for new article
 		$article = $this->Article_model->getArticle($id);
+		$categoryId = $article ? $article->category_id : ($this->uri->segment(3) ?? 0);
 
-		if ($article) {
-			$categoryId = $article->category_id;
-		} else {
-			$categoryId = $this->uri->segment(3) ?? 0; // For new articles, get from URL (segment 3)
-		}
-
-		// Fetch the category name for the categoryId
 		$categoryName = 'Kategorie nicht gefunden';
-		if (!empty($categoryId)) {
-			log_message('debug', 'Article Categories in controller: ' . print_r($articleCategories, true));
-			log_message('debug', 'Looking for category ID: ' . $categoryId);
-			$categoryFound = false;
-			foreach ($articleCategories as $cat) {
-				if ((int)$cat->id === (int)$categoryId) {
-					$categoryName = htmlspecialchars($cat->name);
-					log_message('debug', 'Found category name: ' . $categoryName);
-					$categoryFound = true;
-					break;
-				}
+		foreach ($articleCategories as $cat) {
+			if ((int)$cat->id === (int)$categoryId) {
+				$categoryName = htmlspecialchars($cat->name);
+				break;
 			}
-			if (!$categoryFound) {
-				log_message('error', 'Category ID ' . $categoryId . ' not found in article_categories table.');
-				$this->session->set_flashdata('error', 'Kategorie mit ID ' . $categoryId . ' wurde nicht gefunden. Bitte wählen Sie eine gültige Kategorie.');
-			}
-		} else {
-			log_message('error', 'No category ID provided for article creation.');
-			$this->session->set_flashdata('error', 'Keine Kategorie-ID angegeben. Bitte wählen Sie eine Kategorie aus.');
 		}
 
-		// Handle gallery data
 		$galleryCategoryId = null;
 		$selectedGalleries = [];
-
 		if ($article && $article->gallery_id) {
 			$gallery = $this->Gallery_model->getGallery($article->gallery_id);
 			if ($gallery) {
@@ -369,7 +291,6 @@ class Article extends CI_Controller
 			}
 		}
 
-		// Prepare data for the view
 		$data['article'] = $article;
 		$data['categoryId'] = $categoryId;
 		$data['categoryName'] = $categoryName;
@@ -382,6 +303,7 @@ class Article extends CI_Controller
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
 
 
 	public function getGalleriesByCategory()
