@@ -99,8 +99,6 @@ for ($i = 1; $i <= 3; $i++) {
 								<div class="card-footer bg-transparent border-0 text-end pe-3">
 									<div class="text-success fw-bold">...jetzt SHOPEN!</div>
 								</div>
-
-
 							</div>
 						</a>
 					</div>
@@ -109,6 +107,52 @@ for ($i = 1; $i <= 3; $i++) {
 		</div>
 	</section>
 <?php endif; ?>
+
+<?php
+$interessierenLinks = [];
+
+for ($i = 1; $i <= 3; $i++) {
+	$name = $article->{'empfohlen_name' . $i} ?? '';
+	$url  = $article->{'empfohlen_url' . $i} ?? '';
+
+	if (!empty($name) && !empty($url)) {
+		if (!preg_match('#^https?://#', $url)) {
+			$url = 'https://' . ltrim($url, '/');
+		}
+		$interessierenLinks[] = [
+			'name' => $name,
+			'url' => $url
+		];
+	}
+}
+?>
+
+<?php if (!empty($interessierenLinks)): ?>
+	<section class="related-articles py-5 border-top bg-white">
+		<div class="container">
+			<div class="text-center mb-4">
+				<h3 class="fw-bold mb-2">DAS KÖNNTE SIE INTERESSIEREN</h3>
+				<p class="text-muted mb-4" style="margin-top: -5px;">
+					Entdecken Sie weitere Inhalte, die für Sie von Interesse sein könnten – spannende Themen, verwandte Angebote und mehr.
+				</p>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-8">
+					<ul class="list-unstyled">
+						<?php foreach ($interessierenLinks as $link): ?>
+							<li class="mb-2">
+								<a href="<?= htmlspecialchars($link['url']) ?>" target="_blank" rel="noopener" class="text-decoration-none text-success fw-semibold">
+									<i class="fas fa-angle-right me-2"></i> <?= htmlspecialchars($link['name']) ?>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+<?php endif; ?>
+
 
 
 
