@@ -88,17 +88,19 @@ for ($i = 1; $i <= 3; $i++) {
 						<a href="<?= htmlspecialchars($url ?: '#') ?>" class="text-decoration-none text-dark d-block h-100" <?= $target ?>>
 							<div class="card border-0 shadow-sm h-100">
 								<?php if (!empty($img)): ?>
-									<img src="<?= base_url($img) ?>" class="card-img-top img-fluid" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>" style="object-fit:cover; max-height:200px;">
+									<img src="<?= base_url($img) ?>" class="card-img-top img-fluid" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>" style="max-width: 100%; height: auto;">
 								<?php endif; ?>
 								<div class="card-body">
-									<h5 class="card-title mb-2"><?= htmlspecialchars($name) ?></h5>
+									<h4 class="card-title mb-2"><?= htmlspecialchars($name) ?></h4>
 									<?php if (!empty($desc)): ?>
-										<p class="card-text small"><?= htmlspecialchars($desc) ?></p>
+										<p class="card-text"><?= htmlspecialchars($desc) ?></p>
 									<?php endif; ?>
 								</div>
-								<div class="card-footer bg-transparent border-0">
-									<div class="text-success fw-bold ps-3">Mehr ...</div>
+								<div class="card-footer bg-transparent border-0 text-end pe-3">
+									<div class="text-success fw-bold">...jetzt SHOPEN!</div>
 								</div>
+
+
 							</div>
 						</a>
 					</div>
