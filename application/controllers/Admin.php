@@ -202,7 +202,7 @@ class Admin extends CI_Controller
 
 	public function sliderSave() {
 		$post = $this->input->post(NULL, TRUE); // Použi TRUE pre XSS filter
-		$id = $post['id'] ?? $this->uri->segment(4);
+		$id = isset($post['id']) ? $post['id'] : $this->uri->segment(4);
 		$segment3 = $this->uri->segment(3);
 
 		// === Zápis / editácia ===
@@ -211,7 +211,7 @@ class Admin extends CI_Controller
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
 
 			// Nahratie nového obrázku
-			$image = $this->upload_image('image', 'Uploads/sliders/');
+			$image = $this->upload_image('image', 'uploads/sliders/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['slider'] = (object)$post;
@@ -225,8 +225,8 @@ class Admin extends CI_Controller
 			// Uloženie do DB
 			if ($this->Admin_model->save_slider_full($post, $image, $old_image, $id)) {
 				// Zmazať pôvodný obrázok len ak bol nahratý nový
-				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/sliders/' . $old_image)) {
-					unlink(FCPATH . 'Uploads/sliders/' . $old_image);
+				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/sliders/' . $old_image)) {
+					unlink(FCPATH . 'uploads/sliders/' . $old_image);
 				}
 				$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 				redirect(BASE_URL . 'admin/slider');
@@ -319,43 +319,48 @@ class Admin extends CI_Controller
 	}
 
 	private function upload_image($field_name, $path = 'uploads/sliders/') {
-		log_message('debug', 'FCPATH: ' . FCPATH);
+		if (empty($_FILES[$field_name]['name'])) {
+			return false;
+		}
+
 		$upload_path = FCPATH . $path;
 
 		if (!is_dir($upload_path)) {
 			if (!mkdir($upload_path, 0777, true)) {
-				return ['error' => 'Verzeichnis konnte nicht erstellt werden: ' . $upload_path];
+				return ['error' => 'Cannot create folder: ' . $upload_path];
 			}
 		}
 
 		if (!is_writable($upload_path)) {
-			return ['error' => 'Upload-Pfad ist nicht beschreibbar: ' . $upload_path];
+			return ['error' => 'Upload folder is not writable: ' . $upload_path];
 		}
 
-		// Získať pôvodnú príponu
 		$ext = pathinfo($_FILES[$field_name]['name'], PATHINFO_EXTENSION);
 		$timestamp = time();
 		$new_name = 'slider_' . $timestamp . '.' . $ext;
 
-		$config['upload_path'] = $upload_path;
+		$config['upload_path']   = $upload_path;
 		$config['allowed_types'] = 'jpg|jpeg|png|gif';
-		$config['max_size'] = '4096'; // 4 MB
-		$config['file_name'] = $new_name;
-		$config['overwrite'] = FALSE;
-		$config['encrypt_name'] = FALSE;
+		$config['file_name']     = $new_name;
+		$config['overwrite']     = FALSE;
+		$config['encrypt_name']  = FALSE;
 
 		$this->load->library('upload', $config);
 		$this->upload->initialize($config);
 
 		if (!$this->upload->do_upload($field_name)) {
-			return ['error' => $this->upload->display_errors()];
+			$error = $this->upload->display_errors();
+			log_message('error', 'Upload error: ' . $error);
+			return ['error' => $error];
 		}
 
-		return $this->upload->data(); // obsahuje 'file_name', 'full_path', atď.
+		return $this->upload->data(); // obsahuje ['file_name'] a ['full_path']
 	}
 
 
-	private function uploadImageToPath($field_name, $path = 'uploads/news/') {
+
+	private function uploadImageToPath($field_name, $path = 'uploads
+/news/') {
 		log_message('debug', 'FCPATH value: ' . FCPATH);
 		log_message('debug', 'Current working directory: ' . getcwd());
 
@@ -401,7 +406,8 @@ class Admin extends CI_Controller
 	}
 
 	public function uploadImage() {
-		$response = $this->uploadImageToPath('file', 'uploads/news/');
+		$response = $this->uploadImageToPath('file', 'uploads
+/news/');
 		log_message('debug', 'Upload response: ' . json_encode($response));
 		echo json_encode($response);
 	}
@@ -413,7 +419,8 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'Uploads/news/');
+			$image = $this->upload_image('image', 'uploads
+/news/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['news'] = (object)$post;
@@ -425,8 +432,10 @@ class Admin extends CI_Controller
 
 			if (!empty($id)) {
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/news/' . $old_image)) {
-						unlink(FCPATH . 'Uploads/news/' . $old_image);
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads
+/news/' . $old_image)) {
+						unlink(FCPATH . 'uploads
+/news/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect(BASE_URL . 'admin/news');
@@ -490,7 +499,8 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/product/');
+			$image = $this->upload_image('image', 'uploads
+/product/');
 			if (isset($image['error']) && !$image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['edit'] = (object)$post;
@@ -501,8 +511,10 @@ class Admin extends CI_Controller
 			if (!empty($id)) {
 				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
 					if ($image && !isset($image['error'])) {
-						if ($old_image && file_exists(FCPATH . 'uploads/product/' . $old_image)) {
-							unlink(FCPATH . 'uploads/product/' . $old_image);
+						if ($old_image && file_exists(FCPATH . 'uploads
+/product/' . $old_image)) {
+							unlink(FCPATH . 'uploads
+/product/' . $old_image);
 						}
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
