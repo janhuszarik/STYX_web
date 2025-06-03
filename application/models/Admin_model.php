@@ -184,6 +184,7 @@ function getNewsletters(){
 			$data['image'] = $image['file_name'];
 		}
 
+
 		if (!empty($id) && is_numeric($id)) {
 			if (!$this->get_slider($id)) {
 				return false;

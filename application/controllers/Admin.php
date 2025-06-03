@@ -319,47 +319,41 @@ class Admin extends CI_Controller
 	}
 
 	private function upload_image($field_name, $path = 'uploads/sliders/') {
-		log_message('debug', 'FCPATH value: ' . FCPATH);
-		log_message('debug', 'Current working directory: ' . getcwd());
-
+		log_message('debug', 'FCPATH: ' . FCPATH);
 		$upload_path = FCPATH . $path;
-		log_message('debug', 'Upload path: ' . $upload_path);
 
 		if (!is_dir($upload_path)) {
-			log_message('debug', 'Verzeichnis existiert nicht: ' . $upload_path);
 			if (!mkdir($upload_path, 0777, true)) {
-				log_message('error', 'Fehler beim Erstellen des Verzeichnisses: ' . $upload_path);
-				return array('error' => '<p>Fehler beim Erstellen des Verzeichnisses: ' . $upload_path . '</p>');
-			} else {
-				log_message('debug', 'Verzeichnis erstellt: ' . $upload_path);
+				return ['error' => 'Verzeichnis konnte nicht erstellt werden: ' . $upload_path];
 			}
-		} else {
-			log_message('debug', 'Verzeichnis existiert bereits: ' . $upload_path);
 		}
 
 		if (!is_writable($upload_path)) {
-			log_message('error', 'Upload-Pfad ist nicht beschreibbar: ' . $upload_path);
-			return array('error' => '<p>Upload-Pfad ist nicht beschreibbar: ' . $upload_path . '</p>');
+			return ['error' => 'Upload-Pfad ist nicht beschreibbar: ' . $upload_path];
 		}
+
+		// Získať pôvodnú príponu
+		$ext = pathinfo($_FILES[$field_name]['name'], PATHINFO_EXTENSION);
+		$timestamp = time();
+		$new_name = 'slider_' . $timestamp . '.' . $ext;
 
 		$config['upload_path'] = $upload_path;
 		$config['allowed_types'] = 'jpg|jpeg|png|gif';
-		$config['max_size'] = '';
-		$config['encrypt_name'] = TRUE;
+		$config['max_size'] = '4096'; // 4 MB
+		$config['file_name'] = $new_name;
+		$config['overwrite'] = FALSE;
+		$config['encrypt_name'] = FALSE;
 
 		$this->load->library('upload', $config);
 		$this->upload->initialize($config);
 
-		log_message('debug', 'Upload config: ' . print_r($config, true));
-
 		if (!$this->upload->do_upload($field_name)) {
-			$error = $this->upload->display_errors();
-			log_message('error', 'Upload-Fehler für ' . $field_name . ': ' . $error);
-			return array('error' => $error);
-		} else {
-			return $this->upload->data();
+			return ['error' => $this->upload->display_errors()];
 		}
+
+		return $this->upload->data(); // obsahuje 'file_name', 'full_path', atď.
 	}
+
 
 	private function uploadImageToPath($field_name, $path = 'uploads/news/') {
 		log_message('debug', 'FCPATH value: ' . FCPATH);
