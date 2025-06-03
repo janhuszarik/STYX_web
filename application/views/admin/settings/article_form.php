@@ -15,8 +15,10 @@ $titleSub = isset($article)
 
 $categoryId = isset($article) ? $article->category_id : ($categoryId ?? $CI->uri->segment(3));
 
+// Debug: Vypíšeme hodnoty, aby sme skontrolovali, či sú načítané
 log_message('debug', 'Category ID in view: ' . $categoryId);
 log_message('debug', 'Category Name in view: ' . ($categoryName ?? 'Not set'));
+log_message('debug', 'Article slug in view: ' . ($article->slug ?? 'Not set'));
 
 $CI->load->helper('app_helper');
 $menuItems = getMenu();
@@ -37,14 +39,22 @@ foreach ($menuItems as $menu) {
 
 $menuOptionsJson = json_encode($menuOptions);
 
-// Načítame kategóriu, aby sme určili predvolenú menu položku
-$category = $CI->db->get_where('article_categories', ['id' => $categoryId])->row();
+// Nastavenie defaultMenuUrl pre select input
 $defaultMenuUrl = '';
-if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) {
-	$menuId = $category->menu_id ?: $category->submenu_id;
-	$menu = $CI->db->get_where('menu', ['id' => $menuId])->row();
-	if ($menu && !empty($menu->url)) {
-		$defaultMenuUrl = $menu->url;
+if (isset($article) && !empty($article->slug)) {
+	// Použijeme slug článku ako predvolenú hodnotu pre select
+	$defaultMenuUrl = $article->slug;
+	log_message('debug', 'Using article slug for defaultMenuUrl: ' . $defaultMenuUrl);
+} elseif ($categoryId) {
+	// Ak nie je slug, použijeme menu/submenu z kategórie
+	$category = $CI->db->get_where('article_categories', ['id' => $categoryId])->row();
+	if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) {
+		$menuId = $category->menu_id ?: $category->submenu_id;
+		$menu = $CI->db->get_where('menu', ['id' => $menuId])->row();
+		if ($menu && !empty($menu->url)) {
+			$defaultMenuUrl = $menu->url;
+			log_message('debug', 'Using category menu for defaultMenuUrl: ' . $defaultMenuUrl);
+		}
 	}
 }
 ?>
@@ -115,16 +125,16 @@ if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) 
 						<div class="col-md-6">
 							<label for="menu_select" class="col-form-label">Menu oder Submenu</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpfen Sie den Artikel mit einer Menü- oder Submenüpunkt, um den Slug automatisch zu übernehmen."></i>
-							<select class="form-control" id="menuSelect">
+							<select class="form-control" id="menuSelect" name="menu_select">
 								<option value="">-- Kein Menü --</option>
 								<?php foreach ($menuOptions as $option): ?>
 									<option value="<?= htmlspecialchars($option['value']) ?>"
-										<?= ($defaultMenuUrl == $option['value']) ? 'selected' : '' ?>>
+										<?= ($defaultMenuUrl === $option['value']) ? 'selected' : '' ?>>
 										<?= htmlspecialchars($option['label']) ?>
 									</option>
 								<?php endforeach; ?>
 							</select>
-							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? '') ?>">
+							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>">
 						</div>
 					</div>
 
@@ -132,7 +142,7 @@ if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) 
 						<div class="col-md-6">
 							<label for="slug_display" class="col-form-label">Slug</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-freundliche Adresse des Artikels. Wird automatisch aus dem Menü übernommen, wenn ein Menüpunkt ausgewählt ist."></i>
-							<input type="text" class="form-control" id="slug_display" value="<?= htmlspecialchars($article->slug ?? '') ?>" readonly>
+							<input type="text" class="form-control" id="slug_display" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
 						</div>
 					</div>
 
@@ -523,17 +533,17 @@ if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) 
 			});
 		}
 
-		// Automatické generovanie slug-u na základe vybranej menu položky
+		// Handle menu select and slug
 		const menuSelect = document.getElementById('menuSelect');
-		const slugInput = document.querySelector("input[name='slug']");
+		const slugInput = document.getElementById('slug');
 		const slugDisplay = document.getElementById('slug_display');
 
 		if (menuSelect && slugInput && slugDisplay) {
 			menuSelect.addEventListener("change", function () {
-				const selectedOption = menuSelect.options[menuSelect.selectedIndex];
-				if (selectedOption.value) {
-					// Odstrániť jazykový prefix z URL
-					const parts = selectedOption.value.split('/').filter(part => part && !['de', 'en'].includes(part));
+				const selectedValue = this.value;
+				if (selectedValue) {
+					// Remove language prefix from URL
+					const parts = selectedValue.split('/').filter(part => part && !['de', 'en'].includes(part));
 					const newSlug = parts.join('/');
 					slugInput.value = newSlug;
 					slugDisplay.value = newSlug;
@@ -545,8 +555,23 @@ if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) 
 				}
 			});
 
-			// Spustiť pri načítaní stránky
-			menuSelect.dispatchEvent(new Event('change'));
+			// Ensure initial slug is set correctly
+			const initialSlug = "<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>";
+			if (initialSlug) {
+				const matchingOption = Array.from(menuSelect.options).find(option => {
+					const optionParts = option.value.split('/').filter(part => part && !['de', 'en'].includes(part));
+					const optionSlug = optionParts.join('/');
+					return optionSlug === initialSlug;
+				});
+				if (matchingOption) {
+					menuSelect.value = matchingOption.value;
+					slugInput.value = initialSlug;
+					slugDisplay.value = initialSlug;
+					console.log('Initial slug set to:', initialSlug);
+				} else {
+					console.log('No matching menu option found for slug:', initialSlug);
+				}
+			}
 		} else {
 			console.error('Menu select, slug input, or slug display not found');
 		}

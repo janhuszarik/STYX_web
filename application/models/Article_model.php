@@ -6,7 +6,7 @@ class Article_model extends CI_Model
 	{
 		$data = [
 			'name' => $post['name'],
-			'slug' => url_title($post['name'], 'dash', true),
+			'slug' => trim($post['slug']),
 			'lang' => $post['lang'],
 			'active' => $post['active'],
 			'created_at' => date('Y-m-d H:i:s'),

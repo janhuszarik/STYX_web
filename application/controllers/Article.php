@@ -150,7 +150,7 @@ class Article extends CI_Controller
 
 	public function articlesSave()
 	{
-		$post = $this->input->post();
+		$post = $this->input->post(NULL, FALSE); // <-- FULL POST bez XSS filtrácie
 		$segment3 = $this->uri->segment(3);
 		$id = $this->uri->segment(4);
 
@@ -216,11 +216,30 @@ class Article extends CI_Controller
 				}
 			}
 
+			// Handle menu_select and slug
+			if (!empty($post['menu_select'])) {
+				// Remove language prefix from URL
+				$parts = explode('/', trim($post['menu_select'], '/'));
+				$parts = array_filter($parts, function($part) {
+					return !in_array($part, ['de', 'en']);
+				});
+				$post['slug'] = implode('/', $parts);
+			} elseif (empty($post['slug']) && !empty($id)) {
+				// Preserve existing slug if menu_select is not set
+				$article = $this->Article_model->getArticle($id);
+				$post['slug'] = $article->slug ?? '';
+			}
+
+			if (empty($post['slug'])) {
+				$this->session->set_flashdata('error', 'Slug ist erforderlich.');
+				redirect(BASE_URL . 'admin/articles_in_category/' . ($post['category_id'] ?? 0));
+			}
+
 			if (!empty($_FILES['image']['name'])) {
 				$this->upload->initialize($config_article);
 				if ($this->upload->do_upload('image')) {
 					$upload_data = $this->upload->data();
-					$post['image'] = $upload_data['file_name'];
+					$post['image'] = 'Uploads/articles/' . $upload_data['file_name'];
 				} else {
 					$this->session->set_flashdata('error', 'Fehler beim Hochladen des Hauptbildes: ' . $this->upload->display_errors());
 					$post['image'] = $post['old_image'] ?? null;
@@ -233,21 +252,12 @@ class Article extends CI_Controller
 					$this->upload->initialize($config_product);
 					if ($this->upload->do_upload($file_key)) {
 						$upload_data = $this->upload->data();
-						$post[$file_key] = $upload_data['file_name'];
+						$post[$file_key] = 'Uploads/articles/products/' . $upload_data['file_name'];
 					} else {
 						$this->session->set_flashdata('error', "Fehler beim Hochladen des Produktbildes $i: " . $this->upload->display_errors());
 						$post[$file_key] = $post["old_$file_key"] ?? null;
 					}
 				}
-			}
-
-			if (!empty($post['slug'])) {
-				$post['slug'] = url_title($post['slug'], 'dash', true);
-			} elseif (!empty($post['title'])) {
-				$post['slug'] = url_title($post['title'], 'dash', true);
-			} else {
-				$this->session->set_flashdata('error', 'Titel des Artikels fehlt.');
-				redirect(BASE_URL . 'admin/articles_in_category/' . ($post['category_id'] ?? 0));
 			}
 
 			if ($this->Article_model->saveArticle($post)) {
@@ -276,7 +286,7 @@ class Article extends CI_Controller
 		$categoryName = 'Kategorie nicht gefunden';
 		foreach ($articleCategories as $cat) {
 			if ((int)$cat->id === (int)$categoryId) {
-				$categoryName = htmlspecialchars($cat->name);
+				$categoryName = $cat->name;
 				break;
 			}
 		}
@@ -303,7 +313,6 @@ class Article extends CI_Controller
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
 	}
-
 
 
 	public function getGalleriesByCategory()
