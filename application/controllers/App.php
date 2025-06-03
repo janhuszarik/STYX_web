@@ -61,7 +61,10 @@ class App extends CI_Controller
 			return;
 		}
 
+		$sections = $this->App_model->getSections($article->id);
+
 		$data['article'] = $article;
+		$data['sections'] = $sections; // <-- sem doplň sekcie
 		$data['title'] = $article->title;
 		$data['description'] = $article->description;
 		$data['keywords'] = $article->keywords;
@@ -70,6 +73,7 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+
 
 	private function check_cookie_consent() {
 		if (!$this->input->cookie('cookie_consent', TRUE)) {

@@ -17,6 +17,14 @@ class app_model extends CI_Model
 		$this->db->where('active', 1);
 		return $this->db->get('articles')->row();
 	}
+	public function getSections($articleId)
+	{
+		return $this->db
+			->where('article_id', $articleId)
+			->order_by('order', 'ASC')
+			->get('article_sections')
+			->result();
+	}
 
 
 
