@@ -108,11 +108,11 @@
 									<span>Daten Manager</span>
 								</a>
 							</li>
-							<li class="<?= ($current_url == BASE_URL.'admin/mailbox-folder') ? 'active' : '' ?>">
-								<a class="nav-link" href="mailbox-folder.html">
+							<li class="<?= ($current_url == BASE_URL.'admin/auth') ? 'active' : '' ?>">
+								<a class="nav-link" href="<?=BASE_URL.'admin/auth'?>">
 									<span class="float-end badge badge-primary"></span>
 									<i class="bx bx-envelope" aria-hidden="true"></i>
-									<span>Kontakt</span>
+									<span>Benutzerverwaltung</span>
 								</a>
 							</li>
 							<li>
