@@ -113,12 +113,20 @@ class Admin extends CI_Controller
 			$post['lang'] = isset($post['lang']) ? $post['lang'] : 'de';
 			$post['base'] = isset($post['base']) ? $post['base'] : '0';
 
-			// ✨ Automaticky vygeneruj URL len ak nebola zadaná
-			if (empty($post['url']) && !empty($post['name'])) {
-				$slug = url_oprava($post['name']);
-				$baseUrl = $post['lang'] . '/app/' . $slug;
+			// Automatické generovanie URL podľa názvu
+			$existingUrl = trim($post['url']);
+			$slugPart = url_oprava($post['name']);
+			$langPrefix = $post['lang'] . '/app';
+			$fullPrefix1 = $langPrefix;
+			$fullPrefix2 = $langPrefix . '/';
 
-				// Overíme či už taká URL neexistuje
+			if (
+				empty($existingUrl) ||
+				$existingUrl === $fullPrefix1 ||
+				$existingUrl === $fullPrefix2
+			) {
+				$baseUrl = $langPrefix . '/' . $slugPart;
+
 				$this->load->model('Admin_model');
 				$uniqueUrl = $baseUrl;
 				$counter = 1;
@@ -129,7 +137,7 @@ class Admin extends CI_Controller
 				$post['url'] = $uniqueUrl;
 			}
 
-			// 🔄 Update alebo Insert
+			// Uloženie (update alebo insert)
 			if (!empty($id)) {
 				if ($this->Admin_model->menuSave($post)) {
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
@@ -149,7 +157,7 @@ class Admin extends CI_Controller
 			}
 		}
 
-		// 🗑️ Mazanie
+		// Mazanie
 		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->menuDelete($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
@@ -159,7 +167,7 @@ class Admin extends CI_Controller
 			}
 		}
 
-		// 📝 Formulár edit/create
+		// Formulár edit/create
 		if ($segment3 == 'edit' || $segment3 == 'create') {
 			$data['menu'] = $this->Admin_model->getMenu($id);
 			$data['menuparent'] = $this->Admin_model->getMenu(false, true);
@@ -171,12 +179,15 @@ class Admin extends CI_Controller
 			return;
 		}
 
-		// 📋 Výpis
+		// Výpis
 		$data['menus'] = $this->Admin_model->getFullMenu();
 		$data['title'] = 'Menüpunkte';
 		$data['page'] = 'admin/settings/menu';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
+
+
 
 
 	function getMenuParentName($menus, $parentId)

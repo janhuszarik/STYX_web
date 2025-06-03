@@ -51,6 +51,25 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
+	public function routes()
+	{
+		$lang = language(); // jazyk z helperu
+		$article = $this->App_model->routes($lang);
+
+		if (!$article) {
+			$this->error404();
+			return;
+		}
+
+		$data['article'] = $article;
+		$data['title'] = $article->title;
+		$data['description'] = $article->description;
+		$data['keywords'] = $article->keywords;
+		$data['image'] = BASE_URL . LOGO;
+		$data['page'] = 'article/detail'; // univerzálne view
+
+		$this->load->view('layout/normal', $data);
+	}
 
 	private function check_cookie_consent() {
 		if (!$this->input->cookie('cookie_consent', TRUE)) {

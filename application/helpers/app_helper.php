@@ -286,7 +286,7 @@ function obrazokfinal($adresaimg, $offLogo = true, $defaultWidthImage = 1600) {
 	return $adresaimg;
 }
 
-function url_oprava($str, $separator = '-', $lowercase = FALSE) {
+function url_oprava($str, $separator = '-', $lowercase = TRUE) {
 	if ($separator === 'dash') {
 		$separator = '-';
 	} elseif ($separator === 'underscore') {
@@ -298,46 +298,16 @@ function url_oprava($str, $separator = '-', $lowercase = FALSE) {
 	$trans = array(
 		"'" => '',
 		'"' => '"',
-		'ľ' => 'l',
-		'š' => 's',
-		'č' => 'c',
-		'ť' => 't',
-		'ž' => 'z',
-		'ý' => 'y',
-		'á' => 'a',
-		'í' => 'i',
-		'é' => 'e',
-		'ú' => 'u',
-		'ä' => 'a',
-		'ň' => 'n',
-		'ô' => 'o',
-		'ó' => 'o',
-		'ĺ' => 'l',
-		'ď' => 'd',
-		'Ľ' => 'l',
-		'Š' => 's',
-		'Č' => 'c',
-		'Ť' => 't',
-		'Ž' => 'z',
-		'Ý' => 'y',
-		'Á' => 'a',
-		'Í' => 'i',
-		'É' => 'e',
-		'Ú' => 'u',
-		'Ä' => 'a',
-		'Ň' => 'n',
-		'Ô' => 'o',
-		'Ó' => 'o',
-		'Ĺ' => 'l',
-		'ě' => 'e',
-		'ö' => 'o',
-		'Ď' => 'd',
-		'ř' => 'r',
-		'ŕ' => 'r',
-		'Ŕ' => 'R',
-		'ů' => 'u',
-		'Ř' => 'r',
-		'Ě' => 'e',
+		'ľ' => 'l', 'š' => 's', 'č' => 'c', 'ť' => 't', 'ž' => 'z',
+		'ý' => 'y', 'á' => 'a', 'í' => 'i', 'é' => 'e', 'ú' => 'u',
+		'ä' => 'a', 'ň' => 'n', 'ô' => 'o', 'ó' => 'o', 'ĺ' => 'l', 'ď' => 'd',
+		'Ľ' => 'l', 'Š' => 's', 'Č' => 'c', 'Ť' => 't', 'Ž' => 'z',
+		'Ý' => 'y', 'Á' => 'a', 'Í' => 'i', 'É' => 'e', 'Ú' => 'u',
+		'Ä' => 'a', 'Ň' => 'n', 'Ô' => 'o', 'Ó' => 'o', 'Ĺ' => 'l',
+		'ě' => 'e', 'ö' => 'o', 'Ď' => 'd', 'ř' => 'r', 'ŕ' => 'r',
+		'Ŕ' => 'r', 'ů' => 'u', 'Ř' => 'r', 'Ě' => 'e',
+		'ü' => 'u', 'Ü' => 'u',
+		'ß' => 'ss',
 		'&.+?;' => '',
 		'[^\w\d _-]' => '',
 		'\s+' => $separator,
@@ -349,12 +319,13 @@ function url_oprava($str, $separator = '-', $lowercase = FALSE) {
 		$str = preg_replace('#' . $key . '#i' . (UTF8_ENABLED ? 'u' : ''), $val, $str);
 	}
 
-	if ($lowercase === TRUE) {
-		$str = strtolower($str);
-	}
+	$str = trim($str, $separator);
 
-	return trim(trim($str, $separator));
+	// Vždy vráť malé písmená
+	return strtolower($str);
 }
+
+
 
 function obrpridajthumb($vstup = false) {
 	if ($vstup) {
