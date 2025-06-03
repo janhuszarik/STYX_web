@@ -86,6 +86,10 @@
 							</select>
 						</div>
 					</div>
+					<?php if (!empty($slider->id)): ?>
+						<input type="hidden" name="id" value="<?= $slider->id ?>">
+						<input type="hidden" name="old_image" value="<?= htmlspecialchars($slider->image ?? '') ?>">
+					<?php endif; ?>
 
 					<footer class="card-footer text-end">
 						<button type="submit" class="btn btn-primary"><?= isset($slider->id) ? 'Änderungen speichern' : 'Speichern' ?></button>
