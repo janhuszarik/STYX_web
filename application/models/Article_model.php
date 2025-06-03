@@ -109,9 +109,9 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'Uploads/articles');
+			$uploadPath = uploadImg('image', 'uploads/articles');
 			if ($uploadPath && file_exists($uploadPath)) {
-				$image = basename($uploadPath);
+				$image = $uploadPath; //
 			} else {
 				log_message('error', 'Failed to upload main image: ' . ($uploadPath ?: 'No file'));
 				return false;
@@ -120,7 +120,7 @@ class Article_model extends CI_Model
 
 		if (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'Uploads/articles/';
+			$localDir = FCPATH . 'uploads/articles/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
@@ -170,16 +170,16 @@ class Article_model extends CI_Model
 			$data["product_image{$i}"] = null;
 
 			if (!empty($_FILES["product_image{$i}"]['name'])) {
-				$up = uploadImg("product_image{$i}", 'Uploads/articles/products');
+				$up = uploadImg("product_image{$i}", 'uploads/articles/products');
 				if ($up && file_exists($up)) {
-					$data["product_image{$i}"] = basename($up);
+					$data["product_image{$i}"] = $up;
 				} else {
 					log_message('error', "Failed to upload product image $i: " . ($up ?: 'No file'));
 					return false;
 				}
 			} elseif (!empty($post["ftp_product_image{$i}"])) {
 				$ftpPath = $post["ftp_product_image{$i}"];
-				$localDir = FCPATH . 'Uploads/articles/products/';
+				$localDir = FCPATH . 'uploads/articles/products/';
 				@mkdir($localDir, 0755, true);
 
 				if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
@@ -231,16 +231,16 @@ class Article_model extends CI_Model
 					$_FILES['tmp_sec']['error']    = $_FILES['section_images']['error'][$idx];
 					$_FILES['tmp_sec']['size']     = $_FILES['section_images']['size'][$idx];
 
-					$up = uploadImg('tmp_sec', 'Uploads/articles/sections');
+					$up = uploadImg('tmp_sec', 'uploads/articles/sections');
 					if ($up && file_exists($up)) {
-						$secImg = basename($up);
+						$secImg = $up;
 					} else {
 						log_message('error', "Failed to upload section image $idx: " . ($up ?: 'No file'));
 						return false;
 					}
 				} elseif (!empty($post['ftp_section_image'][$idx])) {
 					$ftpPath = $post['ftp_section_image'][$idx];
-					$localDir = FCPATH . 'Uploads/articles/sections/';
+					$localDir = FCPATH . 'uploads/articles/sections/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {

@@ -175,19 +175,18 @@ function user($user_id = false) {
 	}
 }
 
-function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false) {
+function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false)
+{
 	unset($_FILES['files']);
 	$CI =& get_instance();
 	$CI->load->library('image_lib');
 
-	// Nastavenie priečinka
 	if ($dir === false) {
 		$dir = 'Gallery/';
 	} else {
 		$dir = rtrim($dir, '/') . '/';
 	}
 
-	// Vytvorenie priečinka s kontrolou
 	if (!is_dir($dir)) {
 		if (!mkdir($dir, 0755, true)) {
 			log_message('error', "Nepodarilo sa vytvoriť priečinok: $dir");
@@ -195,29 +194,29 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 		}
 	}
 
-	// Kontrola oprávnení priečinka
 	if (!is_writable($dir)) {
 		log_message('error', "Priečinok nie je zapisovateľný: $dir");
 		return false;
 	}
 
-	if ($saveAsNameFile == false) {
-		$saveAsNameFile = 'img';
-	}
-
-	// Spracovanie jedného súboru
 	if (empty($_FILES[$file]['name'])) {
 		return '';
 	}
 
 	$tmpName = $_FILES[$file]['tmp_name'];
 	if (isset($tmpName) && is_string($tmpName) && file_exists($tmpName)) {
-		$nazovAkoURL = trim(url_oprava($saveAsNameFile));
-		$typ = pathinfo($_FILES[$file]['name'], PATHINFO_EXTENSION);
-		$urlimg = $dir . $nazovAkoURL . '.' . $typ;
+		$originalName = pathinfo($_FILES[$file]['name'], PATHINFO_FILENAME);
+		$extension = pathinfo($_FILES[$file]['name'], PATHINFO_EXTENSION);
 
-		if (in_array(strtolower($typ), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
+		$baseName = $saveAsNameFile
+			? trim(url_oprava($saveAsNameFile))
+			: trim(url_oprava($originalName)) . '_' . time();
+
+		$urlimg = $dir . $baseName . '.' . $extension;
+
+		if (in_array(strtolower($extension), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
 			if (move_uploaded_file($tmpName, $urlimg)) {
+				// Vraciame celú cestu relatívne k base_path
 				return $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
 			} else {
 				log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $urlimg");
@@ -228,8 +227,11 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 			return '';
 		}
 	}
+
 	return '';
 }
+
+
 
 function obrazokfinal($adresaimg, $offLogo = true, $defaultWidthImage = 1600) {
 	$CI =& get_instance();

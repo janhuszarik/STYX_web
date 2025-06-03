@@ -183,7 +183,7 @@ if (isset($article) && !empty($article->slug)) {
 							<?php if (!empty($article->image)): ?>
 								<label class="col-form-label">Aktuelles Bild (Upload)</label>
 								<div>
-									<img src="<?= base_url('Uploads/articles/' . htmlspecialchars($article->image)) ?>" class="img-fluid current-image">
+									<img src="<?= base_url(htmlspecialchars($article->image)) ?>" class="img-fluid current-image">
 								</div>
 							<?php endif; ?>
 						</div>
@@ -233,7 +233,7 @@ if (isset($article) && !empty($article->slug)) {
 								<?php
 								$ftpProductImage = $article->{'ftp_product_image' . $i} ?? '';
 								if (empty($ftpProductImage) && !empty($article->{'product_image' . $i})) {
-									$ftpProductImage = base_url('Uploads/articles/products/' . $article->{'product_image' . $i});
+									$ftpProductImage = base_url($article->{'product_image' . $i});
 								}
 								?>
 								<div class="col-md-4 mb-3">
@@ -499,7 +499,7 @@ if (isset($article) && !empty($article->slug)) {
 		};
 
 		sectionsData.forEach(sec => {
-			const img = sec.image ? BASE_URL + 'Uploads/articles/sections/' + sec.image : null;
+			const img = sec.image ? BASE_URL + sec.image : null;
 			const ftpImage = sec.ftp_image || '';
 			const imageTitle = sec.image_title || '';
 			const buttonName = sec.button_name || '';

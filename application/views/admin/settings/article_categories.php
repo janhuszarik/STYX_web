@@ -50,11 +50,11 @@
 									<td class="text-center">
 										<?php
 										if (!empty($cat->menu_id)) {
-											echo isset($cat->parent) && $cat->parent > 0 ? 'Submenu' : 'Hlavné menu';
+											echo isset($cat->parent) && $cat->parent > 0 ? 'Submenu' : 'Hauptmenu';
 										} elseif (!empty($cat->submenu_id)) {
 											echo 'Submenu';
 										} else {
-											echo 'Vlastná kategória';
+											echo 'Eigene Kategorie';
 										}
 										?>
 									</td>
@@ -73,7 +73,7 @@
 												<a href="<?= base_url('admin/article_categories/del/' . $cat->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Möchten Sie wirklich löschen?')"><i class="fa fa-trash"></i></a>
 											<?php endif; ?>
 										<?php else: ?>
-											<span class="text-muted">Automatisch</span>
+											<span class="text-muted">Generiert von Menü</span>
 										<?php endif; ?>
 									</td>
 
