@@ -211,7 +211,7 @@ class Admin extends CI_Controller
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
 
 			// Nahratie nového obrázku
-			$image = $this->upload_image('image', 'Uploads/sliders/');
+			$image = $this->upload_image('image', 'uploads/sliders/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['slider'] = (object)$post;
@@ -225,8 +225,8 @@ class Admin extends CI_Controller
 			// Uloženie do DB
 			if ($this->Admin_model->save_slider_full($post, $image, $id)) {
 				// Zmazať pôvodný obrázok len ak bol nahratý nový
-				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/sliders/' . $old_image)) {
-					unlink(FCPATH . 'Uploads/sliders/' . $old_image);
+				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/sliders/' . $old_image)) {
+					unlink(FCPATH . 'uploads/sliders/' . $old_image);
 				}
 				$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 				redirect(BASE_URL . 'admin/slider');

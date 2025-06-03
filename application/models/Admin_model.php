@@ -211,8 +211,8 @@ function getNewsletters(){
 		if (!$slider) {
 			return false;
 		}
-		if ($slider->image && file_exists(FCPATH . 'Uploads/sliders/' . $slider->image)) {
-			unlink(FCPATH . 'Uploads/sliders/' . $slider->image);
+		if ($slider->image && file_exists(FCPATH . 'uploads/sliders/' . $slider->image)) {
+			unlink(FCPATH . 'uploads/sliders/' . $slider->image);
 		}
 		$this->db->where('id', $id);
 		return $this->db->delete('slider');
