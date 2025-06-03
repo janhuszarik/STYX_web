@@ -13,9 +13,9 @@
 					<a href="<?= !empty($s->button_link) ? $s->button_link : '#' ?>" style="text-decoration: none;">
 						<div class="slider-text<?= (empty($s->title) && empty($s->name1) && empty($s->name2) && empty($s->name3)) ? ' empty' : ''; ?>"
 							 style="background-color: <?= htmlspecialchars($s->bg_color); ?>;" tabindex="0">
-							<?php if (!empty($s->title)): ?><h2 style="<?= $textColor ?>"><?= $s->title ?></h2><?php endif; ?>
-							<?php if (!empty($s->name1)): ?><h3 style="<?= $textColor ?>"><?= $s->name1 ?></h3><?php endif; ?>
-							<?php if (!empty($s->name2)): ?><p style="<?= $textColor ?>"><?= $s->name2 ?></p><?php endif; ?>
+							<?php if (!empty($s->title)): ?><h1 style="font-weight: 600 <?= $textColor ?>"><?= $s->title ?></h1><?php endif; ?>
+							<?php if (!empty($s->name1)): ?><h2 style="<?= $textColor ?>"><?= $s->name1 ?></h2><?php endif; ?>
+							<?php if (!empty($s->name2)): ?><h3 style="<?= $textColor ?>"><?= $s->name2 ?></h3><?php endif; ?>
 							<?php if (!empty($s->name3)): ?><p style="<?= $textColor ?>"><?= $s->name3 ?></p><?php endif; ?>
 						</div>
 					</a>
