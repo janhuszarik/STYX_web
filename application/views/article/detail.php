@@ -22,7 +22,7 @@
 
 	<?php if (!empty($sections)): ?>
 		<?php foreach ($sections as $section): ?>
-			<div class="row align-items-center mb-5">
+			<div class="row align-items-center mb-5 flex-column-reverse flex-lg-row text-center text-lg-start">
 				<div class="col-lg-8">
 					<div class="section-content">
 						<?= $section->content ?>
@@ -41,17 +41,16 @@
 				</div>
 
 				<?php if (!empty($section->image)): ?>
-					<div class="col-lg-4 text-center">
-						<img src="<?= base_url($section->image) ?>" alt="<?= htmlspecialchars($section->image_title ?? 'STYX Webimage section') ?>" class="img-fluid rounded shadow-sm" style="max-width: 250px;">
+					<div class="col-lg-4 text-center mb-3 mb-lg-0">
+						<img src="<?= base_url($section->image) ?>" alt="<?= htmlspecialchars($section->image_title ?? 'STYX Webimage section') ?>" class="img-fluid rounded shadow-sm section-img">
 					</div>
 				<?php endif; ?>
-
 			</div>
 		<?php endforeach; ?>
 	<?php endif; ?>
 </div>
+
 <?php
-// Over, či existuje aspoň jeden produkt s názvom alebo obrázkom
 $hasProducts = false;
 for ($i = 1; $i <= 3; $i++) {
 	if (!empty($article->{'product_name' . $i}) || !empty($article->{'product_image' . $i})) {
@@ -77,8 +76,6 @@ for ($i = 1; $i <= 3; $i++) {
 					$alt  = $article->{'product_image' . $i . '_title'} ?? '';
 
 					if (empty($name) && empty($img)) continue;
-
-					// Úprava URL: ak nie je http/https, pridáme https://
 					if (!empty($url) && !preg_match('#^https?://#', $url)) {
 						$url = 'https://' . ltrim($url, '/');
 					}
@@ -88,7 +85,7 @@ for ($i = 1; $i <= 3; $i++) {
 						<a href="<?= htmlspecialchars($url ?: '#') ?>" class="text-decoration-none text-dark d-block h-100" <?= $target ?>>
 							<div class="card border-0 shadow-sm h-100">
 								<?php if (!empty($img)): ?>
-									<img src="<?= base_url($img) ?>" class="card-img-top img-fluid" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>" style="max-width: 100%; height: auto;">
+									<img src="<?= base_url($img) ?>" class="card-img-top img-fluid" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>">
 								<?php endif; ?>
 								<div class="card-body">
 									<h4 class="card-title mb-2"><?= htmlspecialchars($name) ?></h4>
@@ -110,19 +107,14 @@ for ($i = 1; $i <= 3; $i++) {
 
 <?php
 $interessierenLinks = [];
-
 for ($i = 1; $i <= 3; $i++) {
 	$name = $article->{'empfohlen_name' . $i} ?? '';
 	$url  = $article->{'empfohlen_url' . $i} ?? '';
-
 	if (!empty($name) && !empty($url)) {
 		if (!preg_match('#^https?://#', $url)) {
 			$url = 'https://' . ltrim($url, '/');
 		}
-		$interessierenLinks[] = [
-			'name' => $name,
-			'url' => $url
-		];
+		$interessierenLinks[] = ['name' => $name, 'url' => $url];
 	}
 }
 ?>
@@ -132,9 +124,7 @@ for ($i = 1; $i <= 3; $i++) {
 		<div class="container">
 			<div class="text-center mb-4">
 				<h3 class="fw-bold mb-2">DAS KÖNNTE SIE INTERESSIEREN</h3>
-				<p class="text-muted mb-4" style="margin-top: -5px;">
-					Entdecken Sie weitere Inhalte, die für Sie von Interesse sein könnten – spannende Themen, verwandte Angebote und mehr.
-				</p>
+				<p class="text-muted mb-4">Entdecken Sie weitere Inhalte, die für Sie von Interesse sein könnten – spannende Themen, verwandte Angebote und mehr.</p>
 			</div>
 			<div class="row justify-content-center">
 				<div class="col-md-8">
@@ -186,25 +176,64 @@ for ($i = 1; $i <= 3; $i++) {
 			const thumbs = document.querySelectorAll('.gallery-thumb');
 			const lightbox = document.getElementById('lightbox-modal');
 			const lightboxImg = document.getElementById('lightbox-img');
-
 			thumbs.forEach(thumb => {
 				thumb.addEventListener('click', function () {
-					const imgSrc = this.getAttribute('data-full');
-					lightboxImg.src = imgSrc;
+					lightboxImg.src = this.getAttribute('data-full');
 					lightbox.style.display = 'flex';
 				});
 			});
 		});
-
 		function closeLightbox() {
 			document.getElementById('lightbox-modal').style.display = 'none';
 		}
 	</script>
 <?php endif; ?>
 
+<style>
+	/* Lightbox */
+	.lightbox-modal {
+		position: fixed;
+		top: 0; left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.85);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 9999;
+	}
+	.lightbox-content {
+		max-width: 90%;
+		max-height: 80vh;
+		object-fit: contain;
+	}
+	.lightbox-close {
+		position: absolute;
+		top: 20px;
+		right: 30px;
+		font-size: 2rem;
+		color: white;
+		cursor: pointer;
+	}
 
+	/* Responsive zmeny */
+	@media (max-width: 768px) {
+		h1, h2, h3 {
+			font-size: 1.5rem;
+		}
+		.lead {
+			font-size: 1rem;
+		}
+		.section-img {
+			max-width: 200px;
+		}
+	}
 
-
-
-
-
+	@media (max-width: 576px) {
+		.article-gallery img,
+		.card-img-top {
+			max-height: 200px;
+			object-fit: cover;
+		}
+	}
+</style>
