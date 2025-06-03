@@ -128,7 +128,7 @@ for ($i = 1; $i <= 3; $i++) {
 ?>
 
 <?php if (!empty($interessierenLinks)): ?>
-	<section class="related-articles py-5 border-top bg-white">
+	<section class="related-articles py-5" style="background-color: #f0faf3; border-top: 1px solid #dee2e6;">
 		<div class="container">
 			<div class="text-center mb-4">
 				<h3 class="fw-bold mb-2">DAS KÖNNTE SIE INTERESSIEREN</h3>
@@ -152,6 +152,7 @@ for ($i = 1; $i <= 3; $i++) {
 		</div>
 	</section>
 <?php endif; ?>
+
 <?php if (!empty($galleryImages)): ?>
 	<section class="article-gallery py-5">
 		<div class="container">
