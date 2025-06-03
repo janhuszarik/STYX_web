@@ -180,35 +180,6 @@ for ($i = 1; $i <= 3; $i++) {
 		<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
 	</div>
 
-	<style>
-		.lightbox-modal {
-			position: fixed;
-			z-index: 1050;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.9);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		.lightbox-content {
-			max-width: 90%;
-			max-height: 90%;
-			box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-			border-radius: 8px;
-		}
-		.lightbox-close {
-			position: absolute;
-			top: 20px;
-			right: 30px;
-			color: white;
-			font-size: 40px;
-			cursor: pointer;
-			z-index: 1060;
-		}
-	</style>
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
