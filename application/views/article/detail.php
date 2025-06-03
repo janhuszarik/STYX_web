@@ -180,7 +180,6 @@ for ($i = 1; $i <= 3; $i++) {
 		<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
 	</div>
 
-
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
 			const thumbs = document.querySelectorAll('.gallery-thumb');
