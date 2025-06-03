@@ -202,7 +202,7 @@ class Article_model extends CI_Model
 							if (!empty($secImg) && file_exists(FCPATH . ltrim($secImg, '/'))) {
 								@unlink(FCPATH . ltrim($secImg, '/'));
 							}
-							$secImg = basename($ftpPath);
+							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to download FTP section image $idx: $ftpPath");
 							return false;
@@ -213,7 +213,7 @@ class Article_model extends CI_Model
 							if (!empty($secImg) && file_exists(FCPATH . ltrim($secImg, '/'))) {
 								@unlink(FCPATH . ltrim($secImg, '/'));
 							}
-							$secImg = basename($ftpPath);
+							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to copy FTP section image $idx: $src");
 							return false;
