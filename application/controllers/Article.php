@@ -150,7 +150,7 @@ class Article extends CI_Controller
 
 	public function articlesSave()
 	{
-		$post = $this->input->post(NULL, FALSE); // <-- FULL POST bez XSS filtrácie
+		$post = $this->input->post(NULL, FALSE);
 		$segment3 = $this->uri->segment(3);
 		$id = $this->uri->segment(4);
 
@@ -168,33 +168,17 @@ class Article extends CI_Controller
 
 		$this->load->model('Article_model');
 		$articleCategories = $this->Article_model->getArticleCategories();
-
 		$this->load->model('Gallery_model');
 		$galleryCategories = $this->Gallery_model->getAllCategories();
 
-		$config_article = [
-			'upload_path' => './Uploads/articles/',
-			'allowed_types' => 'jpg|jpeg|png|gif|webp',
-			'max_size' => 2048,
-			'overwrite' => FALSE
+		// Upload config
+		$dirs = [
+			'articles' => './Uploads/articles/',
+			'products' => './Uploads/articles/products/',
+			'sections' => './Uploads/articles/sections/',
 		];
-
-		$config_product = [
-			'upload_path' => './Uploads/articles/products/',
-			'allowed_types' => 'jpg|jpeg|png|gif|webp',
-			'max_size' => 2048,
-			'overwrite' => FALSE
-		];
-
-		$config_section = [
-			'upload_path' => './Uploads/articles/sections/',
-			'allowed_types' => 'jpg|jpeg|png|gif|webp',
-			'max_size' => 2048,
-			'overwrite' => FALSE
-		];
-
-		foreach ([$config_article['upload_path'], $config_product['upload_path'], $config_section['upload_path']] as $path) {
-			if (!file_exists($path)) mkdir($path, 0777, TRUE);
+		foreach ($dirs as $dir) {
+			if (!file_exists($dir)) mkdir($dir, 0777, true);
 		}
 
 		$this->load->library('upload');
@@ -202,9 +186,8 @@ class Article extends CI_Controller
 		if (!empty($post)) {
 			if (!empty($id)) {
 				$article = $this->Article_model->getArticle($id);
-				if ($article) {
-					$post['category_id'] = $article->category_id;
-				} else {
+				$post['category_id'] = $article->category_id ?? null;
+				if (!$post['category_id']) {
 					$this->session->set_flashdata('error', 'Artikel wurde nicht gefunden.');
 					redirect(BASE_URL . 'admin/articles_in_category/0');
 				}
@@ -216,27 +199,24 @@ class Article extends CI_Controller
 				}
 			}
 
-			// Handle menu_select and slug
+			// Slug generovanie
 			if (!empty($post['menu_select'])) {
-				// Remove language prefix from URL
 				$parts = explode('/', trim($post['menu_select'], '/'));
-				$parts = array_filter($parts, function($part) {
-					return !in_array($part, ['de', 'en']);
-				});
+				$parts = array_filter($parts, fn($part) => !in_array($part, ['de', 'en']));
 				$post['slug'] = implode('/', $parts);
 			} elseif (empty($post['slug']) && !empty($id)) {
-				// Preserve existing slug if menu_select is not set
 				$article = $this->Article_model->getArticle($id);
 				$post['slug'] = $article->slug ?? '';
 			}
 
 			if (empty($post['slug'])) {
 				$this->session->set_flashdata('error', 'Slug ist erforderlich.');
-				redirect(BASE_URL . 'admin/articles_in_category/' . ($post['category_id'] ?? 0));
+				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			}
 
+			// Hlavný obrázok
 			if (!empty($_FILES['image']['name'])) {
-				$this->upload->initialize($config_article);
+				$this->upload->initialize(['upload_path' => $dirs['articles'], 'allowed_types' => 'jpg|jpeg|png|gif|webp']);
 				if ($this->upload->do_upload('image')) {
 					$upload_data = $this->upload->data();
 					$post['image'] = 'Uploads/articles/' . $upload_data['file_name'];
@@ -246,10 +226,11 @@ class Article extends CI_Controller
 				}
 			}
 
+			// Produktové obrázky
 			for ($i = 1; $i <= 3; $i++) {
 				$file_key = "product_image$i";
 				if (!empty($_FILES[$file_key]['name'])) {
-					$this->upload->initialize($config_product);
+					$this->upload->initialize(['upload_path' => $dirs['products'], 'allowed_types' => 'jpg|jpeg|png|gif|webp']);
 					if ($this->upload->do_upload($file_key)) {
 						$upload_data = $this->upload->data();
 						$post[$file_key] = 'Uploads/articles/products/' . $upload_data['file_name'];
@@ -259,12 +240,59 @@ class Article extends CI_Controller
 					}
 				}
 			}
+			$sections = [];
+			if (!empty($post['sections'])) {
+				foreach ($post['sections'] as $i => $content) {
+					$image = '';
+
+					// Najskôr FTP obrázok
+					if (!empty($post['ftp_section_image'][$i])) {
+						$image = $post['ftp_section_image'][$i];
+					}
+					// Potom upload z formulára
+					elseif (!empty($_FILES['section_image']['name'][$i])) {
+						$_FILES_SINGLE = [
+							'name'     => $_FILES['section_image']['name'][$i],
+							'type'     => $_FILES['section_image']['type'][$i],
+							'tmp_name' => $_FILES['section_image']['tmp_name'][$i],
+							'error'    => $_FILES['section_image']['error'][$i],
+							'size'     => $_FILES['section_image']['size'][$i],
+						];
+
+						$_FILES['temp_section_image'] = $_FILES_SINGLE;
+						$this->upload->initialize([
+							'upload_path' => $dirs['sections'],
+							'allowed_types' => 'jpg|jpeg|png|gif|webp',
+						]);
+
+						if ($this->upload->do_upload('temp_section_image')) {
+							$upload_data = $this->upload->data();
+							$image = 'Uploads/articles/sections/' . $upload_data['file_name'];
+						}
+					}
+					// Inak starý obrázok
+					elseif (!empty($post['old_section_image'][$i])) {
+						$image = $post['old_section_image'][$i];
+					}
+
+					$sections[] = [
+						'content' => $content,
+						'image' => $image,
+						'image_title' => $post['section_image_titles'][$i] ?? '',
+						'button_name' => $post['button_names'][$i] ?? '',
+						'subpage' => $post['subpages'][$i] ?? '',
+						'external_url' => $post['external_urls'][$i] ?? ''
+					];
+				}
+			}
+
+			$post['sections_data'] = $sections;
 
 			if ($this->Article_model->saveArticle($post)) {
-				$message = !empty($post['id']) ? 'Artikel wurde erfolgreich bearbeitet.' : 'Artikel wurde erfolgreich hinzugefügt.';
-				$this->session->set_flashdata('success', $message);
+				$this->session->set_flashdata('success', empty($post['id']) ? 'Artikel wurde erfolgreich hinzugefügt.' : 'Artikel wurde erfolgreich bearbeitet.');
 				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			} else {
+				// chyba => načítaj späť všetky dáta do formulára
 				$this->session->set_flashdata('error', 'Fehler beim Speichern.');
 				$data['article'] = (object)$post;
 				$data['categoryId'] = $post['category_id'];
@@ -272,7 +300,33 @@ class Article extends CI_Controller
 				$data['galleryCategories'] = $galleryCategories;
 				$data['selectedGalleries'] = !empty($post['gallery_category_id']) ? $this->Gallery_model->getGalleriesByCategoryId($post['gallery_category_id']) : [];
 				$data['galleryCategoryId'] = $post['gallery_category_id'] ?? null;
+
 				$data['sections'] = [];
+				if (!empty($post['sections'])) {
+					foreach ($post['sections'] as $i => $content) {
+						$image = '';
+
+						// Prednosť má FTP obrázok
+						if (!empty($post['ftp_section_image'][$i])) {
+							$image = $post['ftp_section_image'][$i];
+						}
+						// Ak nie je FTP, použijeme starý obrázok
+						elseif (!empty($post['old_section_image'][$i])) {
+							$image = $post['old_section_image'][$i];
+						}
+
+						$data['sections'][] = (object)[
+							'content' => $content,
+							'image' => $image,
+							'image_title' => $post['section_image_titles'][$i] ?? '',
+							'button_name' => $post['button_names'][$i] ?? '',
+							'subpage' => $post['subpages'][$i] ?? '',
+							'external_url' => $post['external_urls'][$i] ?? ''
+						];
+					}
+				}
+
+
 				$data['title'] = 'Artikel verwalten';
 				$data['page'] = 'admin/settings/article_form';
 				$this->load->view('admin/layout/normal', $data);
@@ -281,7 +335,7 @@ class Article extends CI_Controller
 		}
 
 		$article = $this->Article_model->getArticle($id);
-		$categoryId = $article ? $article->category_id : ($this->uri->segment(3) ?? 0);
+		$categoryId = $article->category_id ?? ($this->uri->segment(3) ?? 0);
 
 		$categoryName = 'Kategorie nicht gefunden';
 		foreach ($articleCategories as $cat) {
@@ -313,6 +367,7 @@ class Article extends CI_Controller
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
 	}
+
 
 
 	public function getGalleriesByCategory()
