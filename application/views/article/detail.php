@@ -50,3 +50,63 @@
 		<?php endforeach; ?>
 	<?php endif; ?>
 </div>
+<?php
+// Over, či existuje aspoň jeden produkt s názvom alebo obrázkom
+$hasProducts = false;
+for ($i = 1; $i <= 3; $i++) {
+	if (!empty($article->{'product_name' . $i}) || !empty($article->{'product_image' . $i})) {
+		$hasProducts = true;
+		break;
+	}
+}
+?>
+
+<?php if ($hasProducts): ?>
+	<section class="recommended-products py-5 bg-light">
+		<div class="container">
+			<div class="text-center mb-4">
+				<h2 class="fw-bold">Empfohlene Produkte</h2>
+			</div>
+			<div class="row justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+				<?php for ($i = 1; $i <= 3; $i++): ?>
+					<?php
+					$name = $article->{'product_name' . $i} ?? '';
+					$desc = $article->{'product_description' . $i} ?? '';
+					$url  = $article->{'product_url' . $i} ?? '';
+					$img  = $article->{'product_image' . $i} ?? '';
+					$alt  = $article->{'product_image' . $i . '_title'} ?? '';
+
+					if (empty($name) && empty($img)) continue;
+
+					// Úprava URL: ak nie je http/https, pridáme https://
+					if (!empty($url) && !preg_match('#^https?://#', $url)) {
+						$url = 'https://' . ltrim($url, '/');
+					}
+					$target = (strpos($url, 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
+					?>
+					<div class="col">
+						<a href="<?= htmlspecialchars($url ?: '#') ?>" class="text-decoration-none text-dark d-block h-100" <?= $target ?>>
+							<div class="card border-0 shadow-sm h-100">
+								<?php if (!empty($img)): ?>
+									<img src="<?= base_url($img) ?>" class="card-img-top img-fluid" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>" style="object-fit:cover; max-height:200px;">
+								<?php endif; ?>
+								<div class="card-body">
+									<h5 class="card-title mb-2"><?= htmlspecialchars($name) ?></h5>
+									<?php if (!empty($desc)): ?>
+										<p class="card-text small"><?= htmlspecialchars($desc) ?></p>
+									<?php endif; ?>
+								</div>
+								<div class="card-footer bg-transparent border-0">
+									<div class="text-success fw-bold ps-3">Mehr ...</div>
+								</div>
+							</div>
+						</a>
+					</div>
+				<?php endfor; ?>
+			</div>
+		</div>
+	</section>
+<?php endif; ?>
+
+
+

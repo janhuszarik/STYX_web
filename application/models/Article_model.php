@@ -102,12 +102,12 @@ class Article_model extends CI_Model
 	public function saveArticle(array $post)
 	{
 		$this->load->helper('app_helper');
-
 		log_message('debug', 'Saving article with post data: ' . print_r($post, true));
 
 		$image = null;
 		$image_title = $post['image_title'] ?? null;
 
+		// Upload hlavného obrázku
 		if (!empty($_FILES['image']['name'])) {
 			$uploadPath = uploadImg('image', 'uploads/articles');
 			if ($uploadPath && file_exists($uploadPath)) {
@@ -118,6 +118,7 @@ class Article_model extends CI_Model
 			}
 		}
 
+		// FTP obrázok hlavný
 		if (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
 			$localDir = FCPATH . 'uploads/articles/';
@@ -126,7 +127,7 @@ class Article_model extends CI_Model
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 				$localFile = $localDir . basename($ftpPath);
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
-					$image = basename($ftpPath);
+					$image = 'uploads/articles/' . basename($ftpPath);
 				} else {
 					log_message('error', "Failed to download FTP image: $ftpPath");
 					return false;
@@ -135,13 +136,13 @@ class Article_model extends CI_Model
 				$src = FCPATH . ltrim($ftpPath, '/');
 				$dst = $localDir . basename($ftpPath);
 				if (@copy($src, $dst)) {
-					$image = basename($ftpPath);
+					$image = 'uploads/articles/' . basename($ftpPath);
 				} else {
 					log_message('error', "Failed to copy local FTP image: $src");
 					return false;
 				}
 			} else {
-				$image = basename($ftpPath);
+				$image = 'uploads/articles/' . basename($ftpPath);
 			}
 		}
 
@@ -158,87 +159,44 @@ class Article_model extends CI_Model
 			'gallery_id'      => !empty($post['gallery_id']) ? $post['gallery_id'] : null,
 			'active'          => !empty($post['active']) ? 1 : 0,
 			'start_date_from' => $post['start_date_from'] ?: null,
-			'end_date_to'     => $post['end_date_to']   ?: null,
+			'end_date_to'     => $post['end_date_to'] ?: null,
 			'updated_at'      => date('Y-m-d H:i:s'),
 		];
 
-		// ... produktové obrázky zachovaj pôvodne ako máš ...
+		// Produkty: názov, popis, URL, obrázok + title
+		for ($i = 1; $i <= 3; $i++) {
+			$data["product_name{$i}"]         = $post["product_name{$i}"] ?? null;
+			$data["product_description{$i}"]  = $post["product_description{$i}"] ?? null;
+			$data["product_url{$i}"]          = $post["product_url{$i}"] ?? null;
+			$data["product_image{$i}_title"]  = $post["product_image{$i}_title"] ?? null;
+			$data["product_image{$i}"]        = $post["old_product_image{$i}"] ?? null;
 
-		if (isset($post['sections']) && is_array($post['sections'])) {
-			if (!empty($post['id'])) {
-				$this->db->delete('article_sections', ['article_id' => $post['id']]);
-			}
-			foreach ($post['sections'] as $idx => $text) {
-				$secImg = $post['old_section_image'][$idx] ?? null;
-				$secImgTitle = $post['section_image_titles'][$idx] ?? null;
-				$buttonName = $post['button_names'][$idx] ?? null;
-				$subpage = $post['subpages'][$idx] ?? null;
-				$externalUrl = $post['external_urls'][$idx] ?? null;
+			// FTP produkt obrázok
+			if (!empty($post["ftp_product_image{$i}"])) {
+				$ftpPath = $post["ftp_product_image{$i}"];
+				$localDir = FCPATH . 'uploads/articles/products/';
+				@mkdir($localDir, 0755, true);
+				$dst = $localDir . basename($ftpPath);
 
-				if (!empty($_FILES['section_images']['name'][$idx])) {
-					$_FILES['tmp_sec']['name']     = $_FILES['section_images']['name'][$idx];
-					$_FILES['tmp_sec']['tmp_name'] = $_FILES['section_images']['tmp_name'][$idx];
-					$_FILES['tmp_sec']['error']    = $_FILES['section_images']['error'][$idx];
-					$_FILES['tmp_sec']['size']     = $_FILES['section_images']['size'][$idx];
-
-					$up = uploadImg('tmp_sec', 'uploads/articles/sections');
-					if ($up && file_exists($up)) {
-						if (!empty($secImg) && file_exists(FCPATH . ltrim($secImg, '/'))) {
-							@unlink(FCPATH . ltrim($secImg, '/'));
-						}
-						$secImg = $up;
-					} else {
-						log_message('error', "Failed to upload section image $idx: " . ($up ?: 'No file'));
-						return false;
+				if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+					if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
+						$data["product_image{$i}"] = 'uploads/articles/products/' . basename($ftpPath);
 					}
-				} elseif (!empty($post['ftp_section_image'][$idx])) {
-					$ftpPath = $post['ftp_section_image'][$idx];
-					$localDir = FCPATH . 'uploads/articles/sections/';
-					@mkdir($localDir, 0755, true);
-
-					$dst = $localDir . basename($ftpPath);
-					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
-						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							if (!empty($secImg) && file_exists(FCPATH . ltrim($secImg, '/'))) {
-								@unlink(FCPATH . ltrim($secImg, '/'));
-							}
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
-						} else {
-							log_message('error', "Failed to download FTP section image $idx: $ftpPath");
-							return false;
-						}
-					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
-						$src = FCPATH . ltrim($ftpPath, '/');
-						if (@copy($src, $dst)) {
-							if (!empty($secImg) && file_exists(FCPATH . ltrim($secImg, '/'))) {
-								@unlink(FCPATH . ltrim($secImg, '/'));
-							}
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
-						} else {
-							log_message('error', "Failed to copy FTP section image $idx: $src");
-							return false;
-						}
+				} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+					if (@copy(FCPATH . ltrim($ftpPath, '/'), $dst)) {
+						$data["product_image{$i}"] = 'uploads/articles/products/' . basename($ftpPath);
 					}
-				}
-
-				$sectionData = [
-					'article_id'   => $post['id'] ?? $this->db->insert_id(),
-					'content'      => $text,
-					'image'        => $secImg,
-					'image_title'  => $secImgTitle,
-					'button_name'  => $buttonName,
-					'subpage'      => $subpage,
-					'external_url' => $externalUrl,
-					'order'        => $idx,
-				];
-
-				if (!$this->db->insert('article_sections', $sectionData)) {
-					log_message('error', "Failed to insert section $idx into article_sections: " . $this->db->last_query());
-					return false;
 				}
 			}
 		}
 
+		// Empfohlene Links
+		for ($i = 1; $i <= 3; $i++) {
+			$data["empfohlen_name{$i}"] = $post["empfohlen_name{$i}"] ?? null;
+			$data["empfohlen_url{$i}"]  = $post["empfohlen_url{$i}"] ?? null;
+		}
+
+		// INSERT alebo UPDATE článku
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
 			return $this->db->update('articles', $data);
@@ -247,6 +205,7 @@ class Article_model extends CI_Model
 			return $this->db->insert('articles', $data);
 		}
 	}
+
 
 
 	public function deleteArticle($id)
