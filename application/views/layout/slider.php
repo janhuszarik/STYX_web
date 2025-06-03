@@ -1,4 +1,21 @@
 <div role="main" class="main">
+	<?php
+	$current_language = language();
+
+	function get_sliders_for_language($lang) {
+		$CI = get_instance();
+		$CI->db->where('lang', $lang);
+		$CI->db->where('active', '1');
+		return $CI->db->get('slider')->result();
+	}
+
+	$sliders = get_sliders_for_language($current_language);
+
+	if (empty($sliders) && $current_language === 'en') {
+		$sliders = get_sliders_for_language('de');
+	}
+	?>
+
 	<?php if (!empty($sliders)): ?>
 		<section class="slider-container" role="region" aria-label="<?= lang('SLIDER_STARTSEITE') ?>">
 			<?php foreach ($sliders as $index => $s): ?>
