@@ -15,7 +15,6 @@ function getNewsletters(){
 	function menuSave($post = false)
 	{
 		if ($post) {
-			// Nastavenie `orderBy` na `null` iba pre záznamy s rovnakým jazykom
 			$this->db->where('orderBy', $post['orderBy']);
 			$this->db->where('parent', $post['parent']);
 			$this->db->where('lang', $post['lang']);
@@ -23,27 +22,38 @@ function getNewsletters(){
 
 			$data = array(
 				'name' => $post['name'],
-				'url' => $post['url'],
+				'url' => $post['url'], // predbežne len slug
 				'parent' => $post['parent'],
 				'orderBy' => $post['orderBy'],
 				'active' => $post['active'],
 				'lang' => $post['lang'],
-				'base' => $post['base'], // pridali sme base
+				'base' => $post['base'],
 				'userId' => $this->ion_auth->user()->row()->id
 			);
 
 			if (is_numeric($post['id'])) {
 				$data['updated_at'] = date('Y-m-d H:i:s');
 				$this->db->where('id', $post['id']);
-				return $this->db->update('menu', $data);
+				$this->db->update('menu', $data);
+
+				// Slug s rodičom
+				$slug = $this->getFullSlugPathFromParent($post['id']);
+				$this->db->where('id', $post['id']);
+				return $this->db->update('menu', ['url' => $slug]);
 			} else {
 				$data['created_at'] = date('Y-m-d H:i:s');
-				return $this->db->insert('menu', $data);
-			}
+				$this->db->insert('menu', $data);
+				$insertId = $this->db->insert_id();
 
+				// Slug s rodičom
+				$slug = $this->getFullSlugPathFromParent($insertId, $post['lang']);
+				$this->db->where('id', $insertId);
+				return $this->db->update('menu', ['url' => $slug]);
+			}
 		}
 		return false;
 	}
+
 
 
 	function getMenu($id = false, $parent = false)
@@ -93,6 +103,29 @@ function getNewsletters(){
 		return $this->db->delete('menu');
 
 	}
+	private function getFullSlugPathFromParent($menuId, $lang = 'de')
+	{
+		$segments = [];
+
+		while ($menuId && $menuId != '0') {
+			$row = $this->db->select('id, parent, url')
+				->where('id', $menuId)
+				->get('menu')
+				->row();
+			if (!$row) break;
+
+			// Odstráň prefix jazyka a /app
+			$cleanUrl = preg_replace('#^(de|sk|en)(/app)?/#', '', trim($row->url, '/'));
+			array_unshift($segments, $cleanUrl);
+
+			$menuId = $row->parent;
+		}
+
+		return $lang . '/' . implode('/', $segments);
+	}
+
+
+
 	public function urlExists($url, $excludeId = null)
 	{
 		$this->db->where('url', $url);
