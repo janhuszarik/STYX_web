@@ -177,8 +177,8 @@ function getNewsletters(){
 			'bg_color' => $this->db->escape_str($post['bg_color'] ?? '#ffffff'),
 			'text_color' => $this->db->escape_str($post['text_color'] ?? '#000000'),
 			'orderBy' => is_numeric($post['orderBy']) ? (int)$post['orderBy'] : 0,
-			'active' => (int)($post['active'] ?? 0)
-		);
+			'active' => $post['active'],
+			);
 
 		if ($image && !isset($image['error']) && isset($image['file_name'])) {
 			$data['image'] = $image['file_name'];
