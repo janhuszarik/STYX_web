@@ -15,7 +15,7 @@
 							 style="background-color: <?= htmlspecialchars($s->bg_color); ?>;" tabindex="0">
 							<?php if (!empty($s->title)): ?><h2 style="font-weight: 600 <?= $textColor ?>"><?= $s->title ?></h2><?php endif; ?>
 							<?php if (!empty($s->name1)): ?><h3 style="font-weight: 400<?= $textColor ?>"><?= $s->name1 ?></h3><?php endif; ?>
-							<?php if (!empty($s->name2)): ?><h3 style="<?= $textColor ?>"><?= $s->name2 ?></h3><?php endif; ?>
+							<?php if (!empty($s->name2)): ?><h4 style="<?= $textColor ?>"><?= $s->name2 ?></h4><?php endif; ?>
 							<?php if (!empty($s->name3)): ?><p style="<?= $textColor ?>"><?= $s->name3 ?></p><?php endif; ?>
 						</div>
 					</a>
