@@ -59,6 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $route['login'] 											= 'auth/login';
     $route['auth/logout'] 										= 'auth/logout';
 	$route['auth/delete_user/(:num)'] 							= 'auth/delete_user/$1';
+	$route['auth/create_user'] 									= 'auth/create_user';
     $route['logout'] 											= 'auth/logout';
     $route['auth/activate'] 									= 'auth/activate';
     $route['auth/forgot_password'] 								= 'auth/forgot_password';
