@@ -162,52 +162,60 @@ class Article_model extends CI_Model
 			'updated_at'      => date('Y-m-d H:i:s'),
 		];
 
-		for ($i = 1; $i <= 3; $i++) {
-			$data["product_name{$i}"]        = $post["product_name{$i}"] ?? null;
-			$data["product_description{$i}"] = $post["product_description{$i}"] ?? null;
-			$data["product_url{$i}"]         = $post["product_url{$i}"] ?? null;
-			$data["product_image{$i}_title"] = $post["product_image{$i}_title"] ?? null;
-			$data["product_image{$i}"]       = null;
+		// Handle product sets (2 sets, 3 products each)
+		for ($set = 0; $set < 2; $set++) {
+			for ($i = 1; $i <= 3; $i++) {
+				$suffix = ($set * 3) + $i;
+				$setNum = $set + 1;
+				$prodNum = $i;
 
-			if (!empty($_FILES["product_image{$i}"]['name'])) {
-				$nazov = url_oprava($post['title'] ?? 'product') . "_produkt{$i}_" . time();
-				$up = uploadImg("product_image{$i}", 'uploads/articles/products', $nazov);
-				if ($up && file_exists($up)) {
-					$data["product_image{$i}"] = $up;
-				} else {
-					log_message('error', "Failed to upload product image $i: " . ($up ?: 'No file'));
-					return false;
-				}
-			} elseif (!empty($post["ftp_product_image{$i}"])) {
-				$ftpPath = $post["ftp_product_image{$i}"];
-				$localDir = FCPATH . 'uploads/articles/products/';
-				@mkdir($localDir, 0755, true);
+				$data["product_set{$setNum}_product{$prodNum}_name"] = $post["product_name{$suffix}"] ?? null;
+				$data["product_set{$setNum}_product{$prodNum}_description"] = $post["product_description{$suffix}"] ?? null;
+				$data["product_set{$setNum}_product{$prodNum}_image_title"] = $post["product_image{$suffix}_title"] ?? null;
+				$data["product_set{$setNum}_product{$prodNum}_url"] = $post["product_url{$suffix}"] ?? null;
+				$data["product_set{$setNum}_product{$prodNum}_image"] = $post["old_product_image{$suffix}"] ?? null; // Default to old image
 
-				if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
-					$dst = $localDir . basename($ftpPath);
-					if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-						$data["product_image{$i}"] = 'uploads/articles/products/' . basename($ftpPath);
+				// Only process new image if uploaded or new FTP path provided
+				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
+					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
+					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov);
+					if ($up && file_exists($up)) {
+						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
-						log_message('error', "Failed to download FTP product image $i: $ftpPath");
+						log_message('error', "Failed to upload product image set{$setNum}_product{$prodNum}: " . ($up ?: 'No file'));
 						return false;
 					}
-				} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
-					$src = FCPATH . ltrim($ftpPath, '/');
-					$dst = $localDir . basename($ftpPath);
-					if (@copy($src, $dst)) {
-						$data["product_image{$i}"] = 'uploads/articles/products/' . basename($ftpPath);
+				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
+					// Process FTP image only if it's different from the old image
+					$ftpPath = $post["ftp_product_image{$suffix}"];
+					$localDir = FCPATH . 'uploads/articles/products/';
+					@mkdir($localDir, 0755, true);
+
+					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+						$dst = $localDir . basename($ftpPath);
+						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						} else {
+							log_message('error', "Failed to download FTP product image set{$setNum}_product{$prodNum}: $ftpPath");
+							return false;
+						}
+					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+						$src = FCPATH . ltrim($ftpPath, '/');
+						$dst = $localDir . basename($ftpPath);
+						if (@copy($src, $dst)) {
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						} else {
+							log_message('error', "Failed to copy FTP product image set{$setNum}_product{$prodNum}: $src");
+							return false;
+						}
 					} else {
-						log_message('error', "Failed to copy FTP product image $i: $src");
-						return false;
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
 					}
-				} else {
-					$data["product_image{$i}"] = 'uploads/articles/products/' . basename($ftpPath);
 				}
-			} else {
-				$data["product_image{$i}"] = $post["old_product_image{$i}"] ?? null;
 			}
 		}
 
+		// Handle "Das könnte Sie interessieren" fields
 		for ($i = 1; $i <= 3; $i++) {
 			$data["empfohlen_name{$i}"] = $post["empfohlen_name{$i}"] ?? null;
 			$data["empfohlen_url{$i}"]  = $post["empfohlen_url{$i}"] ?? null;
@@ -223,61 +231,18 @@ class Article_model extends CI_Model
 			$articleId = $this->db->insert_id();
 		}
 
-		if (isset($post['sections']) && is_array($post['sections'])) {
+		if (isset($post['sections_data']) && is_array($post['sections_data'])) {
 			$this->db->delete('article_sections', ['article_id' => $articleId]);
-			foreach ($post['sections'] as $idx => $text) {
-				$secImg = $post['old_section_image'][$idx] ?? null;
-				$secImgTitle = $post['section_image_titles'][$idx] ?? null;
-				$buttonName = $post['button_names'][$idx] ?? null;
-				$subpage = $post['subpages'][$idx] ?? null;
-				$externalUrl = $post['external_urls'][$idx] ?? null;
-
-				if (!empty($_FILES['section_images']['name'][$idx])) {
-					$_FILES['tmp_sec']['name']     = $_FILES['section_images']['name'][$idx];
-					$_FILES['tmp_sec']['tmp_name'] = $_FILES['section_images']['tmp_name'][$idx];
-					$_FILES['tmp_sec']['error']    = $_FILES['section_images']['error'][$idx];
-					$_FILES['tmp_sec']['size']     = $_FILES['section_images']['size'][$idx];
-
-					$up = uploadImg('tmp_sec', 'uploads/articles/sections');
-					if ($up && file_exists($up)) {
-						if (!empty($secImg) && file_exists(FCPATH . ltrim($secImg, '/'))) {
-							@unlink(FCPATH . ltrim($secImg, '/'));
-						}
-						$secImg = $up;
-					} else {
-						log_message('error', "Failed to upload section image $idx: " . ($up ?: 'No file'));
-						return false;
-					}
-				} elseif (!empty($post['ftp_section_image'][$idx])) {
-					$ftpPath = $post['ftp_section_image'][$idx];
-					$localDir = FCPATH . 'uploads/articles/sections/';
-					@mkdir($localDir, 0755, true);
-
-					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
-						$dst = $localDir . basename($ftpPath);
-						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$secImg = basename($ftpPath);
-						} else {
-							log_message('error', "Failed to download FTP section image $idx: $ftpPath");
-							return false;
-						}
-					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
-						$src = FCPATH . ltrim($ftpPath, '/');
-						$dst = $localDir . basename($ftpPath);
-						if (@copy($src, $dst)) {
-							$secImg = basename($ftpPath);
-						} else {
-							log_message('error', "Failed to copy FTP section image $idx: $src");
-							return false;
-						}
-					} else {
-						$secImg = basename($ftpPath);
-					}
-				}
+			foreach ($post['sections_data'] as $idx => $section) {
+				$secImg = $section['image'] ?? null;
+				$secImgTitle = $section['image_title'] ?? null;
+				$buttonName = $section['button_name'] ?? null;
+				$subpage = $section['subpage'] ?? null;
+				$externalUrl = $section['external_url'] ?? null;
 
 				$sectionData = [
 					'article_id'   => $articleId,
-					'content'      => $text,
+					'content'      => $section['content'],
 					'image'        => $secImg,
 					'image_title'  => $secImgTitle,
 					'button_name'  => $buttonName,
@@ -295,8 +260,6 @@ class Article_model extends CI_Model
 
 		return $ok;
 	}
-
-
 
 	public function deleteArticle($id)
 	{

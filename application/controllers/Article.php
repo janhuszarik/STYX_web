@@ -146,8 +146,6 @@ class Article extends CI_Controller
 		$this->load->view('admin/layout/normal', $data);
 	}
 
-
-
 	public function articlesSave()
 	{
 		$post = $this->input->post(NULL, FALSE);
@@ -226,20 +224,6 @@ class Article extends CI_Controller
 				}
 			}
 
-			// Produktové obrázky
-			for ($i = 1; $i <= 3; $i++) {
-				$file_key = "product_image$i";
-				if (!empty($_FILES[$file_key]['name'])) {
-					$this->upload->initialize(['upload_path' => $dirs['products'], 'allowed_types' => 'jpg|jpeg|png|gif|webp']);
-					if ($this->upload->do_upload($file_key)) {
-						$upload_data = $this->upload->data();
-						$post[$file_key] = 'Uploads/articles/products/' . $upload_data['file_name'];
-					} else {
-						$this->session->set_flashdata('error', "Fehler beim Hochladen des Produktbildes $i: " . $this->upload->display_errors());
-						$post[$file_key] = $post["old_$file_key"] ?? null;
-					}
-				}
-			}
 			$sections = [];
 			if (!empty($post['sections'])) {
 				foreach ($post['sections'] as $i => $content) {
@@ -292,7 +276,7 @@ class Article extends CI_Controller
 				$this->session->set_flashdata('success', empty($post['id']) ? 'Artikel wurde erfolgreich hinzugefügt.' : 'Artikel wurde erfolgreich bearbeitet.');
 				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			} else {
-				// chyba => načítaj späť všetky dáta do formulára
+				// Chyba => načítaj späť všetky dáta do formulára
 				$this->session->set_flashdata('error', 'Fehler beim Speichern.');
 				$data['article'] = (object)$post;
 				$data['categoryId'] = $post['category_id'];
@@ -325,7 +309,6 @@ class Article extends CI_Controller
 						];
 					}
 				}
-
 
 				$data['title'] = 'Artikel verwalten';
 				$data['page'] = 'admin/settings/article_form';
@@ -367,8 +350,6 @@ class Article extends CI_Controller
 		$data['page'] = 'admin/settings/article_form';
 		$this->load->view('admin/layout/normal', $data);
 	}
-
-
 
 	public function getGalleriesByCategory()
 	{

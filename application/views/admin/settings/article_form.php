@@ -200,6 +200,12 @@ if (isset($article) && !empty($article->slug)) {
 						<div id="sections-container" style="margin-top:20px;"></div>
 						<button type="button" class="btn btn-sm btn-success mt-2" id="add-section">+ Sektion hinzufügen</button>
 					</div>
+
+					<hr class="my-4 border-dark">
+
+					<div class="form-group pb-3">
+						<?php $this->load->view('admin/settings/article_products_dynamic'); ?>
+					</div>
 					<hr class="my-4 border-dark">
 
 					<div class="mb-3">
@@ -218,64 +224,6 @@ if (isset($article) && !empty($article->slug)) {
 							<label for="meta" class="col-form-label">Meta-Beschreibung</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Eine kurze Beschreibung des Artikels für Suchmaschinen. Wird in den Suchergebnissen angezeigt und sollte 50-160 Zeichen lang sein."></i>
 							<textarea class="form-control" name="meta" id="meta" rows="3"><?= htmlspecialchars($article->meta ?? '') ?></textarea>
-						</div>
-					</div>
-					<hr class="my-4 border-dark">
-
-					<div class="form-group pb-3">
-						<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
-							Sektion Empfohlene Produkte
-						</h3>
-						<small class="text-muted ms-3">Diese Sektion kann leer bleiben, falls nicht benötigt.</small>
-						<div class="row mt-2">
-							<?php for ($i = 1; $i <= 3; $i++): ?>
-								<?php
-								$ftpProductImage = $article->{'ftp_product_image' . $i} ?? '';
-								if (empty($ftpProductImage) && !empty($article->{'product_image' . $i})) {
-									$ftpProductImage = base_url($article->{'product_image' . $i});
-								}
-								?>
-								<div class="col-md-4 mb-3">
-									<div class="mb-2">
-										<label for="product_name<?= $i ?>" class="col-form-label">Produktname</label>
-										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Name des empfohlenen Produkts. Wird in der Sektion ‚Empfohlene Produkte‘ angezeigt. Kann leer bleiben, wenn nicht benötigt."></i>
-										<input type="text" class="form-control" id="product_name<?= $i ?>" name="product_name<?= $i ?>" placeholder="Name" value="<?= htmlspecialchars($article->{'product_name' . $i} ?? '') ?>">
-									</div>
-									<div class="mb-2">
-										<label for="product_description<?= $i ?>" class="col-form-label">Beschreibung</label>
-										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Eine kurze Beschreibung des empfohlenen Produkts. Wird unter dem Produktnamen angezeigt. Kann leer bleiben, wenn nicht benötigt."></i>
-										<textarea class="form-control" id="product_description<?= $i ?>" name="product_description<?= $i ?>" rows="2" placeholder="Beschreibung"><?= htmlspecialchars($article->{'product_description' . $i} ?? '') ?></textarea>
-									</div>
-									<div class="mb-2">
-										<label for="product_image<?= $i ?>" class="col-form-label">Produktbild hochladen</label>
-										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Bildes für das empfohlene Produkt. Wird in der Sektion ‚Empfohlene Produkte‘ angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
-										<input type="file" class="form-control" id="product_image<?= $i ?>" name="product_image<?= $i ?>">
-									</div>
-									<div class="mb-2">
-										<label for="product_image<?= $i ?>_title" class="col-form-label">Titel des Bildes (SEO)</label>
-										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Produktbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
-										<input type="text" class="form-control" id="product_image<?= $i ?>_title" name="product_image<?= $i ?>_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->{'product_image' . $i . '_title'} ?? '') ?>">
-									</div>
-									<input type="hidden" name="ftp_product_image<?= $i ?>" id="ftp_product_image<?= $i ?>" value="<?= htmlspecialchars($ftpProductImage) ?>">
-									<input type="hidden" name="old_product_image<?= $i ?>" value="<?= htmlspecialchars($article->{'product_image' . $i} ?? '') ?>">
-									<div class="mb-2">
-										<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_product_image<?= $i ?>" data-preview-target="productImagePreview<?= $i ?>">
-											Bild aus FTP wählen
-										</button>
-										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis für das empfohlene Produkt. Das ausgewählte Bild wird in der Sektion ‚Empfohlene Produkte‘ angezeigt."></i>
-									</div>
-									<div id="productImagePreview<?= $i ?>" class="mb-2">
-										<?php if (!empty($ftpProductImage)): ?>
-											<img src="<?= htmlspecialchars($ftpProductImage) ?>" style="max-width:150px;max-height:150px;object-fit:contain;">
-										<?php endif; ?>
-									</div>
-									<div class="mb-2">
-										<label for="product_url<?= $i ?>" class="col-form-label">Produkt-URL</label>
-										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL, zu der das empfohlene Produkt verlinkt. Kann eine interne oder externe Seite sein. Kann leer bleiben, wenn kein Link benötigt wird."></i>
-										<input type="text" class="form-control" id="product_url<?= $i ?>" name="product_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'product_url' . $i} ?? '') ?>">
-									</div>
-								</div>
-							<?php endfor; ?>
 						</div>
 					</div>
 					<hr class="my-4 border-dark">
