@@ -35,8 +35,9 @@ class Article_model extends CI_Model
 
 	public function getArticlesByCategory($categoryId)
 	{
+		$this->db->select('id, title, slug, slug_title, is_main, category_id, lang, active');
 		$this->db->where('category_id', $categoryId);
-		$this->db->order_by('id', 'DESC');
+		$this->db->order_by('is_main DESC, id DESC');
 		return $this->db->get('articles')->result();
 	}
 
@@ -82,8 +83,9 @@ class Article_model extends CI_Model
 
 	public function getPaginatedArticlesByCategory($categoryId, $limit, $offset)
 	{
+		$this->db->select('id, title, slug, slug_title, is_main, category_id, lang, active');
 		$this->db->where('category_id', $categoryId);
-		$this->db->order_by('id', 'DESC');
+		$this->db->order_by('is_main DESC, id DESC');
 		return $this->db->get('articles', $limit, $offset)->result();
 	}
 
@@ -111,7 +113,7 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'uploads/articles');
+			$uploadPath = uploadImg('image', 'Uploads/articles');
 			if ($uploadPath && file_exists($uploadPath)) {
 				$image = $uploadPath;
 			} else {
@@ -120,7 +122,7 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'uploads/articles/';
+			$localDir = FCPATH . 'Uploads/articles/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
@@ -147,6 +149,20 @@ class Article_model extends CI_Model
 			$image = $post['old_image'] ?? null;
 		}
 
+		// Handle is_main and slug_title
+		$is_main = isset($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
+		$slug_title = $is_main ? null : url_title($post['title'], 'dash', true);
+
+		// If setting as main, unset other main articles in the same category
+		if ($is_main && !empty($post['category_id'])) {
+			$this->db->where('category_id', $post['category_id']);
+			$this->db->where('is_main', 1);
+			if (!empty($post['id'])) {
+				$this->db->where('id !=', $post['id']);
+			}
+			$this->db->update('articles', ['is_main' => 0]);
+		}
+
 		$data = [
 			'category_id'     => $post['category_id'],
 			'lang'            => $post['lang'] ?? 'de',
@@ -162,6 +178,8 @@ class Article_model extends CI_Model
 			'start_date_from' => $post['start_date_from'] ?: null,
 			'end_date_to'     => $post['end_date_to']   ?: null,
 			'updated_at'      => date('Y-m-d H:i:s'),
+			'is_main'         => $is_main,
+			'slug_title'      => $slug_title,
 		];
 
 		// Handle product sets (2 sets, 3 products each)
@@ -175,12 +193,11 @@ class Article_model extends CI_Model
 				$data["product_set{$setNum}_product{$prodNum}_description"] = $post["product_description{$suffix}"] ?? null;
 				$data["product_set{$setNum}_product{$prodNum}_image_title"] = $post["product_image{$suffix}_title"] ?? null;
 				$data["product_set{$setNum}_product{$prodNum}_url"] = $post["product_url{$suffix}"] ?? null;
-				$data["product_set{$setNum}_product{$prodNum}_image"] = $post["old_product_image{$suffix}"] ?? null; // Default to old image
+				$data["product_set{$setNum}_product{$prodNum}_image"] = $post["old_product_image{$suffix}"] ?? null;
 
-				// Only process new image if uploaded or new FTP path provided
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov);
+					$up = uploadImg("product_image{$suffix}", 'Uploads/articles/products', $nazov);
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
@@ -188,15 +205,14 @@ class Article_model extends CI_Model
 						return false;
 					}
 				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
-					// Process FTP image only if it's different from the old image
 					$ftpPath = $post["ftp_product_image{$suffix}"];
-					$localDir = FCPATH . 'uploads/articles/products/';
+					$localDir = FCPATH . 'Uploads/articles/products/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to download FTP product image set{$setNum}_product{$prodNum}: $ftpPath");
 							return false;
@@ -205,13 +221,13 @@ class Article_model extends CI_Model
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to copy FTP product image set{$setNum}_product{$prodNum}: $src");
 							return false;
 						}
 					} else {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 					}
 				}
 			}
@@ -328,15 +344,39 @@ class Article_model extends CI_Model
 
 	public function getMenuItems()
 	{
-		$this->db->select('id, name, url');
-		$this->db->where('active', 1);
-		$this->db->order_by('parent', 'ASC');
-		$this->db->order_by('orderBy', 'ASC');
-		$menuItems = $this->db->get('menu')->result();
+		$this->db->select('m.id, m.name, m.url, m.parent, m.orderBy');
+		$this->db->where('m.active', 1);
+		$this->db->order_by('m.parent', 'ASC');
+		$this->db->order_by('m.orderBy', 'ASC');
+		$menuItems = $this->db->get('menu m')->result();
 
 		$options = '';
+		$categories = $this->getArticleCategories();
+
 		foreach ($menuItems as $item) {
 			$options .= '<option value="' . htmlspecialchars($item->url) . '">' . htmlspecialchars($item->name) . '</option>';
+
+			// Find the corresponding category
+			$category = null;
+			foreach ($categories as $cat) {
+				if ($cat->menu_id == $item->id || $cat->submenu_id == $item->id) {
+					$category = $cat;
+					break;
+				}
+			}
+
+			// If the category exists and has multiple articles, add articles as submenu items
+			if ($category) {
+				$articles = $this->getArticlesByCategory($category->id);
+				if (count($articles) > 1) {
+					foreach ($articles as $article) {
+						if (!$article->is_main) {
+							$articleSlug = $article->slug . '/' . $article->slug_title;
+							$options .= '<option value="' . htmlspecialchars($articleSlug) . '"> - ' . htmlspecialchars($article->title) . '</option>';
+						}
+					}
+				}
+			}
 		}
 
 		return ['success' => true, 'options' => $options];

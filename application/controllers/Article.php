@@ -37,7 +37,6 @@ class Article extends CI_Controller
 			}
 
 			if (!empty($post['id'])) {
-				// Opravené volanie metódy saveArticleCategory
 				if ($this->Article_model->saveArticleCategory($post)) {
 					$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich bearbeitet.');
 					redirect(BASE_URL . 'admin/article_categories');
@@ -46,7 +45,6 @@ class Article extends CI_Controller
 					$data['edit'] = (object)$post;
 				}
 			} else {
-				// Opravené volanie metódy saveArticleCategory
 				if ($this->Article_model->saveArticleCategory($post)) {
 					$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich hinzugefügt.');
 					redirect(BASE_URL . 'admin/article_categories');
@@ -83,7 +81,7 @@ class Article extends CI_Controller
 		$config['first_link'] = '«';
 		$config['last_link'] = '»';
 		$config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
-		$config['cur_tag_close'] = '</span></li>'; // Pridané ukončenie tagu
+		$config['cur_tag_close'] = '</span></li>';
 		$config['num_tag_open'] = '<li class="page-item">';
 		$config['num_tag_close'] = '</li>';
 		$config['prev_tag_open'] = '<li class="page-item">';
@@ -173,7 +171,6 @@ class Article extends CI_Controller
 		$this->load->model('Gallery_model');
 		$galleryCategories = $this->Gallery_model->getAllCategories();
 
-		// Upload config
 		$dirs = [
 			'articles' => './Uploads/articles/',
 			'products' => './Uploads/articles/products/',
@@ -203,7 +200,6 @@ class Article extends CI_Controller
 				}
 			}
 
-			// Slug generovanie
 			if (!empty($post['menu_select'])) {
 				$parts = explode('/', trim($post['menu_select'], '/'));
 				$parts = array_filter($parts, fn($part) => !in_array($part, ['de', 'en']));
@@ -218,7 +214,6 @@ class Article extends CI_Controller
 				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			}
 
-			// Hlavný obrázok
 			if (!empty($_FILES['image']['name'])) {
 				$this->upload->initialize(['upload_path' => $dirs['articles'], 'allowed_types' => 'jpg|jpeg|png|gif|webp']);
 				if ($this->upload->do_upload('image')) {
@@ -230,18 +225,14 @@ class Article extends CI_Controller
 				}
 			}
 
-			// Spracovanie sekcií
 			$sections = [];
 			if (!empty($post['sections'])) {
 				foreach ($post['sections'] as $i => $content) {
 					$image = '';
 
-					// Najskôr FTP obrázok
 					if (!empty($post['ftp_section_image'][$i])) {
 						$image = $post['ftp_section_image'][$i];
-					}
-					// Potom upload z formulára
-					elseif (!empty($_FILES['section_images']['name'][$i])) {
+					} elseif (!empty($_FILES['section_images']['name'][$i])) {
 						$_FILES_SINGLE = [
 							'name'     => $_FILES['section_images']['name'][$i],
 							'type'     => $_FILES['section_images']['type'][$i],
@@ -260,9 +251,7 @@ class Article extends CI_Controller
 							$upload_data = $this->upload->data();
 							$image = 'Uploads/articles/sections/' . $upload_data['file_name'];
 						}
-					}
-					// Inak starý obrázok
-					elseif (!empty($post['old_section_image'][$i])) {
+					} elseif (!empty($post['old_section_image'][$i])) {
 						$image = $post['old_section_image'][$i];
 					}
 
@@ -280,11 +269,13 @@ class Article extends CI_Controller
 			log_message('debug', 'Processed sections: ' . print_r($sections, true));
 			$post['sections_data'] = $sections;
 
+			// Handle is_main
+			$post['is_main'] = isset($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
+
 			if ($this->Article_model->saveArticle($post)) {
 				$this->session->set_flashdata('success', empty($post['id']) ? 'Artikel wurde erfolgreich hinzugefügt.' : 'Artikel wurde erfolgreich bearbeitet.');
 				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			} else {
-				// Chyba => načítaj späť všetky dáta do formulára
 				$this->session->set_flashdata('error', 'Fehler beim Speichern.');
 				$data['article'] = (object)$post;
 				$data['categoryId'] = $post['category_id'];
@@ -298,12 +289,9 @@ class Article extends CI_Controller
 					foreach ($post['sections'] as $i => $content) {
 						$image = '';
 
-						// Prednosť má FTP obrázok
 						if (!empty($post['ftp_section_image'][$i])) {
 							$image = $post['ftp_section_image'][$i];
-						}
-						// Ak nie je FTP, použijeme starý obrázok
-						elseif (!empty($post['old_section_image'][$i])) {
+						} elseif (!empty($post['old_section_image'][$i])) {
 							$image = $post['old_section_image'][$i];
 						}
 

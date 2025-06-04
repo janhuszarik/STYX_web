@@ -15,7 +15,6 @@ $titleSub = isset($article)
 
 $categoryId = isset($article) ? $article->category_id : ($categoryId ?? $CI->uri->segment(3));
 
-// Debug: Vypíšeme hodnoty, aby sme skontrolovali, či sú načítané
 log_message('debug', 'Category ID in view: ' . $categoryId);
 log_message('debug', 'Category Name in view: ' . ($categoryName ?? 'Not set'));
 log_message('debug', 'Article slug in view: ' . ($article->slug ?? 'Not set'));
@@ -39,7 +38,6 @@ foreach ($menuItems as $menu) {
 
 $menuOptionsJson = json_encode($menuOptions);
 
-// Nastavenie defaultMenuUrl pre select input
 $defaultMenuUrl = '';
 if (isset($article) && !empty($article->slug)) {
 	$defaultMenuUrl = $article->slug;
@@ -142,6 +140,14 @@ if (isset($article) && !empty($article->slug)) {
 							<label for="slug_display" class="col-form-label">Slug</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-freundliche Adresse des Artikels. Wird automatisch aus dem Menü übernommen, wenn ein Menüpunkt ausgewählt ist."></i>
 							<input type="text" class="form-control" id="slug_display" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
+						</div>
+						<div class="col-md-6">
+							<label for="is_main" class="col-form-label">Hauptartikel</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Markiert diesen Artikel als Hauptartikel der Kategorie. Nur ein Artikel pro Kategorie kann Hauptartikel sein. Nicht-Hauptartikel erhalten einen zusätzlichen Slug basierend auf ihrem Titel."></i>
+							<select name="is_main" id="is_main" class="form-control">
+								<option value="1" <?= (isset($article) && $article->is_main == '1') ? 'selected' : '' ?>>Ja</option>
+								<option value="0" <?= (isset($article) && $article->is_main == '0') || !isset($article) ? 'selected' : '' ?>>Nein</option>
+							</select>
 						</div>
 					</div>
 
@@ -339,7 +345,7 @@ if (isset($article) && !empty($article->slug)) {
 	function updateSectionIndexes() {
 		const sections = document.querySelectorAll('[data-section]');
 		sections.forEach((section, index) => {
-			section.dataset.section = index; // Aktualizovať data-section
+			section.dataset.section = index;
 			section.querySelector('.summernote').name = `sections[${index}]`;
 			section.querySelector('input[type="file"]').name = `section_images[${index}]`;
 			section.querySelector('input[name*="section_image_titles"]').name = `section_image_titles[${index}]`;
@@ -354,7 +360,6 @@ if (isset($article) && !empty($article->slug)) {
 	function addSection(content = '', img = null, ftpImage = '', imageTitle = '', buttonName = '', subpage = '', externalUrl = '', oldImage = '', index = null) {
 		if (sectionCount >= maxSections) return;
 
-		// Použijeme index, ak je zadaný, inak sectionCount
 		const sectionIndex = index !== null ? index : sectionCount;
 		sectionCount++;
 
@@ -364,64 +369,63 @@ if (isset($article) && !empty($article->slug)) {
 			optionsHtml += `<option value="${opt.value}" ${selected}>${opt.label}</option>`;
 		});
 
-		// HTML šablóna pre sekciu
 		const html = `
-			<div class="row align-items-start border p-2 mb-2" data-section="${sectionIndex}">
-				<div class="col-md-9">
-					<label for="section_content${sectionIndex}" class="col-form-label">Inhalt</label>
-					<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Hauptinhalt der Sektion. Verwenden Sie den Texteditor, um formatierten Text, Bilder oder Links hinzuzufügen. Jede Sektion wird im Artikel als separater Abschnitt angezeigt."></i>
-					<textarea name="sections[${sectionIndex}]" id="section_content${sectionIndex}" class="form-control summernote" rows="3">${content}</textarea>
-				</div>
-				<div class="col-md-3">
-					<div class="mb-2">
-						<label for="section_image${sectionIndex}" class="col-form-label">Bild hochladen</label>
-						<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Bildes für diese Sektion. Das Bild wird neben dem Inhalt der Sektion angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
-						<input type="file" name="section_images[${sectionIndex}]" id="section_image${sectionIndex}" class="form-control">
-					</div>
-					<div class="mb-2">
-						<label for="section_image_title${sectionIndex}" class="col-form-label">Titel des Bildes (SEO)</label>
-						<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Sektionsbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
-						<input type="text" name="section_image_titles[${sectionIndex}]" id="section_image_title${sectionIndex}" class="form-control" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
-					</div>
-					<input type="hidden" name="ftp_section_image[${sectionIndex}]" id="ftp_section_image${sectionIndex}" value="${ftpImage}">
-					<input type="hidden" name="old_section_image[${sectionIndex}]" id="old_section_image${sectionIndex}" value="${oldImage}">
-					<div class="mb-2">
-						<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_section_image${sectionIndex}" data-preview-target="sectionImagePreview${sectionIndex}">
-							Bild aus FTP wählen
-						</button>
-						<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis für diese Sektion. Das ausgewählte Bild wird in der Sektion angezeigt."></i>
-					</div>
-					<div id="sectionImagePreview${sectionIndex}" class="mb-2">
-						${ftpImage ? `<img src="${ftpImage}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
-						${img && !ftpImage ? `<img src="${img}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
-					</div>
-				</div>
-				<div class="col-md-12 mt-2">
-					<div class="row">
-						<div class="col-md-4">
-							<label for="button_name${sectionIndex}" class="col-form-label">Button-Name</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Text des Buttons in dieser Sektion. Wenn angegeben, wird ein Button angezeigt, der mit einer Unterseite oder externen URL verknüpft werden kann."></i>
-							<input type="text" name="button_names[${sectionIndex}]" class="form-control button-name" id="button_name${sectionIndex}" placeholder="Name des Buttons" value="${buttonName}">
-						</div>
-						<div class="col-md-4">
-							<label for="subpage${sectionIndex}" class="col-form-label">Unterseite</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer internen Unterseite aus dem Menü. Aktiviert, wenn ein Button-Name angegeben ist. Hat Vorrang vor einer externen URL."></i>
-							<select name="subpages[${sectionIndex}]" class="form-control subpage" id="subpage${sectionIndex}" ${!buttonName ? 'disabled' : ''}>
-								${optionsHtml}
-							</select>
-						</div>
-						<div class="col-md-4">
-							<label for="external_url${sectionIndex}" class="col-form-label">Externe URL</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer externen URL. Aktiviert, wenn ein Button-Name angegeben ist. Wird ignoriert, wenn eine Unterseite ausgewählt ist."></i>
-							<input type="url" name="external_urls[${sectionIndex}]" class="form-control external-url" id="external_url${sectionIndex}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
-						</div>
-					</div>
-					<div class="section-actions">
-						<button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
-					</div>
-				</div>
-			</div>
-		`;
+            <div class="row align-items-start border p-2 mb-2" data-section="${sectionIndex}">
+                <div class="col-md-9">
+                    <label for="section_content${sectionIndex}" class="col-form-label">Inhalt</label>
+                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Hauptinhalt der Sektion. Verwenden Sie den Texteditor, um formatierten Text, Bilder oder Links hinzuzufügen. Jede Sektion wird im Artikel als separater Abschnitt angezeigt."></i>
+                    <textarea name="sections[${sectionIndex}]" id="section_content${sectionIndex}" class="form-control summernote" rows="3">${content}</textarea>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="section_image${sectionIndex}" class="col-form-label">Bild hochladen</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Bildes für diese Sektion. Das Bild wird neben dem Inhalt der Sektion angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
+                        <input type="file" name="section_images[${sectionIndex}]" id="section_image${sectionIndex}" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label for="section_image_title${sectionIndex}" class="col-form-label">Titel des Bildes (SEO)</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Sektionsbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
+                        <input type="text" name="section_image_titles[${sectionIndex}]" id="section_image_title${sectionIndex}" class="form-control" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
+                    </div>
+                    <input type="hidden" name="ftp_section_image[${sectionIndex}]" id="ftp_section_image${sectionIndex}" value="${ftpImage}">
+                    <input type="hidden" name="old_section_image[${sectionIndex}]" id="old_section_image${sectionIndex}" value="${oldImage}">
+                    <div class="mb-2">
+                        <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_section_image${sectionIndex}" data-preview-target="sectionImagePreview${sectionIndex}">
+                            Bild aus FTP wählen
+                        </button>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis für diese Sektion. Das ausgewählte Bild wird in der Sektion angezeigt."></i>
+                    </div>
+                    <div id="sectionImagePreview${sectionIndex}" class="mb-2">
+                        ${ftpImage ? `<img src="${ftpImage}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
+                        ${img && !ftpImage ? `<img src="${img}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
+                    </div>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="button_name${sectionIndex}" class="col-form-label">Button-Name</label>
+                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Text des Buttons in dieser Sektion. Wenn angegeben, wird ein Button angezeigt, der mit einer Unterseite oder externen URL verknüpft werden kann."></i>
+                            <input type="text" name="button_names[${sectionIndex}]" class="form-control button-name" id="button_name${sectionIndex}" placeholder="Name des Buttons" value="${buttonName}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="subpage${sectionIndex}" class="col-form-label">Unterseite</label>
+                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer internen Unterseite aus dem Menü. Aktiviert, wenn ein Button-Name angegeben ist. Hat Vorrang vor einer externen URL."></i>
+                            <select name="subpages[${sectionIndex}]" class="form-control subpage" id="subpage${sectionIndex}" ${!buttonName ? 'disabled' : ''}>
+                                ${optionsHtml}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="external_url${sectionIndex}" class="col-form-label">Externe URL</label>
+                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer externen URL. Aktiviert, wenn ein Button-Name angegeben ist. Wird ignoriert, wenn eine Unterseite ausgewählt ist."></i>
+                            <input type="url" name="external_urls[${sectionIndex}]" class="form-control external-url" id="external_url${sectionIndex}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
+                        </div>
+                    </div>
+                    <div class="section-actions">
+                        <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+                    </div>
+                </div>
+            </div>
+        `;
 		document.querySelector('#sections-container').insertAdjacentHTML('beforeend', html);
 
 		$(`[data-section="${sectionIndex}"] .summernote`).summernote({ height: 200 });
@@ -430,16 +434,14 @@ if (isset($article) && !empty($article->slug)) {
 		const subpageInput = document.getElementById(`subpage${sectionIndex}`);
 		const externalUrlInput = document.getElementById(`external_url${sectionIndex}`);
 
-		// Overenie a nastavenie hodnôt pri načítaní sekcie
 		if (subpage && subpage !== '') {
 			subpageInput.value = subpage;
-			externalUrlInput.value = ''; // Zabezpečiť, že external_url je prázdny, ak je vybraná subpage
+			externalUrlInput.value = '';
 		} else if (externalUrl && externalUrl !== '') {
 			externalUrlInput.value = externalUrl;
-			subpageInput.value = ''; // Zabezpečiť, že subpage je prázdna, ak je vyplnený external_url
+			subpageInput.value = '';
 		}
 
-		// Logika pre button_name
 		buttonNameInput.addEventListener('input', function () {
 			const hasValue = this.value.trim() !== '';
 			subpageInput.disabled = !hasValue;
@@ -450,43 +452,37 @@ if (isset($article) && !empty($article->slug)) {
 			}
 		});
 
-		// Logika pre výber podstránky
 		subpageInput.addEventListener('change', function () {
 			if (this.value) {
-				externalUrlInput.value = ''; // Ak je vybraná podstránka, vyprázdni externý odkaz
+				externalUrlInput.value = '';
 			}
 		});
 
-		// Logika pre externý odkaz
 		externalUrlInput.addEventListener('input', function () {
 			if (this.value.trim()) {
-				subpageInput.value = ''; // Ak je zadaný externý odkaz, vyprázdni podstránku
+				subpageInput.value = '';
 			}
 		});
 	}
 
 	document.addEventListener('DOMContentLoaded', () => {
-		// Inicializácia Summernote editora
 		function initSummer() {
 			$('.summernote').summernote({ height: 200 });
 		}
 
-		// Pridanie novej sekcie
 		document.getElementById('add-section').onclick = () => {
 			addSection();
 			updateSectionIndexes();
 		};
 
-		// Odstránenie sekcie
 		document.getElementById('sections-container').onclick = e => {
 			if (e.target.classList.contains('remove-section')) {
 				e.target.closest('[data-section]').remove();
 				sectionCount--;
-				updateSectionIndexes(); // Aktualizovať indexy po odstránení
+				updateSectionIndexes();
 			}
 		};
 
-		// Načítanie existujúcich sekcií pri editácii
 		sectionsData.forEach((sec, index) => {
 			const img = sec.image ? BASE_URL + sec.image : null;
 			const ftpImage = sec.ftp_image || '';
@@ -498,7 +494,6 @@ if (isset($article) && !empty($article->slug)) {
 			addSection(sec.content, img, ftpImage, imageTitle, buttonName, subpage, externalUrl, oldImage, index);
 		});
 
-		// Logika pre výber galérie
 		const categorySelect = document.getElementById('gallery_category_id');
 		const gallerySelect = document.getElementById('gallery_id');
 		if (categorySelect && gallerySelect) {
@@ -524,7 +519,6 @@ if (isset($article) && !empty($article->slug)) {
 			});
 		}
 
-		// Logika pre menu a slug
 		const menuSelect = document.getElementById('menuSelect');
 		const slugInput = document.getElementById('slug');
 		const slugDisplay = document.getElementById('slug_display');
@@ -565,21 +559,19 @@ if (isset($article) && !empty($article->slug)) {
 			console.error('Menu select, slug input, or slug display not found');
 		}
 
-		// Logovanie odoslaných dát pre ladenie
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
-			// Aktivovať polia pred odoslaním, aby sa odoslali aj deaktivované hodnoty
 			const subpageInputs = document.querySelectorAll('.subpage');
 			const externalUrlInputs = document.querySelectorAll('.external-url');
 
 			subpageInputs.forEach(input => {
 				if (input.value) {
-					input.disabled = false; // Aktivovať pole, ak má hodnotu
+					input.disabled = false;
 				}
 			});
 
 			externalUrlInputs.forEach(input => {
 				if (input.value) {
-					input.disabled = false; // Aktivovať pole, ak má hodnotu
+					input.disabled = false;
 				}
 			});
 
@@ -599,7 +591,6 @@ if (isset($article) && !empty($article->slug)) {
 		});
 	});
 
-	// FTP modal logika
 	document.addEventListener('DOMContentLoaded', function () {
 		const modalEl = document.getElementById('ftpModal'),
 			modal = new bootstrap.Modal(modalEl),
@@ -637,14 +628,14 @@ if (isset($article) && !empty($article->slug)) {
 								? `<a href="#" class="ftp-image-choose" data-path="${item.url}">Auswählen</a>`
 								: '-';
 						html += `
-							<tr>
-								<td class="text-center">${icon}</td>
-								<td>${item.name}</td>
-								<td>${item.path}</td>
-								<td>${size}</td>
-								<td>${action}</td>
-							</tr>
-						`;
+                            <tr>
+                                <td class="text-center">${icon}</td>
+                                <td>${item.name}</td>
+                                <td>${item.path}</td>
+                                <td>${size}</td>
+                                <td>${action}</td>
+                            </tr>
+                        `;
 					});
 					tableBody.innerHTML = html || '<tr><td colspan="5">Ordner ist leer.</td></tr>';
 					tableBody.querySelectorAll('.ftp-folder').forEach(a => {
