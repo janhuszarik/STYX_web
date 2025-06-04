@@ -172,9 +172,9 @@ class Article extends CI_Controller
 		$galleryCategories = $this->Gallery_model->getAllCategories();
 
 		$dirs = [
-			'articles' => './Uploads/articles/',
-			'products' => './Uploads/articles/products/',
-			'sections' => './Uploads/articles/sections/',
+			'articles' => './uploads/articles/',
+			'products' => './uploads/articles/products/',
+			'sections' => './uploads/articles/sections/',
 		];
 		foreach ($dirs as $dir) {
 			if (!file_exists($dir)) mkdir($dir, 0777, true);
@@ -220,7 +220,7 @@ class Article extends CI_Controller
 				$this->upload->initialize(['upload_path' => $dirs['articles'], 'allowed_types' => 'jpg|jpeg|png|gif|webp']);
 				if ($this->upload->do_upload('image')) {
 					$upload_data = $this->upload->data();
-					$post['image'] = 'Uploads/articles/' . $upload_data['file_name'];
+					$post['image'] = 'uploads/articles/' . $upload_data['file_name'];
 				} else {
 					$this->session->set_flashdata('error', 'Fehler beim Hochladen des Hauptbildes: ' . $this->upload->display_errors());
 					$post['image'] = $post['old_image'] ?? null;
@@ -251,7 +251,7 @@ class Article extends CI_Controller
 
 						if ($this->upload->do_upload('temp_section_image')) {
 							$upload_data = $this->upload->data();
-							$image = 'Uploads/articles/sections/' . $upload_data['file_name'];
+							$image = 'uploads/articles/sections/' . $upload_data['file_name'];
 						}
 					} elseif (!empty($post['old_section_image'][$i])) {
 						$image = $post['old_section_image'][$i];

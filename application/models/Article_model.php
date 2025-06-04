@@ -113,7 +113,7 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'Uploads/articles');
+			$uploadPath = uploadImg('image', 'uploads/articles');
 			if ($uploadPath && file_exists($uploadPath)) {
 				$image = $uploadPath;
 			} else {
@@ -122,7 +122,7 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'Uploads/articles/';
+			$localDir = FCPATH . 'uploads/articles/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
@@ -197,7 +197,7 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'Uploads/articles/products', $nazov);
+					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov);
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
@@ -206,13 +206,13 @@ class Article_model extends CI_Model
 					}
 				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
 					$ftpPath = $post["ftp_product_image{$suffix}"];
-					$localDir = FCPATH . 'Uploads/articles/products/';
+					$localDir = FCPATH . 'uploads/articles/products/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to download FTP product image set{$setNum}_product{$prodNum}: $ftpPath");
 							return false;
@@ -221,13 +221,13 @@ class Article_model extends CI_Model
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to copy FTP product image set{$setNum}_product{$prodNum}: $src");
 							return false;
 						}
 					} else {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
 					}
 				}
 			}
