@@ -52,10 +52,12 @@
 
 <?php
 $hasProducts = false;
-for ($i = 1; $i <= 3; $i++) {
-	if (!empty($article->{'product_name' . $i}) || !empty($article->{'product_image' . $i})) {
-		$hasProducts = true;
-		break;
+for ($set = 1; $set <= 2; $set++) {
+	for ($i = 1; $i <= 3; $i++) {
+		if (!empty($article->{'product_set' . $set . '_product' . $i . '_name'}) || !empty($article->{'product_set' . $set . '_product' . $i . '_image'})) {
+			$hasProducts = true;
+			break 2;
+		}
 	}
 }
 ?>
@@ -66,44 +68,49 @@ for ($i = 1; $i <= 3; $i++) {
 			<div class="text-center mb-4">
 				<h2 class="fw-bold">Empfohlene Produkte</h2>
 			</div>
-			<div class="row justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-				<?php for ($i = 1; $i <= 3; $i++): ?>
-					<?php
-					$name = $article->{'product_name' . $i} ?? '';
-					$desc = $article->{'product_description' . $i} ?? '';
-					$url  = $article->{'product_url' . $i} ?? '';
-					$img  = $article->{'product_image' . $i} ?? '';
-					$alt  = $article->{'product_image' . $i . '_title'} ?? '';
 
-					if (empty($name) && empty($img)) continue;
-					if (!empty($url) && !preg_match('#^https?://#', $url)) {
-						$url = 'https://' . ltrim($url, '/');
-					}
-					$target = (strpos($url, 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
-					?>
-					<div class="col">
-						<a href="<?= htmlspecialchars($url ?: '#') ?>" class="text-decoration-none text-dark d-block h-100" <?= $target ?>>
-							<div class="card border-0 shadow-sm h-100">
-								<?php if (!empty($img)): ?>
-									<img src="<?= base_url($img) ?>" class="card-img-top img-fluid" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>">
-								<?php endif; ?>
-								<div class="card-body">
-									<h4 class="card-title mb-2"><?= htmlspecialchars($name) ?></h4>
-									<?php if (!empty($desc)): ?>
-										<p class="card-text"><?= htmlspecialchars($desc) ?></p>
+			<?php for ($set = 1; $set <= 2; $set++): ?>
+				<div class="row justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-4">
+					<?php for ($i = 1; $i <= 3; $i++): ?>
+						<?php
+						$prefix = "product_set{$set}_product{$i}_";
+						$name = $article->{$prefix . 'name'} ?? '';
+						$desc = $article->{$prefix . 'description'} ?? '';
+						$url = $article->{$prefix . 'url'} ?? '';
+						$img = $article->{$prefix . 'image'} ?? '';
+						$alt = $article->{$prefix . 'image_title'} ?? '';
+
+						if (empty($name) && empty($img)) continue;
+						if (!empty($url) && !preg_match('#^https?://#', $url)) {
+							$url = 'https://' . ltrim($url, '/');
+						}
+						$target = (strpos($url, 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
+						?>
+						<div class="col">
+							<a href="<?= htmlspecialchars($url ?: '#') ?>" class="text-decoration-none text-dark d-block h-100" <?= $target ?>>
+								<div class="card border-0 shadow-sm h-100">
+									<?php if (!empty($img)): ?>
+										<img src="<?= base_url($img) ?>" class="card-img-top img-fluid" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>">
 									<?php endif; ?>
+									<div class="card-body">
+										<h4 class="card-title mb-2"><?= htmlspecialchars($name) ?></h4>
+										<?php if (!empty($desc)): ?>
+											<p class="card-text"><?= htmlspecialchars($desc) ?></p>
+										<?php endif; ?>
+									</div>
+									<div class="card-footer bg-transparent border-0 text-end pe-3">
+										<div class="text-success fw-bold">...jetzt SHOPEN!</div>
+									</div>
 								</div>
-								<div class="card-footer bg-transparent border-0 text-end pe-3">
-									<div class="text-success fw-bold">...jetzt SHOPEN!</div>
-								</div>
-							</div>
-						</a>
-					</div>
-				<?php endfor; ?>
-			</div>
+							</a>
+						</div>
+					<?php endfor; ?>
+				</div>
+			<?php endfor; ?>
 		</div>
 	</section>
 <?php endif; ?>
+
 
 <?php
 $interessierenLinks = [];
