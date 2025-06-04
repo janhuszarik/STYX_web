@@ -25,14 +25,15 @@ class app_model extends CI_Model
 			->get('article_sections')
 			->result();
 	}
-	public function getExactArticle($slug, $lang)
+	public function getExactArticle($slug_title, $lang)
 	{
 		$this->db->select('*');
-		$this->db->where('slug', $slug);
+		$this->db->where('slug_title', $slug_title); // <== TOTO je kľúčové!
 		$this->db->where('lang', $lang);
 		$this->db->where('active', 1);
 		return $this->db->get('articles')->row();
 	}
+
 
 
 	public function getCategoryBySlug($slug, $lang)

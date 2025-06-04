@@ -1,10 +1,11 @@
+
 <section class="container py-5">
 	<?php foreach ($articles as $a): ?>
 		<div class="row align-items-center mb-5">
 			<div class="col-md-8">
 				<h4 class="fw-bold"><?= htmlspecialchars($a->title) ?></h4>
 				<p><?= mb_substr(strip_tags($a->subtitle), 0, 200) ?>...</p>
-				<a href="<?= base_url($a->slug) ?>" class="btn btn-success">Mehr lesen >></a>
+				<a href="<?= base_url($a->slug . '/' . $a->slug_title) ?>" class="btn btn-success">Mehr lesen >></a>
 			</div>
 
 			<?php if (!empty($a->image)): ?>

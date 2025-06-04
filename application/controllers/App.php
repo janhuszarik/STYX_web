@@ -53,22 +53,54 @@ class App extends CI_Controller
 
 	public function routes()
 	{
-		$lang = language(); // e.g., 'de'
-		$segment1 = $this->uri->segment(2);
-		$segment2 = $this->uri->segment(3);
-		$slug = $segment1 . '/' . $segment2; // e.g., 'Unternehmen/ueber-styx'
+		$lang = language(); // napr. 'de'
+		$segment1 = $this->uri->segment(2); // napr. Unternehmen
+		$segment2 = $this->uri->segment(3); // napr. ueber-styx
+		$segment3 = $this->uri->segment(4); // napr. toto-je-test (slug článku)
+
+		$slug = $segment1 . '/' . $segment2;
 
 		$this->load->model('App_model');
 
-		// Find the category by slug and language
+		// 1. Nájdeme kategóriu podľa slug-u
 		$category = $this->App_model->getCategoryBySlug($slug, $lang);
-
 		if (!$category) {
 			$this->error404();
 			return;
 		}
 
-		// Get all active articles in the category
+		// 2. Ak máme v URL segment 4, ide o konkrétny článok
+		if (!empty($segment3)) {
+			$article = $this->App_model->getExactArticle($segment3, $lang);
+
+			// Overíme, či článok patrí do kategórie
+			if (!$article || $article->category_id != $category->id) {
+				$this->error404();
+				return;
+			}
+
+			$sections = $this->App_model->getSections($article->id);
+
+			$galleryImages = [];
+			if (!empty($article->gallery_id)) {
+				$this->load->model('Gallery_model');
+				$galleryImages = $this->Gallery_model->getImagesByGalleryId($article->gallery_id);
+			}
+
+			$data['article'] = $article;
+			$data['sections'] = $sections;
+			$data['galleryImages'] = $galleryImages;
+			$data['title'] = $article->title;
+			$data['description'] = $article->meta ?? '';
+			$data['keywords'] = $article->keywords ?? '';
+			$data['image'] = !empty($article->image) ? base_url($article->image) : BASE_URL . LOGO;
+			$data['page'] = 'article/detail';
+
+			$this->load->view('layout/normal', $data);
+			return;
+		}
+
+		// 3. Ak článok nie je priamo v URL, načítame články v danej kategórii
 		$articles = $this->App_model->getArticlesByCategory($category->id, $lang);
 
 		if (empty($articles)) {
@@ -76,9 +108,8 @@ class App extends CI_Controller
 			return;
 		}
 
-		// Check if there is exactly one article and it's marked as main
-		if (count($articles) === 1 && $articles[0]->is_main == 1) {
-			// Display the single main article
+		// 4. Ak je len 1 článok → zobraz rovno detail
+		if (count($articles) === 1) {
 			$article = $articles[0];
 			$sections = $this->App_model->getSections($article->id);
 
@@ -96,19 +127,24 @@ class App extends CI_Controller
 			$data['keywords'] = $article->keywords ?? '';
 			$data['image'] = !empty($article->image) ? base_url($article->image) : BASE_URL . LOGO;
 			$data['page'] = 'article/detail';
-		} else {
-			// Display the list of articles
-			$data['articles'] = $articles;
-			$data['category'] = $category;
-			$data['title'] = $category->name ?? 'Artikelübersicht';
-			$data['description'] = $category->description ?? 'Übersicht der Artikel in dieser Kategorie';
-			$data['keywords'] = $category->keywords ?? '';
-			$data['image'] = BASE_URL . LOGO;
-			$data['page'] = 'article/list';
+
+			$this->load->view('layout/normal', $data);
+			return;
 		}
+
+		// 5. Inak zobrazíme zoznam článkov v kategórii
+		$data['articles'] = $articles;
+		$data['category'] = $category;
+		$data['title'] = $category->name ?? 'Artikelübersicht';
+		$data['description'] = $category->description ?? 'Übersicht der Artikel in dieser Kategorie';
+		$data['keywords'] = $category->keywords ?? '';
+		$data['image'] = BASE_URL . LOGO;
+		$data['page'] = 'article/list';
 
 		$this->load->view('layout/normal', $data);
 	}
+
+
 
 
 

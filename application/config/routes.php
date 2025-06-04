@@ -201,35 +201,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 $route['set-cookie-consent'] 			= 'app/set_cookie_consent';
-	$route['decline-cookie-consent'] 		= 'app/decline_cookie_consent';
+$route['decline-cookie-consent'] 		= 'app/decline_cookie_consent';
 
 
 
 
-	$route[':any/:any'] = 'app/routes';
+$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
+$route['(:any)/(:any)/(:any)'] = 'app/routes';
+$route['(:any)/(:any)'] = 'app/routes';
+
 
 
 //	$route['^en/(.+)$'] = "$1";
