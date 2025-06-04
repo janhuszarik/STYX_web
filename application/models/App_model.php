@@ -26,6 +26,16 @@ class app_model extends CI_Model
 			->result();
 	}
 
+	public function getArticlesBySlug($slug, $lang)
+	{
+		$this->db->select('*');
+		$this->db->from('articles');
+		$this->db->where('lang', $lang);
+		$this->db->like('slug', $slug, 'after'); // zistí všetky články začínajúce týmto slugom
+		$this->db->where('active', 1);
+		$this->db->order_by('created_at', 'DESC');
+		return $this->db->get()->result();
+	}
 
 
 	function getUser($id = false)

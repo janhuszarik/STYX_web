@@ -53,33 +53,48 @@ class App extends CI_Controller
 
 	public function routes()
 	{
-		$lang = language(); // jazyk z helperu
-		$article = $this->App_model->routes($lang);
+		$lang = language(); // napr. de
+		$segment1 = $this->uri->segment(2);
+		$segment2 = $this->uri->segment(3);
+		$slug = $segment1 . '/' . $segment2;
 
-		if (!$article) {
+		$this->load->model('App_model');
+		$articles = $this->App_model->getArticlesBySlug($slug, $lang);
+
+		if (empty($articles)) {
 			$this->error404();
 			return;
 		}
 
-		$sections = $this->App_model->getSections($article->id);
+		if (count($articles) > 1) {
+			// ZOBRAZIŤ ZOZNAM
+			$data['title'] = 'Artikelübersicht';
+			$data['articles'] = $articles;
+			$data['page'] = 'article/list';
+		} else {
+			// ZOBRAZIŤ DETAIL
+			$article = $articles[0];
+			$sections = $this->App_model->getSections($article->id);
 
-		$galleryImages = [];
-		if (!empty($article->gallery_id)) {
-			$this->load->model('Gallery_model');
-			$galleryImages = $this->Gallery_model->getImagesByGalleryId($article->gallery_id);
+			$galleryImages = [];
+			if (!empty($article->gallery_id)) {
+				$this->load->model('Gallery_model');
+				$galleryImages = $this->Gallery_model->getImagesByGalleryId($article->gallery_id);
+			}
+
+			$data['article'] = $article;
+			$data['sections'] = $sections;
+			$data['galleryImages'] = $galleryImages;
+			$data['title'] = $article->title;
+			$data['description'] = $article->description;
+			$data['keywords'] = $article->keywords;
+			$data['image'] = BASE_URL . LOGO;
+			$data['page'] = 'article/detail';
 		}
-
-		$data['article'] = $article;
-		$data['sections'] = $sections;
-		$data['galleryImages'] = $galleryImages; // odovzdáme do view
-		$data['title'] = $article->title;
-		$data['description'] = $article->description;
-		$data['keywords'] = $article->keywords;
-		$data['image'] = BASE_URL . LOGO;
-		$data['page'] = 'article/detail';
 
 		$this->load->view('layout/normal', $data);
 	}
+
 
 
 
