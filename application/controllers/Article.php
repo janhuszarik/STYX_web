@@ -18,6 +18,8 @@ class Article extends CI_Controller
 		$this->Article_model->syncMenuWithArticleCategories();
 
 		if (!empty($post)) {
+			log_message('debug', 'Received POST data in articleCategoriesSave: ' . print_r($post, true));
+
 			if (!empty($post['id'])) {
 				$existing = $this->Article_model->getArticleCategories($post['id']);
 				if (!empty($existing->menu_id) || !empty($existing->submenu_id)) {
@@ -35,6 +37,7 @@ class Article extends CI_Controller
 			}
 
 			if (!empty($post['id'])) {
+				// Opravené volanie metódy saveArticleCategory
 				if ($this->Article_model->saveArticleCategory($post)) {
 					$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich bearbeitet.');
 					redirect(BASE_URL . 'admin/article_categories');
@@ -43,6 +46,7 @@ class Article extends CI_Controller
 					$data['edit'] = (object)$post;
 				}
 			} else {
+				// Opravené volanie metódy saveArticleCategory
 				if ($this->Article_model->saveArticleCategory($post)) {
 					$this->session->set_flashdata('success', 'Kategorie wurde erfolgreich hinzugefügt.');
 					redirect(BASE_URL . 'admin/article_categories');
@@ -79,7 +83,7 @@ class Article extends CI_Controller
 		$config['first_link'] = '«';
 		$config['last_link'] = '»';
 		$config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
-		$config['cur_tag_close'] = '</span></li>';
+		$config['cur_tag_close'] = '</span></li>'; // Pridané ukončenie tagu
 		$config['num_tag_open'] = '<li class="page-item">';
 		$config['num_tag_close'] = '</li>';
 		$config['prev_tag_open'] = '<li class="page-item">';
@@ -182,6 +186,8 @@ class Article extends CI_Controller
 		$this->load->library('upload');
 
 		if (!empty($post)) {
+			log_message('debug', 'Received POST data in articlesSave: ' . print_r($post, true));
+
 			if (!empty($id)) {
 				$article = $this->Article_model->getArticle($id);
 				$post['category_id'] = $article->category_id ?? null;
@@ -224,6 +230,7 @@ class Article extends CI_Controller
 				}
 			}
 
+			// Spracovanie sekcií
 			$sections = [];
 			if (!empty($post['sections'])) {
 				foreach ($post['sections'] as $i => $content) {
@@ -234,13 +241,13 @@ class Article extends CI_Controller
 						$image = $post['ftp_section_image'][$i];
 					}
 					// Potom upload z formulára
-					elseif (!empty($_FILES['section_image']['name'][$i])) {
+					elseif (!empty($_FILES['section_images']['name'][$i])) {
 						$_FILES_SINGLE = [
-							'name'     => $_FILES['section_image']['name'][$i],
-							'type'     => $_FILES['section_image']['type'][$i],
-							'tmp_name' => $_FILES['section_image']['tmp_name'][$i],
-							'error'    => $_FILES['section_image']['error'][$i],
-							'size'     => $_FILES['section_image']['size'][$i],
+							'name'     => $_FILES['section_images']['name'][$i],
+							'type'     => $_FILES['section_images']['type'][$i],
+							'tmp_name' => $_FILES['section_images']['tmp_name'][$i],
+							'error'    => $_FILES['section_images']['error'][$i],
+							'size'     => $_FILES['section_images']['size'][$i],
 						];
 
 						$_FILES['temp_section_image'] = $_FILES_SINGLE;
@@ -259,7 +266,7 @@ class Article extends CI_Controller
 						$image = $post['old_section_image'][$i];
 					}
 
-					$sections[] = [
+					$sections[$i] = [
 						'content' => $content,
 						'image' => $image,
 						'image_title' => $post['section_image_titles'][$i] ?? '',
@@ -270,6 +277,7 @@ class Article extends CI_Controller
 				}
 			}
 
+			log_message('debug', 'Processed sections: ' . print_r($sections, true));
 			$post['sections_data'] = $sections;
 
 			if ($this->Article_model->saveArticle($post)) {
@@ -299,7 +307,7 @@ class Article extends CI_Controller
 							$image = $post['old_section_image'][$i];
 						}
 
-						$data['sections'][] = (object)[
+						$data['sections'][$i] = (object)[
 							'content' => $content,
 							'image' => $image,
 							'image_title' => $post['section_image_titles'][$i] ?? '',

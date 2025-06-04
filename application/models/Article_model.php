@@ -96,7 +96,9 @@ class Article_model extends CI_Model
 	{
 		$this->db->where('article_id', $articleId);
 		$this->db->order_by('order');
-		return $this->db->get('article_sections')->result();
+		$sections = $this->db->get('article_sections')->result();
+		log_message('debug', 'Fetched sections for article ' . $articleId . ': ' . print_r($sections, true));
+		return $sections;
 	}
 
 	public function saveArticle(array $post)
@@ -249,6 +251,8 @@ class Article_model extends CI_Model
 					'external_url' => $externalUrl,
 					'order'        => $idx,
 				];
+
+				log_message('debug', "Inserting section $idx: " . print_r($sectionData, true));
 
 				if (!$this->db->insert('article_sections', $sectionData)) {
 					log_message('error', "Failed to insert section $idx into article_sections: " . $this->db->last_query());
