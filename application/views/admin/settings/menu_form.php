@@ -1,5 +1,3 @@
-
-
 <div class="row">
 	<div class="col-lg-12">
 		<section class="card">
@@ -19,7 +17,7 @@
 					<div class="row form-group pb-3">
 						<div class="col-lg-6">
 							<label class="col-form-label">Sprache
-							<i class="fas fa-info-circle text-primary " data-bs-toggle="tooltip" data-bs-placement="right" title="Sprachauswahl, in der dieser Menüpunkt angezeigt wird."></i>
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Sprachauswahl, in der dieser Menüpunkt angezeigt wird."></i>
 							</label>
 							<select class="form-control" name="lang">
 								<option value="de" <?= ($menu->lang ?? '') == 'de' ? 'selected' : '' ?>>Deutsch</option>
@@ -46,7 +44,7 @@
 						</div>
 						<div class="col-lg-6">
 							<label class="col-form-label">URL (interne oder externe)
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wenn dieses Feld leer bleibt, wird die URL automatisch generiert. Falls eine externe URL hinzugefügt werden soll, muss sie im Format https://www.styx.at eingegeben werden. Das Wichtigste ist, dass die URL mit https:// beginnt."></i>
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wenn dieses Feld leer bleibt, wird die URL automatisch generiert. Für externe URLs geben Sie die vollständige Adresse ein, z.B. https://www.styx.at. Externe URLs müssen mit http:// oder https:// beginnen und werden genau so gespeichert, wie eingegeben."></i>
 							</label>
 							<input type="text" name="url" class="form-control" value="<?= htmlspecialchars($menu->url ?? '') ?>">
 						</div>
@@ -95,3 +93,20 @@
 	</div>
 </div>
 
+<script>
+	document.querySelector('form').addEventListener('submit', function(e) {
+		const urlInput = document.querySelector('input[name="url"]');
+		const urlValue = urlInput.value.trim();
+
+		// Check if URL is non-empty and looks like an external URL
+		if (urlValue && (urlValue.startsWith('http://') || urlValue.startsWith('https://'))) {
+			// Basic URL format validation
+			const urlPattern = /^(https?:\/\/)[\w\-]+(\.[\w\-]+)+[/#?]?.*$/;
+			if (!urlPattern.test(urlValue)) {
+				e.preventDefault();
+				alert('Bitte geben Sie eine gültige URL ein (z.B. https://www.example.com).');
+				urlInput.focus();
+			}
+		}
+	});
+</script>

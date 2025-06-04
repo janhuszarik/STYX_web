@@ -113,31 +113,39 @@ class Admin extends CI_Controller
 			$post['lang'] = isset($post['lang']) ? $post['lang'] : 'de';
 			$post['base'] = isset($post['base']) ? $post['base'] : '0';
 
-			// Automatické generovanie URL podľa názvu
+			// Check if the URL is external (starts with http:// or https://)
 			$existingUrl = trim($post['url']);
-			$slugPart = url_oprava($post['name']);
-			$langPrefix = $post['lang'] . '/app';
-			$fullPrefix1 = $langPrefix;
-			$fullPrefix2 = $langPrefix . '/';
+			$isExternal = (strpos($existingUrl, 'http://') === 0 || strpos($existingUrl, 'https://') === 0);
 
-			if (
-				empty($existingUrl) ||
-				$existingUrl === $fullPrefix1 ||
-				$existingUrl === $fullPrefix2
-			) {
-				$baseUrl = $langPrefix . '/' . $slugPart;
+			if ($isExternal) {
+				// Save external URL as is
+				$post['url'] = $existingUrl;
+			} else {
+				// Automatic URL generation for internal URLs
+				$slugPart = url_oprava($post['name']);
+				$langPrefix = $post['lang'] . '/app';
+				$fullPrefix1 = $langPrefix;
+				$fullPrefix2 = $langPrefix . '/';
 
-				$this->load->model('Admin_model');
-				$uniqueUrl = $baseUrl;
-				$counter = 1;
-				while ($this->Admin_model->urlExists($uniqueUrl, $post['id'] ?? null)) {
-					$uniqueUrl = $baseUrl . '-' . $counter;
-					$counter++;
+				if (
+					empty($existingUrl) ||
+					$existingUrl === $fullPrefix1 ||
+					$existingUrl === $fullPrefix2
+				) {
+					$baseUrl = $langPrefix . '/' . $slugPart;
+
+					$this->load->model('Admin_model');
+					$uniqueUrl = $baseUrl;
+					$counter = 1;
+					while ($this->Admin_model->urlExists($uniqueUrl, $post['id'] ?? null)) {
+						$uniqueUrl = $baseUrl . '-' . $counter;
+						$counter++;
+					}
+					$post['url'] = $uniqueUrl;
 				}
-				$post['url'] = $uniqueUrl;
 			}
 
-			// Uloženie (update alebo insert)
+			// Save (update or insert)
 			if (!empty($id)) {
 				if ($this->Admin_model->menuSave($post)) {
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
@@ -157,7 +165,7 @@ class Admin extends CI_Controller
 			}
 		}
 
-		// Mazanie
+		// Delete
 		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->menuDelete($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
@@ -167,7 +175,7 @@ class Admin extends CI_Controller
 			}
 		}
 
-		// Formulár edit/create
+		// Form edit/create
 		if ($segment3 == 'edit' || $segment3 == 'create') {
 			$data['menu'] = $this->Admin_model->getMenu($id);
 			$data['menuparent'] = $this->Admin_model->getMenu(false, true);
@@ -179,7 +187,7 @@ class Admin extends CI_Controller
 			return;
 		}
 
-		// Výpis
+		// List
 		$data['menus'] = $this->Admin_model->getFullMenu();
 		$data['title'] = 'Menüpunkte';
 		$data['page'] = 'admin/settings/menu';

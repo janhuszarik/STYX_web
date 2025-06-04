@@ -22,7 +22,7 @@ function getNewsletters(){
 
 			$data = array(
 				'name' => $post['name'],
-				'url' => $post['url'], // predbežne len slug
+				'url' => $post['url'], // Predbežne uložíme URL
 				'parent' => $post['parent'],
 				'orderBy' => $post['orderBy'],
 				'active' => $post['active'],
@@ -31,24 +31,35 @@ function getNewsletters(){
 				'userId' => $this->ion_auth->user()->row()->id
 			);
 
+			// Check if the URL is external (starts with http:// or https://)
+			$isExternal = (strpos($post['url'], 'http://') === 0 || strpos($post['url'], 'https://') === 0);
+
 			if (is_numeric($post['id'])) {
 				$data['updated_at'] = date('Y-m-d H:i:s');
 				$this->db->where('id', $post['id']);
 				$this->db->update('menu', $data);
 
-				// Slug s rodičom
-				$slug = $this->getFullSlugPathFromParent($post['id']);
-				$this->db->where('id', $post['id']);
-				return $this->db->update('menu', ['url' => $slug]);
+				// Skip slug generation for external URLs
+				if (!$isExternal) {
+					// Slug s rodičom pre interné URL
+					$slug = $this->getFullSlugPathFromParent($post['id']);
+					$this->db->where('id', $post['id']);
+					return $this->db->update('menu', ['url' => $slug]);
+				}
+				return true;
 			} else {
 				$data['created_at'] = date('Y-m-d H:i:s');
 				$this->db->insert('menu', $data);
 				$insertId = $this->db->insert_id();
 
-				// Slug s rodičom
-				$slug = $this->getFullSlugPathFromParent($insertId, $post['lang']);
-				$this->db->where('id', $insertId);
-				return $this->db->update('menu', ['url' => $slug]);
+				// Skip slug generation for external URLs
+				if (!$isExternal) {
+					// Slug s rodičom pre interné URL
+					$slug = $this->getFullSlugPathFromParent($insertId, $post['lang']);
+					$this->db->where('id', $insertId);
+					return $this->db->update('menu', ['url' => $slug]);
+				}
+				return true;
 			}
 		}
 		return false;
