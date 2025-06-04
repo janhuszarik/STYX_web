@@ -53,27 +53,24 @@ class App extends CI_Controller
 
 	public function routes()
 	{
-		$lang = language(); // napr. 'de'
-		$segment1 = $this->uri->segment(2); // napr. Unternehmen
-		$segment2 = $this->uri->segment(3); // napr. ueber-styx
-		$segment3 = $this->uri->segment(4); // napr. toto-je-test (slug článku)
+		$lang = language();
+		$segment1 = $this->uri->segment(2);
+		$segment2 = $this->uri->segment(3);
+		$segment3 = $this->uri->segment(4);
 
 		$slug = $segment1 . '/' . $segment2;
 
 		$this->load->model('App_model');
 
-		// 1. Nájdeme kategóriu podľa slug-u
 		$category = $this->App_model->getCategoryBySlug($slug, $lang);
 		if (!$category) {
 			$this->error404();
 			return;
 		}
 
-		// 2. Ak máme v URL segment 4, ide o konkrétny článok
 		if (!empty($segment3)) {
 			$article = $this->App_model->getExactArticle($segment3, $lang);
 
-			// Overíme, či článok patrí do kategórie
 			if (!$article || $article->category_id != $category->id) {
 				$this->error404();
 				return;
@@ -100,7 +97,6 @@ class App extends CI_Controller
 			return;
 		}
 
-		// 3. Ak článok nie je priamo v URL, načítame články v danej kategórii
 		$articles = $this->App_model->getArticlesByCategory($category->id, $lang);
 
 		if (empty($articles)) {
@@ -108,7 +104,6 @@ class App extends CI_Controller
 			return;
 		}
 
-		// 4. Ak je len 1 článok → zobraz rovno detail
 		if (count($articles) === 1) {
 			$article = $articles[0];
 			$sections = $this->App_model->getSections($article->id);
@@ -132,7 +127,6 @@ class App extends CI_Controller
 			return;
 		}
 
-		// 5. Inak zobrazíme zoznam článkov v kategórii
 		$data['articles'] = $articles;
 		$data['category'] = $category;
 		$data['title'] = $category->name ?? 'Artikelübersicht';
@@ -143,11 +137,6 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
-
-
-
-
-
 
 
 	private function check_cookie_consent() {
