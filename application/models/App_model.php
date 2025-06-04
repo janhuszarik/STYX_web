@@ -25,6 +25,15 @@ class app_model extends CI_Model
 			->get('article_sections')
 			->result();
 	}
+	public function getExactArticle($slug, $lang)
+	{
+		$this->db->select('*');
+		$this->db->where('slug', $slug);
+		$this->db->where('lang', $lang);
+		$this->db->where('active', 1);
+		return $this->db->get('articles')->row();
+	}
+
 
 	public function getArticlesBySlug($slug, $lang)
 	{

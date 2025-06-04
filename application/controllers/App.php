@@ -59,21 +59,12 @@ class App extends CI_Controller
 		$slug = $segment1 . '/' . $segment2;
 
 		$this->load->model('App_model');
-		$articles = $this->App_model->getArticlesBySlug($slug, $lang);
 
-		if (empty($articles)) {
-			$this->error404();
-			return;
-		}
+		// 1. Skús najprv nájsť presný článok podľa slugu
+		$article = $this->App_model->getExactArticle($slug, $lang);
 
-		if (count($articles) > 1) {
-			// ZOBRAZIŤ ZOZNAM
-			$data['title'] = 'Artikelübersicht';
-			$data['articles'] = $articles;
-			$data['page'] = 'article/list';
-		} else {
-			// ZOBRAZIŤ DETAIL
-			$article = $articles[0];
+		if ($article) {
+			// Detail článku
 			$sections = $this->App_model->getSections($article->id);
 
 			$galleryImages = [];
@@ -90,10 +81,23 @@ class App extends CI_Controller
 			$data['keywords'] = $article->keywords;
 			$data['image'] = BASE_URL . LOGO;
 			$data['page'] = 'article/detail';
+		} else {
+			// Inak načítaj články podľa prefixu slugu
+			$articles = $this->App_model->getArticlesBySlug($slug, $lang);
+
+			if (empty($articles)) {
+				$this->error404();
+				return;
+			}
+
+			$data['articles'] = $articles;
+			$data['title'] = 'Artikelübersicht';
+			$data['page'] = 'article/list';
 		}
 
 		$this->load->view('layout/normal', $data);
 	}
+
 
 
 
