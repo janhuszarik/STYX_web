@@ -345,6 +345,7 @@ if (isset($article) && !empty($article->slug)) {
 			optionsHtml += `<option value="${opt.value}" ${selected}>${opt.label}</option>`;
 		});
 
+		// HTML šablóna pre sekciu
 		const html = `
 			<div class="row align-items-start border p-2 mb-2" data-section="${id}">
 				<div class="col-md-9">
@@ -400,7 +401,8 @@ if (isset($article) && !empty($article->slug)) {
 						<button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
 					</div>
 				</div>
-			</div>`;
+			</div>
+		`;
 		document.querySelector('#sections-container').insertAdjacentHTML('beforeend', html);
 
 		$(`[data-section="${id}"] .summernote`).summernote({ height: 200 });
@@ -409,6 +411,16 @@ if (isset($article) && !empty($article->slug)) {
 		const subpageInput = document.getElementById(`subpage${id}`);
 		const externalUrlInput = document.getElementById(`external_url${id}`);
 
+		// Overenie a nastavenie hodnôt pri načítaní sekcie
+		if (subpage && subpage !== '') {
+			subpageInput.value = subpage;
+			externalUrlInput.value = ''; // Zabezpečiť, že external_url je prázdny, ak je vybraná subpage
+		} else if (externalUrl && externalUrl !== '') {
+			externalUrlInput.value = externalUrl;
+			subpageInput.value = ''; // Zabezpečiť, že subpage je prázdna, ak je vyplnený external_url
+		}
+
+		// Logika pre button_name
 		buttonNameInput.addEventListener('input', function () {
 			const hasValue = this.value.trim() !== '';
 			subpageInput.disabled = !hasValue;
@@ -419,26 +431,31 @@ if (isset($article) && !empty($article->slug)) {
 			}
 		});
 
+		// Logika pre výber podstránky
 		subpageInput.addEventListener('change', function () {
 			if (this.value) {
-				externalUrlInput.value = '';
+				externalUrlInput.value = ''; // Ak je vybraná podstránka, vyprázdni externý odkaz
 			}
 		});
 
+		// Logika pre externý odkaz
 		externalUrlInput.addEventListener('input', function () {
 			if (this.value.trim()) {
-				subpageInput.value = '';
+				subpageInput.value = ''; // Ak je zadaný externý odkaz, vyprázdni podstránku
 			}
 		});
 	}
 
 	document.addEventListener('DOMContentLoaded', () => {
+		// Inicializácia Summernote editora
 		function initSummer() {
 			$('.summernote').summernote({ height: 200 });
 		}
 
+		// Pridanie novej sekcie
 		document.getElementById('add-section').onclick = () => addSection();
 
+		// Odstránenie sekcie
 		document.getElementById('sections-container').onclick = e => {
 			if (e.target.classList.contains('remove-section')) {
 				e.target.closest('[data-section]').remove();
@@ -446,6 +463,7 @@ if (isset($article) && !empty($article->slug)) {
 			}
 		};
 
+		// Načítanie existujúcich sekcií pri editácii
 		sectionsData.forEach(sec => {
 			const img = sec.image ? BASE_URL + sec.image : null;
 			const ftpImage = sec.ftp_image || '';
@@ -457,6 +475,7 @@ if (isset($article) && !empty($article->slug)) {
 			addSection(sec.content, img, ftpImage, imageTitle, buttonName, subpage, externalUrl, oldImage);
 		});
 
+		// Logika pre výber galérie
 		const categorySelect = document.getElementById('gallery_category_id');
 		const gallerySelect = document.getElementById('gallery_id');
 		if (categorySelect && gallerySelect) {
@@ -482,6 +501,7 @@ if (isset($article) && !empty($article->slug)) {
 			});
 		}
 
+		// Logika pre menu a slug
 		const menuSelect = document.getElementById('menuSelect');
 		const slugInput = document.getElementById('slug');
 		const slugDisplay = document.getElementById('slug_display');
@@ -522,7 +542,24 @@ if (isset($article) && !empty($article->slug)) {
 			console.error('Menu select, slug input, or slug display not found');
 		}
 
+		// Logovanie odoslaných dát pre ladenie
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
+			// Aktivovať polia pred odoslaním, aby sa odoslali aj deaktivované hodnoty
+			const subpageInputs = document.querySelectorAll('.subpage');
+			const externalUrlInputs = document.querySelectorAll('.external-url');
+
+			subpageInputs.forEach(input => {
+				if (input.value) {
+					input.disabled = false; // Aktivovať pole, ak má hodnotu
+				}
+			});
+
+			externalUrlInputs.forEach(input => {
+				if (input.value) {
+					input.disabled = false; // Aktivovať pole, ak má hodnotu
+				}
+			});
+
 			const formData = new FormData(this);
 			const formDataObject = {};
 			formData.forEach((value, key) => {
@@ -539,6 +576,7 @@ if (isset($article) && !empty($article->slug)) {
 		});
 	});
 
+	// FTP modal logika
 	document.addEventListener('DOMContentLoaded', function () {
 		const modalEl = document.getElementById('ftpModal'),
 			modal = new bootstrap.Modal(modalEl),
@@ -575,13 +613,15 @@ if (isset($article) && !empty($article->slug)) {
 							: /\.(jpe?g|png|gif|webp)$/i.test(item.name)
 								? `<a href="#" class="ftp-image-choose" data-path="${item.url}">Auswählen</a>`
 								: '-';
-						html += `<tr>
-							<td class="text-center">${icon}</td>
-							<td>${item.name}</td>
-							<td>${item.path}</td>
-							<td>${size}</td>
-							<td>${action}</td>
-						</tr>`;
+						html += `
+							<tr>
+								<td class="text-center">${icon}</td>
+								<td>${item.name}</td>
+								<td>${item.path}</td>
+								<td>${size}</td>
+								<td>${action}</td>
+							</tr>
+						`;
 					});
 					tableBody.innerHTML = html || '<tr><td colspan="5">Ordner ist leer.</td></tr>';
 					tableBody.querySelectorAll('.ftp-folder').forEach(a => {
