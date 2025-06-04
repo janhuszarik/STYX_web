@@ -41,8 +41,6 @@
 											</a>
 										</div>
 									</li>
-
-
 								</ul>
 							</nav>
 
@@ -79,7 +77,6 @@
 															<?= $menu['name'] ?>
 														</a>
 													<?php } else { ?>
-														<!-- Neklikateľná položka (má deti alebo base == 1) -->
 														<a class="nav-link dropdown-toggle no-link" href="javascript:void(0);">
 															<?= $menu['name'] ?>
 														</a>
@@ -87,7 +84,6 @@
 													<?php if ($menu['has_child']) { ?>
 														<ul class="dropdown-menu">
 															<?php foreach ($menu['children'] as $subMenu) { ?>
-																<!-- Podpoložky sú vždy klikateľné -->
 																<li>
 																	<a class="dropdown-item" href="<?= $subMenu['is_external'] ? $subMenu['url'] : BASE_URL . $subMenu['url'] ?>" target="<?= $subMenu['is_external'] ? '_blank' : '_self' ?>">
 																		<?= $subMenu['name'] ?>
@@ -112,7 +108,6 @@
 								<button class="btn header-btn-collapse-nav" data-bs-toggle="collapse" data-bs-target=".header-nav-main nav">
 									<i class="fas fa-bars"></i>
 								</button>
-								<!-- New section for language flags on mobile -->
 								<div class="d-block d-md-none mobile-lang-flags">
 									<?php foreach (getLanguages() as $l){ ?>
 										<div class="lang me-2">

@@ -53,18 +53,33 @@ class App extends CI_Controller
 
 	public function routes()
 	{
-		$lang = language(); // napr. de
+		$lang = language(); // e.g., 'de'
 		$segment1 = $this->uri->segment(2);
 		$segment2 = $this->uri->segment(3);
-		$slug = $segment1 . '/' . $segment2;
+		$slug = $segment1 . '/' . $segment2; // e.g., 'Unternehmen/ueber-styx'
 
 		$this->load->model('App_model');
 
-		// 1. Skús najprv nájsť presný článok podľa slugu
-		$article = $this->App_model->getExactArticle($slug, $lang);
+		// Find the category by slug and language
+		$category = $this->App_model->getCategoryBySlug($slug, $lang);
 
-		if ($article) {
-			// Detail článku
+		if (!$category) {
+			$this->error404();
+			return;
+		}
+
+		// Get all active articles in the category
+		$articles = $this->App_model->getArticlesByCategory($category->id, $lang);
+
+		if (empty($articles)) {
+			$this->error404();
+			return;
+		}
+
+		// Check if there is exactly one article and it's marked as main
+		if (count($articles) === 1 && $articles[0]->is_main == 1) {
+			// Display the single main article
+			$article = $articles[0];
 			$sections = $this->App_model->getSections($article->id);
 
 			$galleryImages = [];
@@ -77,21 +92,18 @@ class App extends CI_Controller
 			$data['sections'] = $sections;
 			$data['galleryImages'] = $galleryImages;
 			$data['title'] = $article->title;
-			$data['description'] = $article->description;
-			$data['keywords'] = $article->keywords;
-			$data['image'] = BASE_URL . LOGO;
+			$data['description'] = $article->meta ?? '';
+			$data['keywords'] = $article->keywords ?? '';
+			$data['image'] = !empty($article->image) ? base_url($article->image) : BASE_URL . LOGO;
 			$data['page'] = 'article/detail';
 		} else {
-			// Inak načítaj články podľa prefixu slugu
-			$articles = $this->App_model->getArticlesBySlug($slug, $lang);
-
-			if (empty($articles)) {
-				$this->error404();
-				return;
-			}
-
+			// Display the list of articles
 			$data['articles'] = $articles;
-			$data['title'] = 'Artikelübersicht';
+			$data['category'] = $category;
+			$data['title'] = $category->name ?? 'Artikelübersicht';
+			$data['description'] = $category->description ?? 'Übersicht der Artikel in dieser Kategorie';
+			$data['keywords'] = $category->keywords ?? '';
+			$data['image'] = BASE_URL . LOGO;
 			$data['page'] = 'article/list';
 		}
 

@@ -80,17 +80,18 @@ function getCurrentUrl() {
 	return current_url();
 }
 
-function getMenu() {
+function getMenu()
+{
 	$ci = get_instance();
 	$language = language();
 
-	$ci->db->select('id, name, url, lang, parent, base'); // Pridajte 'base' do selectu
+	$ci->db->select('id, name, url, lang, parent, base');
 	$ci->db->where('active', '1');
 	$ci->db->where('lang', $language);
 	$ci->db->order_by('orderBy', 'ASC');
 	$mainMenuItems = $ci->db->get('menu')->result();
 
-	$ci->db->select('id, name, url, lang, parent, base'); // Pridajte 'base' aj tu
+	$ci->db->select('id, name, url, lang, parent, base');
 	$ci->db->where('parent !=', '0');
 	$ci->db->where('active', '1');
 	$ci->db->where('lang', $language);
@@ -112,7 +113,7 @@ function getMenu() {
 			'name' => $mainItem->name,
 			'url' => $url,
 			'lang' => $mainItem->lang,
-			'base' => $mainItem->base, // Pridajte base
+			'base' => $mainItem->base,
 			'children' => array(),
 			'has_child' => false,
 			'is_external' => $isExternal
@@ -124,14 +125,14 @@ function getMenu() {
 				$isSubExternal = (strpos($subUrl, 'http://') === 0 || strpos($subUrl, 'https://') === 0);
 
 				if (!$isSubExternal && strpos($subUrl, $language . '/') === false) {
-					$subUrl = $language . '/' . url_oprava($mainItem->name) . '/' . ltrim($subUrl, '/');
+					$subUrl = $language . '/' . ltrim($subUrl, '/');
 				}
 
 				$formattedMenu[$mainKey]['children'][$subKey] = array(
 					'name' => $subItem->name,
 					'url' => $subUrl,
 					'lang' => $subItem->lang,
-					'base' => $subItem->base, // Pridajte base aj pre podpoložky, ak je potrebné
+					'base' => $subItem->base,
 					'is_external' => $isSubExternal
 				);
 

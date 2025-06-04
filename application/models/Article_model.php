@@ -168,7 +168,7 @@ class Article_model extends CI_Model
 			'lang'            => $post['lang'] ?? 'de',
 			'title'           => $post['title'],
 			'subtitle'        => $post['subtitle'],
-			'slug'            => $post['slug'],
+			'slug'            => $post['slug'], // Already includes lang prefix from controller
 			'image'           => $image,
 			'image_title'     => $image_title,
 			'keywords'        => $post['keywords'] ?? null,
@@ -294,7 +294,7 @@ class Article_model extends CI_Model
 
 			$data = [
 				'name' => $menu->name,
-				'slug' => !empty($menu->url) ? $menu->url : url_title($menu->name, 'dash', true),
+				'slug' => !empty($menu->url) ? ($menu->lang ?? 'de') . '/' . $menu->url : ($menu->lang ?? 'de') . '/' . url_title($menu->name, 'dash', true),
 				'lang' => $menu->lang ?? 'de',
 				'active' => 1,
 				'created_at' => date('Y-m-d H:i:s'),
@@ -344,7 +344,7 @@ class Article_model extends CI_Model
 
 	public function getMenuItems()
 	{
-		$this->db->select('m.id, m.name, m.url, m.parent, m.orderBy');
+		$this->db->select('m.id, m.name, m.url, m.parent, m.orderBy, m.lang');
 		$this->db->where('m.active', 1);
 		$this->db->order_by('m.parent', 'ASC');
 		$this->db->order_by('m.orderBy', 'ASC');
@@ -354,7 +354,9 @@ class Article_model extends CI_Model
 		$categories = $this->getArticleCategories();
 
 		foreach ($menuItems as $item) {
-			$options .= '<option value="' . htmlspecialchars($item->url) . '">' . htmlspecialchars($item->name) . '</option>';
+			$lang = $item->lang ?? 'de';
+			$menuSlug = !empty($item->url) ? $lang . '/' . $item->url : $lang . '/' . url_title($item->name, 'dash', true);
+			$options .= '<option value="' . htmlspecialchars($menuSlug) . '">' . htmlspecialchars($item->name) . '</option>';
 
 			// Find the corresponding category
 			$category = null;

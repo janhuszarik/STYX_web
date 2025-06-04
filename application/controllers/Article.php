@@ -200,10 +200,12 @@ class Article extends CI_Controller
 				}
 			}
 
+			// Handle slug with language prefix
+			$lang = $post['lang'] ?? 'de';
 			if (!empty($post['menu_select'])) {
 				$parts = explode('/', trim($post['menu_select'], '/'));
 				$parts = array_filter($parts, fn($part) => !in_array($part, ['de', 'en']));
-				$post['slug'] = implode('/', $parts);
+				$post['slug'] = $lang . '/' . implode('/', $parts);
 			} elseif (empty($post['slug']) && !empty($id)) {
 				$article = $this->Article_model->getArticle($id);
 				$post['slug'] = $article->slug ?? '';

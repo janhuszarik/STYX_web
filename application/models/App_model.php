@@ -35,14 +35,40 @@ class app_model extends CI_Model
 	}
 
 
+	public function getCategoryBySlug($slug, $lang)
+	{
+		$this->db->select('ac.*');
+		$this->db->from('article_categories ac');
+		$this->db->where('ac.slug', $lang . '/' . $slug);
+		$this->db->where('ac.lang', $lang);
+		$this->db->where('ac.active', 1);
+		return $this->db->get()->row();
+	}
+
+	public function getArticlesByCategory($categoryId, $lang)
+	{
+		$this->db->select('a.*');
+		$this->db->from('articles a');
+		$this->db->where('a.category_id', $categoryId);
+		$this->db->where('a.lang', $lang);
+		$this->db->where('a.active', 1);
+		$this->db->where('a.start_date_from IS NULL OR a.start_date_from <=', date('Y-m-d H:i:s'));
+		$this->db->where('a.end_date_to IS NULL OR a.end_date_to >=', date('Y-m-d H:i:s'));
+		$this->db->order_by('a.is_main DESC, a.created_at DESC');
+		return $this->db->get()->result();
+	}
+
 	public function getArticlesBySlug($slug, $lang)
 	{
-		$this->db->select('*');
-		$this->db->from('articles');
-		$this->db->where('lang', $lang);
-		$this->db->like('slug', $slug, 'after'); // zistí všetky články začínajúce týmto slugom
-		$this->db->where('active', 1);
-		$this->db->order_by('created_at', 'DESC');
+		$this->db->select('a.*');
+		$this->db->from('articles a');
+		$this->db->join('article_categories ac', 'a.category_id = ac.id');
+		$this->db->where('ac.slug', $lang . '/' . $slug);
+		$this->db->where('a.lang', $lang);
+		$this->db->where('a.active', 1);
+		$this->db->where('a.start_date_from IS NULL OR a.start_date_from <=', date('Y-m-d H:i:s'));
+		$this->db->where('a.end_date_to IS NULL OR a.end_date_to >=', date('Y-m-d H:i:s'));
+		$this->db->order_by('a.is_main DESC, a.created_at DESC');
 		return $this->db->get()->result();
 	}
 
