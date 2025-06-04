@@ -215,7 +215,6 @@ class Article_model extends CI_Model
 			}
 		}
 
-		// Handle "Das könnte Sie interessieren" fields
 		for ($i = 1; $i <= 3; $i++) {
 			$data["empfohlen_name{$i}"] = $post["empfohlen_name{$i}"] ?? null;
 			$data["empfohlen_url{$i}"]  = $post["empfohlen_url{$i}"] ?? null;
