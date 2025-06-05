@@ -197,13 +197,7 @@ for ($i = 1; $i <= 3; $i++) {
 <?php endif; ?>
 
 <style>
-	/* Globálne prepis všetkého obsahu, ktorý pochádza zo Summernote alebo editovateľných častí */
-	.content,
-	.section-content,
-	.note-editable,
-	.note-editable * {
-		font-family: 'Poppins', Arial, sans-serif !important;
-	}
+
 
 	/* Lightbox */
 	.lightbox-modal {
