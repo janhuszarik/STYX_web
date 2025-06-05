@@ -482,18 +482,20 @@ class Admin extends CI_Controller
 		}
 	}
 
-	function bestProductSave() {
+	public function bestProductSave()
+	{
 		$post = $this->input->post();
-		$id = $this->uri->segment('4');
-		$segment2 = $this->uri->segment('3');
+		$id = $this->uri->segment(4);
+		$segment2 = $this->uri->segment(3);
 
+		// Spracovanie POST požiadavky – ULOŽENIE
 		if (!empty($post)) {
-			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
+			$old_image = !empty($id) ? $this->Admin_model->getProduct($id)->image : false;
 			$image = $this->upload_image('image', 'uploads/product/');
+
 			if (isset($image['error']) && !$image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
-				$data['edit'] = (object)$post;
-				$this->load->view('admin/layout/normal', $data);
+				redirect('admin/bestProduct/edit/' . $id);
 				return;
 			}
 
@@ -505,45 +507,50 @@ class Admin extends CI_Controller
 						}
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
-					redirect(BASE_URL . 'admin/bestProduct/');
+					redirect('admin/bestProduct');
 				} else {
 					$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
-					$data['edit'] = (object)$post;
+					redirect('admin/bestProduct/edit/' . $id);
 				}
 			} else {
 				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
-					redirect(BASE_URL . 'admin/bestProduct');
+					redirect('admin/bestProduct');
 				} else {
 					$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
-					$data['edit'] = (object)$post;
+					redirect('admin/bestProduct/create');
 				}
 			}
 		}
 
+		// MAZANIE
 		if ($segment2 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->bestProductDelete($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
-				redirect(BASE_URL . 'admin/bestProduct');
 			} else {
 				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
 			}
+			redirect('admin/bestProduct');
 		}
 
-		if (empty($id)) {
+		// INDEX – výpis
+		if (empty($segment2)) {
 			$data['products'] = $this->Admin_model->getProduct();
-			$data['product'] = $this->Admin_model->getProduct($id);
 			$data['title'] = 'Beliebte Produkte';
-			$data['page'] = 'admin/settings/bestProduct';
+			$data['page'] = 'admin/settings/bestProduct_list';
 			$this->load->view('admin/layout/normal', $data);
-		} else {
-			$data['products'] = $this->Admin_model->getProduct();
+			return;
+		}
+
+		// CREATE alebo EDIT formulár
+		if ($segment2 == 'create' || ($segment2 == 'edit' && is_numeric($id))) {
 			$data['product'] = $this->Admin_model->getProduct($id);
-			$data['title'] = 'Beliebte Produkte';
-			$data['page'] = 'admin/settings/bestProduct';
+			$data['title'] = $segment2 == 'create' ? 'Neues Produkt erstellen' : 'Produkt bearbeiten';
+			$data['page'] = 'admin/settings/bestProduct_form';
 			$this->load->view('admin/layout/normal', $data);
 		}
 	}
+
 
 
 

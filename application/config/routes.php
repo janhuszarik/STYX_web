@@ -124,12 +124,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/news/edit/:num'] 								= 'admin/newsSave';
 	$route['admin/news/del/:num']								= 'admin/newsSave';
 
-	$route['admin/bestProduct'] 								= 'admin/bestProductSave';
-	$route['admin/bestProductSave'] 							= 'admin/bestProductSave';
-	$route['admin/bestProduct/edit/:num'] 						= 'admin/bestProductSave';
-	$route['admin/bestProduct/del/:num']						= 'admin/bestProductSave';
+$route['admin/bestProduct']              = 'admin/bestProductSave';
+$route['admin/bestProduct/create']       = 'admin/bestProductSave/create';
+$route['admin/bestProduct/edit/(:num)']  = 'admin/bestProductSave/edit/$1';
+$route['admin/bestProduct/del/(:num)']   = 'admin/bestProductSave/del/$1';
+$route['admin/bestProduct/save']         = 'admin/bestProductSave'; // volané cez POST
 
-	$route['admin/galleryCategory']                      		= 'gallery/galleryCategorySave';
+
+
+$route['admin/galleryCategory']                      		= 'gallery/galleryCategorySave';
 	$route['admin/galleryCategory/edit/(:num)']          		= 'gallery/galleryCategorySave/edit/$1';
 	$route['admin/galleryCategory/form']                 		= 'gallery/galleryCategoryForm';
 	$route['admin/galleryCategory/form/(:num)']          		= 'gallery/galleryCategoryForm/$1';
