@@ -1,3 +1,8 @@
+.note-editable,
+.note-editable * {
+  font-family: 'Poppins', Arial, sans-serif !important;
+}
+
 .wrapped-text {
   display: inline-block;
   width: 8ch; /* 'ch' jednotka nastaví šírku podľa šírky znaku '0' v aktuálnom fonte */

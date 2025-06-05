@@ -26,14 +26,20 @@ $(document).ready(function () {
   // Summernote init
   $('#summernote').summernote({
     height: 450,
+    fontNames: ['Poppins'],
+    fontNamesIgnoreCheck: ['Poppins'],
     toolbar: [
       ['style', ['bold', 'italic', 'underline', 'clear']],
-      ['font', ['strikethrough']],
+      // možnosť ponechať 'fontname' alebo ho odstrániť
+      // ['font', ['fontname']],
+      ['fontsize', ['fontsize']],
+      ['color', ['color']],
       ['para', ['ul', 'ol', 'paragraph']],
       ['insert', ['link', 'picture', 'video']],
       ['view', ['codeview']]
     ]
   });
+
 
   // Synchronizácia pri submit
   $('form').on('submit', function () {
