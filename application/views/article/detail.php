@@ -197,8 +197,6 @@ for ($i = 1; $i <= 3; $i++) {
 <?php endif; ?>
 
 <style>
-
-
 	/* Lightbox */
 	.lightbox-modal {
 		position: fixed;
@@ -229,6 +227,16 @@ for ($i = 1; $i <= 3; $i++) {
 		height: auto;
 	}
 
+	/* Vynútenie fontu Poppins pre celý obsah */
+	.content *,
+	.section-content *,
+	.card *,
+	.related-articles *,
+	.article-gallery *,
+	.recommended-products * {
+		font-family: 'Poppins', Arial, sans-serif !important;
+	}
+
 	/* Responsive zmeny */
 	@media (max-width: 768px) {
 		h1, h2, h3 {
@@ -250,3 +258,4 @@ for ($i = 1; $i <= 3; $i++) {
 		}
 	}
 </style>
+
