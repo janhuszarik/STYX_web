@@ -15,10 +15,6 @@ $titleSub = isset($article)
 
 $categoryId = isset($article) ? $article->category_id : ($categoryId ?? $CI->uri->segment(3));
 
-log_message('debug', 'Category ID in view: ' . $categoryId);
-log_message('debug', 'Category Name in view: ' . ($categoryName ?? 'Not set'));
-log_message('debug', 'Article slug in view: ' . ($article->slug ?? 'Not set'));
-
 $CI->load->helper('app_helper');
 $menuItems = getMenu();
 $menuOptions = [];
@@ -41,7 +37,6 @@ $menuOptionsJson = json_encode($menuOptions);
 $defaultMenuUrl = '';
 if (isset($article) && !empty($article->slug)) {
 	$defaultMenuUrl = $article->slug;
-	log_message('debug', 'Using article slug for defaultMenuUrl: ' . $defaultMenuUrl);
 } elseif ($categoryId) {
 	$category = $CI->db->get_where('article_categories', ['id' => $categoryId])->row();
 	if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) {
@@ -49,7 +44,6 @@ if (isset($article) && !empty($article->slug)) {
 		$menu = $CI->db->get_where('menu', ['id' => $menuId])->row();
 		if ($menu && !empty($menu->url)) {
 			$defaultMenuUrl = $menu->url;
-			log_message('debug', 'Using category menu for defaultMenuUrl: ' . $defaultMenuUrl);
 		}
 	}
 }
@@ -86,64 +80,37 @@ if (isset($article) && !empty($article->slug)) {
 					<div class="row form-group pb-3">
 						<div class="col-md-2">
 							<label for="lang" class="col-form-label">Sprache</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestimmt die Sprache des Artikels. Wählen Sie zwischen Deutsch oder Englisch. Der Artikel wird in der gewählten Sprache gespeichert und angezeigt."></i>
 							<select name="lang" id="lang" class="form-control" required>
 								<option value="de" <?= (isset($article) && $article->lang == 'de') ? 'selected' : '' ?>>Deutsch</option>
-								<option value="en" <?= (isset($article) && $article->lang == 'en') ? 'selected' : '' ?>>English</option>
+								<option value="en" <?= (isset($article) && $article->lang == 'en') ? 'selected' : '' ?>>Englisch</option>
 							</select>
 						</div>
 						<div class="col-md-5">
 							<label for="title" class="col-form-label">Titel</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Haupttitel des Artikels. Dieser wird auf der Webseite angezeigt und ist für SEO relevant. Erforderliches Feld."></i>
 							<input type="text" class="form-control" name="title" id="title" value="<?= htmlspecialchars($article->title ?? '') ?>" required>
 						</div>
 						<div class="col-md-5">
 							<label for="subtitle" class="col-form-label">Untertitel</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ein optionaler Untertitel, der zusätzliche Informationen zum Artikel bereitstellt. Wird unter dem Haupttitel angezeigt."></i>
 							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>">
 						</div>
 					</div>
 
 					<div class="row form-group pb-3">
-						<div class="col-md-6">
+						<div class="col-md-4">
 							<label for="category_name" class="col-form-label">Kategorie</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Zeigt die Kategorie des Artikels an. Dieses Feld ist schreibgeschützt und basiert auf der ausgewählten Kategorie-ID."></i>
-							<?php if ($categoryName === 'Kategorie nicht gefunden'): ?>
-								<input type="text" class="form-control is-invalid" id="category_name" name="category_name" value="Kategorie nicht gefunden (ID: <?= htmlspecialchars($categoryId) ?>) - Bitte wählen Sie eine gültige Kategorie" readonly>
-								<?php if ($this->session->flashdata('error')): ?>
-									<div class="invalid-feedback">
-										<?= $this->session->flashdata('error') ?>
-									</div>
-								<?php endif; ?>
-							<?php else: ?>
-								<input type="text" class="form-control" id="category_name" name="category_name" value="<?= htmlspecialchars($categoryName) ?>" readonly>
-							<?php endif; ?>
+							<input type="text" class="form-control" id="category_name" name="category_name" value="<?= htmlspecialchars($categoryName) ?>" readonly>
 						</div>
-						<div class="col-md-6">
-							<label for="menu_select" class="col-form-label">Menu oder Submenu</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpfen Sie den Artikel mit einer Menü- oder Submenüpunkt, um den Slug automatisch zu übernehmen."></i>
-							<select class="form-control" id="menuSelect" name="menu_select">
-								<option value="">-- Kein Menü --</option>
-								<?php foreach ($menuOptions as $option): ?>
-									<option value="<?= htmlspecialchars($option['value']) ?>"
-										<?= ($defaultMenuUrl === $option['value']) ? 'selected' : '' ?>>
-										<?= htmlspecialchars($option['label']) ?>
-									</option>
-								<?php endforeach; ?>
-							</select>
+						<div class="col-md-4">
+							<label for="slug_display" class="col-form-label">URL-Adresse
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-Adresse wird automatisch generiert und setzt sich aus der gewählten Sprache, dem Hauptmenüpunkt und dem letzten Menüpunkt zusammen, unter dem dieser Artikel gespeichert wird."></i>
+							</label>
+							<input type="text" class="form-control" id="slug_display" name="slug_display" value="https://www.styx.at/<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
 							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>">
 						</div>
-					</div>
-
-					<div class="row form-group pb-3">
-						<div class="col-md-6">
-							<label for="slug_display" class="col-form-label">Slug</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-freundliche Adresse des Artikels. Wird automatisch aus dem Menü übernommen, wenn ein Menüpunkt ausgewählt ist."></i>
-							<input type="text" class="form-control" id="slug_display" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
-						</div>
-						<div class="col-md-6">
-							<label for="is_main" class="col-form-label">Hauptartikel</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Markiert diesen Artikel als Hauptartikel der Kategorie. Nur ein Artikel pro Kategorie kann Hauptartikel sein. Nicht-Hauptartikel erhalten einen zusätzlichen Slug basierend auf ihrem Titel."></i>
+						<div class="col-md-4">
+							<label for="is_main" class="col-form-label">Hauptartikel
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Dieser Abschnitt legt fest, ob dieser Artikel als Hauptartikel bestimmt ist oder ob er zur Artikelliste gehören soll, in der die Artikel den Benutzern als Liste angezeigt werden. Wenn „Ja“ gewählt ist, handelt es sich um einen eigenständigen / einzigen Artikel in dieser Kategorie."></i>
+							</label>
 							<select name="is_main" id="is_main" class="form-control">
 								<option value="1" <?= (isset($article) && $article->is_main == '1') ? 'selected' : '' ?>>Ja</option>
 								<option value="0" <?= (isset($article) && $article->is_main == '0') || !isset($article) ? 'selected' : '' ?>>Nein</option>
@@ -341,7 +308,6 @@ if (isset($article) && !empty($article->slug)) {
 	let sectionCount = 0, maxSections = 6, sectionsData = <?= json_encode($sections ?? []) ?>;
 	const menuOptions = <?= $menuOptionsJson ?>;
 
-	// Pomocná funkcia na aktualizáciu indexov polí
 	function updateSectionIndexes() {
 		const sections = document.querySelectorAll('[data-section]');
 		sections.forEach((section, index) => {
@@ -513,7 +479,6 @@ if (isset($article) && !empty($article->slug)) {
 						gallerySelect.innerHTML = data.success ? data.options : '<option value="">-- Keine Galerien verfügbar --</option>';
 					})
 					.catch(error => {
-						console.error('Error:', error);
 						gallerySelect.innerHTML = '<option value="">-- Fehler beim Laden --</option>';
 					});
 			});
@@ -531,11 +496,9 @@ if (isset($article) && !empty($article->slug)) {
 					const newSlug = parts.join('/');
 					slugInput.value = newSlug;
 					slugDisplay.value = newSlug;
-					console.log('Slug updated to:', newSlug);
 				} else {
 					slugInput.value = '';
 					slugDisplay.value = '';
-					console.log('Slug cleared');
 				}
 			});
 
@@ -550,13 +513,8 @@ if (isset($article) && !empty($article->slug)) {
 					menuSelect.value = matchingOption.value;
 					slugInput.value = initialSlug;
 					slugDisplay.value = initialSlug;
-					console.log('Initial slug set to:', initialSlug);
-				} else {
-					console.log('No matching menu option found for slug:', initialSlug);
 				}
 			}
-		} else {
-			console.error('Menu select, slug input, or slug display not found');
 		}
 
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
@@ -587,7 +545,6 @@ if (isset($article) && !empty($article->slug)) {
 					formDataObject[key].push(value);
 				}
 			});
-			console.log('Form data being submitted:', formDataObject);
 		});
 	});
 
