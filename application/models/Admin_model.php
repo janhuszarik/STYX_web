@@ -11,7 +11,7 @@ function getNewsletters(){
 
 }
 
-// MENU
+
 	function menuSave($post = false)
 	{
 		if ($post) {
@@ -22,7 +22,7 @@ function getNewsletters(){
 
 			$data = array(
 				'name' => $post['name'],
-				'url' => $post['url'], // Predbežne uložíme URL
+				'url' => $post['url'],
 				'parent' => $post['parent'],
 				'orderBy' => $post['orderBy'],
 				'active' => $post['active'],
@@ -31,7 +31,7 @@ function getNewsletters(){
 				'userId' => $this->ion_auth->user()->row()->id
 			);
 
-			// Check if the URL is external (starts with http:// or https://)
+
 			$isExternal = (strpos($post['url'], 'http://') === 0 || strpos($post['url'], 'https://') === 0);
 
 			if (is_numeric($post['id'])) {
@@ -39,9 +39,7 @@ function getNewsletters(){
 				$this->db->where('id', $post['id']);
 				$this->db->update('menu', $data);
 
-				// Skip slug generation for external URLs
 				if (!$isExternal) {
-					// Slug s rodičom pre interné URL
 					$slug = $this->getFullSlugPathFromParent($post['id']);
 					$this->db->where('id', $post['id']);
 					return $this->db->update('menu', ['url' => $slug]);
@@ -52,9 +50,7 @@ function getNewsletters(){
 				$this->db->insert('menu', $data);
 				$insertId = $this->db->insert_id();
 
-				// Skip slug generation for external URLs
 				if (!$isExternal) {
-					// Slug s rodičom pre interné URL
 					$slug = $this->getFullSlugPathFromParent($insertId, $post['lang']);
 					$this->db->where('id', $insertId);
 					return $this->db->update('menu', ['url' => $slug]);
@@ -125,7 +121,6 @@ function getNewsletters(){
 				->row();
 			if (!$row) break;
 
-			// Odstráň prefix jazyka a /app
 			$cleanUrl = preg_replace('#^(de|sk|en)(/app)?/#', '', trim($row->url, '/'));
 			array_unshift($segments, $cleanUrl);
 
@@ -152,7 +147,7 @@ function getNewsletters(){
 		$this->db->select('*');
 		$this->db->from('slider');
 		$this->db->order_by('orderBy', 'ASC');
-		return $this->db->get()->result(); // Returns objects for consistency with views
+		return $this->db->get()->result();
 	}
 
 	public function get_slider($id) {
@@ -163,7 +158,7 @@ function getNewsletters(){
 		$this->db->from('slider');
 		$this->db->where('id', $id);
 		$query = $this->db->get();
-		return $query->num_rows() > 0 ? $query->row() : null; // Returns object or null
+		return $query->num_rows() > 0 ? $query->row() : null;
 	}
 
 	public function get_slider_image_by_id($id) {
@@ -254,8 +249,8 @@ function getNewsletters(){
 			'name1' => $this->input->post('name1'),
 			'buttonUrl' => $this->input->post('buttonUrl'),
 			'active' => $this->input->post('active'),
-			'start_date' => $this->input->post('start_date') ?: date('Y-m-d'), // Ak nie je zadaný, použije aktuálny dátum
-			'end_date' => $this->input->post('end_date') ?: NULL // Ak nie je zadaný, nastaví NULL
+			'start_date' => $this->input->post('start_date') ?: date('Y-m-d'),
+			'end_date' => $this->input->post('end_date') ?: NULL
 		);
 
 		if ($image && !isset($image['error'])) {
@@ -310,11 +305,9 @@ function getNewsletters(){
 			'end_date' => $this->input->post('end_date')
 		);
 
-		// Ak je nahraná nová fotka a neobsahuje chybu, nastavíme ju do dát
 		if ($image && !isset($image['error'])) {
 			$data['image'] = $image['file_name'];
 		} else if ($old_image) {
-			// Ak nie je nahraná nová fotka, ponecháme starú
 			$data['image'] = $old_image;
 		}
 
@@ -452,7 +445,7 @@ function getNewsletters(){
 		];
 	}
 
-// MENU
+
 	public function getMenuStats()
 	{
 		$this->db->from('menu');
@@ -472,7 +465,7 @@ function getNewsletters(){
 		];
 	}
 
-// SLIDER
+
 	public function getSliderStats()
 	{
 		$this->db->from('slider');
@@ -484,7 +477,6 @@ function getNewsletters(){
 		$this->db->order_by('updated_at', 'DESC');
 		$recent = $this->db->get('slider', 3)->result();
 
-		// Najdi názov – skús name1, potom title, potom fallback
 		$last_title = '';
 		if ($last) {
 			$last_title = $last->name1 ?: ($last->title ?: '[kein Titel]');
@@ -520,7 +512,6 @@ function getNewsletters(){
 	}
 
 
-// BELIEBTE PRODUKTE
 	public function getBestProductStats()
 	{
 		$this->db->from('bestProduct');
@@ -565,12 +556,10 @@ function getNewsletters(){
 		return $this->db->get('calendar_notes')->result();
 	}
 	public function getGalleryStats() {
-		// Celkový počet galérií
 		$this->db->select('COUNT(*) as total');
 		$query = $this->db->get('galleries');
 		$total = $query->row()->total;
 
-		// Posledná galéria
 		$this->db->select('name, created_at');
 		$this->db->order_by('created_at', 'DESC');
 		$this->db->limit(1);
@@ -580,13 +569,11 @@ function getNewsletters(){
 		$last_title = $last ? $last->name : '';
 		$last_date = $last && $last->created_at ? date('d.m.Y', strtotime($last->created_at)) : '';
 
-		// Nedávne galérie (napr. posledné 3)
 		$this->db->select('name');
 		$this->db->order_by('created_at', 'DESC');
 		$this->db->limit(3);
 		$recent = $this->db->get('galleries')->result();
 
-		// Premenujeme 'name' na 'title' vo výstupe, aby zodpovedal štruktúre očakávanej v šablóne
 		$recent = array_map(function($item) {
 			$item->title = $item->name;
 			unset($item->name);

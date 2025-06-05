@@ -28,7 +28,7 @@
 							<th class="text-center">#</th>
 							<th></th>
 							<th>Menü</th>
-							<th class="text-center">URL</th>
+							<th class="text-center">URL-Adresse</th>
 							<th class="text-center">Position</th>
 							<th class="text-center">Aktiv</th>
 							<th class="text-center">Aktionen</th>
@@ -44,7 +44,7 @@
 										<img src="<?= langInfo($m->lang)['flag'] ?>" width="24px" alt="lang">
 									</td>
 									<td><strong><?= $m->name ?></strong></td>
-									<td class="text-center"><?= $m->url ?></td>
+									<td><?= BASE_URL.$m->url ?></td>
 									<td class="text-center"><?= $m->orderBy ?></td>
 									<td class="text-center"><?= active($m->active) ?></td>
 									<td class="text-center">
@@ -62,7 +62,7 @@
 												<img src="<?= langInfo($s->lang)['flag'] ?>" width="24px" alt="lang">
 											</td>
 											<td>– <?= $s->name ?></td>
-											<td class="text-center"><?= $s->url ?></td>
+											<td><?= BASE_URL.$s->url ?></td>
 											<td class="text-center"><?= $s->orderBy ?></td>
 											<td class="text-center"><?= active($s->active) ?></td>
 											<td class="text-center">

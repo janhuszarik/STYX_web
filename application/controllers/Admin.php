@@ -25,7 +25,6 @@ class Admin extends CI_Controller
 		$data['title'] = 'Admin - Dashboard';
 		$data['page'] = 'admin/dashboard';
 
-		// Získanie štatistík
 		$data['articleStats'] = $this->Admin_model->getArticleStats();
 		$data['menuStats'] = $this->Admin_model->getMenuStats();
 		$data['sliderStats'] = $this->Admin_model->getSliderStats();
@@ -33,14 +32,13 @@ class Admin extends CI_Controller
 		$data['productStats'] = $this->Admin_model->getBestProductStats();
 		$data['articleCategoryStats'] = $this->Admin_model->getArticleCategoryStats();
 		$data['galleryStats'] = $this->Admin_model->getGalleryStats();
-		// Získanie udalostí do kalendára
 		$data['calendar_events'] = array_map(function($n) {
 			return [
 				'id' => $n->id,
 				'title' => $n->note,
 				'start' => $n->date,
-				'end' => $n->end_date ? date('Y-m-d', strtotime($n->end_date . ' +1 day')) : null, // pre kalendár
-				'raw_end' => $n->end_date, // pre modálne okno
+				'end' => $n->end_date ? date('Y-m-d', strtotime($n->end_date . ' +1 day')) : null,
+				'raw_end' => $n->end_date,
 				'color' => $n->color
 			];
 		}, $this->Admin_model->get_calendar_notes());
@@ -101,7 +99,6 @@ class Admin extends CI_Controller
 		}
 	}
 
-
 	public function menuSave()
 	{
 		$post = $this->input->post();
@@ -113,15 +110,12 @@ class Admin extends CI_Controller
 			$post['lang'] = isset($post['lang']) ? $post['lang'] : 'de';
 			$post['base'] = isset($post['base']) ? $post['base'] : '0';
 
-			// Check if the URL is external (starts with http:// or https://)
 			$existingUrl = trim($post['url']);
 			$isExternal = (strpos($existingUrl, 'http://') === 0 || strpos($existingUrl, 'https://') === 0);
 
 			if ($isExternal) {
-				// Save external URL as is
 				$post['url'] = $existingUrl;
 			} else {
-				// Automatic URL generation for internal URLs
 				$slugPart = url_oprava($post['name']);
 				$langPrefix = $post['lang'] . '/app';
 				$fullPrefix1 = $langPrefix;
@@ -145,7 +139,6 @@ class Admin extends CI_Controller
 				}
 			}
 
-			// Save (update or insert)
 			if (!empty($id)) {
 				if ($this->Admin_model->menuSave($post)) {
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
@@ -165,7 +158,7 @@ class Admin extends CI_Controller
 			}
 		}
 
-		// Delete
+
 		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->menuDelete($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
@@ -175,7 +168,6 @@ class Admin extends CI_Controller
 			}
 		}
 
-		// Form edit/create
 		if ($segment3 == 'edit' || $segment3 == 'create') {
 			$data['menu'] = $this->Admin_model->getMenu($id);
 			$data['menuparent'] = $this->Admin_model->getMenu(false, true);
@@ -187,16 +179,11 @@ class Admin extends CI_Controller
 			return;
 		}
 
-		// List
 		$data['menus'] = $this->Admin_model->getFullMenu();
 		$data['title'] = 'Menüpunkte';
 		$data['page'] = 'admin/settings/menu';
 		$this->load->view('admin/layout/normal', $data);
 	}
-
-
-
-
 
 	function getMenuParentName($menus, $parentId)
 	{
@@ -288,8 +275,6 @@ class Admin extends CI_Controller
 		$this->load->view('admin/layout/normal', $data);
 	}
 
-
-
 	private function saveSlider($post, $id = null) {
 		log_message('debug', 'saveSlider post data before upload: ' . print_r($post, true));
 
@@ -369,10 +354,7 @@ class Admin extends CI_Controller
 		return $this->upload->data(); // obsahuje ['file_name'] a ['full_path']
 	}
 
-
-
-	private function uploadImageToPath($field_name, $path = 'uploads
-/news/') {
+	private function uploadImageToPath($field_name, $path = 'uploads/news/') {
 		log_message('debug', 'FCPATH value: ' . FCPATH);
 		log_message('debug', 'Current working directory: ' . getcwd());
 
@@ -418,8 +400,7 @@ class Admin extends CI_Controller
 	}
 
 	public function uploadImage() {
-		$response = $this->uploadImageToPath('file', 'uploads
-/news/');
+		$response = $this->uploadImageToPath('file', 'uploads/news/');
 		log_message('debug', 'Upload response: ' . json_encode($response));
 		echo json_encode($response);
 	}
@@ -431,8 +412,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'uploads
-/news/');
+			$image = $this->upload_image('image', 'uploads/news/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['news'] = (object)$post;
@@ -444,10 +424,8 @@ class Admin extends CI_Controller
 
 			if (!empty($id)) {
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads
-/news/' . $old_image)) {
-						unlink(FCPATH . 'uploads
-/news/' . $old_image);
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/news/' . $old_image)) {
+						unlink(FCPATH . 'uploads/news/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect(BASE_URL . 'admin/news');
@@ -511,8 +489,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'uploads
-/product/');
+			$image = $this->upload_image('image', 'uploads/product/');
 			if (isset($image['error']) && !$image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['edit'] = (object)$post;
@@ -523,10 +500,8 @@ class Admin extends CI_Controller
 			if (!empty($id)) {
 				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
 					if ($image && !isset($image['error'])) {
-						if ($old_image && file_exists(FCPATH . 'uploads
-/product/' . $old_image)) {
-							unlink(FCPATH . 'uploads
-/product/' . $old_image);
+						if ($old_image && file_exists(FCPATH . 'uploads/product/' . $old_image)) {
+							unlink(FCPATH . 'uploads/product/' . $old_image);
 						}
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
