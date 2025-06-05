@@ -305,7 +305,7 @@ if (isset($article) && !empty($article->slug)) {
 
 <script>const BASE_URL = "<?= base_url() ?>";</script>
 <script>
-	let sectionCount = 0, maxSections = 6, sectionsData = <?= json_encode($sections ?? []) ?>;
+	let sectionCount = 0, maxSections = 10, sectionsData = <?= json_encode($sections ?? []) ?>;
 	const menuOptions = <?= $menuOptionsJson ?>;
 
 	function updateSectionIndexes() {
