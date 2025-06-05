@@ -1,13 +1,3 @@
-<?php /* bestProduct_list.php */ ?>
-<style>
-	.menu-table tr {
-		background-color: white;
-	}
-	.menu-table tr.main-menu:hover {
-		background-color: #f5f5f5;
-	}
-</style>
-
 <div class="row">
 	<div class="col-lg-12">
 		<section class="card card-yellow">
@@ -47,10 +37,10 @@
 									<td class="text-center">
 										<img src="<?= langInfo($p->lang)['flag'] ?>" width="24px" alt="lang">
 									</td>
-									<td><strong><?= $p->name ?></strong></td>
-									<td class="text-center"><?= $p->url ?></td>
-									<td class="text-center"><?= $p->start_date ?></td>
-									<td class="text-center"><?= $p->end_date ?></td>
+									<td><?= $p->name ?></td>
+									<td><?= $p->url ?></td>
+									<td class="text-center"><?= date('d.m.Y', strtotime($p->start_date)) ?></td>
+									<td class="text-center"><?= date('d.m.Y', strtotime($p->end_date)) ?></td>
 									<td class="text-center"><?= $p->orderBy ?></td>
 									<td class="text-center"><?= active($p->active) ?></td>
 									<td class="text-center"><?= $p->action ? 'Ja' : 'Nein' ?></td>
