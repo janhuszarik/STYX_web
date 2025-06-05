@@ -21,16 +21,7 @@ class App extends CI_Controller
 	function index(){
 		$this->home();
 	}
-	function error404(){
 
-		header("HTTP/1.1 404 Not Found");
-		$data['title'] = 'Error 404 ';
-		$data['page'] = 'Error404';
-		$data['description'] = '';
-		$data['keywords'] = '';
-		$this->load->view('layout/normal',$data);
-
-	}
 
 	public function home()
 	{
@@ -136,7 +127,18 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
-
+	public function error404()
+	{
+		log_message('error', '404 Page Not Found: ' . current_url());
+		header("HTTP/1.1 404 Not Found");
+		$data['user'] = $this->ion_auth->user()->row();
+		$data['title'] = lang('ERROR_404_TITLE') ?: '404 - Seite nicht gefunden';
+		$data['description'] = lang('ERROR_404_DESCRIPTION') ?: 'Die angeforderte Seite konnte nicht gefunden werden.';
+		$data['keywords'] = '';
+		$data['image'] = BASE_URL . LOGO;
+		$data['page'] = 'error404';
+		$this->load->view('layout/normal', $data);
+	}
 
 	private function check_cookie_consent() {
 		if (!$this->input->cookie('cookie_consent', TRUE)) {

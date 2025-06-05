@@ -50,26 +50,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | my-controller/my-method	-> my_controller/my_method
 */
 
-    $route['default_controller'] 								= 'app';
-    $route['404_override'] 										= 'app/error404';
-    $route['404'] 												= 'app/error404';
-    $route['error404'] 											= 'app/error404';
+	$route['default_controller'] 								= 'app';
+	$route['404_override'] 										= 'app/error404';
 	$route['generate_data'] 									= 'Generate_data/index';
 	$route['auth/login'] 										= 'auth/login';
-    $route['login'] 											= 'auth/login';
-    $route['auth/logout'] 										= 'auth/logout';
+	$route['login'] 											= 'auth/login';
+	$route['auth/logout'] 										= 'auth/logout';
+	$route['logout'] 											= 'auth/logout';
 	$route['auth/delete_user/(:num)'] 							= 'auth/delete_user/$1';
 	$route['auth/create_user'] 									= 'auth/create_user';
-    $route['logout'] 											= 'auth/logout';
-    $route['auth/activate'] 									= 'auth/activate';
-    $route['auth/forgot_password'] 								= 'auth/forgot_password';
-	$route['change_password'] 									= 'auth/change_password';
+	$route['auth/activate'] 									= 'auth/activate';
+	$route['auth/forgot_password'] 								= 'auth/forgot_password';
 	$route['auth/change_password'] 								= 'auth/change_password';
 	$route['admin/auth'] 										= 'auth';
-	$route['xml/sitemap'] 										= 'xml/sitemap';
-	$route['error404only'] 										= 'app/error404only';
+	$route['sitemap.xml'] 										= 'xml/sitemap';
 	$route['sitemap'] 											= 'xml/sitemap';
-    $route['sitemap.xml'] 										= 'xml/sitemap';
 	$route['translate_uri_dashes'] 								= FALSE;
 // administrator
 
