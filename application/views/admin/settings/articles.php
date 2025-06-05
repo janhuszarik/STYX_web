@@ -31,7 +31,7 @@ foreach ($articleCategories as $category) {
 							<th class="text-center">#</th>
 							<th class="text-center">Sprache</th> <!-- New column for language flag -->
 							<th>Titel</th>
-							<th>Slug</th>
+							<th>URL-Adresse</th>
 							<th class="text-center">Keywords</th>
 							<th class="text-center">Meta</th>
 							<th class="text-center">Status</th>
@@ -40,6 +40,7 @@ foreach ($articleCategories as $category) {
 						</tr>
 						</thead>
 						<tbody>
+
 						<?php if (!empty($articles)): ?>
 							<?php foreach ($articles as $index => $article): ?>
 								<tr>
@@ -51,6 +52,7 @@ foreach ($articleCategories as $category) {
 										?>
 										<img src="<?= htmlspecialchars($langInfo['flag']) ?>" alt="<?= htmlspecialchars($langInfo['text']) ?>" title="<?= htmlspecialchars($langInfo['text']) ?>" style="width: 24px; height: 16px;">
 									</td>
+
 									<td><?= $article->title ?></td>
 									<td><?= $article->slug ?></td>
 									<td class="text-center"><?= checkTextIcon($article->keywords) ?></td>

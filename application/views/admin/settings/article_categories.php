@@ -30,9 +30,8 @@
 							<th class="text-center">#</th>
 							<th></th>
 							<th>Name</th>
-							<th>Slug</th>
-							<th class="text-center">Typ</th> <!-- Nový stĺpec -->
-
+							<th>URL-Adresse</th>
+							<th class="text-center">Typ</th>
 							<th class="text-center">Artikel</th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Aktionen</th>

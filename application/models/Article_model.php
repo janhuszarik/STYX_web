@@ -83,7 +83,7 @@ class Article_model extends CI_Model
 
 	public function getPaginatedArticlesByCategory($categoryId, $limit, $offset)
 	{
-		$this->db->select('id, title, slug, slug_title, is_main, category_id, lang, active');
+		$this->db->select('id, title, slug, slug_title, is_main, category_id, lang, active, keywords, meta');
 		$this->db->where('category_id', $categoryId);
 		$this->db->order_by('is_main DESC, id DESC');
 		return $this->db->get('articles', $limit, $offset)->result();
