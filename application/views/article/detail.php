@@ -222,6 +222,10 @@ for ($i = 1; $i <= 3; $i++) {
 		color: white;
 		cursor: pointer;
 	}
+	.section-img {
+		max-width: 80%;
+		height: auto;
+	}
 
 	/* Responsive zmeny */
 	@media (max-width: 768px) {
