@@ -292,10 +292,20 @@ class Article_model extends CI_Model
 		foreach ($menuItems as $menu) {
 			if (empty($menu->name)) continue;
 
+			// Základná časť slug-u bez duplicitného jazyka
+			$baseSlug = !empty($menu->url) ? $menu->url : url_title($menu->name, 'dash', true);
+
+			// Odstránime potenciálny existujúci jazykový prefix z baseSlug
+			$lang = $menu->lang ?? 'de';
+			$baseSlug = preg_replace("/^$lang\//", '', $baseSlug);
+
+			// Vytvoríme slug s jedným jazykovým prefixom
+			$slug = $lang . '/' . $baseSlug;
+
 			$data = [
 				'name' => $menu->name,
-				'slug' => !empty($menu->url) ? ($menu->lang ?? 'de') . '/' . $menu->url : ($menu->lang ?? 'de') . '/' . url_title($menu->name, 'dash', true),
-				'lang' => $menu->lang ?? 'de',
+				'slug' => $slug,
+				'lang' => $lang,
 				'active' => 1,
 				'created_at' => date('Y-m-d H:i:s'),
 			];
