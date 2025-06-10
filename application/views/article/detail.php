@@ -197,6 +197,9 @@ for ($i = 1; $i <= 3; $i++) {
 <?php endif; ?>
 
 <style>
+	p {
+		font-size: 16px !important;
+	}
 	/* Lightbox */
 	.lightbox-modal {
 		position: fixed;
