@@ -257,5 +257,9 @@ for ($i = 1; $i <= 3; $i++) {
 			object-fit: cover;
 		}
 	}
+	img {
+		box-shadow: none !important;
+	}
+
 </style>
 
