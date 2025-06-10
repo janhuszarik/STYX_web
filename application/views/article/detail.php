@@ -42,7 +42,7 @@
 
 				<?php if (!empty($section->image)): ?>
 					<div class="col-lg-4 text-center mb-3 mb-lg-0">
-						<img src="<?= base_url($section->image) ?>" alt="<?= htmlspecialchars($section->image_title ?? 'STYX Webimage section') ?>" class="img-fluid rounded shadow-sm section-img">
+						<img src="<?= base_url($section->image) ?>" alt="<?= htmlspecialchars($section->image_title ?? 'STYX Webimage section') ?>" class="img-fluid rounded section-img">
 					</div>
 				<?php endif; ?>
 			</div>
@@ -172,7 +172,7 @@ for ($i = 1; $i <= 3; $i++) {
 		</div>
 	</section>
 
-	<!-- Lightbox Modal -->
+
 	<div id="lightbox-modal" class="lightbox-modal" style="display:none;">
 		<span class="lightbox-close" onclick="closeLightbox()">&times;</span>
 		<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
@@ -257,9 +257,7 @@ for ($i = 1; $i <= 3; $i++) {
 			object-fit: cover;
 		}
 	}
-	img {
-		box-shadow: none !important;
-	}
+
 
 </style>
 
