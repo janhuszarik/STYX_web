@@ -1,4 +1,4 @@
-<section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading">
+<section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 	<div class="container py-5">
 		<div class="row justify-content-center">
 			<div class="col-lg-10 text-center">
@@ -11,7 +11,7 @@
 	</div>
 </section>
 
-<div class="container py-5">
+<div class="container py-5" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 	<?php if (!empty(trim($article->title))): ?>
 		<div class="content mb-5">
 			<?= $article->content ?>
@@ -63,7 +63,7 @@ for ($set = 1; $set <= 2; $set++) {
 ?>
 
 <?php if ($hasProducts): ?>
-	<section class="recommended-products py-5 bg-light">
+	<section class="recommended-products py-5 bg-light" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 		<div class="container">
 			<div class="text-center mb-4">
 				<h2 class="fw-bold">Empfohlene Produkte</h2>
@@ -111,7 +111,6 @@ for ($set = 1; $set <= 2; $set++) {
 	</section>
 <?php endif; ?>
 
-
 <?php
 $interessierenLinks = [];
 for ($i = 1; $i <= 3; $i++) {
@@ -127,7 +126,7 @@ for ($i = 1; $i <= 3; $i++) {
 ?>
 
 <?php if (!empty($interessierenLinks)): ?>
-	<section class="related-articles py-5" style="background-color: #f0faf3; border-top: 1px solid #dee2e6;">
+	<section class="related-articles py-5" style="background-color: #f0faf3; border-top: 1px solid #dee2e6; font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 		<div class="container">
 			<div class="text-center mb-4">
 				<h3 class="fw-bold mb-2">DAS KÖNNTE SIE INTERESSIEREN</h3>
@@ -151,7 +150,7 @@ for ($i = 1; $i <= 3; $i++) {
 <?php endif; ?>
 
 <?php if (!empty($galleryImages)): ?>
-	<section class="article-gallery py-5">
+	<section class="article-gallery py-5" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 		<div class="container">
 			<div class="text-center mb-4">
 				<h2 class="fw-bold">Galerie</h2>
@@ -171,7 +170,6 @@ for ($i = 1; $i <= 3; $i++) {
 			</div>
 		</div>
 	</section>
-
 
 	<div id="lightbox-modal" class="lightbox-modal" style="display:none;">
 		<span class="lightbox-close" onclick="closeLightbox()">&times;</span>
@@ -196,10 +194,9 @@ for ($i = 1; $i <= 3; $i++) {
 	</script>
 <?php endif; ?>
 
+
 <style>
-	p {
-		font-size: 16px !important;
-	}
+	
 	/* Lightbox */
 	.lightbox-modal {
 		position: fixed;
