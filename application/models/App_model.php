@@ -166,16 +166,13 @@ class app_model extends CI_Model
 		$this->email->to($data['email']);
 		$this->email->subject('Vielen Dank für Ihre Anfrage');
 
-		$userMessage = '
-		<p>Sehr geehrte/r ' . htmlspecialchars($data['name']) . ',</p>
-		<p>vielen Dank für Ihre Nachricht an STYX Naturcosmetic. Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
-		<p>Mit freundlichen Grüßen<br>Ihr STYX-Team</p>
-	';
+		$userMessage = $this->load->view('emails/contact_reply', [
+			'name' => $data['name']
+		], TRUE);
 
 		$this->email->message($userMessage);
 		$userSent = $this->email->send();
 
-		// úspech = oba e-maily odoslané
 		return $adminSent && $userSent;
 	}
 
