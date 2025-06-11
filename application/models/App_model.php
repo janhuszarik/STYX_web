@@ -125,35 +125,60 @@ class app_model extends CI_Model
 	{
 		$this->load->library('email');
 
-		$config['protocol'] = 'smtp';
-		$config['smtp_host'] = SMTP;
-		$config['smtp_user'] = SMTP_NAME;
-		$config['smtp_pass'] = SMTP_PASS;
-		$config['smtp_port'] = SMTP_PORT;
+		$config['protocol']    = 'smtp';
+		$config['smtp_host']   = SMTP;
+		$config['smtp_user']   = SMTP_NAME;
+		$config['smtp_pass']   = SMTP_PASS;
+		$config['smtp_port']   = SMTP_PORT;
 		$config['smtp_crypto'] = 'ssl';
-		$config['mailtype'] = 'html';
-		$config['charset'] = 'utf-8';
-		$config['newline'] = "\r\n";
+		$config['mailtype']    = 'html';
+		$config['charset']     = 'utf-8';
+		$config['newline']     = "\r\n";
 
 		$this->email->initialize($config);
 
-		$this->email->from(SMTP_NAME, 'Website Kontaktformular');
+		// --- Prvý email: pre admina ---
+		$this->email->from(SMTP_NAME, 'STYX Kontaktformular');
 		$this->email->to(MAIL_ADMIN);
 		$this->email->bcc(MAIL_MODERATOR);
+		$this->email->reply_to($data['email'], $data['name']);
+		$this->email->subject('Neue Kontaktanfrage über das Formular');
 
-		$this->email->subject('Neue Kontaktanfrage');
-		$message = '
-		<b>Name:</b> ' . htmlspecialchars($data['name']) . '<br>
-		<b>Adresse:</b> ' . htmlspecialchars($data['adresse']) . '<br>
-		<b>Telefon:</b> ' . htmlspecialchars($data['telefon']) . '<br>
-		<b>E-Mail:</b> ' . htmlspecialchars($data['email']) . '<br>
-		<b>Ich bin ein:</b> ' . htmlspecialchars($data['typ']) . '<br><br>
-		<b>Nachricht:</b><br>' . nl2br(htmlspecialchars($data['nachricht'])) . '<br><br>
+		$adminMessage = '
+		<h3 style="margin-bottom:10px;">Neue Nachricht von der Website</h3>
+		<table style="width:100%;border-collapse:collapse;">
+			<tr><td style="font-weight:bold;width:150px;">Name:</td><td>' . htmlspecialchars($data['name']) . '</td></tr>
+			<tr><td style="font-weight:bold;">Adresse:</td><td>' . htmlspecialchars($data['adresse']) . '</td></tr>
+			<tr><td style="font-weight:bold;">Telefon:</td><td>' . htmlspecialchars($data['telefon']) . '</td></tr>
+			<tr><td style="font-weight:bold;">E-Mail:</td><td>' . htmlspecialchars($data['email']) . '</td></tr>
+			<tr><td style="font-weight:bold;">Typ:</td><td>' . htmlspecialchars($data['typ']) . '</td></tr>
+			<tr><td style="font-weight:bold;">Nachricht:</td><td>' . nl2br(htmlspecialchars($data['nachricht'])) . '</td></tr>
+		</table>
 	';
 
-		$this->email->message($message);
-		return $this->email->send();
+		$this->email->message($adminMessage);
+		$adminSent = $this->email->send();
+
+		// --- Druhý email: pre odosielateľa ---
+		$this->email->clear();
+
+		$this->email->from(SMTP_NAME, 'STYX Naturcosmetic');
+		$this->email->to($data['email']);
+		$this->email->subject('Vielen Dank für Ihre Anfrage');
+
+		$userMessage = '
+		<p>Sehr geehrte/r ' . htmlspecialchars($data['name']) . ',</p>
+		<p>vielen Dank für Ihre Nachricht an STYX Naturcosmetic. Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
+		<p>Mit freundlichen Grüßen<br>Ihr STYX-Team</p>
+	';
+
+		$this->email->message($userMessage);
+		$userSent = $this->email->send();
+
+		// úspech = oba e-maily odoslané
+		return $adminSent && $userSent;
 	}
+
 
 
 
