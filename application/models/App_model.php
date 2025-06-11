@@ -149,7 +149,6 @@ class app_model extends CI_Model
 		<b>E-Mail:</b> ' . htmlspecialchars($data['email']) . '<br>
 		<b>Ich bin ein:</b> ' . htmlspecialchars($data['typ']) . '<br><br>
 		<b>Nachricht:</b><br>' . nl2br(htmlspecialchars($data['nachricht'])) . '<br><br>
-		<b>Datum:</b> ' . htmlspecialchars($data['datum']) . '
 	';
 
 		$this->email->message($message);

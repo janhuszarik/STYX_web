@@ -150,34 +150,65 @@ class App extends CI_Controller
 	}
 	public function send_contact()
 	{
-		$post = $this->input->post();
 
-		$recaptcha = $post['g-recaptcha-response'];
-		if (empty($recaptcha)) {
+
+
+		$this->load->library('form_validation');
+		$this->load->library('email');
+
+		$this->form_validation->set_rules('name', 'Name', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('adresse', 'Adresse', 'required|trim|max_length[150]');
+		$this->form_validation->set_rules('telefon', 'Telefon', 'required|trim|max_length[30]');
+		$this->form_validation->set_rules('email', 'E-Mail', 'required|trim|valid_email|max_length[100]');
+		$this->form_validation->set_rules('typ', 'Typ', 'required');
+		$this->form_validation->set_rules('nachricht', 'Nachricht', 'required|trim|max_length[5000]');
+
+
+		if ($this->form_validation->run() == FALSE) {
+			ddd(validation_errors());
+
+			$this->session->set_flashdata('error', 'Bitte füllen Sie alle Felder korrekt aus.');
+			redirect($_SERVER['HTTP_REFERER']);
+			return;
+		}
+
+		$recaptcha_response = $this->input->post('g-recaptcha-response');
+		if (empty($recaptcha_response)) {
 			$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
 			redirect($_SERVER['HTTP_REFERER']);
+			return;
 		}
 
-		$response = file_get_contents(
-			"https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha
-		);
-		$result = json_decode($response);
+		$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response);
+		$response = json_decode($verify);
 
-		if (!$result->success) {
+		if (!$response->success) {
 			$this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
 			redirect($_SERVER['HTTP_REFERER']);
+			return;
 		}
 
+		// === Email odoslanie ===
+		$data = [
+			'name' => $this->input->post('name', true),
+			'adresse' => $this->input->post('adresse', true),
+			'telefon' => $this->input->post('telefon', true),
+			'email' => $this->input->post('email', true),
+			'typ' => $this->input->post('typ', true),
+			'nachricht' => $this->input->post('nachricht', true),
+		];
+
 		$this->load->model('App_model');
-		$sent = $this->App_model->sendContactMail($post);
+		$sent = $this->App_model->sendContactMail($data);
 
 		if ($sent) {
 			$this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
 		} else {
-			$this->session->set_flashdata('error', 'Beim Senden der Nachricht ist ein Fehler aufgetreten.');
+			$this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
 		}
 
 		redirect($_SERVER['HTTP_REFERER']);
 	}
+
 
 }

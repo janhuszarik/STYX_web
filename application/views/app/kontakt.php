@@ -51,12 +51,15 @@
 						<textarea name="nachricht" id="nachricht" class="form-control" rows="5" required></textarea>
 					</div>
 					<button
+						type="button"
 						class="g-recaptcha btn btn-success"
 						data-sitekey="<?= RECAPTCHA ?>"
 						data-callback="submitForm"
 						data-action="submit">
 						Anfrage abschicken
 					</button>
+
+
 				</form>
 			</div>
 
@@ -89,7 +92,8 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
 	function submitForm(token) {
-		document.querySelector('form').submit();
+		document.getElementById('kontaktFormular').submit();
 	}
 </script>
+
 

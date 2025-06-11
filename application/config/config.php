@@ -51,10 +51,10 @@ define ( 'COMPANY','STYX Naturcosmetic' );
 
 //SMTP nastavenia
     define ('SMTP','smtp.hostcreators.sk');
-    define ('SMTP_NAME','info@styx.at');
-    define ('SMTP_PASS','_4U!y4Ax5i_JK3s!');
+    define ('SMTP_NAME','support@styxnatur.at');
+    define ('SMTP_PASS','5pE3RE31P_!_i!lb');
     define ('SMTP_PORT','465');
-    define ('MAIL_ADMIN','styx@styx.at');
+    define ('MAIL_ADMIN','jan.huszarik@styx.at');
     define ('MAIL_MODERATOR','jan.huszarik@styx.at');
 
 
