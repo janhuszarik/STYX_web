@@ -34,7 +34,12 @@ foreach ($articleCategories as $category) {
 							<th>URL-Adresse</th>
 							<th class="text-center">Keywords</th>
 							<th class="text-center">Meta</th>
+							<th class="text-center">Galerie</th>
+
+							<th class="text-center">Start datum</th>
+							<th class="text-center">Ende datum</th>
 							<th class="text-center">Status</th>
+							<th class="text-center">Update</th>
 							<th class="text-center">Erstellt</th>
 							<th class="text-center">Aktionen</th>
 						</tr>
@@ -54,10 +59,14 @@ foreach ($articleCategories as $category) {
 									</td>
 
 									<td><?= $article->title ?></td>
-									<td><?= $article->slug ?></td>
+									<td><?= BASE_URL.$article->slug ?></td>
 									<td class="text-center"><?= checkTextIcon($article->keywords) ?></td>
 									<td class="text-center"><?= checkTextIcon($article->meta) ?></td>
+									<td class="text-center"><?= checkTextIcon($article->gallery_id) ?></td>
+									<td class="text-center"><?= checkDateOrIcon($article->start_date_from)?></td>
+									<td class="text-center"><?= checkDateOrIcon($article->end_date_to)?></td>
 									<td class="text-center"><?= active($article->active)?></td>
+									<td class="text-center"><?= date('d.m.Y', strtotime($article->updated_at)) ?></td>
 									<td class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/article_save/edit/' . $article->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>

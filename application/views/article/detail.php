@@ -1,3 +1,15 @@
+<?php if (empty($article)): ?>
+	<div class="container py-5 text-center" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
+		<h2 class="text-danger fw-bold mb-3">Diese Unterseite wird gerade überarbeitet</h2>
+		<p>Na tejto podstránke sa aktuálne pracuje, alebo je v procese aktualizácie.<br>
+			Prejdite späť a vráťte sa neskôr. Ospravedlňujeme sa za zdržanie.</p>
+	</div>
+	<?php return; ?>
+<?php endif; ?>
+<?php
+$this->load->view('partials/article_assets');
+?>
+
 <section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 	<div class="container py-5">
 		<div class="row justify-content-center">
@@ -176,109 +188,8 @@ for ($i = 1; $i <= 3; $i++) {
 		<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
 	</div>
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			const imgs = document.querySelectorAll('img');
-			const lightbox = document.getElementById('lightbox-modal');
-			const lightboxImg = document.getElementById('lightbox-img');
-
-			imgs.forEach(img => {
-				img.style.cursor = 'zoom-in';
-				img.addEventListener('click', function () {
-					lightboxImg.src = this.src;
-					lightbox.style.display = 'flex';
-				});
-			});
-
-			// ESC zatvorenie
-			document.addEventListener('keydown', function(e) {
-				if (e.key === "Escape") closeLightbox();
-			});
-
-			// klik mimo obrázka zatvorí lightbox
-			lightbox.addEventListener('click', function (e) {
-				if (e.target === lightbox) closeLightbox();
-			});
-		});
-
-		function closeLightbox() {
-			document.getElementById('lightbox-modal').style.display = 'none';
-		}
-	</script>
 
 
 
-
-
-
-<style>
-
-	/* Lightbox */
-	.lightbox-modal {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		background: rgba(0, 0, 0, 0.85);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 9999;
-	}
-
-	.lightbox-content {
-		max-width: 90%;
-		max-height: 80vh;
-		object-fit: contain;
-		box-shadow: 0 0 30px rgba(255,255,255,0.2);
-	}
-
-	.lightbox-close {
-		position: absolute;
-		top: 20px;
-		right: 30px;
-		font-size: 2.5rem;
-		color: white;
-		cursor: pointer;
-		z-index: 10000;
-	}
-
-	.section-img {
-		max-width: 80%;
-		height: auto;
-	}
-
-	/* Vynútenie fontu Poppins pre celý obsah */
-	.content *,
-	.section-content *,
-	.card *,
-	.related-articles *,
-	.article-gallery *,
-	.recommended-products * {
-		font-family: 'Poppins', Arial, sans-serif !important;
-	}
-
-	/* Responsive zmeny */
-	@media (max-width: 768px) {
-		h1, h2, h3 {
-			font-size: 1.5rem;
-		}
-		.lead {
-			font-size: 1rem;
-		}
-		.section-img {
-			max-width: 200px;
-		}
-	}
-
-	@media (max-width: 576px) {
-		.article-gallery img,
-		.card-img-top {
-			max-height: 200px;
-			object-fit: cover;
-		}
-	}
-</style>
 
 

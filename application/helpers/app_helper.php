@@ -344,4 +344,17 @@ if (!function_exists('checkTextIcon')) {
 		}
 	}
 }
+if (!function_exists('checkDateOrIcon')) {
+	function checkDateOrIcon($value = '') {
+		$value = trim($value);
+
+		if (!empty($value)) {
+			$date = date('d.m.Y', strtotime($value));
+			return '<span>' . $date . ' </span>';
+		} else {
+			return '<i class="fa fa-times" style="color: red; font-weight: bold; font-size: 17px"></i>';
+		}
+	}
+}
+
 ?>
