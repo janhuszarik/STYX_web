@@ -336,65 +336,98 @@ if (isset($article) && !empty($article->slug)) {
 		});
 
 		const html = `
-            <div class="row align-items-start border p-2 mb-2" data-section="${sectionIndex}">
-                <div class="col-md-9">
-                    <label for="section_content${sectionIndex}" class="col-form-label">Inhalt</label>
-                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Hauptinhalt der Sektion. Verwenden Sie den Texteditor, um formatierten Text, Bilder oder Links hinzuzufügen. Jede Sektion wird im Artikel als separater Abschnitt angezeigt."></i>
-                    <textarea name="sections[${sectionIndex}]" id="section_content${sectionIndex}" class="form-control summernote" rows="3">${content}</textarea>
+        <div class="row align-items-start border p-2 mb-2" data-section="${sectionIndex}">
+            <div class="col-md-9">
+                <label for="section_content${sectionIndex}" class="col-form-label">Inhalt</label>
+                <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Hauptinhalt der Sektion. Verwenden Sie den Texteditor, um formatierten Text, Bilder oder Links hinzuzufügen. Jede Sektion wird im Artikel als separater Abschnitt angezeigt."></i>
+                <textarea name="sections[${sectionIndex}]" id="section_content${sectionIndex}" class="form-control summernote" rows="3">${content}</textarea>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-2">
+                    <label for="section_image${sectionIndex}" class="col-form-label">Bild hochladen</label>
+                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Bildes für diese Sektion. Das Bild wird neben dem Inhalt der Sektion angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
+                    <input type="file" name="section_images[${sectionIndex}]" id="section_image${sectionIndex}" class="form-control">
                 </div>
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="section_image${sectionIndex}" class="col-form-label">Bild hochladen</label>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Bildes für diese Sektion. Das Bild wird neben dem Inhalt der Sektion angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
-                        <input type="file" name="section_images[${sectionIndex}]" id="section_image${sectionIndex}" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label for="section_image_title${sectionIndex}" class="col-form-label">Titel des Bildes (SEO)</label>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Sektionsbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
-                        <input type="text" name="section_image_titles[${sectionIndex}]" id="section_image_title${sectionIndex}" class="form-control" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
-                    </div>
-                    <input type="hidden" name="ftp_section_image[${sectionIndex}]" id="ftp_section_image${sectionIndex}" value="${ftpImage}">
-                    <input type="hidden" name="old_section_image[${sectionIndex}]" id="old_section_image${sectionIndex}" value="${oldImage}">
-                    <div class="mb-2">
-                        <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_section_image${sectionIndex}" data-preview-target="sectionImagePreview${sectionIndex}">
-                            Bild aus FTP wählen
-                        </button>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis für diese Sektion. Das ausgewählte Bild wird in der Sektion angezeigt."></i>
-                    </div>
-                    <div id="sectionImagePreview${sectionIndex}" class="mb-2">
-                        ${ftpImage ? `<img src="${ftpImage}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
-                        ${img && !ftpImage ? `<img src="${img}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
-                    </div>
+                <div class="mb-2">
+                    <label for="section_image_title${sectionIndex}" class="col-form-label">Titel des Bildes (SEO)</label>
+                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Sektionsbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
+                    <input type="text" name="section_image_titles[${sectionIndex}]" id="section_image_title${sectionIndex}" class="form-control" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
                 </div>
-                <div class="col-md-12 mt-2">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label for="button_name${sectionIndex}" class="col-form-label">Button-Name</label>
-                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Text des Buttons in dieser Sektion. Wenn angegeben, wird ein Button angezeigt, der mit einer Unterseite oder externen URL verknüpft werden kann."></i>
-                            <input type="text" name="button_names[${sectionIndex}]" class="form-control button-name" id="button_name${sectionIndex}" placeholder="Name des Buttons" value="${buttonName}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="subpage${sectionIndex}" class="col-form-label">Unterseite</label>
-                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer internen Unterseite aus dem Menü. Aktiviert, wenn ein Button-Name angegeben ist. Hat Vorrang vor einer externen URL."></i>
-                            <select name="subpages[${sectionIndex}]" class="form-control subpage" id="subpage${sectionIndex}" ${!buttonName ? 'disabled' : ''}>
-                                ${optionsHtml}
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="external_url${sectionIndex}" class="col-form-label">Externe URL</label>
-                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer externen URL. Aktiviert, wenn ein Button-Name angegeben ist. Wird ignoriert, wenn eine Unterseite ausgewählt ist."></i>
-                            <input type="url" name="external_urls[${sectionIndex}]" class="form-control external-url" id="external_url${sectionIndex}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
-                        </div>
-                    </div>
-                    <div class="section-actions">
-                        <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
-                    </div>
+                <input type="hidden" name="ftp_section_image[${sectionIndex}]" id="ftp_section_image${sectionIndex}" value="${ftpImage}">
+                <input type="hidden" name="old_section_image[${sectionIndex}]" id="old_section_image${sectionIndex}" value="${oldImage}">
+                <div class="mb-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_section_image${sectionIndex}" data-preview-target="sectionImagePreview${sectionIndex}">
+                        Bild aus FTP wählen
+                    </button>
+                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis für diese Sektion. Das ausgewählte Bild wird in der Sektion angezeigt."></i>
+                </div>
+                <div id="sectionImagePreview${sectionIndex}" class="mb-2">
+                    ${ftpImage ? `<img src="${ftpImage}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
+                    ${img && !ftpImage ? `<img src="${img}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
                 </div>
             </div>
-        `;
+            <div class="col-md-12 mt-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="button_name${sectionIndex}" class="col-form-label">Button-Name</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Text des Buttons in dieser Sektion. Wenn angegeben, wird ein Button angezeigt, der mit einer Unterseite oder externen URL verknüpft werden kann."></i>
+                        <input type="text" name="button_names[${sectionIndex}]" class="form-control button-name" id="button_name${sectionIndex}" placeholder="Name des Buttons" value="${buttonName}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="subpage${sectionIndex}" class="col-form-label">Unterseite</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer internen Unterseite aus dem Menü. Aktiviert, wenn ein Button-Name angegeben ist. Hat Vorrang vor einer externen URL."></i>
+                        <select name="subpages[${sectionIndex}]" class="form-control subpage" id="subpage${sectionIndex}" ${!buttonName ? 'disabled' : ''}>
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="external_url${sectionIndex}" class="col-form-label">Externe URL</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer externen URL. Aktiviert, wenn ein Button-Name angegeben ist. Wird ignoriert, wenn eine Unterseite ausgewählt ist."></i>
+                        <input type="url" name="external_urls[${sectionIndex}]" class="form-control external-url" id="external_url${sectionIndex}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
+                    </div>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+                </div>
+            </div>
+        </div>
+    `;
 		document.querySelector('#sections-container').insertAdjacentHTML('beforeend', html);
 
-		$(`[data-section="${sectionIndex}"] .summernote`).summernote({ height: 200 });
+		$(`[data-section="${sectionIndex}"] .summernote`).summernote({
+			height: 200,
+			callbacks: {
+				onImageUpload: function(files) {
+					const formData = new FormData();
+					formData.append('image', files[0]);
+					fetch(BASE_URL + 'admin/article/upload_image', {
+						method: 'POST',
+						body: formData
+					})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								$(this).summernote('insertImage', BASE_URL + data.image_url);
+							} else {
+								alert('Chyba pri nahrávaní obrázku: ' + data.error);
+							}
+						})
+						.catch(error => {
+							alert('Chyba pri nahrávaní obrázku: ' + error);
+						});
+				},
+				onMediaDelete: function($target) {
+					const imageUrl = $target.attr('src');
+					if (imageUrl.startsWith(BASE_URL)) {
+						fetch(BASE_URL + 'admin/article/delete_image', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+							body: new URLSearchParams({ image_url: imageUrl })
+						});
+					}
+				}
+			}
+		});
 
 		const buttonNameInput = document.getElementById(`button_name${sectionIndex}`);
 		const subpageInput = document.getElementById(`subpage${sectionIndex}`);
@@ -433,8 +466,43 @@ if (isset($article) && !empty($article->slug)) {
 
 	document.addEventListener('DOMContentLoaded', () => {
 		function initSummer() {
-			$('.summernote').summernote({ height: 200 });
+			$('.summernote').summernote({
+				height: 200,
+				callbacks: {
+					onImageUpload: function(files) {
+						const formData = new FormData();
+						formData.append('image', files[0]);
+						fetch(BASE_URL + 'admin/article/upload_image', {
+							method: 'POST',
+							body: formData
+						})
+							.then(response => response.json())
+							.then(data => {
+								if (data.success) {
+									$(this).summernote('insertImage', BASE_URL + data.image_url);
+								} else {
+									alert('Chyba pri nahrávaní obrázku: ' + data.error);
+								}
+							})
+							.catch(error => {
+								alert('Chyba pri nahrávaní obrázku: ' + error);
+							});
+					},
+					onMediaDelete: function($target) {
+						const imageUrl = $target.attr('src');
+						if (imageUrl.startsWith(BASE_URL)) {
+							fetch(BASE_URL + 'admin/article/delete_image', {
+								method: 'POST',
+								headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+								body: new URLSearchParams({ image_url: imageUrl })
+							});
+						}
+					}
+				}
+			});
 		}
+
+		initSummer();
 
 		document.getElementById('add-section').onclick = () => {
 			addSection();
@@ -456,7 +524,7 @@ if (isset($article) && !empty($article->slug)) {
 			const buttonName = sec.button_name || '';
 			const subpage = sec.subpage || '';
 			const externalUrl = sec.external_url || '';
-			const oldImage = sec.image || '';
+			const oldImage = sec.image || null;
 			addSection(sec.content, img, ftpImage, imageTitle, buttonName, subpage, externalUrl, oldImage, index);
 		});
 
@@ -466,7 +534,7 @@ if (isset($article) && !empty($article->slug)) {
 			categorySelect.addEventListener('change', function () {
 				const categoryId = this.value;
 				if (!categoryId) {
-					gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen --</option>';
+					gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen!</option>';
 					return;
 				}
 				fetch(BASE_URL + 'admin/article/getGalleriesByCategory', {
@@ -476,10 +544,10 @@ if (isset($article) && !empty($article->slug)) {
 				})
 					.then(response => response.json())
 					.then(data => {
-						gallerySelect.innerHTML = data.success ? data.options : '<option value="">-- Keine Galerien verfügbar --</option>';
+						gallerySelect.innerHTML = data.success ? data.options : '<option value="">-- Keine Galerien verfügbar!</option>';
 					})
 					.catch(error => {
-						gallerySelect.innerHTML = '<option value="">-- Fehler beim Laden --</option>';
+						gallerySelect.innerHTML = '<option value="">-- Fehler beim Laden!</option>';
 					});
 			});
 		}
@@ -492,10 +560,10 @@ if (isset($article) && !empty($article->slug)) {
 			menuSelect.addEventListener("change", function () {
 				const selectedValue = this.value;
 				if (selectedValue) {
-					const parts = selectedValue.split('/').filter(part => part && !['de', 'en'].includes(part));
+					const parts = selectedValue.split('/').filter(val => val && !['de', 'en'].includes(val));
 					const newSlug = parts.join('/');
 					slugInput.value = newSlug;
-					slugDisplay.value = newSlug;
+					slugDisplay.value = '#' + newSlug;
 				} else {
 					slugInput.value = '';
 					slugDisplay.value = '';
@@ -506,13 +574,13 @@ if (isset($article) && !empty($article->slug)) {
 			if (initialSlug) {
 				const matchingOption = Array.from(menuSelect.options).find(option => {
 					const optionParts = option.value.split('/').filter(part => part && !['de', 'en'].includes(part));
-					const optionSlug = optionParts.join('/');
+					const optionSlug = optionParts.join(' ');
 					return optionSlug === initialSlug;
 				});
 				if (matchingOption) {
 					menuSelect.value = matchingOption.value;
 					slugInput.value = initialSlug;
-					slugDisplay.value = initialSlug;
+					slugDisplay.value = '#' + initialSlug;
 				}
 			}
 		}
@@ -534,27 +602,27 @@ if (isset($article) && !empty($article->slug)) {
 			});
 
 			const formData = new FormData(this);
-			const formDataObject = {};
+			const formObject = {};
 			formData.forEach((value, key) => {
-				if (!formDataObject[key]) {
-					formDataObject[key] = value;
+				if (!formObject[key]) {
+					formObject[key] = value;
 				} else {
-					if (!Array.isArray(formDataObject[key])) {
-						formDataObject[key] = [formDataObject[key]];
+					if (!Array.isArray(formObject[key])) {
+						formObject[key] = [formObject[key]];
 					}
-					formDataObject[key].push(value);
+					formObject[key].push(value);
 				}
 			});
 		});
-	});
 
-	document.addEventListener('DOMContentLoaded', function () {
-		const modalEl = document.getElementById('ftpModal'),
-			modal = new bootstrap.Modal(modalEl),
-			tableBody = document.getElementById('ftp-table-body'),
-			currentFolder = document.getElementById('current-folder'),
-			backBtn = document.getElementById('ftp-back-btn');
-		let lastTarget = '', lastPreview = '', currentPath = '';
+		const modalEl = document.getElementById('ftpModal');
+		const modal = new bootstrap.Modal(modalEl);
+		const tableBody = document.getElementById('ftp-table-body');
+		const currentFolder = document.getElementById('current-folder');
+		const backBtn = document.getElementById('ftp-back-btn');
+		let lastTarget = '';
+		let lastPreview = '';
+		let currentPath = '';
 
 		function loadFolder(path = '') {
 			currentPath = path;
@@ -565,7 +633,7 @@ if (isset($article) && !empty($article->slug)) {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({ folder: path })
 			})
-				.then(r => r.json())
+				.then(response => response.json())
 				.then(data => {
 					if (data.error) {
 						tableBody.innerHTML = `<tr><td colspan="5">${data.error}</td></tr>`;
@@ -576,7 +644,7 @@ if (isset($article) && !empty($article->slug)) {
 						let icon = item.type === 'dir'
 							? '<i class="bi bi-folder-fill text-warning"></i>'
 							: /\.(jpe?g|png|gif|webp)$/i.test(item.name)
-								? `<img src="${item.url}" style="width:60px;height:60px;object-fit:cover">`
+								? `<img src="${item.url}" style="width:60px;height:60px;object-fit:cover;">`
 								: '<i class="bi bi-file-earmark-fill text-primary"></i>';
 						const size = item.size > 0 ? (item.size / 1024).toFixed(1) + ' KB' : '-';
 						const action = item.type === 'dir'
@@ -585,18 +653,21 @@ if (isset($article) && !empty($article->slug)) {
 								? `<a href="#" class="ftp-image-choose" data-path="${item.url}">Auswählen</a>`
 								: '-';
 						html += `
-                            <tr>
-                                <td class="text-center">${icon}</td>
-                                <td>${item.name}</td>
-                                <td>${item.path}</td>
-                                <td>${size}</td>
-                                <td>${action}</td>
-                            </tr>
-                        `;
+                    <tr>
+                        <td class="text-center">${icon}</td>
+                        <td>${item.name}</td>
+                        <td>${item.path}</td>
+                        <td>${size}</td>
+                        <td>${action}</td>
+                    </tr>
+                `;
 					});
-					tableBody.innerHTML = html || '<tr><td colspan="5">Ordner ist leer.</td></tr>';
+					tableBody.innerHTML = html || '<tr><td colspan="5">Ordner ist leer!</td></tr>';
 					tableBody.querySelectorAll('.ftp-folder').forEach(a => {
-						a.onclick = e => { e.preventDefault(); loadFolder(a.dataset.path); };
+						a.onclick = e => {
+							e.preventDefault();
+							loadFolder(a.dataset.path);
+						};
 					});
 					tableBody.querySelectorAll('.ftp-image-choose').forEach(a => {
 						a.onclick = e => {

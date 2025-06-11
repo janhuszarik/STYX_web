@@ -382,4 +382,57 @@ class Article extends CI_Controller
 			->set_content_type('application/json')
 			->set_output(json_encode($result));
 	}
+	public function upload_image()
+	{
+		$this->load->helper('app_helper');
+		$response = ['success' => false, 'error' => ''];
+
+		$dir = './uploads/articles/summernote/';
+		if (!file_exists($dir)) {
+			if (!mkdir($dir, 0777, true)) {
+				$response['error'] = 'Fehler beim Erstellen des Ordners.';
+				$this->output->set_content_type('application/json')->set_output(json_encode($response));
+				return;
+			}
+		}
+
+		if (!empty($_FILES['image']['name'])) {
+			$upload_path = uploadImg('image', 'uploads/articles/summernote');
+			if ($upload_path && file_exists($upload_path)) {
+				$response['success'] = true;
+				$response['image_url'] = $upload_path;
+			} else {
+				$response['error'] = 'Fehler beim Hochladen des Bildes: ' . ($_FILES['image']['error'] ?? 'Unbekannter Fehler');
+			}
+		} else {
+			$response['error'] = 'Kein Bild wurde hochgeladen.';
+		}
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
+
+	public function delete_image()
+	{
+		$response = ['success' => false, 'error' => ''];
+		$image_url = $this->input->post('image_url');
+
+		if ($image_url) {
+			$base_url = rtrim(BASE_URL, '/');
+			$file_path = FCPATH . str_replace($base_url . '/', '', $image_url);
+
+			if (file_exists($file_path) && unlink($file_path)) {
+				$response['success'] = true;
+			} else {
+				$response['error'] = 'Fehler beim Löschen des Bildes.';
+			}
+		} else {
+			$response['error'] = 'Kein Bildpfad angegeben.';
+		}
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
 }
