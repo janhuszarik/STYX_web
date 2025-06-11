@@ -31,7 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-define ( 'COMPANY','STYX Naturcosmetic' );
+	define ( 'COMPANY','STYX Naturcosmetic' );
     define ( 'ADRESS','Am Kräutergarten 6,' );
     define ( 'ZIP','3200' );
     define ( 'CITY','Ober-Grafendorf' );
@@ -40,6 +40,8 @@ define ( 'COMPANY','STYX Naturcosmetic' );
     define ( 'LOGO','img/logo/STYX_logo_black.svg' );
     define ( 'LOGO1','img/logo/STYX_logo_green.svg' );
     define ( 'LOGO2','img/logo/STYX_logo_white.svg' );
+    define ( 'LOGOBLACKPNG','img/logo/STYX_logo_black.png' );
+    define ( 'LOGOGREENPNG','img/logo/STYX_logo_green.png' );
 
 // Doména a info
     define ( 'TELEFON','+432747325039' );

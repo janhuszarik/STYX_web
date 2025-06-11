@@ -9,7 +9,7 @@
 <table width="100%" style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; overflow: hidden;">
 	<tr style="background-color: #2b2b2b;">
 		<td style="padding: 20px; text-align: center;">
-			<img src="<?= base_url(LOGO1) ?>" alt="STYX Logo" width="120">
+			<img src="<?= BASE_URL.LOGOBLACKPNG ?>" alt="STYX Logo" width="120">
 		</td>
 	</tr>
 	<tr>
