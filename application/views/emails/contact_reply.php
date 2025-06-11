@@ -33,10 +33,10 @@
 	</tr>
 	<tr style="background-color: #f0f0f0;">
 		<td style="padding: 15px; text-align: center;">
-			<a href="https://www.facebook.com/STYX.Naturcosmetic/" style="margin: 0 10px;"><img src="<?= base_url('img/icons/facebook.png') ?>" width="24" alt="Facebook"></a>
-			<a href="https://www.instagram.com/styx_naturcosmetic/" style="margin: 0 10px;"><img src="<?= base_url('img/icons/instagram.png') ?>" width="24" alt="Instagram"></a>
-			<a href="https://www.youtube.com/@STYXNaturcosmetic" style="margin: 0 10px;"><img src="<?= base_url('img/icons/youtube.png') ?>" width="24" alt="YouTube"></a>
-			<a href="mailto:office@styx.at" style="margin: 0 10px;"><img src="<?= base_url('img/icons/email.png') ?>" width="24" alt="E-Mail"></a>
+			<a href="https://www.facebook.com/STYX.Naturcosmetic/" style="margin: 0 10px;"><img src="<?= base_url('img/icon/facebook.png') ?>" width="24" alt="Facebook"></a>
+			<a href="https://www.instagram.com/styx_naturcosmetic/" style="margin: 0 10px;"><img src="<?= base_url('img/icon/instagram.png') ?>" width="24" alt="Instagram"></a>
+			<a href="https://www.youtube.com/@STYXNaturcosmetic" style="margin: 0 10px;"><img src="<?= base_url('img/icon/youtube.png') ?>" width="24" alt="YouTube"></a>
+			<a href="mailto:office@styx.at" style="margin: 0 10px;"><img src="<?= base_url('img/icon/email.png') ?>" width="24" alt="E-Mail"></a>
 		</td>
 	</tr>
 </table>
