@@ -7,16 +7,26 @@
 <body style="font-family: Arial, sans-serif; background-color:#f5f5f5; padding: 20px;">
 
 <table width="100%" style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; overflow: hidden;">
-	<tr style="background-color: #2b2b2b;">
-		<td style="padding: 20px; text-align: center;">
-			<img src="<?= BASE_URL.LOGOBLACKPNG ?>" alt="STYX Logo" width="120">
+
+	<tr>
+		<td style="padding: 20px; text-align: center;
+			background-image: url('<?= BASE_URL ?>img/icon/gravientBackground.png');
+			background-size: cover;
+			background-repeat: repeat;
+			background-position: center;">
+			<img src="<?= BASE_URL . LOGOBLACKPNG ?>" alt="STYX Logo" width="120" style="background: rgba(255,255,255,0.6); padding: 6px; border-radius: 6px;">
 		</td>
 	</tr>
+
+	<!-- OBSAH EMAILU -->
 	<tr>
 		<td style="padding: 30px;">
 			<p style="font-size: 18px;">Sehr geehrte/r <?= htmlspecialchars($name) ?>,</p>
-			<p>vielen Dank für Ihre Nachricht an STYX Naturcosmetic.<br>Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
-			<hr>
+			<p>vielen Dank für Ihre Nachricht an <b>STYX Naturcosmetic</b>.<br>
+				Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
+
+			<hr style="margin: 20px 0;">
+
 			<p style="font-size: 14px; color: #555;">
 				Mit freundlichen Grüßen<br>
 				<b>STYX Naturcosmetic GmbH</b><br>
@@ -31,16 +41,25 @@
 			</p>
 		</td>
 	</tr>
+
+	<!-- PÄTIČKA: ikony sociálnych sietí -->
 	<tr style="background-color: #f0f0f0;">
 		<td style="padding: 15px; text-align: center;">
-			<a href="https://www.facebook.com/STYX.Naturcosmetic/" style="margin: 0 10px;"><img src="<?= base_url('img/icon/facebook.png') ?>" width="24" alt="Facebook"></a>
-			<a href="https://www.instagram.com/styx_naturcosmetic/" style="margin: 0 10px;"><img src="<?= base_url('img/icon/instagram.png') ?>" width="24" alt="Instagram"></a>
-			<a href="https://www.youtube.com/@STYXNaturcosmetic" style="margin: 0 10px;"><img src="<?= base_url('img/icon/youtube.png') ?>" width="24" alt="YouTube"></a>
-			<a href="mailto:office@styx.at" style="margin: 0 10px;"><img src="<?= base_url('img/icon/email.png') ?>" width="24" alt="E-Mail"></a>
+			<a href="https://www.facebook.com/STYX.Naturcosmetic/" style="margin: 0 10px;">
+				<img src="<?= base_url('img/icon/facebook.png') ?>" width="24" height="24" alt="Facebook">
+			</a>
+			<a href="https://www.instagram.com/styx_naturcosmetic/" style="margin: 0 10px;">
+				<img src="<?= base_url('img/icon/instagram.png') ?>" width="24" height="24" alt="Instagram">
+			</a>
+			<a href="https://www.youtube.com/@STYXNaturcosmetic" style="margin: 0 10px;">
+				<img src="<?= base_url('img/icon/youtube.png') ?>" width="24" height="24" alt="YouTube">
+			</a>
+			<a href="mailto:office@styx.at" style="margin: 0 10px;">
+				<img src="<?= base_url('img/icon/email.png') ?>" width="24" height="24" alt="E-Mail">
+			</a>
 		</td>
 	</tr>
 </table>
 
 </body>
 </html>
-
