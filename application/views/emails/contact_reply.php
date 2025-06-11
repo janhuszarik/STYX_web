@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Kontaktformular Antwort</title>
 </head>
-<body style="font-family: Arial, sans-serif; background-color:#f5f5f5; padding: 20px;">
+<body style="font-family: Poppins, Arial, sans-serif; background-color:#f5f5f5; padding: 20px;">
 
 <table width="100%" style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; overflow: hidden;">
 
@@ -15,7 +15,7 @@
 			background-size: cover;
 			background-repeat: repeat;
 			background-position: center;">
-			<img src="<?= BASE_URL . LOGOBLACKPNG ?>" alt="STYX Logo" width="120" style="background: rgba(255,255,255,0.6); padding: 6px; border-radius: 6px;">
+			<img src="<?= BASE_URL . LOGOGREENPNG ?>" alt="STYX Logo" width="120" style="background: rgba(255,255,255,0.6); padding: 6px; border-radius: 6px;">
 		</td>
 	</tr>
 
@@ -28,7 +28,6 @@
 
 			<hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc; width: 50%;">
 
-			<!-- Adresa + obrázok doprava -->
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<tr>
 					<td style="font-size: 14px; color: #555; vertical-align: top;">
@@ -41,7 +40,7 @@
 					</td>
 					<td style="text-align: right;">
 						<a href="https://styx.shop.com" target="_blank">
-							<img src="<?= BASE_URL ?>img/icons/cart.png" alt="Zum Shop" width="48" height="48" style="margin-left: 10px;">
+							<img src="<?= BASE_URL ?>img/icon/shop.png" alt="Zum Shop" width="48" height="48" style="margin-left: 10px;">
 						</a>
 					</td>
 				</tr>
@@ -51,8 +50,7 @@
 				<a href="<?= base_url('gdpr') ?>">Datenschutzerklärung</a>
 			</p>
 
-			<!-- Info o e-maile -->
-			<p style="font-size: 12px; color: #999; text-align: center; margin: 30px 0 10px;">
+			<p style="font-size: 11px; color: #999; text-align: center; margin: 30px 0 10px;">
 				Dies ist eine automatisch generierte E-Mail, bitte antworten Sie nicht darauf.<br>
 				Falls Sie Fragen oder Probleme mit Ihrer Bestellung oder unseren Dienstleistungen haben,<br>
 				zögern Sie nicht, uns über die oben genannten Telefonnummern zu kontaktieren.
