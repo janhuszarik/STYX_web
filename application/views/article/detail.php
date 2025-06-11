@@ -170,7 +170,7 @@ for ($i = 1; $i <= 3; $i++) {
 			</div>
 		</div>
 	</section>
-
+<?php endif; ?>
 	<div id="lightbox-modal" class="lightbox-modal" style="display:none;">
 		<span class="lightbox-close" onclick="closeLightbox()">&times;</span>
 		<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
@@ -178,29 +178,46 @@ for ($i = 1; $i <= 3; $i++) {
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
-			const thumbs = document.querySelectorAll('.gallery-thumb');
+			const imgs = document.querySelectorAll('img');
 			const lightbox = document.getElementById('lightbox-modal');
 			const lightboxImg = document.getElementById('lightbox-img');
-			thumbs.forEach(thumb => {
-				thumb.addEventListener('click', function () {
-					lightboxImg.src = this.getAttribute('data-full');
+
+			imgs.forEach(img => {
+				img.style.cursor = 'zoom-in';
+				img.addEventListener('click', function () {
+					lightboxImg.src = this.src;
 					lightbox.style.display = 'flex';
 				});
 			});
+
+			// ESC zatvorenie
+			document.addEventListener('keydown', function(e) {
+				if (e.key === "Escape") closeLightbox();
+			});
+
+			// klik mimo obrázka zatvorí lightbox
+			lightbox.addEventListener('click', function (e) {
+				if (e.target === lightbox) closeLightbox();
+			});
 		});
+
 		function closeLightbox() {
 			document.getElementById('lightbox-modal').style.display = 'none';
 		}
 	</script>
-<?php endif; ?>
+
+
+
+
 
 
 <style>
-	
+
 	/* Lightbox */
 	.lightbox-modal {
 		position: fixed;
-		top: 0; left: 0;
+		top: 0;
+		left: 0;
 		width: 100vw;
 		height: 100vh;
 		background: rgba(0, 0, 0, 0.85);
@@ -209,19 +226,24 @@ for ($i = 1; $i <= 3; $i++) {
 		justify-content: center;
 		z-index: 9999;
 	}
+
 	.lightbox-content {
 		max-width: 90%;
 		max-height: 80vh;
 		object-fit: contain;
+		box-shadow: 0 0 30px rgba(255,255,255,0.2);
 	}
+
 	.lightbox-close {
 		position: absolute;
 		top: 20px;
 		right: 30px;
-		font-size: 2rem;
+		font-size: 2.5rem;
 		color: white;
 		cursor: pointer;
+		z-index: 10000;
 	}
+
 	.section-img {
 		max-width: 80%;
 		height: auto;
@@ -257,7 +279,6 @@ for ($i = 1; $i <= 3; $i++) {
 			object-fit: cover;
 		}
 	}
-
-
 </style>
+
 
