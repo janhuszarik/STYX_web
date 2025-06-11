@@ -382,4 +382,23 @@ class Article extends CI_Controller
 			->set_content_type('application/json')
 			->set_output(json_encode($result));
 	}
+	public function upload_summernote_image()
+	{
+		if (!empty($_FILES['file']['name'])) {
+			$uploadPath = uploadImg('file', 'uploads/articles/summernote');
+
+			if ($uploadPath && file_exists($uploadPath)) {
+				echo base_url($uploadPath);
+			} else {
+				http_response_code(400);
+				echo 'Chyba pri ukladaní obrázka.';
+			}
+		} else {
+			http_response_code(400);
+			echo 'Žiadny súbor na upload.';
+		}
+	}
+
+
+
 }

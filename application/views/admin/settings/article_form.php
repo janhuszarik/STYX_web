@@ -433,8 +433,36 @@ if (isset($article) && !empty($article->slug)) {
 
 	document.addEventListener('DOMContentLoaded', () => {
 		function initSummer() {
-			$('.summernote').summernote({ height: 200 });
+			$('.summernote').summernote({
+				height: 200,
+				callbacks: {
+					onImageUpload: function(files) {
+						sendSummernoteImage(files[0], this);
+					}
+				}
+			});
 		}
+
+		function sendSummernoteImage(file, editor) {
+			let data = new FormData();
+			data.append("image", file); // musí byť "image", lebo backend očakáva $_FILES['image']
+
+			$.ajax({
+				url: BASE_URL + 'admin/article/upload_image', // alebo upload_summernote_image, ak to chceš oddeliť
+				type: "POST",
+				data: data,
+				contentType: false,
+				processData: false,
+				success: function(url) {
+					$(editor).summernote('insertImage', url);
+				},
+				error: function(err) {
+					alert('Chyba pri nahrávaní obrázka.');
+					console.error(err);
+				}
+			});
+		}
+
 
 		document.getElementById('add-section').onclick = () => {
 			addSection();
