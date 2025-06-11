@@ -8,10 +8,9 @@
 
 <table width="100%" style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; overflow: hidden;">
 
-	<!-- HLAVIČKA -->
 	<tr>
 		<td style="padding: 20px; text-align: center;
-			background-image: url('<?= BASE_URL ?>img/bg/email_bg.png');
+			background-image: url('<?= BASE_URL ?>img/icon/gravientBackground.png');
 			background-size: cover;
 			background-repeat: repeat;
 			background-position: center;">
@@ -19,7 +18,6 @@
 		</td>
 	</tr>
 
-	<!-- OBSAH EMAILU -->
 	<tr>
 		<td style="padding: 30px;">
 			<p style="font-size: 18px;">Sehr geehrte/r <?= htmlspecialchars($name) ?>,</p>
@@ -30,7 +28,7 @@
 
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<tr>
-					<td style="font-size: 14px; color: #555; vertical-align: top;">
+					<td style="font-size: 12px; color: #555; vertical-align: top;">
 						Mit freundlichen Grüßen<br>
 						<b>STYX Naturcosmetic GmbH</b><br>
 						Am Kräutergarten 6, 3200 Ober-Grafendorf<br>
@@ -63,12 +61,10 @@
 	<tr style="background-color: #f0f0f0;">
 		<td style="padding: 15px; text-align: center;">
 
-			<!-- Nadpis -->
 			<p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">
 				Versuchen Sie auch unsere App für Ihr mobiles Gerät:
 			</p>
 
-			<!-- Obrázky aplikácií -->
 			<a href="https://play.google.com/store/apps/details?id=at.helloagain.styx" style="margin: 0 5px; text-decoration: none;">
 				<img src="<?= base_url('img/icon/android_app.png') ?>"  alt="Google Play">
 			</a>
@@ -76,7 +72,6 @@
 				<img src="<?= base_url('img/icon/apple_app.png') ?>"  alt="App Store">
 			</a>
 
-			<!-- Ikony sociálnych sietí -->
 			<div style="margin-top: 20px;">
 				<a href="https://www.facebook.com/STYX.Naturcosmetic/" style="margin: 0 10px; text-decoration: none;">
 					<img src="<?= base_url('img/icon/facebook.png') ?>" width="24" height="24" alt="Facebook">
@@ -95,10 +90,9 @@
 	</tr>
 
 
-	<!-- FOOTER -->
 	<tr style="background-color: #e8e8e8;">
 		<td style="padding: 10px; text-align: center; font-size: 11px; color: #777;">
-			&copy; <?= date('d.m.Y') ?> STYX Naturcosmetic. Alle Rechte vorbehalten. | Powered by STYX Naturcosmetic GmbH.
+			&copy; <?= date('Y') ?> STYX Naturcosmetic. Alle Rechte vorbehalten. | Powered by STYX Naturcosmetic GmbH.
 		</td>
 	</tr>
 
