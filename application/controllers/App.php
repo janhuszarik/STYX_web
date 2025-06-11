@@ -209,6 +209,11 @@ class App extends CI_Controller
 
 		redirect($_SERVER['HTTP_REFERER']);
 	}
+	public function preview_email()
+	{
+		$data['name'] = 'Max Mustermann'; // testovacie dáta
+		$this->load->view('emails/contact_reply', $data);
+	}
 
 
 }

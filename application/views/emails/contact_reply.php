@@ -40,7 +40,7 @@
 					</td>
 					<td style="text-align: right;">
 						<a href="https://styx.shop.com" target="_blank">
-							<img src="<?= BASE_URL ?>img/icon/shop.png" alt="Zum Shop" width="48" height="48" style="margin-left: 10px;">
+							<img src="<?= BASE_URL ?>img/icon/shop.png" alt="Zum Shop" width="100" height="100" style="margin-right: 50px;">
 						</a>
 					</td>
 				</tr>
@@ -58,23 +58,42 @@
 		</td>
 	</tr>
 
-	<!-- SOCIÁLNE SIETE -->
+
+
 	<tr style="background-color: #f0f0f0;">
 		<td style="padding: 15px; text-align: center;">
-			<a href="https://www.facebook.com/STYX.Naturcosmetic/" style="margin: 0 10px;">
-				<img src="<?= base_url('img/icon/facebook.png') ?>" width="24" height="24" alt="Facebook">
+
+			<!-- Nadpis -->
+			<p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">
+				Versuchen Sie auch unsere App für Ihr mobiles Gerät:
+			</p>
+
+			<!-- Obrázky aplikácií -->
+			<a href="https://play.google.com/store/apps/details?id=at.helloagain.styx" style="margin: 0 5px; text-decoration: none;">
+				<img src="<?= base_url('img/icon/android_app.png') ?>"  alt="Google Play">
 			</a>
-			<a href="https://www.instagram.com/styx_naturcosmetic/" style="margin: 0 10px;">
-				<img src="<?= base_url('img/icon/instagram.png') ?>" width="24" height="24" alt="Instagram">
+			<a href="https://apps.apple.com/app/id6743492896" style="margin: 0 5px; text-decoration: none;">
+				<img src="<?= base_url('img/icon/apple_app.png') ?>"  alt="App Store">
 			</a>
-			<a href="https://www.youtube.com/@STYXNaturcosmetic" style="margin: 0 10px;">
-				<img src="<?= base_url('img/icon/youtube.png') ?>" width="24" height="24" alt="YouTube">
-			</a>
-			<a href="mailto:office@styx.at" style="margin: 0 10px;">
-				<img src="<?= base_url('img/icon/email.png') ?>" width="24" height="24" alt="E-Mail">
-			</a>
+
+			<!-- Ikony sociálnych sietí -->
+			<div style="margin-top: 20px;">
+				<a href="https://www.facebook.com/STYX.Naturcosmetic/" style="margin: 0 10px; text-decoration: none;">
+					<img src="<?= base_url('img/icon/facebook.png') ?>" width="24" height="24" alt="Facebook">
+				</a>
+				<a href="https://www.instagram.com/styx_naturcosmetic/" style="margin: 0 10px; text-decoration: none;">
+					<img src="<?= base_url('img/icon/instagram.png') ?>" width="24" height="24" alt="Instagram">
+				</a>
+				<a href="https://www.youtube.com/@STYXNaturcosmetic" style="margin: 0 10px; text-decoration: none;">
+					<img src="<?= base_url('img/icon/youtube.png') ?>" width="24" height="24" alt="YouTube">
+				</a>
+				<a href="mailto:office@styx.at" style="margin: 0 10px; text-decoration: none;">
+					<img src="<?= base_url('img/icon/email.png') ?>" width="24" height="24" alt="E-Mail">
+				</a>
+			</div>
 		</td>
 	</tr>
+
 
 	<!-- FOOTER -->
 	<tr style="background-color: #e8e8e8;">
