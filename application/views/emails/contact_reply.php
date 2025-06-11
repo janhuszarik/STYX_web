@@ -98,7 +98,7 @@
 	<!-- FOOTER -->
 	<tr style="background-color: #e8e8e8;">
 		<td style="padding: 10px; text-align: center; font-size: 11px; color: #777;">
-			&copy; <?= date('d.m.Y') ?> STYX Naturcosmetic. Alle Rechte vorbehalten. | Powered by Jan Huszarik
+			&copy; <?= date('d.m.Y') ?> STYX Naturcosmetic. Alle Rechte vorbehalten. | Powered by STYX Naturcosmetic GmbH.
 		</td>
 	</tr>
 
