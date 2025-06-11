@@ -148,5 +148,36 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+	public function send_contact()
+	{
+		$post = $this->input->post();
+
+		$recaptcha = $post['g-recaptcha-response'];
+		if (empty($recaptcha)) {
+			$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
+			redirect($_SERVER['HTTP_REFERER']);
+		}
+
+		$response = file_get_contents(
+			"https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha
+		);
+		$result = json_decode($response);
+
+		if (!$result->success) {
+			$this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
+			redirect($_SERVER['HTTP_REFERER']);
+		}
+
+		$this->load->model('App_model');
+		$sent = $this->App_model->sendContactMail($post);
+
+		if ($sent) {
+			$this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
+		} else {
+			$this->session->set_flashdata('error', 'Beim Senden der Nachricht ist ein Fehler aufgetreten.');
+		}
+
+		redirect($_SERVER['HTTP_REFERER']);
+	}
 
 }

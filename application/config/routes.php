@@ -144,6 +144,8 @@ $route['admin/galleryCategory']                      		= 'gallery/galleryCategor
 	$route['admin/image/update_order']                   		= 'gallery/updateImageOrder';
 	$route['admin/uploadImage'] 								= 'admin/uploadImage';
 
+	$route['kontakt/send'] 										= 'app/send_contact';
+
 	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
 	$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
 	$route['(:any)/(:any)/(:any)'] = 'app/routes';

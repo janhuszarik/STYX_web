@@ -119,36 +119,43 @@ class app_model extends CI_Model
 		return $this->db->get('bestProduct')->result();
 	}
 
-	public function getCommentKosmetic()
+
+
+	public function sendContactMail($data)
 	{
-		$this->db->select('*');
-		$this->db->where('section_id', 'Naturkosmetik');
-		$this->db->where('active', '1');
-		$this->db->where('lang', language());
-		return $this->db->get('comments')->result();
+		$this->load->library('email');
+
+		$config['protocol'] = 'smtp';
+		$config['smtp_host'] = SMTP;
+		$config['smtp_user'] = SMTP_NAME;
+		$config['smtp_pass'] = SMTP_PASS;
+		$config['smtp_port'] = SMTP_PORT;
+		$config['smtp_crypto'] = 'ssl';
+		$config['mailtype'] = 'html';
+		$config['charset'] = 'utf-8';
+		$config['newline'] = "\r\n";
+
+		$this->email->initialize($config);
+
+		$this->email->from(SMTP_NAME, 'Website Kontaktformular');
+		$this->email->to(MAIL_ADMIN);
+		$this->email->bcc(MAIL_MODERATOR);
+
+		$this->email->subject('Neue Kontaktanfrage');
+		$message = '
+		<b>Name:</b> ' . htmlspecialchars($data['name']) . '<br>
+		<b>Adresse:</b> ' . htmlspecialchars($data['adresse']) . '<br>
+		<b>Telefon:</b> ' . htmlspecialchars($data['telefon']) . '<br>
+		<b>E-Mail:</b> ' . htmlspecialchars($data['email']) . '<br>
+		<b>Ich bin ein:</b> ' . htmlspecialchars($data['typ']) . '<br><br>
+		<b>Nachricht:</b><br>' . nl2br(htmlspecialchars($data['nachricht'])) . '<br><br>
+		<b>Datum:</b> ' . htmlspecialchars($data['datum']) . '
+	';
+
+		$this->email->message($message);
+		return $this->email->send();
 	}
 
-	public function sumCommentKosmetic()
-	{
-		$this->db->where('section_id', '1');
-		$this->db->where('lang', language());
-		return $this->db->count_all_results('comments');
-	}
-
-	public function naturkosmetik()
-	{
-		$data = array(
-			'lang' => $this->input->post('lang'),
-			'name' => $this->input->post('name'),
-			'email' => $this->input->post('email'),
-			'comment' => $this->input->post('comment'),
-			'section_id' => $this->input->post('section_id'),
-			'consent' => $this->input->post('consent'),
-			'active' => $this->input->post('active'),
-		);
-
-		return $this->db->insert('comments', $data);
-	}
 
 
 

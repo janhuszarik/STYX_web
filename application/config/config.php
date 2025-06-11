@@ -26,11 +26,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     
     define ( 'LANG','de' );
 
-	define ( 'RECAPTCHA','' );
-	define ( 'SECRETKEY','' );
+	define ( 'RECAPTCHA','6Lff2VwrAAAAAKXlJxtBK1CUZzdJCAEmOsmL8vX2' );
+	define ( 'SECRETKEY','6Lff2VwrAAAAAL2AzVHwnX4V5XYrKVYUMbpCuV6l' );
 
 
-    define ( 'COMPANY','STYX Naturcosmetic' );
+
+define ( 'COMPANY','STYX Naturcosmetic' );
     define ( 'ADRESS','Am Kräutergarten 6,' );
     define ( 'ZIP','3200' );
     define ( 'CITY','Ober-Grafendorf' );
@@ -50,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 //SMTP nastavenia
     define ('SMTP','smtp.hostcreators.sk');
-    define ('SMTP_NAME','info@uctovnictvoaustria.eu');
+    define ('SMTP_NAME','info@styx.at');
     define ('SMTP_PASS','_4U!y4Ax5i_JK3s!');
     define ('SMTP_PORT','465');
     define ('MAIL_ADMIN','styx@styx.at');
