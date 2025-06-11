@@ -142,80 +142,15 @@ $route['admin/galleryCategory']                      		= 'gallery/galleryCategor
 	$route['admin/image/save']                           		= 'gallery/saveImage';
 	$route['admin/image/delete/(:num)']                  		= 'gallery/deleteImage/$1';
 	$route['admin/image/update_order']                   		= 'gallery/updateImageOrder';
-
-
-	$route['Unternehmen/AboutStyx']								= 'App/aboutStyx';
-	$route['Company/AboutStyx']									= 'App/aboutStyx';
-
-	$route['Naturkosmetik']										= 'App/naturkosmetik';
-	$route['Unternehmen/Naturkosmetik']							= 'App/naturkosmetik';
-	$route['Company/Natural-cosmetics']							= 'App/naturkosmetik';
-	$route['app/naturkosmetik']									= 'App/naturkosmetik';
-
-	$route['Aroma-Derm']										= 'App/aromaDerm';
-	$route['Unternehmen/Aroma-Derm']							= 'App/aromaDerm';
-	$route['Company/Aroma-Derm']								= 'App/aromaDerm';
-	$route['app/aromaDerm']										= 'App/aromaDerm';
-
-	$route['Schokoladen']										= 'App/schokoladen';
-	$route['Unternehmen/Schokoladen']							= 'App/schokoladen';
-	$route['Company/Chocolate-manufactory']						= 'App/schokoladen';
-	$route['app/schokoladen']									= 'App/schokoladen';
-	$route['Schokolade/figuren']								= 'App/figuren';
-
-	$route['Private-labeling']									= 'App/privateLabeling';
-	$route['Unternehmen/Private-Labeling']						= 'App/privateLabeling';
-	$route['Company/Private-Labeling']							= 'App/privateLabeling';
-	$route['app/Private-labeling']								= 'App/privateLabeling';
-
-	$route['Werbegeschenke']									= 'App/werbegeschenke';
-	$route['app/werbegeschenke']								= 'App/werbegeschenke';
-
-	$route['Workshops']											= 'App/workshops';
-	$route['app/workshops']										= 'App/workshops';
-
-	$route['Betriebsfuehrungen']								= 'App/wordOfStyx';
-	$route['app/wordOfStyx']									= 'App/wordOfStyx';
-
-	$route['Unternehmen/Philosophie']							= 'App/philosophie';
-	$route['Company/Philosophy']								= 'App/philosophie';
-	$route['app/philosophie']									= 'App/philosophie';
-
-	$route['Unternehmen/Zertifizierungen']						= 'App/zertifizierungen';
-	$route['Company/Certificates']								= 'App/zertifizierungen';
-
-	$route['Unternehmen/Styx-Worldwide']						= 'App/worldwide';
-	$route['Company/Styx-Worldwide']							= 'App/worldwide';
-
-	$route['Unternehmen/Beauty-Club-Austria']					= 'App/beautyClubAustria';
-	$route['Company/Beauty-Club-Austria']						= 'App/beautyClubAustria';
-
-	$route['Company/About-Styx']								= 'App/contact';
-	$route['admin/sync_article_categories'] 					= 'article/syncCategories';
-	$route['news_article/:num']									= 'App/news_article';
-	$route['news_article/:num'] 								= 'App/news_article/$1/$2';
 	$route['admin/uploadImage'] 								= 'admin/uploadImage';
 
+	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
+	$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
+	$route['(:any)/(:any)/(:any)'] = 'app/routes';
+	$route['(:any)/(:any)'] = 'app/routes';
 
 
 
-$route['set-cookie-consent'] 			= 'app/set_cookie_consent';
-$route['decline-cookie-consent'] 		= 'app/decline_cookie_consent';
-
-
-
-
-$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
-$route['(:any)/(:any)/(:any)'] = 'app/routes';
-$route['(:any)/(:any)'] = 'app/routes';
-
-
-
-//	$route['^en/(.+)$'] = "$1";
-//	$route['^de/(.+)$'] = "$1";
-//
-//	$route['^en$'] = $route['default_controller'];
-//	$route['^de$'] = $route['default_controller'];
 
 
 

@@ -140,25 +140,13 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
-	private function check_cookie_consent() {
-		if (!$this->input->cookie('cookie_consent', TRUE)) {
-			setcookie('cookie_consent', 'false', time() + 86400, "/");
-		}
+	public function kontakt()
+	{
+		$data['title'] = 'Kontakt & Anfahrt';
+		$data['description'] = 'So erreichen Sie uns...';
+		$data['page'] = 'app/kontakt';
+
+		$this->load->view('layout/normal', $data);
 	}
 
-	public function set_cookie_consent() {
-		setcookie('cookie_consent', 'true', time() + 86400, "/");
-		setcookie('performance_cookies', $this->input->post('performance_cookies') == 'true' ? 'true' : 'false', time() + 86400, "/");
-		setcookie('functional_cookies', $this->input->post('functional_cookies') == 'true' ? 'true' : 'false', time() + 86400, "/");
-		setcookie('targeting_cookies', $this->input->post('targeting_cookies') == 'true' ? 'true' : 'false', time() + 86400, "/");
-		echo json_encode(array("status" => "success"));
-	}
-
-	public function decline_cookie_consent() {
-		setcookie('cookie_consent', 'false', time() + 86400, "/");
-		setcookie('performance_cookies', 'false', time() + 86400, "/");
-		setcookie('functional_cookies', 'false', time() + 86400, "/");
-		setcookie('targeting_cookies', 'false', time() + 86400, "/");
-		echo json_encode(array("status" => "success"));
-	}
 }
