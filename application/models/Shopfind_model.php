@@ -1,35 +1,49 @@
 <?php
+// application/models/Shopfind_model.php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Shopfind_model extends CI_Model
 {
-	public function saveLocation($post = false)
+	public function saveLocation($data)
 	{
-		$data = [
-			'name' => $post['name'],
-			'contact_person' => $post['contact_person'] ?? '',
-			'address' => $post['address'],
-			'zip_code' => $post['zip_code'],
-			'city' => $post['city'],
-			'state' => $post['state'] ?? '',
-			'country' => $post['country'],
-			'email' => $post['email'] ?? '',
-			'phone' => $post['phone'] ?? '',
-			'website' => $post['website'] ?? '',
-			'opening_hours' => $post['opening_hours'] ?? '',
-			'latitude' => $post['latitude'],
-			'longitude' => $post['longitude'],
-			'logo' => $post['logo'] ?? '',
-			'active' => isset($post['active']) ? 1 : 0,
+		$location_data = [
+			'name' => $data['name'],
+			'contact_person' => $data['contact_person'] ?? '',
+			'address' => $data['address'],
+			'zip_code' => $data['zip_code'],
+			'city' => $data['city'],
+			'state' => $data['state'] ?? '',
+			'country' => $data['country'],
+			'email' => $data['email'] ?? '',
+			'phone' => $data['phone'] ?? '',
+			'website' => $data['website'] ?? '',
+			'opening_hours' => $data['opening_hours'] ?? '',
+			'latitude' => $data['latitude'] ?: null,
+			'longitude' => $data['longitude'] ?: null,
+			'active' => $data['active'] ?? 0,
 			'updated_at' => date('Y-m-d H:i:s')
 		];
 
+		// Spracovanie loga
+		if (!empty($data['logo'])) {
+			$location_data['logo'] = $data['logo'];
+		} elseif (!empty($data['id'])) {
+			// Zachovať existujúce logo, ak nebolo nahraté nové
+			$existing = $this->getLocation($data['id']);
+			if ($existing && !empty($existing->logo)) {
+				$location_data['logo'] = $existing->logo;
+			} else {
+				$location_data['logo'] = null;
+			}
+		}
 
-		if (!empty($post['id']) && is_numeric($post['id'])) {
-			$this->db->where('id', $post['id']);
-			return $this->db->update('locations', $data);
+		if (!empty($data['id']) && is_numeric($data['id'])) {
+			$this->db->where('id', $data['id']);
+			return $this->db->update('locations', $location_data);
 		} else {
-			return $this->db->insert('locations', $data);
+			$location_data['created_at'] = date('Y-m-d H:i:s');
+			return $this->db->insert('locations', $location_data);
 		}
 	}
 
@@ -46,7 +60,15 @@ class Shopfind_model extends CI_Model
 
 	public function deleteLocation($id)
 	{
+		// Najskôr získame cestu k logu, aby sme ho mohli vymazať
+		$location = $this->getLocation($id);
+		if ($location && !empty($location->logo)) {
+			$logo_path = './Uploads/' . $location->logo;
+			if (file_exists($logo_path)) {
+				unlink($logo_path);
+			}
+		}
+
 		return $this->db->delete('locations', ['id' => $id]);
 	}
 }
-
