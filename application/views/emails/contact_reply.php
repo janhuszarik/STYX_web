@@ -14,21 +14,21 @@
 			background-size: cover;
 			background-repeat: repeat;
 			background-position: center;">
-			<img src="<?= BASE_URL . LOGOGREENPNG ?>" alt="STYX Logo" width="120" style="background: rgba(255,255,255,0.6); padding: 6px; border-radius: 6px;">
+			<img src="<?= BASE_URL . LOGOGREENPNG ?>" alt="STYX Logo" width="180" style="background: rgba(255,255,255,0.6); padding: 6px; border-radius: 6px;">
 		</td>
 	</tr>
 
 	<tr>
-		<td style="padding: 30px;">
-			<p style="font-size: 18px;">Sehr geehrte/r <?= htmlspecialchars($name) ?>,</p>
+		<td style="padding: 20px 30px 3px 30px;">
+			<p style="font-size: 20px;">Sehr geehrte/r <?= htmlspecialchars($name) ?>,</p>
 			<p>vielen Dank für Ihre Nachricht an <b>STYX Naturcosmetic</b>.<br>
 				Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
 
-			<hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc; width: 50%;">
+			<hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc; width: 100%;">
 
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<tr>
-					<td style="font-size: 12px; color: #555; vertical-align: top;">
+					<td style="font-size: 11px; color: #000000; vertical-align: top;">
 						Mit freundlichen Grüßen<br>
 						<b>STYX Naturcosmetic GmbH</b><br>
 						Am Kräutergarten 6, 3200 Ober-Grafendorf<br>
@@ -43,12 +43,11 @@
 					</td>
 				</tr>
 			</table>
-
-			<p style="margin-top: 20px; font-size: 12px;">
+			<p style="margin-top: 20px; font-size: 12px; font-weight: lighter">
 				<a href="<?= base_url('gdpr') ?>">Datenschutzerklärung</a>
 			</p>
 
-			<p style="font-size: 11px; color: #999; text-align: center; margin: 30px 0 10px;">
+			<p style="font-size: 10px; color: #818080; text-align: center; margin: 30px 0 0 0;">
 				Dies ist eine automatisch generierte E-Mail, bitte antworten Sie nicht darauf.<br>
 				Falls Sie Fragen oder Probleme mit Ihrer Bestellung oder unseren Dienstleistungen haben,<br>
 				zögern Sie nicht, uns über die oben genannten Telefonnummern zu kontaktieren.
