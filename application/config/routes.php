@@ -143,7 +143,11 @@ $route['admin/galleryCategory']                      		= 'gallery/galleryCategor
 	$route['admin/image/delete/(:num)']                  		= 'gallery/deleteImage/$1';
 	$route['admin/image/update_order']                   		= 'gallery/updateImageOrder';
 	$route['admin/uploadImage'] 								= 'admin/uploadImage';
-$route['preview'] = 'app/preview_email';
+	$route['admin/shopfind'] 									= 'shopfind/shopfindSave';
+	$route['admin/shopfind/(:any)'] 							= 'shopfind/shopfindSave/$1';
+	$route['admin/shopfind/(:any)/(:num)'] 						= 'shopfind/shopfindSave/$1/$2';
+
+//$route['preview'] = 'app/preview_email';
 
 	$route['kontakt/send'] 										= 'app/send_contact';
 

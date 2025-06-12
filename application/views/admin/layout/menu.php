@@ -84,6 +84,12 @@
 									<span>Aktuell</span>
 								</a>
 							</li>
+							<li class="<?= ($current_url == BASE_URL.'admin/shopfind') ? 'active' : '' ?>">
+								<a class="nav-link" href="<?=BASE_URL.'admin/shopfind'?>">
+									<i class="bx bx-shopping-bag" aria-hidden="true"></i>
+									<span>Shop finder</span>
+								</a>
+							</li>
 							<li class="<?= ($current_url == BASE_URL.'admin/article_categories') ? 'active' : '' ?>">
 								<a class="nav-link" href="<?=BASE_URL.'admin/article_categories'?>">
 									<i class="bx bx-news" aria-hidden="true"></i>
