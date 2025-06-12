@@ -3,7 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Kontaktformular Antwort</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
+<style>
+	@media only screen and (max-width: 600px) {
+		table {
+			width: 100% !important;
+		}
+		td {
+			display: block !important;
+			width: 95% !important;
+			text-align: left !important;
+		}
+		a.button-shop {
+			display: block !important;
+			width: 95% !important;
+			text-align: center !important;
+		}
+	}
+</style>
+
 <body style="font-family: Poppins, Arial, sans-serif; background-color:#f5f5f5; padding: 20px;">
 
 <table width="100%" style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; overflow: hidden;">
@@ -26,9 +46,10 @@
 
 			<hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc; width: 100%;">
 
-			<table width="100%" cellspacing="0" cellpadding="0">
+			<!-- Pôvodná tabuľka s adresou a košíkom -->
+			<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
 				<tr>
-					<td style="font-size: 11px; color: #000000; vertical-align: top;">
+					<td style="font-size: 11px; color: #000000; vertical-align: top; width: 100%;">
 						Mit freundlichen Grüßen<br>
 						<b>STYX Naturcosmetic GmbH</b><br>
 						Am Kräutergarten 6, 3200 Ober-Grafendorf<br>
@@ -36,9 +57,20 @@
 						E-Mail: <a href="mailto:office@styx.at">office@styx.at</a><br>
 						Web: <a href="https://styx.at">www.styx.at</a>
 					</td>
-					<td style="text-align: right;">
-						<a href="https://styx.shop.com" target="_blank">
-							<img src="<?= BASE_URL ?>img/icon/shop.png" alt="Zum Shop" width="100" height="100" style="margin-right: 50px;">
+				</tr>
+				<tr>
+					<td style="padding-top: 20px; text-align: center;">
+						<a href="https://styx.shop.com" class="button-shop" target="_blank" style="
+				display: inline-block;
+				background-color: #5cb85c;
+				color: #fff;
+				text-decoration: none;
+				padding: 12px 20px;
+				border-radius: 30px;
+				font-weight: bold;
+				font-size: 14px;
+				font-family: Poppins, Arial, sans-serif;">
+							JETZT SHOPPEN!
 						</a>
 					</td>
 				</tr>
