@@ -144,17 +144,8 @@ class app_model extends CI_Model
 		$this->email->reply_to($data['email'], $data['name']);
 		$this->email->subject('Neue Kontaktanfrage über das Formular');
 
-		$adminMessage = '
-		<h3 style="margin-bottom:10px;">Neue Nachricht von der Website</h3>
-		<table style="width:100%;border-collapse:collapse;">
-			<tr><td style="font-weight:bold;width:150px;">Name:</td><td>' . htmlspecialchars($data['name']) . '</td></tr>
-			<tr><td style="font-weight:bold;">Adresse:</td><td>' . htmlspecialchars($data['adresse']) . '</td></tr>
-			<tr><td style="font-weight:bold;">Telefon:</td><td>' . htmlspecialchars($data['telefon']) . '</td></tr>
-			<tr><td style="font-weight:bold;">E-Mail:</td><td>' . htmlspecialchars($data['email']) . '</td></tr>
-			<tr><td style="font-weight:bold;">Typ:</td><td>' . htmlspecialchars($data['typ']) . '</td></tr>
-			<tr><td style="font-weight:bold;">Nachricht:</td><td>' . nl2br(htmlspecialchars($data['nachricht'])) . '</td></tr>
-		</table>
-	';
+		$adminMessage = $this->load->view('emails/contact_admin', $data, TRUE);
+
 
 		$this->email->message($adminMessage);
 		$adminSent = $this->email->send();

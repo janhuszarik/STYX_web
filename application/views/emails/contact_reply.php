@@ -60,7 +60,7 @@
 				</tr>
 				<tr>
 					<td style="padding-top: 20px; text-align: center;">
-						<a href="https://styx.shop.com" class="button-shop" target="_blank" style="
+						<a href="https://shop.styx.at/" class="button-shop" target="_blank" style="
 				display: inline-block;
 				background-color: #5cb85c;
 				color: #fff;
