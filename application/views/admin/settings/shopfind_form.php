@@ -54,7 +54,7 @@
 					<label>Logo</label>
 					<input type="file" name="logo" class="form-control">
 					<?php if (!empty($location->logo)): ?>
-						<img src="<?= base_url('uploads/shopfind/' . $location->logo) ?>" alt="Logo" style="max-height: 60px; margin-top: 10px;">
+						<img src="<?= base_url('uploads/' . $location->logo) ?>" alt="Logo" style="max-height: 100px; margin-top: 10px;">
 					<?php endif; ?>
 				</div>
 
