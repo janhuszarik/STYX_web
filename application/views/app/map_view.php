@@ -42,7 +42,7 @@
 				</ul>
 			</div>
 			<div class="modal-footer">
-				<button onclick="openWebsite()" class="modal-button">
+				<button id="modalWebsite" onclick="openWebsite()" class="modal-button" data-url="#">
 					<i class="fas fa-globe"></i><span>Webseite</span>
 				</button>
 				<button onclick="planRoute()" class="modal-button">
@@ -56,8 +56,9 @@
 
 
 
+
 		</div>
-		<span id="modalWebsite" data-url="#" style="display:none;"></span>
+
 
 	</div>
 
@@ -160,7 +161,6 @@
 		document.getElementById('modalEmail').textContent = email || 'Nicht verfügbar';
 		document.getElementById('modalPhone').textContent = phone || 'Nicht verfügbar';
 		document.getElementById('modalWebsite').setAttribute('data-url', website || '#');
-		document.getElementById('modalWebsite').textContent = 'Webseite';
 		document.getElementById('modalHours').textContent = hours || 'Nicht verfügbar';
 
 		const logoElement = document.getElementById('modalLogo');
