@@ -58,10 +58,65 @@
 					<?php endif; ?>
 				</div>
 
-				<div class="col-md-12">
-					<label>Öffnungszeiten</label>
-					<textarea name="opening_hours" class="form-control" rows="3"><?= htmlspecialchars($location->opening_hours ?? '') ?></textarea>
+				<div class="row">
+					<div class="col-12">
+						<button type="button" class="btn btn-sm btn-outline-primary mb-6" id="copyMonday">Montag auf alle kopieren</button>
+					</div>
+
+					<?php
+					$days = [
+						'Montag' => 'monday',
+						'Dienstag' => 'tuesday',
+						'Mittwoch' => 'wednesday',
+						'Donnerstag' => 'thursday',
+						'Freitag' => 'friday',
+						'Samstag' => 'saturday',
+						'Sonntag' => 'sunday',
+						'Feiertage' => 'holidays'
+					];
+					$hours = json_decode($location->opening_hours ?? '{}', true) ?: [];
+					$counter = 0;
+
+					foreach ($days as $dayName => $dayKey) {
+						$startTime = $hours[$dayKey]['start'] ?? '';
+						$endTime = $hours[$dayKey]['end'] ?? '';
+						$closed = !empty($hours[$dayKey]['closed']) ? 'checked' : '';
+
+						if ($counter % 2 === 0) echo '<div class="row mb-3"><div class="col-12 ps-4"><div class="row">';
+
+						?>
+						<div class="col-lg-6">
+							<div class="mb-2 fw-bold"><?= $dayName ?></div>
+							<div class="row">
+								<div class="col-md-6 mb-2">
+									<input type="time" name="opening_hours[<?= $dayKey ?>][start]" class="form-control"
+										   value="<?= htmlspecialchars($startTime) ?>">
+								</div>
+								<div class="col-md-6 mb-2">
+									<input type="time" name="opening_hours[<?= $dayKey ?>][end]" class="form-control"
+										   value="<?= htmlspecialchars($endTime) ?>">
+								</div>
+								<div class="col-md-12">
+									<div class="form-check mt-1">
+										<input class="form-check-input closed-checkbox" type="checkbox"
+											   id="closed_<?= $dayKey ?>"
+											   name="opening_hours[<?= $dayKey ?>][closed]" value="1" <?= $closed ?>>
+										<label class="form-check-label small" for="closed_<?= $dayKey ?>">Geschlossen</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<?php
+
+						if ($counter % 2 === 1) echo '</div></div></div>'; // zatvoríme vnútorný rad
+						$counter++;
+					}
+					if ($counter % 2 !== 0) echo '</div></div></div>'; // zatvoríme ak ostal jeden deň bez dvojice
+					?>
 				</div>
+
+
+
 
 				<div class="col-md-6">
 					<label>Latitude</label>
@@ -83,3 +138,31 @@
 		</footer>
 	</section>
 </form>
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		document.querySelectorAll('.closed-checkbox').forEach(function (checkbox) {
+			const row = checkbox.closest('.row');
+			const inputs = row.querySelectorAll('input[type="time"]');
+
+			function toggleDisabled() {
+				inputs.forEach(input => input.disabled = checkbox.checked);
+			}
+
+			checkbox.addEventListener('change', toggleDisabled);
+			toggleDisabled(); // Apply on load
+		});
+
+		document.getElementById('copyMonday')?.addEventListener('click', function () {
+			const monStart = document.querySelector('input[name="opening_hours[monday][start]"]').value;
+			const monEnd = document.querySelector('input[name="opening_hours[monday][end]"]').value;
+
+			const days = ['tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'holidays'];
+			days.forEach(day => {
+				document.querySelector(`input[name="opening_hours[${day}][start]"]`).value = monStart;
+				document.querySelector(`input[name="opening_hours[${day}][end]"]`).value = monEnd;
+				const checkbox = document.querySelector(`input[name="opening_hours[${day}][closed]"]`);
+				if (checkbox) checkbox.checked = false;
+			});
+		});
+	});
+</script>

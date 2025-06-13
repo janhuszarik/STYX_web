@@ -60,7 +60,7 @@ class Shopfind extends CI_Controller
 					'email' => $post['email'] ?? '',
 					'phone' => $post['phone'] ?? '',
 					'website' => $post['website'] ?? '',
-					'opening_hours' => $post['opening_hours'] ?? '',
+					'opening_hours' => isset($post['opening_hours']) && is_array($post['opening_hours']) ? json_encode($post['opening_hours']) : '',
 					'latitude' => $post['latitude'] ?? null,
 					'longitude' => $post['longitude'] ?? null,
 					'active' => isset($post['active']) ? 1 : 0,

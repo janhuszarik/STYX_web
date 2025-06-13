@@ -41,7 +41,10 @@
 					<li><i class="fas fa-user"></i> <span id="modalContactPerson"></span></li>
 					<li><i class="fas fa-envelope"></i> <span id="modalEmail"></span></li>
 					<li><i class="fas fa-phone-alt"></i> <span id="modalPhone"></span></li>
-					<li><i class="fas fa-clock"></i> <span id="modalHours"></span></li>
+					<li style="align-items: flex-start;">
+						<i class="fas fa-clock" style="margin-top: 4px;"></i>
+						<div id="modalHours"></div>
+					</li>
 				</ul>
 				<div class="modal-footer">
 					<button id="modalWebsite" class="modal-button" data-url="#"><i class="fas fa-globe"></i> Webseite</button>
@@ -54,6 +57,25 @@
 </section>
 
 <style>
+
+	#modalHours li {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		margin-bottom: 4px;
+		font-size: 0.9rem;
+	}
+
+	#modalHours li strong {
+		min-width: 100px;
+		display: inline-block;
+	}
+
+	#modalHours li.closed {
+		color: #d00;
+		font-weight: bold;
+	}
+
 	.modal-title{
 		margin: 0 0 0 10px;
 		font-weight: bold;
@@ -402,6 +424,41 @@
 			showModal({ name, address, zip: zip_code, city, hours: opening_hours, contact: contact_person, email, phone, website, logo });
 		}
 	});
+	function formatOpeningHours(hoursJson) {
+		if (!hoursJson) return 'Nicht verfügbar';
+
+		let html = '<ul style="padding-left: 0; list-style: none;">';
+		const days = {
+			monday: 'Montag',
+			tuesday: 'Dienstag',
+			wednesday: 'Mittwoch',
+			thursday: 'Donnerstag',
+			friday: 'Freitag',
+			saturday: 'Samstag',
+			sunday: 'Sonntag',
+			holidays: 'Feiertage'
+		};
+
+		try {
+			const hours = typeof hoursJson === 'string' ? JSON.parse(hoursJson) : hoursJson;
+
+			for (const [key, label] of Object.entries(days)) {
+				if (hours[key]?.closed || (!hours[key]?.start && !hours[key]?.end)) {
+					html += `<li><strong>${label}:</strong> <span class="text-danger">Geschlossen</span></li>`;
+				} else {
+					const from = hours[key]?.start || '--:--';
+					const to = hours[key]?.end || '--:--';
+					html += `<li><strong>${label}:</strong> ${from} – ${to}</li>`;
+				}
+			}
+		} catch (e) {
+			console.warn('Fehler beim Parsen der Öffnungszeiten:', e);
+			return 'Nicht verfügbar';
+		}
+
+		html += '</ul>';
+		return html;
+	}
 
 	function showModal({ name, address, zip, city, hours, contact, email, phone, website, logo }) {
 		const modal = document.getElementById('modal');
@@ -413,10 +470,14 @@
 			modalContactPerson: contact || 'Nicht verfügbar',
 			modalEmail: email || 'Nicht verfügbar',
 			modalPhone: phone || 'Nicht verfügbar',
-			modalHours: hours || 'Nicht verfügbar'
+			modalHours: formatOpeningHours(hours) // ← tu voláš tú externú funkciu
 		};
-		Object.entries(fields).forEach(([id, value]) => document.getElementById(id).textContent = value);
 
+		Object.entries(fields).forEach(([id, value]) => {
+			document.getElementById(id).innerHTML = value; // použijeme innerHTML, pretože tam bude HTML
+		});
+
+		// logo a web
 		const websiteBtn = document.getElementById('modalWebsite');
 		websiteBtn.setAttribute('data-url', website || '#');
 		websiteBtn.onclick = () => website && website !== '#' ? window.open(website, '_blank') : alert('Webseite nicht verfügbar');
