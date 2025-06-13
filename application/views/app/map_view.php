@@ -32,7 +32,7 @@
 						<img id="modalLogo" src="" alt="Logo" class="modal-logo">
 					</div>
 					<div class="modal-title-container">
-						<h2 id="modalTitle">Firmenname</h2>
+						<h2 class="modal-title" id="modalTitle">Firmenname</h2>
 					</div>
 					<span class="close" onclick="closeModal()">×</span>
 				</div>
@@ -54,6 +54,10 @@
 </section>
 
 <style>
+	.modal-title{
+		margin: 0 0 0 10px;
+		font-weight: bold;
+	}
 	.home-intro {
 		font-family: 'Poppins', sans-serif;
 		font-size: 16px;
