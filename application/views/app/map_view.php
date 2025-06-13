@@ -95,20 +95,21 @@
 		const div = document.createElement('div');
 		div.className = 'location-item';
 		div.innerHTML = `
-			<h3>${location.name}</h3>
-			<p>${location.city}</p>
-			<button class="info-btn"
-				data-name="${location.name}"
-				data-address="${location.address}"
-				data-zip="${location.zip_code}"
-				data-city="${location.city}"
-				data-hours="${location.opening_hours || ''}"
-				data-contact="${location.contact_person || ''}"
-				data-email="${location.email || ''}"
-				data-phone="${location.phone || ''}"
-				data-website="${location.website || ''}"
-			>Mehr Info</button>
-		`;
+		<h3>${location.name}</h3>
+		<p>${location.city}</p>
+		<button class="info-btn"
+			data-name="${location.name}"
+			data-address="${location.address}"
+			data-zip="${location.zip_code}"
+			data-city="${location.city}"
+			data-hours="${location.opening_hours || ''}"
+			data-contact="${location.contact_person || ''}"
+			data-email="${location.email || ''}"
+			data-phone="${location.phone || ''}"
+			data-website="${location.website || ''}"
+			data-logo="${location.logo || ''}"
+		>Mehr Info</button>
+	`;
 
 		div.onclick = function () {
 			map.setCenter(marker.getPosition());
@@ -148,9 +149,20 @@
 		document.getElementById('modalWebsite').href = website || '#';
 		document.getElementById('modalWebsite').textContent = 'Webseite';
 		document.getElementById('modalHours').textContent = hours || 'Nicht verfügbar';
-		document.getElementById('modalLogo').src = logo || '<?= base_url("img/logo_default.png") ?>';
+
+		// Zobraziť logo
+		const logoElement = document.getElementById('modalLogo');
+		if (logo) {
+			logoElement.src = logo.startsWith('http') ? logo : '<?= base_url("uploads/logos/") ?>' + logo;
+			logoElement.alt = name;
+		} else {
+			logoElement.src = '<?= base_url("img/logo_default.png") ?>';
+			logoElement.alt = 'Logo';
+		}
+
 		document.getElementById('modal').style.display = 'flex';
 	}
+
 
 
 	function closeModal() {
