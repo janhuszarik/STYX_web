@@ -232,6 +232,7 @@ class App extends CI_Controller
 				'opening_hours' => $loc->opening_hours
 			];
 		}, $locations));
+
 		$this->load->view('layout/normal', $data);
 	}
 
