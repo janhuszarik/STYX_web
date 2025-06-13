@@ -8,8 +8,6 @@
 		</div>
 	</div>
 </section>
-
-
 <section class="map-section py-5">
 	<div class="container">
 		<h1 class="mb-3">Filialen & Karte</h1>
@@ -298,17 +296,31 @@
 			locations = JSON.parse('<?php echo addslashes(str_replace("\r\n", "\\n", $locations)); ?>');
 			if (!Array.isArray(locations)) throw new Error('Ungültige Standortdaten');
 
+			// Fit map to show all markers
+			const bounds = new google.maps.LatLngBounds();
 			locations.forEach(location => {
+				const position = { lat: parseFloat(location.latitude), lng: parseFloat(location.longitude) };
+				bounds.extend(position);
+
 				const marker = new google.maps.Marker({
-					position: { lat: parseFloat(location.latitude), lng: parseFloat(location.longitude) },
+					position,
 					map,
 					title: location.name
 				});
 				const infowindow = new google.maps.InfoWindow({
 					content: `<h3>${location.name}</h3><p>${location.address}, ${location.zip_code} ${location.city}</p>`
 				});
-				marker.addListener('click', () => infowindow.open(map, marker));
+				marker.addListener('click', () => {
+					infowindow.open(map, marker);
+					map.setCenter(marker.getPosition());
+					map.setZoom(12);
+				});
 				addToLocationList(location, marker, infowindow);
+			});
+			map.fitBounds(bounds);
+			// Ensure minimum zoom level to avoid too close zoom
+			google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
+				if (map.getZoom() > 10) map.setZoom(10);
 			});
 		} catch (e) {
 			console.error('Fehler beim Parsen der Standorte:', e);
