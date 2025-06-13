@@ -126,6 +126,12 @@
 					<label>Longitude</label>
 					<input type="text" name="longitude" class="form-control" value="<?= htmlspecialchars($location->longitude ?? '') ?>">
 				</div>
+				<div class="col-md-12">
+					<button type="button" onclick="getCoordinatesFromAddress()" class="btn btn-sm btn-outline-secondary mt-2">
+						Koordinaten automatisch holen
+					</button>
+				</div>
+
 				<div class="col-md-3">
 					<label>Status</label><br>
 					<input type="checkbox" name="active" value="1" <?= (!isset($location) || $location->active) ? 'checked' : '' ?>> Aktiv
@@ -166,3 +172,38 @@
 		});
 	});
 </script>
+<script>
+	function getCoordinatesFromAddress() {
+		console.log('➡️ Spúšťam funkciu getCoordinatesFromAddress');
+
+		const address = document.querySelector('input[name="address"]').value;
+		const zip = document.querySelector('input[name="zip_code"]').value;
+		const city = document.querySelector('input[name="city"]').value;
+		const fullAddress = `${address}, ${zip} ${city}`;
+
+		console.log('🔎 Adresa:', fullAddress);
+
+		const apiKey = 'AIzaSyCZbtqHZxjo2p5oc7_0LBXksSqFhPFK3FQ';
+
+		const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddress)}&key=${apiKey}`;
+
+		fetch(url)
+			.then(response => response.json())
+			.then(data => {
+				console.log('✅ API odpoveď:', data);
+				if (data.status === "OK") {
+					const result = data.results[0].geometry.location;
+					document.querySelector('input[name="latitude"]').value = result.lat;
+					document.querySelector('input[name="longitude"]').value = result.lng;
+				} else {
+					alert("Geocodovanie zlyhalo: " + data.status);
+				}
+			})
+			.catch(err => {
+				console.error("❌ Fetch error:", err);
+				alert("Chyba pri požiadavke na Google API");
+			});
+	}
+</script>
+
+
