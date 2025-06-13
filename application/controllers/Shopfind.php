@@ -106,7 +106,7 @@ class Shopfind extends CI_Controller
 
 	private function upload_logo()
 	{
-		$config['upload_path'] = './Uploads/shopfind/';
+		$config['upload_path'] = './uploads/shopfind/';
 		$config['allowed_types'] = 'jpg|jpeg|png|gif';
 		$config['max_size'] = 2048; // 2MB
 		$config['file_name'] = 'logo_' . time();
