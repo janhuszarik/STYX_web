@@ -8,6 +8,7 @@
 		</div>
 	</div>
 </section>
+
 <section class="map-section py-5">
 	<div class="container">
 		<h1 class="mb-3">Filialen & Karte</h1>
@@ -27,8 +28,12 @@
 		<div id="modal" class="modal">
 			<div class="modal-card">
 				<div class="modal-header">
-					<img id="modalLogo" src="" alt="Logo" class="modal-logo">
-					<h2 id="modalTitle">Firmenname</h2>
+					<div class="modal-logo-container">
+						<img id="modalLogo" src="" alt="Logo" class="modal-logo">
+					</div>
+					<div class="modal-title-container">
+						<h2 id="modalTitle">Firmenname</h2>
+					</div>
 					<span class="close" onclick="closeModal()">×</span>
 				</div>
 				<ul class="modal-body info-list">
@@ -177,24 +182,32 @@
 
 	.modal-header {
 		display: flex;
-		align-items: center;
 		padding: 15px;
 		background: #f5f5f5;
 		border-radius: 12px 12px 0 0;
 		position: relative;
 	}
 
+	.modal-logo-container {
+		width: 60px;
+		height: 60px;
+		flex: 0 0 auto;
+	}
+
 	.modal-logo {
-		width: 50px;
-		height: 50px;
+		width: 100%;
+		height: 100%;
 		object-fit: contain;
-		margin-right: 15px;
+	}
+
+	.modal-title-container {
+		flex: 1;
+		padding-left: 15px;
 	}
 
 	.modal-title {
 		font-size: 1.4rem;
 		margin: 0;
-		flex: 1;
 	}
 
 	.close {
@@ -271,8 +284,14 @@
 		}
 		.modal-header {
 			flex-direction: column;
-			align-items: flex-start;
 			gap: 10px;
+		}
+		.modal-logo-container {
+			width: 50px;
+			height: 50px;
+		}
+		.modal-title-container {
+			padding-left: 0;
 		}
 		.modal-footer {
 			flex-direction: column;
@@ -296,7 +315,6 @@
 			locations = JSON.parse('<?php echo addslashes(str_replace("\r\n", "\\n", $locations)); ?>');
 			if (!Array.isArray(locations)) throw new Error('Ungültige Standortdaten');
 
-			// Fit map to show all markers
 			const bounds = new google.maps.LatLngBounds();
 			locations.forEach(location => {
 				const position = { lat: parseFloat(location.latitude), lng: parseFloat(location.longitude) };
@@ -318,7 +336,6 @@
 				addToLocationList(location, marker, infowindow);
 			});
 			map.fitBounds(bounds);
-			// Ensure minimum zoom level to avoid too close zoom
 			google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
 				if (map.getZoom() > 10) map.setZoom(10);
 			});
@@ -343,6 +360,37 @@
 		});
 		list.appendChild(div);
 	}
+
+	function filterLocations(query) {
+		const list = document.getElementById('locationList');
+		list.innerHTML = '';
+		const filtered = locations.filter(loc =>
+			loc.name.toLowerCase().includes(query.toLowerCase()) ||
+			loc.city.toLowerCase().includes(query.toLowerCase())
+		);
+		filtered.forEach(loc => {
+			const marker = new google.maps.Marker({
+				position: { lat: parseFloat(loc.latitude), lng: parseFloat(loc.longitude) },
+				map,
+				title: loc.name
+			});
+			const infowindow = new google.maps.InfoWindow({
+				content: `<h3>${loc.name}</h3><p>${loc.address}, ${loc.zip_code} ${loc.city}</p>`
+			});
+			marker.addListener('click', () => {
+				infowindow.open(map, marker);
+				map.setCenter(marker.getPosition());
+				map.setZoom(12);
+			});
+			addToLocationList(loc, marker, infowindow);
+		});
+	}
+
+	document.addEventListener('input', e => {
+		if (e.target.id === 'searchInput') {
+			filterLocations(e.target.value);
+		}
+	});
 
 	document.addEventListener('click', e => {
 		if (e.target.classList.contains('info-btn')) {
@@ -383,20 +431,20 @@
 
 	function planRoute() {
 		const address = `${document.getElementById('modalAddress').textContent}, ${document.getElementById('modalZip').textContent} ${document.getElementById('modalCity').textContent}`;
-		if (!navigator.geolocation) return alert('Geolokation wird nicht unterstützt');
+		if (!navigator.geolocation) {
+			const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
+			window.open(url, '_blank');
+			return;
+		}
 
 		navigator.geolocation.getCurrentPosition(pos => {
-			const directionsService = new google.maps.DirectionsService();
-			const directionsRenderer = new google.maps.DirectionsRenderer({ map });
-			directionsService.route({
-				origin: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-				destination: address,
-				travelMode: 'DRIVING'
-			}, (result, status) => {
-				if (status === 'OK') directionsRenderer.setDirections(result);
-				else alert('Route konnte nicht berechnet werden');
-			});
-		}, () => alert('Geolokation nicht verfügbar'));
+			const origin = `${pos.coords.latitude},${pos.coords.longitude}`;
+			const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${encodeURIComponent(address)}`;
+			window.open(url, '_blank');
+		}, () => {
+			const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
+			window.open(url, '_blank');
+		});
 	}
 
 	function shareLocation() {
@@ -436,7 +484,15 @@
 					position: { lat: parseFloat(item.location.latitude), lng: parseFloat(item.location.longitude) },
 					map
 				});
-				addToLocationList(item.location, marker);
+				const infowindow = new google.maps.InfoWindow({
+					content: `<h3>${item.location.name}</h3><p>${item.location.address}, ${item.location.zip_code} ${item.location.city}</p>`
+				});
+				marker.addListener('click', () => {
+					infowindow.open(map, marker);
+					map.setCenter(marker.getPosition());
+					map.setZoom(12);
+				});
+				addToLocationList(item.location, marker, infowindow);
 			});
 		}, () => alert('Geolokation nicht verfügbar'));
 	}
