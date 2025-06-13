@@ -229,11 +229,17 @@ class App extends CI_Controller
 				'address' => $loc->address,
 				'city' => $loc->city,
 				'zip_code' => $loc->zip_code,
-				'opening_hours' => $loc->opening_hours
+				'opening_hours' => $loc->opening_hours,
+				'logo' => $loc->logo,
+				'contact_person' => $loc->contact_person,
+				'email' => $loc->email,
+				'phone' => $loc->phone,
+				'website' => $loc->website
 			];
 		}, $locations));
 
 		$this->load->view('layout/normal', $data);
 	}
+
 
 }

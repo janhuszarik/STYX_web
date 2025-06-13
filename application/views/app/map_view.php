@@ -150,15 +150,16 @@
 		document.getElementById('modalWebsite').textContent = 'Webseite';
 		document.getElementById('modalHours').textContent = hours || 'Nicht verfügbar';
 
-		// Zobraziť logo
 		const logoElement = document.getElementById('modalLogo');
+		const base = '<?= base_url("uploads/") ?>';
 		if (logo) {
-			logoElement.src = logo.startsWith('http') ? logo : '<?= base_url("uploads/logos/") ?>' + logo;
+			logoElement.src = (logo.startsWith('http') || logo.startsWith('/')) ? logo : base + logo;
 			logoElement.alt = name;
 		} else {
 			logoElement.src = '<?= base_url("img/logo_default.png") ?>';
 			logoElement.alt = 'Logo';
 		}
+
 
 		document.getElementById('modal').style.display = 'flex';
 	}
