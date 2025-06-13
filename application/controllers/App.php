@@ -216,8 +216,8 @@ class App extends CI_Controller
 	}
 	public function showMap()
 	{
-		$data['title'] = 'Pobočky & Mapa';
-		$data['description'] = 'Prehľad našich pobočiek na mape...';
+		$data['title'] = 'Shopfinder';
+		$data['description'] = 'Das Beste was die Natur zu bieten hat';
 		$data['page'] = 'app/map_view';
 
 		$locations = $this->App_model->getLocations();
