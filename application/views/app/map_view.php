@@ -37,16 +37,28 @@
 					<li><i class="fas fa-map-marker-alt"></i> <span id="modalAddress"></span>, <span id="modalZip"></span> <span id="modalCity"></span></li>
 					<li><i class="fas fa-user"></i> <span id="modalContactPerson"></span></li>
 					<li><i class="fas fa-envelope"></i> <span id="modalEmail"></span></li>
-					<li><i class="fas fa-phone-alt"></i> <span id="modalPhone"></span></li>
+					<li class="modal-firma-name"><i class="fas fa-phone-alt"></i> <span id="modalPhone"></span></li>
 					<li><i class="fas fa-clock"></i> <span id="modalHours"></span></li>
 				</ul>
 			</div>
 			<div class="modal-footer">
-				<a id="modalWebsite" href="#" target="_blank" class="modal-action"><i class="fas fa-globe"></i> Webseite</a>
-				<button onclick="planRoute()" class="modal-action"><i class="fas fa-route"></i> Route planen</button>
-				<button onclick="shareLocation()" class="modal-action"><i class="fas fa-share-alt"></i> Teilen</button>
+				<button onclick="openWebsite()" class="modal-button">
+					<i class="fas fa-globe"></i><span>Webseite</span>
+				</button>
+				<button onclick="planRoute()" class="modal-button">
+					<i class="fas fa-route"></i><span>Route planen</span>
+				</button>
+				<button onclick="shareLocation()" class="modal-button">
+					<i class="fas fa-share-alt"></i><span>Teilen</span>
+				</button>
 			</div>
+
+
+
+
 		</div>
+		<span id="modalWebsite" data-url="#" style="display:none;"></span>
+
 	</div>
 
 </div>
@@ -147,7 +159,7 @@
 		document.getElementById('modalContactPerson').textContent = contactPerson || 'Nicht verfügbar';
 		document.getElementById('modalEmail').textContent = email || 'Nicht verfügbar';
 		document.getElementById('modalPhone').textContent = phone || 'Nicht verfügbar';
-		document.getElementById('modalWebsite').href = website || '#';
+		document.getElementById('modalWebsite').setAttribute('data-url', website || '#');
 		document.getElementById('modalWebsite').textContent = 'Webseite';
 		document.getElementById('modalHours').textContent = hours || 'Nicht verfügbar';
 
@@ -197,6 +209,15 @@
 			alert('Ihr Browser unterstützt keine Geolokation.');
 		}
 	}
+	function openWebsite() {
+		const link = document.getElementById('modalWebsite').getAttribute('data-url');
+		if (link && link !== '#') {
+			window.open(link, '_blank');
+		} else {
+			alert('Website ist nicht verfügbar.');
+		}
+	}
+
 	function shareLocation() {
 		const url = window.location.href;
 		if (navigator.share) {
@@ -397,6 +418,34 @@
 		flex-direction: column;
 		animation: fadeInUp 0.3s ease-out;
 	}
+	.modal-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 16px;
+		background-color: #1a73e8;
+		color: white;
+		font-size: 1em;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		text-decoration: none !important; /* ⛔️ odstráni podčiarknutie aj pri <a> */
+		transition: background 0.3s, transform 0.2s;
+	}
+
+	.modal-button:hover {
+		background-color: #1557b0;
+		transform: translateY(-1px);
+	}
+
+	.modal-button i {
+		font-size: 1.2em;
+	}
+
+	.modal-button span {
+		display: inline-block;
+	}
+
 
 	@keyframes fadeInUp {
 		from { transform: translateY(-10px); opacity: 0; }
@@ -421,6 +470,7 @@
 		font-size: 1.5em;
 		margin: 0;
 		flex-grow: 1;
+		font-weight: bold;
 	}
 	.modal-header .close {
 		position: absolute;
