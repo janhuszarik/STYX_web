@@ -214,6 +214,25 @@ class App extends CI_Controller
 		$data['name'] = 'Max Mustermann'; // testovacie dáta
 		$this->load->view('emails/contact_reply', $data);
 	}
+	public function showMap()
+	{
+		$data['title'] = 'Pobočky & Mapa';
+		$data['description'] = 'Prehľad našich pobočiek na mape...';
+		$data['page'] = 'app/map_view';
 
+		$locations = $this->App_model->getLocations();
+		$data['locations'] = json_encode(array_map(function($loc) {
+			return [
+				'name' => $loc->name,
+				'latitude' => $loc->latitude,
+				'longitude' => $loc->longitude,
+				'address' => $loc->address,
+				'city' => $loc->city,
+				'zip_code' => $loc->zip_code,
+				'opening_hours' => $loc->opening_hours
+			];
+		}, $locations));
+		$this->load->view('layout/normal', $data);
+	}
 
 }
