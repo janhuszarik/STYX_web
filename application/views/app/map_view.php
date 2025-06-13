@@ -370,7 +370,7 @@
 		websiteBtn.onclick = () => website && website !== '#' ? window.open(website, '_blank') : alert('Webseite nicht verfügbar');
 
 		const logoElement = document.getElementById('modalLogo');
-		const base = '<?= base_url("Uploads/") ?>';
+		const base = '<?= base_url("uploads/") ?>';
 		logoElement.src = logo ? (logo.startsWith('http') || logo.startsWith('/') ? logo : base + logo) : '<?= base_url("img/logo_default.png") ?>';
 		logoElement.alt = name;
 
