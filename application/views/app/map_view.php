@@ -133,8 +133,9 @@
 				btn.dataset.contact,
 				btn.dataset.email,
 				btn.dataset.phone,
-				btn.dataset.website
-			);
+				btn.dataset.website,
+				btn.dataset.logo
+		);
 		}
 	});
 
