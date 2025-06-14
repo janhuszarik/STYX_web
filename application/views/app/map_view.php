@@ -37,15 +37,16 @@
 					<span class="close" onclick="closeModal()">×</span>
 				</div>
 				<ul class="modal-body info-list">
-					<li class="d-flex">
-						<i class="fas fa-map-marker-alt" style="margin-right: 10px; margin-top: 3px;"></i>
+					<li class="info-list-item">
+						<i class="fas fa-map-marker-alt"></i>
 						<div>
-							<div id="modalFirmName" class="fw-bold mb-1"></div>
-							<div id="modalAddress" class="mb-1"></div>
-							<div class="mb-1"><span id="modalZip"></span>, <span id="modalCity"></span></div>
+							<div class="fw-bold" id="modalFirmName"></div>
+							<div id="modalAddress"></div>
+							<div><span id="modalZip"></span>, <span id="modalCity"></span></div>
 							<div id="modalCountry"></div>
 						</div>
 					</li>
+
 
 					<li><i class="fas fa-user"></i> <span id="modalContactPerson"></span></li>
 					<li><i class="fas fa-envelope"></i> <span id="modalEmail"></span></li>
