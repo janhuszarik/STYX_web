@@ -107,14 +107,25 @@ class Shopfind extends CI_Controller
 	private function upload_logo()
 	{
 		$config['upload_path'] = './uploads/shopfind/';
-		$config['allowed_types'] = 'jpg|jpeg|png|gif';
-		$config['max_size'] = 2048; // 2MB
+		$config['allowed_types'] = 'jpg|jpeg|png|gif|webp|svg';
+		$config['max_size'] = 2048;
 		$config['file_name'] = 'logo_' . time();
 
 		$this->upload->initialize($config);
 
 		if (!is_dir($config['upload_path'])) {
 			mkdir($config['upload_path'], 0755, true);
+		}
+
+		// MIME typ kontrola
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mime = finfo_file($finfo, $_FILES['logo']['tmp_name']);
+		finfo_close($finfo);
+
+		$allowed_mimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+		if (!in_array($mime, $allowed_mimes)) {
+			$this->session->set_flashdata('error', 'Nepodporovaný formát obrázka.');
+			return false;
 		}
 
 		if ($this->upload->do_upload('logo')) {
@@ -124,4 +135,5 @@ class Shopfind extends CI_Controller
 
 		return false;
 	}
+
 }
