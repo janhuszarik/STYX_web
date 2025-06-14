@@ -1,3 +1,6 @@
+<?php
+// application/views/admin/shopfind/index.php
+?>
 
 <div class="row">
 	<div class="col-lg-12">

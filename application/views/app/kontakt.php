@@ -8,6 +8,12 @@
 		</div>
 	</div>
 </section>
+<?php if ($this->session->flashdata('success')): ?>
+	<div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+<?php endif; ?>
+<?php if ($this->session->flashdata('error')): ?>
+	<div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+<?php endif; ?>
 
 <section class="contact-form-section py-5" style="font-family: 'Poppins', Arial, sans-serif; font-size: 14px;">
 	<div class="container">
@@ -57,6 +63,7 @@
 				</form>
 			</div>
 
+			<!-- Pravá strana: text + mapa -->
 			<div class="col-lg-5">
 				<div class="kontakt-info">
 					<h4 class="font-weight-bold">STYX Naturcosmetic GmbH</h4>
@@ -74,6 +81,7 @@
 					</p>
 				</div>
 
+				<!-- Mapa -->
 				<div class="mt-4">
 					<iframe src="https://www.google.com/maps?q=Am+Kräutergarten+6,+3200+Ober-Grafendorf&output=embed" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 				</div>

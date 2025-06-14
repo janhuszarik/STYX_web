@@ -90,7 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/article_save/del/(:num)'] 					= 'article/articlesSave/del/$1';
 	$route['admin/add_article/(:num)'] 							= 'article/articlesSave/$1';
 	$route['admin/article/getGalleriesByCategory'] 				= 'article/getGalleriesByCategory';
-	$route['admin/article/upload_image'] 						= 'article/upload_image';
+$route['admin/article/upload_image'] = 'article/upload_image';
 	$route['admin/save_calendar_note'] 							= 'admin/save_calendar_note';
 	$route['admin/update_calendar_note'] 						= 'admin/update_calendar_note';
 	$route['admin/delete_calendar_note/(:num)']					= 'admin/delete_calendar_note/$1';
@@ -119,15 +119,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/news/edit/:num'] 								= 'admin/newsSave';
 	$route['admin/news/del/:num']								= 'admin/newsSave';
 
-	$route['admin/bestProduct']              					= 'admin/bestProductSave';
-	$route['admin/bestProduct/create']       					= 'admin/bestProductSave/create';
-	$route['admin/bestProduct/edit/(:num)']  					= 'admin/bestProductSave/edit/$1';
-	$route['admin/bestProduct/del/(:num)']   					= 'admin/bestProductSave/del/$1';
-	$route['admin/bestProduct/save']         					= 'admin/bestProductSave';
+$route['admin/bestProduct']              = 'admin/bestProductSave';
+$route['admin/bestProduct/create']       = 'admin/bestProductSave/create';
+$route['admin/bestProduct/edit/(:num)']  = 'admin/bestProductSave/edit/$1';
+$route['admin/bestProduct/del/(:num)']   = 'admin/bestProductSave/del/$1';
+$route['admin/bestProduct/save']         = 'admin/bestProductSave'; // volané cez POST
 
 
 
-	$route['admin/galleryCategory']                      		= 'gallery/galleryCategorySave';
+$route['admin/galleryCategory']                      		= 'gallery/galleryCategorySave';
 	$route['admin/galleryCategory/edit/(:num)']          		= 'gallery/galleryCategorySave/edit/$1';
 	$route['admin/galleryCategory/form']                 		= 'gallery/galleryCategoryForm';
 	$route['admin/galleryCategory/form/(:num)']          		= 'gallery/galleryCategoryForm/$1';
@@ -147,18 +147,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/shopfind/(:any)'] 							= 'shopfind/shopfindSave/$1';
 	$route['admin/shopfind/(:any)/(:num)'] 						= 'shopfind/shopfindSave/$1/$2';
 
-
-
-
-
 	$route['besuchen/shopfinder'] 								= 'app/showMap';
 	$route['visit/shopfinder'] 									= 'app/showMap';
 	$route['kontakt/send'] 										= 'app/send_contact';
+
 	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
 	$route['contact/contact-journey'] 							= 'app/kontakt';
-	$route['(:any)/(:any)/(:any)/(:any)'] 						= 'app/routes';
-	$route['(:any)/(:any)/(:any)'] 								= 'app/routes';
-	$route['(:any)/(:any)'] 									= 'app/routes';
+	$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
+	$route['(:any)/(:any)/(:any)'] = 'app/routes';
+	$route['(:any)/(:any)'] = 'app/routes';
 
 
 
