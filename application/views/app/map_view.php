@@ -40,7 +40,7 @@
 					<li style="display: block;">
 						<i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i>
 						<div style="display: inline-block;">
-							<div id="modalTitle" class="fw-bold"></div>
+							<div id="modalFirmName" class="fw-bold"></div>
 							<div><span id="modalAddress"></span></div>
 							<div><span id="modalZip"></span>, <span id="modalCity"></span></div>
 							<div id="modalCountry"></div>
@@ -491,6 +491,7 @@
 		const modal = document.getElementById('modal');
 		const fields = {
 			modalTitle: name || 'Nicht verfügbar',
+			modalFirmName: name || 'Nicht verfügbar',
 			modalAddress: address || 'Nicht verfügbar',
 			modalZip: zip || '',
 			modalCity: city || 'Nicht verfügbar',
