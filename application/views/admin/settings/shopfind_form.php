@@ -54,10 +54,10 @@
 				</div>
 				<div class="col-md-6">
 					<label>Logo</label>
-					<input type="file" name="logo" class="form-control" accept=".jpg,.jpeg,.png,.webp,.svg,.svg+xml">
-					<?php if (!empty($location->logo)): ?>
-						<img src="<?= base_url('uploads/' . $location->logo) ?>" alt="Logo" style="max-height: 100px; margin-top: 10px;">
-					<?php endif; ?>
+					<input type="url" name="website" class="form-control"
+						   placeholder="https://example.com"
+						   value="<?= htmlspecialchars(!empty($location->website) && $location->website !== 'https://' ? $location->website : '') ?>">
+
 				</div>
 
 				<div class="row">
