@@ -42,7 +42,7 @@
 									<td><?= htmlspecialchars($loc->address) ?></td>
 									<td><?= htmlspecialchars($loc->zip_code) ?></td>
 									<td><?= htmlspecialchars($loc->city) ?></td>
-									<td><?= htmlspecialchars($loc->website) ?></td>
+									<td><?= htmlspecialchars($loc->country) ?></td>
 									<td class="text-center"><?= active($loc->active) ?></td>
 									<td class="text-center"><?= date('d.m.Y', strtotime($loc->created_at)) ?></td>
 									<td class="text-center">
