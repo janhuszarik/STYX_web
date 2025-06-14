@@ -15,7 +15,7 @@
 		<p class="text-muted">Übersicht unserer Filialen auf der Karte</p>
 		<p>In den folgenden Geschäften, Märkten und Bio-Läden können Sie unsere STYX-Produkte in Österreich sowie in Deutschland kaufen.<br>
 			Bitte beachten Sie, dass nicht alle Produkte in jedem Shop verfügbar sind. <br> Alle Produkte finden Sie in unserem
-			<a href="https://www.styx-shop.at">Online-Shop</a>.
+			<a href="https://shop.styx.at/">Online-Shop</a>.
 		</p>
 		<div class="map-container">
 			<div id="map" class="map-area"></div>
