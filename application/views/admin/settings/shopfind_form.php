@@ -207,5 +207,15 @@
 			});
 	}
 </script>
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const input = document.querySelector('input[name="website"]');
+		document.querySelector('form').addEventListener('submit', function () {
+			if (input.value && !input.value.startsWith('http')) {
+				input.value = 'https://' + input.value;
+			}
+		});
+	});
+</script>
 
 
