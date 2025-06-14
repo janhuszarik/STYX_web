@@ -1,3 +1,10 @@
+<style>
+	/* Natrvalo prepíše všetky font-family štýly aj inline */
+	.content *, .section-content *, .recommended-products *, .related-articles *, .article-gallery * {
+		font-family: 'Poppins', Arial, sans-serif !important;
+	}
+</style>
+
 <?php if (empty($article)): ?>
 	<div class="container py-5 text-center" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 		<h2 class="text-danger fw-bold mb-3">Diese Unterseite wird gerade überarbeitet</h2>
