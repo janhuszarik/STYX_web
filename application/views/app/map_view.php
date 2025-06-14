@@ -507,8 +507,21 @@
 			if (el) el.innerHTML = value;
 		});
 
-		// ... (zvyšok ostáva rovnaký)
+		if (website) {
+			const btn = document.getElementById('modalWebsite');
+			btn.setAttribute('data-url', website);
+			btn.onclick = () => window.open(website, '_blank');
+		}
+
+		if (logo) {
+			const img = document.getElementById('modalLogo');
+			img.src = '<?= base_url('uploads/') ?>' + logo;
+		}
+
+		// 👉 Tento riadok spôsobí zobrazenie modalu
+		modal.style.display = 'flex';
 	}
+
 
 
 	function closeModal() {
