@@ -148,6 +148,7 @@ $route['admin/galleryCategory']                      		= 'gallery/galleryCategor
 	$route['admin/shopfind/(:any)/(:num)'] 						= 'shopfind/shopfindSave/$1/$2';
 
 	$route['besuchen/shopfinder'] 								= 'app/showMap';
+	$route['visit/shopfinder'] 									= 'app/showMap';
 	$route['kontakt/send'] 										= 'app/send_contact';
 
 	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
