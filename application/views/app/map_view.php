@@ -425,7 +425,9 @@
 		}
 	});
 	function formatOpeningHours(hoursJson) {
-		if (!hoursJson) return 'Nicht verfügbar';
+		if (!hoursJson || hoursJson === "{}") {
+			return '<span>Keine näheren Informationen verfügbar</span>';
+		}
 
 		let html = '<ul style="padding-left: 0; list-style: none;">';
 		const days = {
@@ -442,53 +444,70 @@
 		try {
 			const hours = typeof hoursJson === 'string' ? JSON.parse(hoursJson) : hoursJson;
 
+			let isEmpty = true;
+
 			for (const [key, label] of Object.entries(days)) {
-				if (hours[key]?.closed || (!hours[key]?.start && !hours[key]?.end)) {
+				const h = hours[key];
+				if (h?.start || h?.end || h?.closed) isEmpty = false;
+
+				if (h?.closed || (!h?.start && !h?.end)) {
 					html += `<li><strong>${label}:</strong> <span class="text-danger">Geschlossen</span></li>`;
 				} else {
-					const from = hours[key]?.start || '--:--';
-					const to = hours[key]?.end || '--:--';
-					html += `<li><strong>${label}:</strong> ${from} – ${to}</li>`;
+					html += `<li><strong>${label}:</strong> ${h.start || '--:--'} – ${h.end || '--:--'}</li>`;
 				}
 			}
+
+			if (isEmpty) return '<span>Keine näheren Informationen verfügbar</span>';
 		} catch (e) {
 			console.warn('Fehler beim Parsen der Öffnungszeiten:', e);
-			return 'Nicht verfügbar';
+			return '<span>Keine näheren Informationen verfügbar</span>';
 		}
 
 		html += '</ul>';
 		return html;
 	}
 
+
 	function showModal({ name, address, zip, city, hours, contact, email, phone, website, logo }) {
 		const modal = document.getElementById('modal');
 		const fields = {
-			modalTitle: name,
-			modalAddress: address,
-			modalZip: zip,
-			modalCity: city,
-			modalContactPerson: contact || 'Nicht verfügbar',
-			modalEmail: email || 'Nicht verfügbar',
-			modalPhone: phone || 'Nicht verfügbar',
-			modalHours: formatOpeningHours(hours) // ← tu voláš tú externú funkciu
+			modalTitle: name || 'Nicht verfügbar',
+			modalAddress: address || 'Nicht verfügbar',
+			modalZip: zip || '',
+			modalCity: city || 'Nicht verfügbar',
+			modalContactPerson: contact?.trim() || 'Nicht verfügbar',
+			modalEmail: email?.trim() || 'Nicht verfügbar',
+			modalPhone: phone?.trim() || 'Nicht verfügbar',
+			modalHours: formatOpeningHours(hours)
 		};
 
 		Object.entries(fields).forEach(([id, value]) => {
-			document.getElementById(id).innerHTML = value; // použijeme innerHTML, pretože tam bude HTML
+			document.getElementById(id).innerHTML = value;
 		});
 
-		// logo a web
+		// web stránka
 		const websiteBtn = document.getElementById('modalWebsite');
-		websiteBtn.setAttribute('data-url', website || '#');
-		websiteBtn.onclick = () => website && website !== '#' ? window.open(website, '_blank') : alert('Webseite nicht verfügbar');
+		if (website && website !== '#') {
+			websiteBtn.setAttribute('data-url', website);
+			websiteBtn.onclick = () => window.open(website, '_blank');
+			websiteBtn.disabled = false;
+			websiteBtn.innerHTML = '<i class="fas fa-globe"></i> Webseite';
+		} else {
+			websiteBtn.setAttribute('data-url', '#');
+			websiteBtn.onclick = () => alert('Webseite nicht verfügbar');
+			websiteBtn.disabled = true;
+			websiteBtn.innerHTML = '<i class="fas fa-globe"></i> Keine Webseite';
+		}
 
+		// logo
 		const logoElement = document.getElementById('modalLogo');
 		const base = '<?= base_url("uploads/") ?>';
 		logoElement.src = logo ? (logo.startsWith('http') || logo.startsWith('/') ? logo : base + logo) : '<?= base_url("img/logo_default.png") ?>';
-		logoElement.alt = name;
+		logoElement.alt = name || 'Firmenlogo';
 
 		modal.style.display = 'flex';
 	}
+
 
 	function closeModal() {
 		document.getElementById('modal').style.display = 'none';
