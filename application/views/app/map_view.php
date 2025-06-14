@@ -46,8 +46,6 @@
 							<div id="modalCountry"></div>
 						</div>
 					</li>
-
-
 					<li><i class="fas fa-user"></i> <span id="modalContactPerson"></span></li>
 					<li><i class="fas fa-envelope"></i> <span id="modalEmail"></span></li>
 					<li><i class="fas fa-phone-alt"></i> <span id="modalPhone"></span></li>
@@ -67,7 +65,6 @@
 </section>
 
 <style>
-
 	#modalHours li {
 		display: flex;
 		align-items: flex-start;
@@ -86,10 +83,11 @@
 		font-weight: bold;
 	}
 
-	.modal-title{
+	.modal-title {
 		margin: 0 0 0 10px;
 		font-weight: bold;
 	}
+
 	.home-intro {
 		font-family: 'Poppins', sans-serif;
 		font-size: 16px;
@@ -169,6 +167,8 @@
 		font-size: 1.1rem;
 		color: #1a73e8;
 		margin: 0 0 5px;
+		display: flex;
+		align-items: center;
 	}
 
 	.location-item p {
@@ -188,6 +188,20 @@
 
 	.location-item button:hover {
 		background: #1557b0;
+	}
+
+	.location-item .letter-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		background-color: #d32f2f;
+		color: #fff;
+		border-radius: 50%;
+		font-size: 14px;
+		font-weight: bold;
+		margin-right: 8px;
 	}
 
 	.modal {
@@ -333,17 +347,16 @@
 			flex-direction: column;
 		}
 	}
+
 	@media (max-width: 576px) {
 		.modal-footer {
 			flex-direction: column;
 		}
-
 		.modal-button {
 			width: 100%;
 			justify-content: center;
 		}
 	}
-
 </style>
 
 <script>
@@ -363,25 +376,35 @@
 			if (!Array.isArray(locations)) throw new Error('Ungültige Standortdaten');
 
 			const bounds = new google.maps.LatLngBounds();
-			locations.forEach(location => {
+			locations.forEach((location, index) => {
 				const position = { lat: parseFloat(location.latitude), lng: parseFloat(location.longitude) };
 				bounds.extend(position);
+
+				const letter = String.fromCharCode(65 + index); // Generovanie písmena (A, B, C, ...)
 
 				const marker = new google.maps.Marker({
 					position,
 					map,
-					title: location.name
+					title: location.name,
+					icon: {
+						url: `https://maps.google.com/mapfiles/marker${letter}.png`
+					}
+					// Odstránenie labelu, aby sa písmeno nezobrazovalo dvakrát
 				});
+
 				const infowindow = new google.maps.InfoWindow({
 					content: `<h3>${location.name}</h3><p>${location.address}, ${location.zip_code} ${location.city}</p>`
 				});
+
 				marker.addListener('click', () => {
 					infowindow.open(map, marker);
 					map.setCenter(marker.getPosition());
 					map.setZoom(12);
 				});
-				addToLocationList(location, marker, infowindow);
+
+				addToLocationList(location, marker, infowindow, letter);
 			});
+
 			map.fitBounds(bounds);
 			google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
 				if (map.getZoom() > 10) map.setZoom(10);
@@ -391,12 +414,12 @@
 		}
 	}
 
-	function addToLocationList(location, marker, infowindow) {
+	function addToLocationList(location, marker, infowindow, letter) {
 		const list = document.getElementById('locationList');
 		const div = document.createElement('div');
 		div.className = 'location-item';
 		div.innerHTML = `
-			<h3>${location.name}</h3>
+			<h3><span class="letter-icon">${letter}</span>${location.name}</h3>
 			<p>${location.city}</p>
 			<button class="info-btn" data-info='${JSON.stringify(location)}'>Mehr Infos</button>
 		`;
@@ -415,21 +438,30 @@
 			loc.name.toLowerCase().includes(query.toLowerCase()) ||
 			loc.city.toLowerCase().includes(query.toLowerCase())
 		);
-		filtered.forEach(loc => {
+
+		filtered.forEach((loc, index) => {
+			const letter = String.fromCharCode(65 + index); // Generovanie písmena pre filtrovaný zoznam
 			const marker = new google.maps.Marker({
 				position: { lat: parseFloat(loc.latitude), lng: parseFloat(loc.longitude) },
 				map,
-				title: loc.name
+				title: loc.name,
+				icon: {
+					url: `https://maps.google.com/mapfiles/marker${letter}.png`
+				}
+				// Odstránenie labelu
 			});
+
 			const infowindow = new google.maps.InfoWindow({
 				content: `<h3>${loc.name}</h3><p>${loc.address}, ${loc.zip_code} ${loc.city}</p>`
 			});
+
 			marker.addListener('click', () => {
 				infowindow.open(map, marker);
 				map.setCenter(marker.getPosition());
 				map.setZoom(12);
 			});
-			addToLocationList(loc, marker, infowindow);
+
+			addToLocationList(loc, marker, infowindow, letter);
 		});
 	}
 
@@ -445,6 +477,7 @@
 			showModal({ name, address, zip: zip_code, city, hours: opening_hours, contact: contact_person, email, phone, website, logo });
 		}
 	});
+
 	function formatOpeningHours(hoursJson) {
 		if (!hoursJson || hoursJson === "{}") {
 			return '<span>Keine näheren Informationen verfügbar</span>';
@@ -488,7 +521,6 @@
 		return html;
 	}
 
-
 	function showModal({ name, address, zip, city, hours, contact, email, phone, website, logo, country }) {
 		const modal = document.getElementById('modal');
 		const fields = {
@@ -517,14 +549,11 @@
 
 		if (logo) {
 			const img = document.getElementById('modalLogo');
-			img.src = '<?= base_url('uploads/') ?>' + logo;
+			img.src = '<?= base_url("uploads/") ?>' + logo;
 		}
 
-		// 👉 Tento riadok spôsobí zobrazenie modalu
 		modal.style.display = 'flex';
 	}
-
-
 
 	function closeModal() {
 		document.getElementById('modal').style.display = 'none';
@@ -573,9 +602,10 @@
 				title: 'Meine Position'
 			});
 
-			const distances = locations.map(loc => ({
+			const distances = locations.map((loc, index) => ({
 				location: loc,
-				distance: google.maps.geometry.spherical.computeDistanceBetween(userLatLng, new google.maps.LatLng(parseFloat(loc.latitude), parseFloat(loc.longitude)))
+				distance: google.maps.geometry.spherical.computeDistanceBetween(userLatLng, new google.maps.LatLng(parseFloat(loc.latitude), parseFloat(loc.longitude))),
+				letter: String.fromCharCode(65 + index)
 			})).sort((a, b) => a.distance - b.distance);
 
 			const list = document.getElementById('locationList');
@@ -583,17 +613,25 @@
 			[distances[0], distances[1] || distances[0]].forEach(item => {
 				const marker = new google.maps.Marker({
 					position: { lat: parseFloat(item.location.latitude), lng: parseFloat(item.location.longitude) },
-					map
+					map,
+					title: item.location.name,
+					icon: {
+						url: `https://maps.google.com/mapfiles/marker${item.letter}.png`
+					}
+					// Odstránenie labelu
 				});
+
 				const infowindow = new google.maps.InfoWindow({
 					content: `<h3>${item.location.name}</h3><p>${item.location.address}, ${item.location.zip_code} ${item.location.city}</p>`
 				});
+
 				marker.addListener('click', () => {
 					infowindow.open(map, marker);
 					map.setCenter(marker.getPosition());
 					map.setZoom(12);
 				});
-				addToLocationList(item.location, marker, infowindow);
+
+				addToLocationList(item.location, marker, infowindow, item.letter);
 			});
 		}, () => alert('Geolokation nicht verfügbar'));
 	}
