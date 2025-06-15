@@ -468,6 +468,15 @@ if (isset($article) && !empty($article->slug)) {
 		function initSummer() {
 			$('.summernote').summernote({
 				height: 200,
+				dialogsInBody: true,
+				toolbar: [
+					['style', ['bold', 'italic', 'underline', 'clear']],
+					['fontsize', ['fontsize']],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph']],
+					['insert', ['link', 'picture']],
+					['view', ['fullscreen', 'codeview', 'help']]
+				],
 				callbacks: {
 					onImageUpload: function(files) {
 						const formData = new FormData();
@@ -497,10 +506,18 @@ if (isset($article) && !empty($article->slug)) {
 								body: new URLSearchParams({ image_url: imageUrl })
 							});
 						}
+					},
+					onPaste: function(e) {
+						setTimeout(() => {
+							let content = $(this).summernote('code');
+							content = content.replace(/font-family:[^;"]+;?/gi, '');
+							$(this).summernote('code', content);
+						}, 10);
 					}
 				}
 			});
 		}
+
 
 		initSummer();
 
@@ -586,6 +603,29 @@ if (isset($article) && !empty($article->slug)) {
 		}
 
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
+
+			// 🧼 1. Vyčistenie všetkých font-family vo Summernote na Poppins
+			$('.summernote').each(function () {
+				let content = $(this).summernote('code');
+				content = content.replace(/font-family:[^;"']+;?/gi, '');
+				content = content.replace(/style="([^"]*)"/gi, function(match, style) {
+					let newStyle = style
+						.replace(/font-family:[^;"']+;?/gi, '') // odstráni font-family
+						.replace(/["']?Open Sans["']?,?\s?Arial,?\s?sans-serif;?/gi, '') // odstráni zvyšky
+						.trim();
+
+					if (newStyle.length > 0 && !/font-family:/i.test(newStyle)) {
+						newStyle = `font-family: Poppins; ` + newStyle;
+					} else if (newStyle.length === 0) {
+						newStyle = `font-family: Poppins;`;
+					}
+					return `style="${newStyle}"`;
+				});
+
+				$(this).summernote('code', content);
+			});
+
+			// 🧩 2. Ponechaný tvoj pôvodný kód
 			const subpageInputs = document.querySelectorAll('.subpage');
 			const externalUrlInputs = document.querySelectorAll('.external-url');
 
@@ -614,6 +654,7 @@ if (isset($article) && !empty($article->slug)) {
 				}
 			});
 		});
+
 
 		const modalEl = document.getElementById('ftpModal');
 		const modal = new bootstrap.Modal(modalEl);
