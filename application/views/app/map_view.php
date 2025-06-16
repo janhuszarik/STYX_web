@@ -261,10 +261,17 @@ $this->load->view('partials/mapfind_assets');
 			btn.onclick = () => window.open(website, '_blank');
 		}
 
-		if (logo) {
-			const img = document.getElementById('modalLogo');
+		const img = document.getElementById('modalLogo');
+		if (logo && logo.trim() !== '') {
 			img.src = '<?= base_url("uploads/") ?>' + logo;
+		} else {
+			img.src = '<?= base_url("img/logo/kein_logo.png") ?>';
 		}
+		img.onerror = function () {
+			this.src = '<?= base_url("img/logo/kein_logo.png") ?>';
+		};
+
+
 
 		modal.style.display = 'flex';
 	}
