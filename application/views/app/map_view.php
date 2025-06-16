@@ -265,10 +265,10 @@ $this->load->view('partials/mapfind_assets');
 		if (logo && logo.trim() !== '') {
 			img.src = '<?= base_url("uploads/") ?>' + logo;
 		} else {
-			img.src = '<?= base_url("img/logo/kein_logo.png") ?>';
+			img.src = '<?= base_url("img/logo/kein_logo_find.png") ?>';
 		}
 		img.onerror = function () {
-			this.src = '<?= base_url("img/logo/kein_logo.png") ?>';
+			this.src = '<?= base_url("img/logo/kein_logo_find.png") ?>';
 		};
 
 
