@@ -151,6 +151,7 @@ $route['admin/galleryCategory']                      		= 'gallery/galleryCategor
 	$route['visit/shopfinder'] 									= 'app/showMap';
 	$route['kontakt/send'] 										= 'app/send_contact';
 
+	$route['aktuelles/download-presse'] 						= 'app/download_presse';
 	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
 	$route['contact/contact-journey'] 							= 'app/kontakt';
 	$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
