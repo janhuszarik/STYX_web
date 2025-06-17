@@ -24,6 +24,7 @@
 			</header>
 			<div class="card-body">
 				<div class="table-responsive">
+					<!-- ... predchádzajúci kód ... -->
 					<table class="table table-hover table-bordered mb-0" id="categoryTable">
 						<thead>
 						<tr>
@@ -32,12 +33,12 @@
 							<th>Name</th>
 							<th>URL-Adresse</th>
 							<th class="text-center">Typ</th>
+							<th class="text-center">Poradie</th> <!-- Nový stĺpec -->
 							<th class="text-center">Artikel</th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Aktionen</th>
 						</tr>
 						</thead>
-
 						<tbody>
 						<?php if (!empty($articleCategories)): ?>
 							<?php foreach ($articleCategories as $index => $cat): ?>
@@ -57,6 +58,7 @@
 										}
 										?>
 									</td>
+									<td class="text-center"><?= $cat->orderBy ?></td> <!-- Zobrazenie poradia -->
 									<td class="text-center align-middle">
 										<a href="<?= base_url('admin/articles_in_category/' . $cat->id) ?>"
 										   class="btn btn-outline-primary d-inline-flex justify-content-center align-items-center"
@@ -75,17 +77,14 @@
 											<span class="text-muted">Generiert von Menü</span>
 										<?php endif; ?>
 									</td>
-
 								</tr>
 							<?php endforeach; ?>
 						<?php else: ?>
 							<tr><td colspan="10" class="text-center">Keine Daten</td></tr>
 						<?php endif; ?>
 						</tbody>
-
-
 					</table>
-				</div>
+					<!-- ... nasledujúci kód ... -->				</div>
 				<div class="mt-3">
 					<?= $pagination ?? '' ?>
 				</div>

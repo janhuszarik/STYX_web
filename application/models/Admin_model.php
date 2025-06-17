@@ -31,7 +31,6 @@ function getNewsletters(){
 				'userId' => $this->ion_auth->user()->row()->id
 			);
 
-
 			$isExternal = (strpos($post['url'], 'http://') === 0 || strpos($post['url'], 'https://') === 0);
 
 			if (is_numeric($post['id'])) {
@@ -42,9 +41,8 @@ function getNewsletters(){
 				if (!$isExternal) {
 					$slug = $this->getFullSlugPathFromParent($post['id']);
 					$this->db->where('id', $post['id']);
-					return $this->db->update('menu', ['url' => $slug]);
+					$this->db->update('menu', ['url' => $slug]);
 				}
-				return true;
 			} else {
 				$data['created_at'] = date('Y-m-d H:i:s');
 				$this->db->insert('menu', $data);
@@ -53,10 +51,15 @@ function getNewsletters(){
 				if (!$isExternal) {
 					$slug = $this->getFullSlugPathFromParent($insertId, $post['lang']);
 					$this->db->where('id', $insertId);
-					return $this->db->update('menu', ['url' => $slug]);
+					$this->db->update('menu', ['url' => $slug]);
 				}
-				return true;
 			}
+
+			// Spustiť synchronizáciu po uložení
+			$this->load->model('Article_model');
+			$this->Article_model->syncMenuWithArticleCategories();
+
+			return true;
 		}
 		return false;
 	}
@@ -104,11 +107,30 @@ function getNewsletters(){
 		}
 		return $menu;
 	}
-	public function menuDelete($id) {
+	public function menuDelete($id)
+	{
+		// Skontrolovať, či menu položka má priradenú kategóriu
+		$this->db->where('menu_id', $id);
+		$this->db->or_where('submenu_id', $id);
+		$category = $this->db->get('article_categories')->row();
 
+		if ($category) {
+			// Skontrolovať, či kategória obsahuje články
+			$articleCount = $this->db->where('category_id', $category->id)
+				->count_all_results('articles');
+			if ($articleCount > 0) {
+				$this->session->set_flashdata('error', 'Menu položka nemôže byť odstránená, pretože priradená kategória obsahuje články.');
+				return false;
+			}
+
+			// Odstrániť kategóriu, ak neobsahuje články
+			$this->db->where('id', $category->id);
+			$this->db->delete('article_categories');
+		}
+
+		// Odstrániť menu položku
 		$this->db->where('id', $id);
 		return $this->db->delete('menu');
-
 	}
 	private function getFullSlugPathFromParent($menuId, $lang = 'de')
 	{

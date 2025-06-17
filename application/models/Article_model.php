@@ -287,39 +287,65 @@ class Article_model extends CI_Model
 
 	public function syncMenuWithArticleCategories()
 	{
-		$menuItems = $this->db->get('menu')->result();
+		$menuItems = $this->db->select('id, name, url, parent, orderBy, lang, active')
+			->order_by('parent ASC, orderBy ASC')
+			->get('menu')
+			->result();
 
 		foreach ($menuItems as $menu) {
 			if (empty($menu->name)) continue;
 
-			// Základná časť slug-u bez duplicitného jazyka
-			$baseSlug = !empty($menu->url) ? $menu->url : url_title($menu->name, 'dash', true);
-
-			// Odstránime potenciálny existujúci jazykový prefix z baseSlug
+			$baseSlug = !empty($menu->url) ? $menu->url : url_oprava($menu->name);
 			$lang = $menu->lang ?? 'de';
 			$baseSlug = preg_replace("/^$lang\//", '', $baseSlug);
-
-			// Vytvoríme slug s jedným jazykovým prefixom
 			$slug = $lang . '/' . $baseSlug;
 
 			$data = [
 				'name' => $menu->name,
 				'slug' => $slug,
 				'lang' => $lang,
-				'active' => 1,
+				'active' => $menu->active,
+				'orderBy' => $menu->orderBy,
 				'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s'),
 			];
 
+			// Priradenie menu_id alebo submenu_id
 			if ((int)$menu->parent === 0) {
 				$data['menu_id'] = $menu->id;
+				$data['submenu_id'] = null;
 				$exists = $this->db->get_where('article_categories', ['menu_id' => $menu->id])->row();
 			} else {
+				$data['menu_id'] = null;
 				$data['submenu_id'] = $menu->id;
 				$exists = $this->db->get_where('article_categories', ['submenu_id' => $menu->id])->row();
 			}
 
-			if (!$exists) {
+			if ($exists) {
+				// Aktualizácia existujúcej kategórie
+				$this->db->where('id', $exists->id);
+				$this->db->update('article_categories', $data);
+			} else {
+				// Vytvorenie novej kategórie
 				$this->db->insert('article_categories', $data);
+			}
+		}
+
+		// Odstránenie kategórií, ktoré už nemajú zodpovedajúcu menu položku
+		$this->db->where('menu_id IS NOT NULL OR submenu_id IS NOT NULL');
+		$categories = $this->db->get('article_categories')->result();
+		foreach ($categories as $cat) {
+			$menuExists = $this->db->where('id', $cat->menu_id ?: $cat->submenu_id)
+				->get('menu')
+				->num_rows();
+			if (!$menuExists) {
+				// Skontrolovať, či kategória nemá články
+				$articleCount = $this->db->where('category_id', $cat->id)
+					->count_all_results('articles');
+				if ($articleCount === 0) {
+					$this->db->where('id', $cat->id);
+					$this->db->delete('article_categories');
+				}
 			}
 		}
 	}
