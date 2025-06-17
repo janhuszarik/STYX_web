@@ -64,3 +64,8 @@
 		object-fit: cover;
 	}
 }
+.fas.fa-angle-right {
+	display: inline-block !important;
+	font-family: "Font Awesome 6 Free" !important;
+	font-weight: 900 !important;
+}

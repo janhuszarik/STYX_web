@@ -104,7 +104,7 @@ for ($set = 1; $set <= 2; $set++) {
 							<a href="<?= htmlspecialchars($url ?: '#') ?>" class="text-decoration-none text-dark d-block h-100" <?= $target ?>>
 								<div class="card border-0 shadow-sm h-100">
 									<?php if (!empty($img)): ?>
-										<img src="<?= base_url($img) ?>" class="card-img-top img-fluid" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>">
+										<img src="<?= base_url($img) ?>" class="card-img-top img-fluid no-lightbox" alt="<?= htmlspecialchars($alt) ?>" title="<?= htmlspecialchars($alt) ?>">
 									<?php endif; ?>
 									<div class="card-body">
 										<h4 class="card-title mb-2"><?= htmlspecialchars($name) ?></h4>
@@ -185,13 +185,9 @@ for ($i = 1; $i <= 3; $i++) {
 		</div>
 	</section>
 <?php endif; ?>
-	<div id="lightbox-modal" class="lightbox-modal" style="display:none;">
-		<span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-		<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
-	</div>
-
-
-
-
+<div id="lightbox-modal" class="lightbox-modal" style="display:none;">
+	<span class="lightbox-close" onclick="closeLightbox()">×</span>
+	<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
+</div>
 
 
