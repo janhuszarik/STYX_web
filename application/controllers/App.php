@@ -240,13 +240,5 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
-	public function download_presse()
-	{
-		$data['title'] = 'Download & Presse';
-		$data['description'] = 'Download - Presse | STYX Naturcosmetic GmbH';
-		$data['page'] = 'app/download_presse';
-
-		$this->load->view('layout/normal', $data);
-	}
 
 }
