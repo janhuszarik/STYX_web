@@ -243,35 +243,44 @@ class App extends CI_Controller
 	public function download_presse_login()
 	{
 		$post = $this->input->post();
+
 		if ($post) {
 			$username = trim($post['username']);
 			$password = trim($post['password']);
-			$recaptchaResponse = $post['g-recaptcha-response'];
 
-			// ✅ overenie reCAPTCHA
-			$secret = config_item('recaptcha_secret_key');
-			$verifyResponse = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$recaptchaResponse}");
-			$responseData = json_decode($verifyResponse);
-
-			if (!$responseData->success) {
+			// === reCAPTCHA kontrola ===
+			$recaptcha_response = $this->input->post('g-recaptcha-response');
+			if (empty($recaptcha_response)) {
 				$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
-				redirect('aktuelles/download-presse-login');
+				redirect($_SERVER['HTTP_REFERER']);
 				return;
 			}
 
-			// ✅ Overenie mena/hesla
+			$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response);
+			$response = json_decode($verify);
+
+			if (!$response->success) {
+				$this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
+				redirect($_SERVER['HTTP_REFERER']);
+				return;
+			}
+
+			// === Jednoduché overenie prístupových údajov ===
 			if ($username === 'styx' && $password === 'styx3100') {
 				redirect('https://drive.google.com/drive/u/1/folders/1j-DjaM3af-ZAodvNLB-jNOLADFqaPoS9');
 			} else {
 				$this->session->set_flashdata('error', 'Ungültiger Benutzername oder Passwort.');
-				redirect('aktuelles/download-presse-login');
+				redirect($_SERVER['HTTP_REFERER']);
 			}
 		} else {
 			$data['title'] = 'Presse Zugang';
+			$data['description'] = 'Zugang zum geschützten Pressebereich.';
 			$data['page'] = 'app/download_presse_login';
+
 			$this->load->view('layout/normal', $data);
 		}
 	}
+
 
 
 
