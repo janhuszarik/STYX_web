@@ -119,15 +119,15 @@ $route['admin/article/upload_image'] = 'article/upload_image';
 	$route['admin/news/edit/:num'] 								= 'admin/newsSave';
 	$route['admin/news/del/:num']								= 'admin/newsSave';
 
-$route['admin/bestProduct']              = 'admin/bestProductSave';
-$route['admin/bestProduct/create']       = 'admin/bestProductSave/create';
-$route['admin/bestProduct/edit/(:num)']  = 'admin/bestProductSave/edit/$1';
-$route['admin/bestProduct/del/(:num)']   = 'admin/bestProductSave/del/$1';
-$route['admin/bestProduct/save']         = 'admin/bestProductSave'; // volané cez POST
+	$route['admin/bestProduct']              = 'admin/bestProductSave';
+	$route['admin/bestProduct/create']       = 'admin/bestProductSave/create';
+	$route['admin/bestProduct/edit/(:num)']  = 'admin/bestProductSave/edit/$1';
+	$route['admin/bestProduct/del/(:num)']   = 'admin/bestProductSave/del/$1';
+	$route['admin/bestProduct/save']         = 'admin/bestProductSave';
 
 
 
-$route['admin/galleryCategory']                      		= 'gallery/galleryCategorySave';
+	$route['admin/galleryCategory']                      		= 'gallery/galleryCategorySave';
 	$route['admin/galleryCategory/edit/(:num)']          		= 'gallery/galleryCategorySave/edit/$1';
 	$route['admin/galleryCategory/form']                 		= 'gallery/galleryCategoryForm';
 	$route['admin/galleryCategory/form/(:num)']          		= 'gallery/galleryCategoryForm/$1';
@@ -151,6 +151,7 @@ $route['admin/galleryCategory']                      		= 'gallery/galleryCategor
 	$route['visit/shopfinder'] 									= 'app/showMap';
 	$route['kontakt/send'] 										= 'app/send_contact';
 
+	$route['aktuelles/download-presse-login'] 					= 'app/download_presse_login';
 	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
 	$route['contact/contact-journey'] 							= 'app/kontakt';
 	$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
