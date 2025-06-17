@@ -154,9 +154,9 @@ $route['admin/article/upload_image'] = 'article/upload_image';
 	$route['aktuelles/download-presse-login'] 					= 'app/download_presse_login';
 	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
 	$route['contact/contact-journey'] 							= 'app/kontakt';
-	$route['(:any)/(:any)/(:any)/(:any)'] 						= 'app/routes';
-	$route['(:any)/(:any)/(:any)'] 								= 'app/routes';
-	$route['(:any)/(:any)'] 									= 'app/routes';
+	$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
+	$route['(:any)/(:any)/(:any)'] = 'app/routes';
+	$route['(:any)/(:any)'] = 'app/routes';
 
 
 
