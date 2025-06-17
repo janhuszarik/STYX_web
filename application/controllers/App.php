@@ -273,7 +273,7 @@ class App extends CI_Controller
 				redirect($_SERVER['HTTP_REFERER']);
 			}
 		} else {
-			$data['title'] = 'Presse Zugang';
+			$data['title'] = 'Downloads & Presse';
 			$data['description'] = 'Zugang zum geschützten Pressebereich.';
 			$data['page'] = 'app/download_presse_login';
 

@@ -1,3 +1,13 @@
+<section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-10 text-center">
+				<h1 id="article-heading" class="font-weight-bold mb-3"><?= $title ?></h1>
+				<p class="text-muted lead mb-0"><?= htmlspecialchars($description) ?></p>
+			</div>
+		</div>
+	</div>
+</section>
 <section class="container py-5" style="max-width: 500px; margin: auto;">
 	<h2 class="mb-4 text-center">Presse Login</h2>
 
