@@ -112,8 +112,8 @@ for ($set = 1; $set <= 2; $set++) {
 											<p class="card-text"><?= htmlspecialchars($desc) ?></p>
 										<?php endif; ?>
 									</div>
-									<div class="card-footer bg-transparent border-0 text-end pe-3">
-										<div class="text-success fw-bold">Shop</div>
+									<div class="card-footer bg-transparent border-0 p-3">
+										<span class="btn btn-success w-100 text-white fw-bold">SHOP</span>
 									</div>
 								</div>
 							</a>
