@@ -28,12 +28,13 @@ class Article extends CI_Controller
 				}
 			}
 
-			if (!empty($post['menu_id'])) {
-				$post['menu_id'] = (int)$post['menu_id'];
-				$post['slug'] = $this->Admin_model->getSlugById($post['menu_id']);
-			} elseif (!empty($post['submenu_id'])) {
-				$post['submenu_id'] = (int)$post['submenu_id'];
-				$post['slug'] = $this->Admin_model->getSlugBySubId($post['submenu_id']);
+			// Generate slug based on category name and language
+			$lang = $post['lang'] ?? 'de';
+			if (empty($post['slug'])) {
+				$post['slug'] = $lang . '/' . url_title($post['name'], 'dash', true);
+			} else {
+				// Ensure slug starts with language prefix
+				$post['slug'] = $lang . '/' . ltrim($post['slug'], '/');
 			}
 
 			if (!empty($post['id'])) {
@@ -205,10 +206,27 @@ class Article extends CI_Controller
 			if (!empty($post['menu_select'])) {
 				$parts = explode('/', trim($post['menu_select'], '/'));
 				$parts = array_filter($parts, fn($part) => !in_array($part, ['de', 'en']));
-				$post['slug'] = $lang . '/' . implode('/', $parts);
+				$baseSlug = $lang . '/' . implode('/', $parts);
+				// Append title slug only if not main article
+				if (isset($post['is_main']) && $post['is_main'] == '0') {
+					$titleSlug = url_title($post['title'], 'dash', true);
+					$post['slug'] = $baseSlug . '/' . $titleSlug;
+				} else {
+					$post['slug'] = $baseSlug;
+				}
 			} elseif (empty($post['slug']) && !empty($id)) {
 				$article = $this->Article_model->getArticle($id);
 				$post['slug'] = $article->slug ?? '';
+			} else {
+				// For new articles with non-menu-based categories or no menu_select
+				$category = $this->Article_model->getArticleCategories($post['category_id']);
+				if ($category && (empty($category->menu_id) && empty($category->submenu_id)) && !empty($category->slug)) {
+					$categorySlug = $category->slug;
+					$titleSlug = url_title($post['title'], 'dash', true);
+					$post['slug'] = $categorySlug . '/' . $titleSlug;
+				} elseif (empty($post['slug'])) {
+					$post['slug'] = $lang . '/' . url_title($post['title'], 'dash', true);
+				}
 			}
 
 			if (empty($post['slug'])) {
@@ -382,6 +400,7 @@ class Article extends CI_Controller
 			->set_content_type('application/json')
 			->set_output(json_encode($result));
 	}
+
 	public function upload_image()
 	{
 		$this->load->helper('app_helper');

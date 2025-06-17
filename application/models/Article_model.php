@@ -2,12 +2,59 @@
 
 class Article_model extends CI_Model
 {
+	/**
+	 * Generate a unique slug for the category
+	 *
+	 * @param string $title The category title
+	 * @param string $lang The language code
+	 * @param int|null $excludeId ID to exclude when checking for duplicates
+	 * @return string The unique slug
+	 */
+	private function generateUniqueSlug($title, $lang, $excludeId = null)
+	{
+		$this->load->helper('url');
+		$baseSlug = url_title($title, 'dash', true);
+		$slug = $lang . '/' . $baseSlug;
+		$originalSlug = $slug;
+		$counter = 1;
+
+		$this->db->where('slug', $slug);
+		if ($excludeId) {
+			$this->db->where('id !=', $excludeId);
+		}
+
+		while ($this->db->count_all_results('article_categories') > 0) {
+			$slug = $lang . '/' . $baseSlug . '-' . $counter;
+			$this->db->where('slug', $slug);
+			if ($excludeId) {
+				$this->db->where('id !=', $excludeId);
+			}
+			$counter++;
+		}
+
+		return $slug;
+	}
+
 	public function saveArticleCategory($post = false)
 	{
+		$this->load->helper('url');
+
+		// Generate slug if not provided or empty
+		$slug = trim($post['slug'] ?? '');
+		$lang = $post['lang'] ?? 'de';
+		if (empty($slug)) {
+			$slug = $this->generateUniqueSlug($post['name'], $lang, !empty($post['id']) ? $post['id'] : null);
+		} else {
+			// Ensure slug starts with language prefix
+			$slug = $lang . '/' . ltrim(str_replace($lang . '/', '', $slug), '/');
+			// Verify uniqueness
+			$slug = $this->generateUniqueSlug(str_replace($lang . '/', '', $slug), $lang, !empty($post['id']) ? $post['id'] : null);
+		}
+
 		$data = [
 			'name' => $post['name'],
-			'slug' => trim($post['slug']),
-			'lang' => $post['lang'],
+			'slug' => $slug,
+			'lang' => $lang,
 			'active' => $post['active'],
 			'created_at' => date('Y-m-d H:i:s'),
 			'keywords' => $post['keywords'],
@@ -22,8 +69,11 @@ class Article_model extends CI_Model
 		}
 	}
 
-	public function getArticleCategories()
+	public function getArticleCategories($id = null)
 	{
+		if ($id) {
+			return $this->db->get_where('article_categories', ['id' => $id])->row();
+		}
 		$query = $this->db->get('article_categories');
 		return $query->result();
 	}
@@ -113,7 +163,7 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'uploads/articles');
+			$uploadPath = uploadImg('image', 'Uploads/articles');
 			if ($uploadPath && file_exists($uploadPath)) {
 				$image = $uploadPath;
 			} else {
@@ -122,7 +172,7 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'uploads/articles/';
+			$localDir = FCPATH . 'Uploads/articles/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
@@ -197,7 +247,7 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov);
+					$up = uploadImg("product_image{$suffix}", 'Uploads/articles/products', $nazov);
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
@@ -206,13 +256,13 @@ class Article_model extends CI_Model
 					}
 				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
 					$ftpPath = $post["ftp_product_image{$suffix}"];
-					$localDir = FCPATH . 'uploads/articles/products/';
+					$localDir = FCPATH . 'Uploads/articles/products/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to download FTP product image set{$setNum}_product{$prodNum}: $ftpPath");
 							return false;
@@ -221,13 +271,13 @@ class Article_model extends CI_Model
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to copy FTP product image set{$setNum}_product{$prodNum}: $src");
 							return false;
 						}
 					} else {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 					}
 				}
 			}

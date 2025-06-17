@@ -35,15 +35,20 @@ foreach ($menuItems as $menu) {
 $menuOptionsJson = json_encode($menuOptions);
 
 $defaultMenuUrl = '';
+$categorySlug = '';
 if (isset($article) && !empty($article->slug)) {
 	$defaultMenuUrl = $article->slug;
 } elseif ($categoryId) {
 	$category = $CI->db->get_where('article_categories', ['id' => $categoryId])->row();
-	if ($category && (!empty($category->menu_id) || !empty($category->submenu_id))) {
-		$menuId = $category->menu_id ?: $category->submenu_id;
-		$menu = $CI->db->get_where('menu', ['id' => $menuId])->row();
-		if ($menu && !empty($menu->url)) {
-			$defaultMenuUrl = $menu->url;
+	if ($category) {
+		if (empty($category->menu_id) && empty($category->submenu_id) && !empty($category->slug)) {
+			$categorySlug = $category->slug; // For non-menu-based categories
+		} elseif (!empty($category->menu_id) || !empty($category->submenu_id)) {
+			$menuId = $category->menu_id ?: $category->submenu_id;
+			$menu = $CI->db->get_where('menu', ['id' => $menuId])->row();
+			if ($menu && !empty($menu->url)) {
+				$defaultMenuUrl = $menu->url;
+			}
 		}
 	}
 }
@@ -104,8 +109,8 @@ if (isset($article) && !empty($article->slug)) {
 							<label for="slug_display" class="col-form-label">URL-Adresse
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-Adresse wird automatisch generiert und setzt sich aus der gewählten Sprache, dem Hauptmenüpunkt und dem letzten Menüpunkt zusammen, unter dem dieser Artikel gespeichert wird."></i>
 							</label>
-							<input type="text" class="form-control" id="slug_display" name="slug_display" value="https://www.styx.at/<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
-							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>">
+							<input type="text" class="form-control" id="slug_display" name="slug_display" value="https://www.styx.at/<?= htmlspecialchars((isset($article) && !empty($article->slug) ? $article->slug : ($defaultMenuUrl ?? $categorySlug))) ?>" readonly>
+							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl ?? $categorySlug ?? '') ?>">
 						</div>
 						<div class="col-md-4">
 							<label for="is_main" class="col-form-label">Hauptartikel
@@ -307,6 +312,8 @@ if (isset($article) && !empty($article->slug)) {
 <script>
 	let sectionCount = 0, maxSections = 10, sectionsData = <?= json_encode($sections ?? []) ?>;
 	const menuOptions = <?= $menuOptionsJson ?>;
+	const categorySlug = "<?= htmlspecialchars($categorySlug) ?>";
+	const defaultMenuUrl = "<?= htmlspecialchars($defaultMenuUrl ?? '') ?>";
 
 	function updateSectionIndexes() {
 		const sections = document.querySelectorAll('[data-section]');
@@ -518,7 +525,6 @@ if (isset($article) && !empty($article->slug)) {
 			});
 		}
 
-
 		initSummer();
 
 		document.getElementById('add-section').onclick = () => {
@@ -572,38 +578,59 @@ if (isset($article) && !empty($article->slug)) {
 		const menuSelect = document.getElementById('menuSelect');
 		const slugInput = document.getElementById('slug');
 		const slugDisplay = document.getElementById('slug_display');
+		const isMainSelect = document.getElementById('is_main');
+		const titleInput = document.getElementById('title');
 
-		if (menuSelect && slugInput && slugDisplay) {
-			menuSelect.addEventListener("change", function () {
-				const selectedValue = this.value;
+		if (menuSelect && slugInput && slugDisplay && isMainSelect) {
+			function updateSlug() {
+				let newSlug = '';
+				const lang = document.getElementById('lang').value || 'de';
+				const selectedValue = menuSelect.value;
+				const isMain = isMainSelect.value === '1';
+				const title = titleInput.value || '<?= htmlspecialchars($article->title ?? '') ?>';
+
 				if (selectedValue) {
 					const parts = selectedValue.split('/').filter(val => val && !['de', 'en'].includes(val));
-					const newSlug = parts.join('/');
-					slugInput.value = newSlug;
-					slugDisplay.value = '#' + newSlug;
+					newSlug = lang + '/' + parts.join('/');
+					if (!isMain) {
+						newSlug += '/' + urlTitle(title);
+					}
+				} else if (categorySlug) {
+					newSlug = categorySlug;
+					if (!isMain) {
+						newSlug += '/' + urlTitle(title);
+					}
 				} else {
-					slugInput.value = '';
-					slugDisplay.value = '';
+					newSlug = lang + '/' + urlTitle(title);
 				}
-			});
 
-			const initialSlug = "<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>";
+				slugInput.value = newSlug;
+				slugDisplay.value = 'https://www.styx.at/' + newSlug;
+			}
+
+			menuSelect.addEventListener("change", updateSlug);
+			isMainSelect.addEventListener("change", updateSlug);
+			titleInput.addEventListener("input", updateSlug);
+
+			// Initialize slug
+			const initialSlug = "<?= htmlspecialchars($article->slug ?? $defaultMenuUrl ?? $categorySlug ?? '') ?>";
 			if (initialSlug) {
 				const matchingOption = Array.from(menuSelect.options).find(option => {
 					const optionParts = option.value.split('/').filter(part => part && !['de', 'en'].includes(part));
 					const optionSlug = optionParts.join(' ');
-					return optionSlug === initialSlug;
+					return optionSlug === initialSlug.split('/').pop();
 				});
 				if (matchingOption) {
 					menuSelect.value = matchingOption.value;
-					slugInput.value = initialSlug;
-					slugDisplay.value = '#' + initialSlug;
 				}
+				slugInput.value = initialSlug;
+				slugDisplay.value = 'https://www.styx.at/' + initialSlug;
+			} else {
+				updateSlug();
 			}
 		}
 
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
-
 			// 🧼 1. Vyčistenie všetkých font-family vo Summernote na Poppins
 			$('.summernote').each(function () {
 				let content = $(this).summernote('code');
@@ -655,6 +682,13 @@ if (isset($article) && !empty($article->slug)) {
 			});
 		});
 
+		// Helper function to generate URL title
+		function urlTitle(str) {
+			return str.toLowerCase()
+				.replace(/[^a-z0-9-]/g, '-')
+				.replace(/-+/g, '-')
+				.replace(/^-|-$/g, '');
+		}
 
 		const modalEl = document.getElementById('ftpModal');
 		const modal = new bootstrap.Modal(modalEl);
