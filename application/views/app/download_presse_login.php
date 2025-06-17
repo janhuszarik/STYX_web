@@ -9,7 +9,7 @@
 	</div>
 </section>
 <section class="container py-5" style="max-width: 500px; margin: auto;">
-	<h2 class="mb-4 text-center">Presse Login</h2>
+	<h2 class="mb-4 text-center">Downloads & Presse Login</h2>
 
 	<?php if ($this->session->flashdata('error')): ?>
 		<div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
@@ -26,7 +26,6 @@
 			<input type="password" name="password" id="password" class="form-control" required>
 		</div>
 
-		<!-- Invisible reCAPTCHA tlačidlo -->
 		<button
 			type="button"
 			class="g-recaptcha btn btn-primary w-100"
