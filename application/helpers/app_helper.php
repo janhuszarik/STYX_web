@@ -322,7 +322,20 @@ function url_oprava($str, $separator = '-', $lowercase = TRUE) {
 	return trim(trim($str, $separator));
 }
 
-
+if (!function_exists('remove_diacritics')) {
+	function remove_diacritics($string) {
+		$trans = array(
+			'á' => 'a', 'ä' => 'a', 'č' => 'c', 'ď' => 'd', 'é' => 'e', 'ě' => 'e',
+			'í' => 'i', 'ľ' => 'l', 'ň' => 'n', 'ó' => 'o', 'ô' => 'o', 'ŕ' => 'r',
+			'š' => 's', 'ť' => 't', 'ú' => 'u', 'ů' => 'u', 'ý' => 'y', 'ž' => 'z',
+			'Á' => 'A', 'Ä' => 'A', 'Č' => 'C', 'Ď' => 'D', 'É' => 'E', 'Ě' => 'E',
+			'Í' => 'I', 'Ľ' => 'L', 'Ň' => 'N', 'Ó' => 'O', 'Ô' => 'O', 'Ŕ' => 'R',
+			'Š' => 'S', 'Ť' => 'T', 'Ú' => 'U', 'Ů' => 'U', 'Ý' => 'Y', 'Ž' => 'Z',
+			'ü' => 'u', 'Ü' => 'U', 'ö' => 'o', 'Ö' => 'O', 'ß' => 'ss'
+		);
+		return strtr($string, $trans);
+	}
+}
 
 
 function obrpridajthumb($vstup = false) {

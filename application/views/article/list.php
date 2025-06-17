@@ -4,7 +4,7 @@
 			<div class="col-md-8">
 				<h4 class="fw-bold"><?= htmlspecialchars($a->title) ?></h4>
 				<p><?= strip_tags($a->subtitle) ?></p>
-				<a href="<?= base_url($a->slug . '/' . $a->slug_title) ?>" class="btn btn-success">Mehr lesen >></a>
+				<a href="<?= base_url($a->slug . '/' . remove_diacritics($a->slug_title)) ?>" class="btn btn-success">Mehr lesen >></a>
 			</div>
 
 			<?php if (!empty($a->image)): ?>

@@ -113,7 +113,7 @@ for ($set = 1; $set <= 2; $set++) {
 										<?php endif; ?>
 									</div>
 									<div class="card-footer bg-transparent border-0 text-end pe-3">
-										<div class="text-success fw-bold">...jetzt SHOPEN!</div>
+										<div class="text-success fw-bold">Shop</div>
 									</div>
 								</div>
 							</a>
