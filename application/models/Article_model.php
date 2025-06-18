@@ -50,29 +50,65 @@ class Article_model extends CI_Model
 		return $this->db->get()->result();
 	}
 
-	public function countCategoriesFiltered($search = null)
+	public function getPaginatedCategoriesFiltered($limit = null, $offset = null, $search = null)
 	{
-		if (!empty($search)) {
-			$this->db->group_start();
-			$this->db->like('name', $search);
-			$this->db->or_like('slug', $search);
-			$this->db->or_like('keywords', $search);
-			$this->db->or_like('description', $search);
-			$this->db->group_end();
-		}
-		return $this->db->count_all_results('article_categories');
-	}
-
-	public function getPaginatedCategories($limit, $offset)
-	{
-		$this->db->select('ac.*, COUNT(a.id) as article_count, m.parent');
+		$this->db->select('ac.*, COUNT(a.id) as article_count, m.parent, m.orderBy, m.id as menu_id');
 		$this->db->from('article_categories ac');
 		$this->db->join('articles a', 'a.category_id = ac.id', 'left');
-		$this->db->join('menu m', 'ac.menu_id = m.id', 'left');
+		$this->db->join('menu m', 'ac.menu_id = m.id OR ac.submenu_id = m.id', 'left');
+
+		if (!empty($search)) {
+			$this->db->group_start();
+			$this->db->like('ac.name', $search);
+			$this->db->or_like('ac.slug', $search);
+			$this->db->or_like('ac.keywords', $search);
+			$this->db->or_like('ac.description', $search);
+			$this->db->group_end();
+		}
+
 		$this->db->group_by('ac.id');
-		$this->db->order_by('ac.id', 'DESC');
-		$this->db->limit($limit, $offset);
-		return $this->db->get()->result();
+		$this->db->order_by('m.parent', 'ASC');
+		$this->db->order_by('m.orderBy', 'ASC');
+		$this->db->order_by('ac.id', 'ASC');
+
+		if ($limit !== null && $offset !== null) {
+			$this->db->limit($limit, $offset);
+		}
+
+		$categories = $this->db->get()->result();
+
+		$ordered_categories = [];
+		$main_menus = [];
+		$sub_menus = [];
+
+		foreach ($categories as $cat) {
+			if ($cat->parent == 0 && $cat->menu_id) {
+				$main_menus[] = $cat;
+			} else {
+				$sub_menus[] = $cat;
+			}
+		}
+
+		usort($main_menus, function($a, $b) {
+			return $a->orderBy <=> $b->orderBy;
+		});
+
+		foreach ($main_menus as $main) {
+			$ordered_categories[] = $main;
+			foreach ($sub_menus as $sub) {
+				if ($sub->parent == $main->menu_id) {
+					$ordered_categories[] = $sub;
+				}
+			}
+		}
+
+		foreach ($categories as $cat) {
+			if (!$cat->menu_id && !$cat->submenu_id) {
+				$ordered_categories[] = $cat;
+			}
+		}
+
+		return $ordered_categories;
 	}
 
 	public function countArticlesByCategory($categoryId)
@@ -113,7 +149,7 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'uploads/articles');
+			$uploadPath = uploadImg('image', 'Uploads/articles');
 			if ($uploadPath && file_exists($uploadPath)) {
 				$image = $uploadPath;
 			} else {
@@ -122,7 +158,7 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'uploads/articles/';
+			$localDir = FCPATH . 'Uploads/articles/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
@@ -149,11 +185,9 @@ class Article_model extends CI_Model
 			$image = $post['old_image'] ?? null;
 		}
 
-		// Handle is_main and slug_title
 		$is_main = isset($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
 		$slug_title = $is_main ? null : url_title($post['title'], 'dash', true);
 
-		// If setting as main, unset other main articles in the same category
 		if ($is_main && !empty($post['category_id'])) {
 			$this->db->where('category_id', $post['category_id']);
 			$this->db->where('is_main', 1);
@@ -168,7 +202,7 @@ class Article_model extends CI_Model
 			'lang'            => $post['lang'] ?? 'de',
 			'title'           => $post['title'],
 			'subtitle'        => $post['subtitle'],
-			'slug'            => $post['slug'], // Already includes lang prefix from controller
+			'slug'            => $post['slug'],
 			'image'           => $image,
 			'image_title'     => $image_title,
 			'keywords'        => $post['keywords'] ?? null,
@@ -182,7 +216,6 @@ class Article_model extends CI_Model
 			'slug_title'      => $slug_title,
 		];
 
-		// Handle product sets (2 sets, 3 products each)
 		for ($set = 0; $set < 2; $set++) {
 			for ($i = 1; $i <= 3; $i++) {
 				$suffix = ($set * 3) + $i;
@@ -197,7 +230,7 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov);
+					$up = uploadImg("product_image{$suffix}", 'Uploads/articles/products', $nazov);
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
@@ -206,13 +239,13 @@ class Article_model extends CI_Model
 					}
 				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
 					$ftpPath = $post["ftp_product_image{$suffix}"];
-					$localDir = FCPATH . 'uploads/articles/products/';
+					$localDir = FCPATH . 'Uploads/articles/products/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to download FTP product image set{$setNum}_product{$prodNum}: $ftpPath");
 							return false;
@@ -221,13 +254,13 @@ class Article_model extends CI_Model
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to copy FTP product image set{$setNum}_product{$prodNum}: $src");
 							return false;
 						}
 					} else {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 					}
 				}
 			}
@@ -310,7 +343,6 @@ class Article_model extends CI_Model
 				'updated_at' => date('Y-m-d H:i:s'),
 			];
 
-			// Priradenie menu_id alebo submenu_id
 			if ((int)$menu->parent === 0) {
 				$data['menu_id'] = $menu->id;
 				$data['submenu_id'] = null;
@@ -322,16 +354,13 @@ class Article_model extends CI_Model
 			}
 
 			if ($exists) {
-				// Aktualizácia existujúcej kategórie
 				$this->db->where('id', $exists->id);
 				$this->db->update('article_categories', $data);
 			} else {
-				// Vytvorenie novej kategórie
 				$this->db->insert('article_categories', $data);
 			}
 		}
 
-		// Odstránenie kategórií, ktoré už nemajú zodpovedajúcu menu položku
 		$this->db->where('menu_id IS NOT NULL OR submenu_id IS NOT NULL');
 		$categories = $this->db->get('article_categories')->result();
 		foreach ($categories as $cat) {
@@ -339,7 +368,6 @@ class Article_model extends CI_Model
 				->get('menu')
 				->num_rows();
 			if (!$menuExists) {
-				// Skontrolovať, či kategória nemá články
 				$articleCount = $this->db->where('category_id', $cat->id)
 					->count_all_results('articles');
 				if ($articleCount === 0) {
@@ -348,34 +376,6 @@ class Article_model extends CI_Model
 				}
 			}
 		}
-	}
-
-	public function getPaginatedCategoriesFiltered($limit, $offset, $search = null)
-	{
-		$this->db->select('ac.*, COUNT(a.id) as article_count, m.parent, m.orderBy');
-		$this->db->from('article_categories ac');
-		$this->db->join('articles a', 'a.category_id = ac.id', 'left');
-		$this->db->join('menu m', 'ac.menu_id = m.id', 'left');
-
-		if (!empty($search)) {
-			$this->db->group_start();
-			$this->db->like('ac.name', $search);
-			$this->db->or_like('ac.slug', $search);
-			$this->db->or_like('ac.keywords', $search);
-			$this->db->or_like('ac.description', $search);
-			$this->db->group_end();
-		}
-
-		$this->db->group_by('ac.id');
-
-		$this->db->order_by('(CASE WHEN ac.menu_id IS NULL AND ac.submenu_id IS NULL THEN 1 ELSE 0 END)', 'ASC');
-		$this->db->order_by('m.parent', 'ASC');
-		$this->db->order_by('m.orderBy', 'ASC');
-		$this->db->order_by('ac.lang', 'ASC');
-		$this->db->order_by('ac.id', 'ASC');
-
-		$this->db->limit($limit, $offset);
-		return $this->db->get()->result();
 	}
 
 	public function getMenuItems()
@@ -394,7 +394,6 @@ class Article_model extends CI_Model
 			$menuSlug = !empty($item->url) ? $lang . '/' . $item->url : $lang . '/' . url_title($item->name, 'dash', true);
 			$options .= '<option value="' . htmlspecialchars($menuSlug) . '">' . htmlspecialchars($item->name) . '</option>';
 
-			// Find the corresponding category
 			$category = null;
 			foreach ($categories as $cat) {
 				if ($cat->menu_id == $item->id || $cat->submenu_id == $item->id) {
@@ -403,7 +402,6 @@ class Article_model extends CI_Model
 				}
 			}
 
-			// If the category exists and has multiple articles, add articles as submenu items
 			if ($category) {
 				$articles = $this->getArticlesByCategory($category->id);
 				if (count($articles) > 1) {

@@ -43,9 +43,6 @@ class Admin extends CI_Controller
 			];
 		}, $this->Admin_model->get_calendar_notes());
 
-
-
-
 		$this->load->view('admin/layout/normal', $data);
 	}
 
@@ -81,7 +78,6 @@ class Admin extends CI_Controller
 			'color' => $post['color']
 		]);
 
-
 		echo json_encode(['success' => true]);
 	}
 
@@ -110,12 +106,14 @@ class Admin extends CI_Controller
 			$post['lang'] = isset($post['lang']) ? $post['lang'] : 'de';
 			$post['base'] = isset($post['base']) ? $post['base'] : '0';
 
+			// Clean URL if provided
 			$existingUrl = trim($post['url']);
 			$isExternal = (strpos($existingUrl, 'http://') === 0 || strpos($existingUrl, 'https://') === 0);
 
 			if ($isExternal) {
 				$post['url'] = $existingUrl;
 			} else {
+				// Generate slug only if URL is empty or matches default prefixes
 				$slugPart = url_oprava($post['name']);
 				$langPrefix = $post['lang'] . '/app';
 				$fullPrefix1 = $langPrefix;
@@ -124,9 +122,10 @@ class Admin extends CI_Controller
 				if (
 					empty($existingUrl) ||
 					$existingUrl === $fullPrefix1 ||
-					$existingUrl === $fullPrefix2
+					$existingUrl === $fullPrefix2 ||
+					strpos($existingUrl, $langPrefix) === 0
 				) {
-					$baseUrl = $langPrefix . '/' . $slugPart;
+					$baseUrl = $slugPart;
 
 					$this->load->model('Admin_model');
 					$uniqueUrl = $baseUrl;
@@ -136,6 +135,10 @@ class Admin extends CI_Controller
 						$counter++;
 					}
 					$post['url'] = $uniqueUrl;
+				} else {
+					// Use provided URL, but clean it
+					$post['url'] = trim($existingUrl, '/');
+					$post['url'] = preg_replace('#^(de|sk|en)(/app)?/#', '', $post['url']);
 				}
 			}
 
@@ -157,7 +160,6 @@ class Admin extends CI_Controller
 				}
 			}
 		}
-
 
 		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->menuDelete($id)) {
@@ -196,39 +198,34 @@ class Admin extends CI_Controller
 	}
 
 	public function sliderSave() {
-		$post = $this->input->post(NULL, TRUE); // Použi TRUE pre XSS filter
-		$id = $post['id'] ?? $this->uri->segment(4); // Priorita pre $post['id']
+		$post = $this->input->post(NULL, TRUE);
+		$id = $post['id'] ?? $this->uri->segment(4);
 		$segment3 = $this->uri->segment(3);
 
-		// === Zápis / editácia ===
 		if (!empty($post)) {
-			// Získať pôvodný obrázok ak ide o úpravu
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
 
-			// Nahratie nového obrázku
-			$image = $this->upload_image('image', 'uploads/sliders/');
+			$image = $this->upload_image('image', 'Uploads/sliders/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['slider'] = (object)$post;
-				$data['slider']->image = $old_image; // Zachová aktuálny obrázok pri chybe
+				$data['slider']->image = $old_image;
 				$data['title'] = !empty($id) ? 'Slider bearbeiten' : 'Slider hinzufügen';
 				$data['page'] = 'admin/settings/slider_form';
 				$this->load->view('admin/layout/normal', $data);
 				return;
 			}
 
-			// Uloženie do DB
 			if ($this->Admin_model->save_slider_full($post, $image, $id)) {
-				// Zmazať pôvodný obrázok len ak bol nahratý nový
-				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/sliders/' . $old_image)) {
-					unlink(FCPATH . 'uploads/sliders/' . $old_image);
+				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/sliders/' . $old_image)) {
+					unlink(FCPATH . 'Uploads/sliders/' . $old_image);
 				}
 				$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 				redirect(BASE_URL . 'admin/slider');
 			} else {
 				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
 				$data['slider'] = (object)$post;
-				$data['slider']->image = $old_image; // Zachovať starý obrázok pri chybe
+				$data['slider']->image = $old_image;
 				$data['title'] = !empty($id) ? 'Slider bearbeiten' : 'Slider hinzufügen';
 				$data['page'] = 'admin/settings/slider_form';
 				$this->load->view('admin/layout/normal', $data);
@@ -236,7 +233,6 @@ class Admin extends CI_Controller
 			}
 		}
 
-		// Mazanie
 		if ($segment3 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->delete_slider($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
@@ -246,7 +242,6 @@ class Admin extends CI_Controller
 			redirect(BASE_URL . 'admin/slider');
 		}
 
-		// Editácia
 		if ($segment3 == 'edit' && is_numeric($id)) {
 			$data['slider'] = $this->Admin_model->get_slider($id);
 			if (!$data['slider']) {
@@ -259,7 +254,6 @@ class Admin extends CI_Controller
 			return;
 		}
 
-		// Pridanie
 		if ($segment3 == 'add') {
 			$data['slider'] = new stdClass();
 			$data['title'] = 'Slider hinzufügen';
@@ -268,7 +262,6 @@ class Admin extends CI_Controller
 			return;
 		}
 
-		// Zoznam sliderov
 		$data['sliders'] = $this->Admin_model->get_all_sliders();
 		$data['title'] = 'Slider';
 		$data['page'] = 'admin/settings/sliders';
@@ -315,7 +308,7 @@ class Admin extends CI_Controller
 		}
 	}
 
-	private function upload_image($field_name, $path = 'uploads/sliders/') {
+	private function upload_image($field_name, $path = 'Uploads/sliders/') {
 		if (empty($_FILES[$field_name]['name'])) {
 			return false;
 		}
@@ -351,10 +344,10 @@ class Admin extends CI_Controller
 			return ['error' => $error];
 		}
 
-		return $this->upload->data(); // obsahuje ['file_name'] a ['full_path']
+		return $this->upload->data();
 	}
 
-	private function uploadImageToPath($field_name, $path = 'uploads/news/') {
+	private function uploadImageToPath($field_name, $path = 'Uploads/news/') {
 		log_message('debug', 'FCPATH value: ' . FCPATH);
 		log_message('debug', 'Current working directory: ' . getcwd());
 
@@ -400,7 +393,7 @@ class Admin extends CI_Controller
 	}
 
 	public function uploadImage() {
-		$response = $this->uploadImageToPath('file', 'uploads/news/');
+		$response = $this->uploadImageToPath('file', 'Uploads/news/');
 		log_message('debug', 'Upload response: ' . json_encode($response));
 		echo json_encode($response);
 	}
@@ -412,7 +405,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/news/');
+			$image = $this->upload_image('image', 'Uploads/news/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['news'] = (object)$post;
@@ -424,8 +417,8 @@ class Admin extends CI_Controller
 
 			if (!empty($id)) {
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/news/' . $old_image)) {
-						unlink(FCPATH . 'uploads/news/' . $old_image);
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/news/' . $old_image)) {
+						unlink(FCPATH . 'Uploads/news/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect(BASE_URL . 'admin/news');
@@ -470,7 +463,7 @@ class Admin extends CI_Controller
 			$data['page'] = 'admin/settings/news_form';
 			$this->load->view('admin/layout/normal', $data);
 		} elseif ($segment3 == 'add') {
-			$data['news'] = new stdClass(); // Empty object for new news
+			$data['news'] = new stdClass();
 			$data['title'] = 'News hinzufügen';
 			$data['page'] = 'admin/settings/news_form';
 			$this->load->view('admin/layout/normal', $data);
@@ -488,10 +481,9 @@ class Admin extends CI_Controller
 		$id = $this->uri->segment(4);
 		$segment2 = $this->uri->segment(3);
 
-		// Spracovanie POST požiadavky – ULOŽENIE
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getProduct($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/product/');
+			$image = $this->upload_image('image', 'Uploads/product/');
 
 			if (isset($image['error']) && !$image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
@@ -502,8 +494,8 @@ class Admin extends CI_Controller
 			if (!empty($id)) {
 				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
 					if ($image && !isset($image['error'])) {
-						if ($old_image && file_exists(FCPATH . 'uploads/product/' . $old_image)) {
-							unlink(FCPATH . 'uploads/product/' . $old_image);
+						if ($old_image && file_exists(FCPATH . 'Uploads/product/' . $old_image)) {
+							unlink(FCPATH . 'Uploads/product/' . $old_image);
 						}
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
@@ -523,7 +515,6 @@ class Admin extends CI_Controller
 			}
 		}
 
-		// MAZANIE
 		if ($segment2 == 'del' && is_numeric($id)) {
 			if ($this->Admin_model->bestProductDelete($id)) {
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
@@ -533,7 +524,6 @@ class Admin extends CI_Controller
 			redirect('admin/bestProduct');
 		}
 
-		// INDEX – výpis
 		if (empty($segment2)) {
 			$data['products'] = $this->Admin_model->getProduct();
 			$data['title'] = 'Beliebte Produkte';
@@ -542,7 +532,6 @@ class Admin extends CI_Controller
 			return;
 		}
 
-		// CREATE alebo EDIT formulár
 		if ($segment2 == 'create' || ($segment2 == 'edit' && is_numeric($id))) {
 			$data['product'] = $this->Admin_model->getProduct($id);
 			$data['title'] = $segment2 == 'create' ? 'Neues Produkt erstellen' : 'Produkt bearbeiten';
@@ -550,10 +539,4 @@ class Admin extends CI_Controller
 			$this->load->view('admin/layout/normal', $data);
 		}
 	}
-
-
-
-
-
-
 }

@@ -70,30 +70,7 @@ class Article extends CI_Controller
 			}
 		}
 
-		$this->load->library('pagination');
-		$config['base_url'] = base_url('admin/article_categories');
-		$config['total_rows'] = $this->Article_model->countCategoriesFiltered($search);
-		$config['per_page'] = 30;
-		$config['uri_segment'] = 3;
-		$config['full_tag_open'] = '<ul class="pagination justify-content-center">';
-		$config['full_tag_close'] = '</ul>';
-		$config['attributes'] = ['class' => 'page-link'];
-		$config['first_link'] = '«';
-		$config['last_link'] = '»';
-		$config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
-		$config['cur_tag_close'] = '</span></li>';
-		$config['num_tag_open'] = '<li class="page-item">';
-		$config['num_tag_close'] = '</li>';
-		$config['prev_tag_open'] = '<li class="page-item">';
-		$config['prev_tag_close'] = '</li>';
-		$config['next_tag_open'] = '<li class="page-item">';
-		$config['next_tag_close'] = '</li>';
-
-		$this->pagination->initialize($config);
-		$offset = $this->uri->segment(3) ?? 0;
-
-		$data['articleCategories'] = $this->Article_model->getPaginatedCategoriesFiltered($config['per_page'], $offset, $search);
-		$data['pagination'] = $this->pagination->create_links();
+		$data['articleCategories'] = $this->Article_model->getPaginatedCategoriesFiltered(null, null, $search);
 		$data['articleCategory'] = $this->Article_model->getArticleCategories($id);
 		$data['title'] = 'Artikelkategorien';
 		$data['page'] = 'admin/settings/article_categories';
@@ -172,9 +149,9 @@ class Article extends CI_Controller
 		$galleryCategories = $this->Gallery_model->getAllCategories();
 
 		$dirs = [
-			'articles' => './uploads/articles/',
-			'products' => './uploads/articles/products/',
-			'sections' => './uploads/articles/sections/',
+			'articles' => './Uploads/articles/',
+			'products' => './Uploads/articles/products/',
+			'sections' => './Uploads/articles/sections/',
 		];
 		foreach ($dirs as $dir) {
 			if (!file_exists($dir)) mkdir($dir, 0777, true);
@@ -220,7 +197,7 @@ class Article extends CI_Controller
 				$this->upload->initialize(['upload_path' => $dirs['articles'], 'allowed_types' => 'jpg|jpeg|png|gif|webp']);
 				if ($this->upload->do_upload('image')) {
 					$upload_data = $this->upload->data();
-					$post['image'] = 'uploads/articles/' . $upload_data['file_name'];
+					$post['image'] = 'Uploads/articles/' . $upload_data['file_name'];
 				} else {
 					$this->session->set_flashdata('error', 'Fehler beim Hochladen des Hauptbildes: ' . $this->upload->display_errors());
 					$post['image'] = $post['old_image'] ?? null;
@@ -251,7 +228,7 @@ class Article extends CI_Controller
 
 						if ($this->upload->do_upload('temp_section_image')) {
 							$upload_data = $this->upload->data();
-							$image = 'uploads/articles/sections/' . $upload_data['file_name'];
+							$image = 'Uploads/articles/sections/' . $upload_data['file_name'];
 						}
 					} elseif (!empty($post['old_section_image'][$i])) {
 						$image = $post['old_section_image'][$i];
@@ -382,12 +359,13 @@ class Article extends CI_Controller
 			->set_content_type('application/json')
 			->set_output(json_encode($result));
 	}
+
 	public function upload_image()
 	{
 		$this->load->helper('app_helper');
 		$response = ['success' => false, 'error' => ''];
 
-		$dir = './uploads/articles/summernote/';
+		$dir = './Uploads/articles/summernote/';
 		if (!file_exists($dir)) {
 			if (!mkdir($dir, 0777, true)) {
 				$response['error'] = 'Fehler beim Erstellen des Ordners.';
@@ -397,7 +375,7 @@ class Article extends CI_Controller
 		}
 
 		if (!empty($_FILES['image']['name'])) {
-			$upload_path = uploadImg('image', 'uploads/articles/summernote');
+			$upload_path = uploadImg('image', 'Uploads/articles/summernote');
 			if ($upload_path && file_exists($upload_path)) {
 				$response['success'] = true;
 				$response['image_url'] = $upload_path;

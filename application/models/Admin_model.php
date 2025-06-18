@@ -3,14 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin_model extends CI_Model {
 
-function getNewsletters(){
-
+	function getNewsletters(){
 		$this->db->select('*');
 		$this->db->where('active','1');
 		return $this->db->get('newsletter')->result();
-
-}
-
+	}
 
 	function menuSave($post = false)
 	{
@@ -64,8 +61,6 @@ function getNewsletters(){
 		return false;
 	}
 
-
-
 	function getMenu($id = false, $parent = false)
 	{
 		$this->db->select('m.*');
@@ -107,15 +102,14 @@ function getNewsletters(){
 		}
 		return $menu;
 	}
+
 	public function menuDelete($id)
 	{
-		// Skontrolovať, či menu položka má priradenú kategóriu
 		$this->db->where('menu_id', $id);
 		$this->db->or_where('submenu_id', $id);
 		$category = $this->db->get('article_categories')->row();
 
 		if ($category) {
-			// Skontrolovať, či kategória obsahuje články
 			$articleCount = $this->db->where('category_id', $category->id)
 				->count_all_results('articles');
 			if ($articleCount > 0) {
@@ -123,36 +117,51 @@ function getNewsletters(){
 				return false;
 			}
 
-			// Odstrániť kategóriu, ak neobsahuje články
 			$this->db->where('id', $category->id);
 			$this->db->delete('article_categories');
 		}
 
-		// Odstrániť menu položku
 		$this->db->where('id', $id);
 		return $this->db->delete('menu');
 	}
+
 	private function getFullSlugPathFromParent($menuId, $lang = 'de')
 	{
 		$segments = [];
+		$currentMenuId = $menuId;
 
-		while ($menuId && $menuId != '0') {
-			$row = $this->db->select('id, parent, url')
-				->where('id', $menuId)
+		while ($currentMenuId && $currentMenuId != '0') {
+			$row = $this->db->select('id, parent, name, url, lang')
+				->where('id', $currentMenuId)
 				->get('menu')
 				->row();
 			if (!$row) break;
 
-			$cleanUrl = preg_replace('#^(de|sk|en)(/app)?/#', '', trim($row->url, '/'));
-			array_unshift($segments, $cleanUrl);
+			// Use provided URL if available, otherwise generate from name
+			$cleanSegment = !empty($row->url) ? $row->url : url_oprava($row->name);
+			// Remove language prefix and any leading/trailing slashes
+			$cleanSegment = preg_replace('#^(de|sk|en)(/app)?/#', '', trim($cleanSegment, '/'));
+			// Avoid adding empty segments
+			if (!empty($cleanSegment)) {
+				array_unshift($segments, $cleanSegment);
+			}
 
-			$menuId = $row->parent;
+			$currentMenuId = $row->parent;
 		}
 
-		return $lang . '/' . implode('/', $segments);
+		// Ensure unique segments to prevent duplicates
+		$segments = array_unique($segments);
+
+		// Prepend language prefix
+		$finalSlug = $lang . '/' . implode('/', $segments);
+
+		// Remove duplicate language prefixes and normalize
+		$finalSlug = preg_replace('#^(de|sk|en)/(de|sk|en)/#', '$1/', $finalSlug);
+		$finalSlug = preg_replace('#//+#', '/', $finalSlug);
+		$finalSlug = trim($finalSlug, '/');
+
+		return $finalSlug;
 	}
-
-
 
 	public function urlExists($url, $excludeId = null)
 	{
@@ -163,7 +172,6 @@ function getNewsletters(){
 		$query = $this->db->get('menu');
 		return $query->num_rows() > 0;
 	}
-
 
 	public function get_all_sliders() {
 		$this->db->select('*');
@@ -191,7 +199,7 @@ function getNewsletters(){
 		$this->db->from('slider');
 		$this->db->where('id', $id);
 		$query = $this->db->get();
-		return $query->num_rows() > 0 ? $query->row()->image : null; // Returns image or null
+		return $query->num_rows() > 0 ? $query->row()->image : null;
 	}
 
 	public function save_slider_full($post, $image = false, $id = null) {
@@ -213,7 +221,6 @@ function getNewsletters(){
 		}
 
 		if (!empty($id) && is_numeric($id)) {
-			// Overiť, či slider existuje
 			$existing_slider = $this->get_slider($id);
 			if (!$existing_slider) {
 				log_message('error', "Slider s ID $id neexistuje.");
@@ -224,7 +231,6 @@ function getNewsletters(){
 			$this->db->where('id', $id);
 			return $this->db->update('slider', $data);
 		} else {
-			// Vytvorenie nového záznamu
 			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('slider', $data);
 		}
@@ -234,19 +240,16 @@ function getNewsletters(){
 		if (!is_numeric($id)) {
 			return false;
 		}
-		// Get slider to delete its image
 		$slider = $this->get_slider($id);
 		if (!$slider) {
 			return false;
 		}
-		if ($slider->image && file_exists(FCPATH . 'uploads/sliders/' . $slider->image)) {
-			unlink(FCPATH . 'uploads/sliders/' . $slider->image);
+		if ($slider->image && file_exists(FCPATH . 'Uploads/sliders/' . $slider->image)) {
+			unlink(FCPATH . 'Uploads/sliders/' . $slider->image);
 		}
 		$this->db->where('id', $id);
 		return $this->db->delete('slider');
 	}
-
-
 
 	public function is_order_by_duplicate($orderBy, $id = null) {
 		$this->db->where('orderBy', $orderBy);
@@ -261,8 +264,6 @@ function getNewsletters(){
 		$result = $this->db->get('slider')->row_array();
 		return isset($result['orderBy']) ? $result['orderBy'] + 1 : 1;
 	}
-
-
 
 	function newsSave($post = false, $image = false, $old_image = false) {
 		$data = array(
@@ -291,31 +292,27 @@ function getNewsletters(){
 		}
 	}
 
-
 	function getNews($id = false)
 	{
-
 		if ($id == false) {
 			$this->db->select('*');
 			return $this->db->get('news')->result();
-
 		} else {
 			$this->db->select('*');
 			$this->db->where('id', $id);
 			return $this->db->get('news')->row();
 		}
 	}
+
 	function newsDelete($id)
 	{
-
 		$this->db->where('id', $id);
 		return $this->db->delete('news');
-
 	}
 
 	function bestProductSave($post = false, $image = false, $old_image = false) {
 		$data = array(
-			'lang'=> $this->input->post('lang'),
+			'lang' => $this->input->post('lang'),
 			'name' => $this->input->post('name'),
 			'url' => $this->input->post('url'),
 			'active' => $this->input->post('active'),
@@ -341,29 +338,26 @@ function getNewsletters(){
 			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('bestProduct', $data);
 		}
-
 	}
 
 	function getProduct($id = false)
 	{
-
 		if ($id == false) {
 			$this->db->select('*');
 			return $this->db->get('bestProduct')->result();
-
 		} else {
 			$this->db->select('*');
 			$this->db->where('id', $id);
 			return $this->db->get('bestProduct')->row();
 		}
 	}
+
 	function bestProductDelete($id)
 	{
-
 		$this->db->where('id', $id);
 		return $this->db->delete('bestProduct');
-
 	}
+
 	public function saveArticleCategory($post = false)
 	{
 		$data = [
@@ -372,7 +366,7 @@ function getNewsletters(){
 			'lang' => $post['lang'],
 			'active' => $post['active'],
 			'created_at' => date('Y-m-d H:i:s'),
-			'keywords'    => $post['keywords'] ,
+			'keywords'    => $post['keywords'],
 			'description' => $post['description']
 		];
 
@@ -384,7 +378,6 @@ function getNewsletters(){
 			$data['created_at'] = date('Y-m-d H:i:s');
 			return $this->db->insert('article_categories', $data);
 		}
-
 	}
 
 	public function getArticleCategories($id = false)
@@ -399,11 +392,11 @@ function getNewsletters(){
 		}
 	}
 
-
 	public function deleteArticleCategory($id)
 	{
 		return $this->db->delete('article_categories', ['id' => $id]);
 	}
+
 	public function getArticlesByCategory($categoryId)
 	{
 		$this->db->select('*');
@@ -412,6 +405,7 @@ function getNewsletters(){
 		$this->db->order_by('id', 'DESC');
 		return $this->db->get()->result();
 	}
+
 	public function getArticleCategoriesWithCount()
 	{
 		$this->db->select('ac.*, COUNT(a.id) as article_count');
@@ -420,6 +414,7 @@ function getNewsletters(){
 		$this->db->group_by('ac.id');
 		return $this->db->get()->result();
 	}
+
 	public function getArticle($id)
 	{
 		return $this->db->get_where('articles', ['id' => $id])->row();
@@ -447,7 +442,6 @@ function getNewsletters(){
 		}
 	}
 
-	// ČLÁNKY
 	public function getArticleStats()
 	{
 		$this->db->from('articles');
@@ -467,7 +461,6 @@ function getNewsletters(){
 		];
 	}
 
-
 	public function getMenuStats()
 	{
 		$this->db->from('menu');
@@ -486,7 +479,6 @@ function getNewsletters(){
 			'recent' => $recent
 		];
 	}
-
 
 	public function getSliderStats()
 	{
@@ -512,8 +504,6 @@ function getNewsletters(){
 		];
 	}
 
-
-// NEWS
 	public function getNewsStats()
 	{
 		$this->db->from('news');
@@ -532,7 +522,6 @@ function getNewsletters(){
 			'recent' => $recent
 		];
 	}
-
 
 	public function getBestProductStats()
 	{
@@ -553,8 +542,6 @@ function getNewsletters(){
 		];
 	}
 
-
-
 	public function getArticleCategoryStats()
 	{
 		$this->db->from('article_categories');
@@ -573,10 +560,12 @@ function getNewsletters(){
 			'recent' => $recent
 		];
 	}
+
 	public function get_calendar_notes()
 	{
 		return $this->db->get('calendar_notes')->result();
 	}
+
 	public function getGalleryStats() {
 		$this->db->select('COUNT(*) as total');
 		$query = $this->db->get('galleries');
@@ -609,11 +598,4 @@ function getNewsletters(){
 			'recent' => $recent
 		];
 	}
-
-
-
-
-
-
-
 }
