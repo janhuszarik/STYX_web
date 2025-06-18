@@ -13,13 +13,15 @@
 					<?php if (!empty($menu->id)): ?>
 						<input type="hidden" name="id" value="<?= $menu->id ?>">
 					<?php endif; ?>
+					<!-- Skryté pole pre jazyk -->
+					<input type="hidden" name="lang" value="<?= htmlspecialchars($menu->lang ?? 'de') ?>">
 
 					<div class="row form-group pb-3">
 						<div class="col-lg-6">
 							<label class="col-form-label">Sprache
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Sprachauswahl, in der dieser Menüpunkt angezeigt wird."></i>
 							</label>
-							<select class="form-control" name="lang">
+							<select class="form-control" name="lang_display" onchange="document.querySelector('input[name=lang]').value = this.value">
 								<option value="de" <?= ($menu->lang ?? '') == 'de' ? 'selected' : '' ?>>Deutsch</option>
 								<option value="en" <?= ($menu->lang ?? '') == 'en' ? 'selected' : '' ?>>English</option>
 							</select>

@@ -12,6 +12,7 @@ class Admin_model extends CI_Model {
 	function menuSave($post = false)
 	{
 		if ($post) {
+			log_message('debug', 'Received POST data in menuSave: ' . print_r($post, true));
 			$this->db->where('orderBy', $post['orderBy']);
 			$this->db->where('parent', $post['parent']);
 			$this->db->where('lang', $post['lang']);
@@ -33,13 +34,22 @@ class Admin_model extends CI_Model {
 			if (is_numeric($post['id'])) {
 				$data['updated_at'] = date('Y-m-d H:i:s');
 				$this->db->where('id', $post['id']);
-				$this->db->update('menu', $data);
+				$existingMenu = $this->db->get('menu')->row();
 
 				if (!$isExternal) {
-					$slug = $this->getFullSlugPathFromParent($post['id']);
+					$slug = trim($post['url']);
+					// Ensure language prefix is at the start
+					if (strpos($slug, $post['lang'] . '/') !== 0) {
+						$slug = $post['lang'] . '/' . $slug;
+					}
+					// Remove any trailing language if mistakenly added
+					$slug = preg_replace('#/' . preg_quote($post['lang'], '#') . '$#', '', $slug);
+					log_message('debug', 'Generated slug for ID ' . $post['id'] . ': ' . $slug);
 					$this->db->where('id', $post['id']);
 					$this->db->update('menu', ['url' => $slug]);
 				}
+				$this->db->where('id', $post['id']);
+				$this->db->update('menu', $data);
 			} else {
 				$data['created_at'] = date('Y-m-d H:i:s');
 				$this->db->insert('menu', $data);
@@ -137,12 +147,12 @@ class Admin_model extends CI_Model {
 				->row();
 			if (!$row) break;
 
-			// Use provided URL if available, otherwise generate from name
+			// Use provided URL if available and valid, otherwise generate from name
 			$cleanSegment = !empty($row->url) ? $row->url : url_oprava($row->name);
 			// Remove language prefix and any leading/trailing slashes
 			$cleanSegment = preg_replace('#^(de|sk|en)(/app)?/#', '', trim($cleanSegment, '/'));
-			// Avoid adding empty segments
-			if (!empty($cleanSegment)) {
+			// Avoid adding empty or duplicate segments based on current path
+			if (!empty($cleanSegment) && !in_array($cleanSegment, $segments)) {
 				array_unshift($segments, $cleanSegment);
 			}
 
@@ -152,8 +162,12 @@ class Admin_model extends CI_Model {
 		// Ensure unique segments to prevent duplicates
 		$segments = array_unique($segments);
 
-		// Prepend language prefix
-		$finalSlug = $lang . '/' . implode('/', $segments);
+		// Prepend language prefix only once and ensure it's always included
+		if (empty($segments)) {
+			$finalSlug = $lang . '/';
+		} else {
+			$finalSlug = $lang . '/' . implode('/', $segments);
+		}
 
 		// Remove duplicate language prefixes and normalize
 		$finalSlug = preg_replace('#^(de|sk|en)/(de|sk|en)/#', '$1/', $finalSlug);
@@ -161,6 +175,19 @@ class Admin_model extends CI_Model {
 		$finalSlug = trim($finalSlug, '/');
 
 		return $finalSlug;
+	}
+
+	private function getParentSlug($parentId, $lang = 'de')
+	{
+		if ($parentId == 0) return '';
+		$parent = $this->db->select('url')
+			->where('id', $parentId)
+			->get('menu')
+			->row();
+		if ($parent && !empty($parent->url)) {
+			return preg_replace('#^(de|sk|en)/#', '', trim($parent->url, '/'));
+		}
+		return '';
 	}
 
 	public function urlExists($url, $excludeId = null)

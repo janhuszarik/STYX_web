@@ -113,33 +113,21 @@ class Admin extends CI_Controller
 			if ($isExternal) {
 				$post['url'] = $existingUrl;
 			} else {
-				// Generate slug only if URL is empty or matches default prefixes
-				$slugPart = url_oprava($post['name']);
-				$langPrefix = $post['lang'] . '/app';
-				$fullPrefix1 = $langPrefix;
-				$fullPrefix2 = $langPrefix . '/';
-
-				if (
-					empty($existingUrl) ||
-					$existingUrl === $fullPrefix1 ||
-					$existingUrl === $fullPrefix2 ||
-					strpos($existingUrl, $langPrefix) === 0
-				) {
-					$baseUrl = $slugPart;
-
-					$this->load->model('Admin_model');
-					$uniqueUrl = $baseUrl;
-					$counter = 1;
-					while ($this->Admin_model->urlExists($uniqueUrl, $post['id'] ?? null)) {
-						$uniqueUrl = $baseUrl . '-' . $counter;
-						$counter++;
-					}
-					$post['url'] = $uniqueUrl;
-				} else {
-					// Use provided URL, but clean it
-					$post['url'] = trim($existingUrl, '/');
-					$post['url'] = preg_replace('#^(de|sk|en)(/app)?/#', '', $post['url']);
+				// Ensure language prefix is added to the URL
+				if (empty($existingUrl) || strpos($existingUrl, $post['lang'] . '/') !== 0) {
+					$slugPart = !empty($existingUrl) ? $existingUrl : url_oprava($post['name']);
+					$post['url'] = $post['lang'] . '/' . $slugPart;
 				}
+
+				// Ensure uniqueness if URL is generated
+				$this->load->model('Admin_model');
+				$uniqueUrl = $post['url'];
+				$counter = 1;
+				while ($this->Admin_model->urlExists($uniqueUrl, $post['id'] ?? null)) {
+					$uniqueUrl = preg_replace('#/[^/]+$#', '/' . url_oprava($post['name']) . '-' . $counter, $post['url']);
+					$counter++;
+				}
+				$post['url'] = $uniqueUrl;
 			}
 
 			if (!empty($id)) {
