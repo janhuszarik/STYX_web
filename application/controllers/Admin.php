@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('Kein direkter Skriptzugriff erlaubt');
+
 /**
  * Class Admin
  * @property Admin_model|Admin_model $Admin_model
@@ -66,7 +67,7 @@ class Admin extends CI_Controller
 		$post = json_decode(file_get_contents("php://input"), true);
 
 		if (empty($post['id']) || empty($post['note'])) {
-			echo json_encode(['success' => false, 'error' => 'Chýbajúce údaje']);
+			echo json_encode(['success' => false, 'error' => 'Fehlende Daten']);
 			return;
 		}
 
@@ -84,14 +85,14 @@ class Admin extends CI_Controller
 	public function delete_calendar_note($id)
 	{
 		if (!is_numeric($id)) {
-			echo json_encode(['success' => false, 'error' => 'Nesprávne ID']);
+			echo json_encode(['success' => false, 'error' => 'Ungültige ID']);
 			return;
 		}
 
 		if ($this->db->delete('calendar_notes', ['id' => $id])) {
 			echo json_encode(['success' => true, 'id' => $id]);
 		} else {
-			echo json_encode(['success' => false, 'error' => 'Chyba pri mazaní']);
+			echo json_encode(['success' => false, 'error' => 'Fehler beim Löschen']);
 		}
 	}
 
@@ -257,20 +258,11 @@ class Admin extends CI_Controller
 	}
 
 	private function saveSlider($post, $id = null) {
-		log_message('debug', 'saveSlider post data before upload: ' . print_r($post, true));
-
 		$image_upload_data = $this->upload_image('image');
 		$thumb_upload_data = $this->upload_image('thumb');
 
-		log_message('debug', 'Image upload data: ' . print_r($image_upload_data, true));
-		log_message('debug', 'Thumb upload data: ' . print_r($thumb_upload_data, true));
-
 		if ((isset($image_upload_data['error']) && $image_upload_data['error'] !== "<p>upload_no_file_selected</p>") ||
 			(isset($thumb_upload_data['error']) && $thumb_upload_data['error'] !== "<p>upload_no_file_selected</p>")) {
-
-			log_message('error', 'Image upload error: ' . print_r($image_upload_data['error'], true));
-			log_message('error', 'Thumb upload error: ' . print_r($thumb_upload_data['error'], true));
-
 			$this->session->set_flashdata('error', 'Bild-Upload fehlgeschlagen. Bitte versuchen Sie es erneut.');
 			return false;
 		} else {
@@ -281,14 +273,9 @@ class Admin extends CI_Controller
 				$post['thumb'] = $thumb_upload_data['file_name'];
 			}
 
-			log_message('debug', 'saveSlider post data after upload: ' . print_r($post, true));
-
 			$result = $this->Admin_model->save_slider($post, $id);
 
-			log_message('debug', 'save_slider result: ' . $result);
-
 			if (!$result) {
-				log_message('error', 'Datenbankspeicherung für Slider fehlgeschlagen: ' . print_r($post, true));
 				$this->session->set_flashdata('error', 'Datenbankspeicherung fehlgeschlagen. Bitte versuchen Sie es erneut.');
 			}
 
@@ -305,12 +292,12 @@ class Admin extends CI_Controller
 
 		if (!is_dir($upload_path)) {
 			if (!mkdir($upload_path, 0777, true)) {
-				return ['error' => 'Cannot create folder: ' . $upload_path];
+				return ['error' => 'Verzeichnis konnte nicht erstellt werden: ' . $upload_path];
 			}
 		}
 
 		if (!is_writable($upload_path)) {
-			return ['error' => 'Upload folder is not writable: ' . $upload_path];
+			return ['error' => 'Upload-Verzeichnis ist nicht beschreibbar: ' . $upload_path];
 		}
 
 		$ext = pathinfo($_FILES[$field_name]['name'], PATHINFO_EXTENSION);
@@ -328,7 +315,6 @@ class Admin extends CI_Controller
 
 		if (!$this->upload->do_upload($field_name)) {
 			$error = $this->upload->display_errors();
-			log_message('error', 'Upload error: ' . $error);
 			return ['error' => $error];
 		}
 
@@ -336,27 +322,17 @@ class Admin extends CI_Controller
 	}
 
 	private function uploadImageToPath($field_name, $path = 'Uploads/news/') {
-		log_message('debug', 'FCPATH value: ' . FCPATH);
-		log_message('debug', 'Current working directory: ' . getcwd());
-
 		$upload_path = FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $path);
-		log_message('debug', 'Upload path: ' . $upload_path);
 
 		if (!is_dir($upload_path)) {
-			log_message('debug', 'Verzeichnis existiert nicht: ' . $upload_path);
 			if (!mkdir($upload_path, 0777, true)) {
-				log_message('error', 'Fehler beim Erstellen des Verzeichnisses: ' . $upload_path);
-				return array('error' => 'Fehler beim Erstellen des Verzeichnisses: ' . $upload_path);
+				return array('error' => 'Verzeichnis konnte nicht erstellt werden: ' . $upload_path);
 			} else {
 				chmod($upload_path, 0777);
-				log_message('debug', 'Verzeichnis erstellt: ' . $upload_path);
 			}
-		} else {
-			log_message('debug', 'Verzeichnis existiert bereits: ' . $upload_path);
 		}
 
 		if (!is_writable($upload_path)) {
-			log_message('error', 'Upload-Pfad ist nicht beschreibbar: ' . $upload_path);
 			return array('error' => 'Upload-Pfad ist nicht beschreibbar: ' . $upload_path);
 		}
 
@@ -368,11 +344,8 @@ class Admin extends CI_Controller
 		$this->load->library('upload', $config);
 		$this->upload->initialize($config);
 
-		log_message('debug', 'Upload config: ' . print_r($config, true));
-
 		if (!$this->upload->do_upload($field_name)) {
 			$error = $this->upload->display_errors();
-			log_message('error', 'Upload-Fehler für ' . $field_name . ': ' . $error);
 			return array('error' => $error);
 		} else {
 			$data = $this->upload->data();
@@ -382,7 +355,6 @@ class Admin extends CI_Controller
 
 	public function uploadImage() {
 		$response = $this->uploadImageToPath('file', 'Uploads/news/');
-		log_message('debug', 'Upload response: ' . json_encode($response));
 		echo json_encode($response);
 	}
 
@@ -473,7 +445,7 @@ class Admin extends CI_Controller
 			$old_image = !empty($id) ? $this->Admin_model->getProduct($id)->image : false;
 			$image = $this->upload_image('image', 'Uploads/product/');
 
-			if (isset($image['error']) && !$image['error']) {
+			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				redirect('admin/bestProduct/edit/' . $id);
 				return;
@@ -481,10 +453,8 @@ class Admin extends CI_Controller
 
 			if (!empty($id)) {
 				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error'])) {
-						if ($old_image && file_exists(FCPATH . 'Uploads/product/' . $old_image)) {
-							unlink(FCPATH . 'Uploads/product/' . $old_image);
-						}
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/product/' . $old_image)) {
+						unlink(FCPATH . 'Uploads/product/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect('admin/bestProduct');
