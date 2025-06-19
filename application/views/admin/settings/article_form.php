@@ -1,5 +1,4 @@
 <?php
-
 $CI =& get_instance();
 
 $actionUrl = isset($article)
@@ -68,7 +67,6 @@ if (isset($article) && !empty($article->slug)) {
 				<form method="post" action="<?= base_url($actionUrl) ?>" enctype="multipart/form-data" id="articleForm">
 					<input type="hidden" name="id" value="<?= htmlspecialchars($article->id ?? '') ?>">
 					<input type="hidden" name="category_id" value="<?= htmlspecialchars($categoryId) ?>">
-					<input type="hidden" name="lang" value="de">
 
 					<div class="section-heading mb-3">
 						<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
@@ -80,11 +78,19 @@ if (isset($article) && !empty($article->slug)) {
 					</div>
 
 					<div class="row form-group pb-3">
-						<div class="col-md-6">
+						<div class="col-md-2">
+							<label for="lang" class="col-form-label">Sprache</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wählen Sie die Sprache des Artikels aus. Dies bestimmt, in welcher Sprache der Artikel angezeigt wird."></i>
+							<select name="lang" id="lang" class="form-control" required>
+								<option value="de" <?= (isset($article) && $article->lang == 'de') ? 'selected' : '' ?>>Deutsch</option>
+								<option value="en" <?= (isset($article) && $article->lang == 'en') ? 'selected' : '' ?>>Englisch</option>
+							</select>
+						</div>
+						<div class="col-md-5">
 							<label for="title" class="col-form-label">Titel</label>
 							<input type="text" class="form-control" name="title" id="title" value="<?= htmlspecialchars($article->title ?? '') ?>" required>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<label for="subtitle" class="col-form-label">Untertitel</label>
 							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>">
 						</div>
@@ -97,7 +103,7 @@ if (isset($article) && !empty($article->slug)) {
 						</div>
 						<div class="col-md-4">
 							<label for="slug_display" class="col-form-label">URL-Adresse
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-Adresse wird automatisch generiert und setzt sich aus der gewählten Sprache, dem Hauptmenüpunkt und dem letzten Menüpunkt zusammen, unter dem dieser Artikel gespeichert wird."></i>
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-Adresse wird automatisch generiert und setzt sich aus der gewählten Sprache, dem Hauptmenüpunkt und dem letzten Menüpunkt zusammen, unter dem dieser Artikel gespeichen wird."></i>
 							</label>
 							<input type="text" class="form-control" id="slug_display" name="slug_display" value="https://www.styx.at/<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
 							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>">
@@ -126,7 +132,7 @@ if (isset($article) && !empty($article->slug)) {
 							<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_image" data-preview-target="ftpImagePreview">
 								Bild aus FTP wählen
 							</button>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis. Das ausgewählte Bild wird als Hauptbild des Artikels gespeichert."></i>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis. Das ausgewählte Bild wird als Hauptbild des Artikels gespeichen."></i>
 							<div id="ftpImagePreview" class="mb-2">
 								<?php if (!empty($article->ftp_image)): ?>
 									<img src="<?= htmlspecialchars($article->ftp_image) ?>" style="max-width:150px;max-height:150px;object-fit:contain;">
