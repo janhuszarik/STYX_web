@@ -90,7 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/article_save/del/(:num)'] 					= 'article/articlesSave/del/$1';
 	$route['admin/add_article/(:num)'] 							= 'article/articlesSave/$1';
 	$route['admin/article/getGalleriesByCategory'] 				= 'article/getGalleriesByCategory';
-$route['admin/article/upload_image'] = 'article/upload_image';
+	$route['admin/article/upload_image'] 						= 'article/upload_image';
 	$route['admin/save_calendar_note'] 							= 'admin/save_calendar_note';
 	$route['admin/update_calendar_note'] 						= 'admin/update_calendar_note';
 	$route['admin/delete_calendar_note/(:num)']					= 'admin/delete_calendar_note/$1';

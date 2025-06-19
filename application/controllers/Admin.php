@@ -155,7 +155,11 @@ class Admin extends CI_Controller
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
 				redirect(BASE_URL . 'admin/menu/');
 			} else {
-				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
+				// Použi existujúcu chybovú hlášku z modelu, ak existuje
+				if (!$this->session->flashdata('error')) {
+					$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
+				}
+				redirect(BASE_URL . 'admin/menu/');
 			}
 		}
 

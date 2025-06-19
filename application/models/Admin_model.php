@@ -12,7 +12,6 @@ class Admin_model extends CI_Model {
 	function menuSave($post = false)
 	{
 		if ($post) {
-			log_message('debug', 'Received POST data in menuSave: ' . print_r($post, true));
 			$this->db->where('orderBy', $post['orderBy']);
 			$this->db->where('parent', $post['parent']);
 			$this->db->where('lang', $post['lang']);
@@ -38,13 +37,10 @@ class Admin_model extends CI_Model {
 
 				if (!$isExternal) {
 					$slug = trim($post['url']);
-					// Ensure language prefix is at the start
 					if (strpos($slug, $post['lang'] . '/') !== 0) {
 						$slug = $post['lang'] . '/' . $slug;
 					}
-					// Remove any trailing language if mistakenly added
 					$slug = preg_replace('#/' . preg_quote($post['lang'], '#') . '$#', '', $slug);
-					log_message('debug', 'Generated slug for ID ' . $post['id'] . ': ' . $slug);
 					$this->db->where('id', $post['id']);
 					$this->db->update('menu', ['url' => $slug]);
 				}
@@ -62,7 +58,6 @@ class Admin_model extends CI_Model {
 				}
 			}
 
-			// Spustiť synchronizáciu po uložení
 			$this->load->model('Article_model');
 			$this->Article_model->syncMenuWithArticleCategories();
 
@@ -123,7 +118,7 @@ class Admin_model extends CI_Model {
 			$articleCount = $this->db->where('category_id', $category->id)
 				->count_all_results('articles');
 			if ($articleCount > 0) {
-				$this->session->set_flashdata('error', 'Menu položka nemôže byť odstránená, pretože priradená kategória obsahuje články.');
+				$this->session->set_flashdata('error', 'Menüpunkt kann nicht gelöscht werden, da die zugeordnete Kategorie Artikel enthält.');
 				return false;
 			}
 
@@ -147,11 +142,8 @@ class Admin_model extends CI_Model {
 				->row();
 			if (!$row) break;
 
-			// Use provided URL if available and valid, otherwise generate from name
 			$cleanSegment = !empty($row->url) ? $row->url : url_oprava($row->name);
-			// Remove language prefix and any leading/trailing slashes
 			$cleanSegment = preg_replace('#^(de|sk|en)(/app)?/#', '', trim($cleanSegment, '/'));
-			// Avoid adding empty or duplicate segments based on current path
 			if (!empty($cleanSegment) && !in_array($cleanSegment, $segments)) {
 				array_unshift($segments, $cleanSegment);
 			}
@@ -159,17 +151,14 @@ class Admin_model extends CI_Model {
 			$currentMenuId = $row->parent;
 		}
 
-		// Ensure unique segments to prevent duplicates
 		$segments = array_unique($segments);
 
-		// Prepend language prefix only once and ensure it's always included
 		if (empty($segments)) {
 			$finalSlug = $lang . '/';
 		} else {
 			$finalSlug = $lang . '/' . implode('/', $segments);
 		}
 
-		// Remove duplicate language prefixes and normalize
 		$finalSlug = preg_replace('#^(de|sk|en)/(de|sk|en)/#', '$1/', $finalSlug);
 		$finalSlug = preg_replace('#//+#', '/', $finalSlug);
 		$finalSlug = trim($finalSlug, '/');
@@ -250,7 +239,6 @@ class Admin_model extends CI_Model {
 		if (!empty($id) && is_numeric($id)) {
 			$existing_slider = $this->get_slider($id);
 			if (!$existing_slider) {
-				log_message('error', "Slider s ID $id neexistuje.");
 				return false;
 			}
 
