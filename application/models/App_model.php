@@ -1,22 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_model extends CI_Model
+class App_model extends CI_Model
 {
 
 	function routes($lang)
 	{
-		// poskladáme celý slug z segmentov
 		$segment1 = $this->uri->segment(2);
 		$segment2 = $this->uri->segment(3);
-		$url = $segment1 . '/' . $segment2; // napr. 'app/Nachhaltigkeit-Philosophie'
+		$url = $segment1 . '/' . $segment2;
 
 		$this->db->select('*');
 		$this->db->where('lang', $lang);
-		$this->db->where('slug', $url); // porovná s 'app/Nachhaltigkeit-Philosophie'
+		$this->db->where('slug', $url);
 		$this->db->where('active', 1);
 		return $this->db->get('articles')->row();
 	}
+
 	public function getSections($articleId)
 	{
 		return $this->db
@@ -25,16 +25,15 @@ class app_model extends CI_Model
 			->get('article_sections')
 			->result();
 	}
+
 	public function getExactArticle($slug_title, $lang)
 	{
 		$this->db->select('*');
-		$this->db->where('slug_title', $slug_title); // <== TOTO je kľúčové!
+		$this->db->where('slug_title', $slug_title);
 		$this->db->where('lang', $lang);
 		$this->db->where('active', 1);
 		return $this->db->get('articles')->row();
 	}
-
-
 
 	public function getCategoryBySlug($slug, $lang)
 	{
@@ -55,7 +54,8 @@ class app_model extends CI_Model
 		$this->db->where('a.active', 1);
 		$this->db->where('a.start_date_from IS NULL OR a.start_date_from <=', date('Y-m-d H:i:s'));
 		$this->db->where('a.end_date_to IS NULL OR a.end_date_to >=', date('Y-m-d H:i:s'));
-		$this->db->order_by('a.is_main DESC, a.created_at DESC');
+		$this->db->order_by('a.orderBy', 'ASC');
+		$this->db->order_by('a.created_at', 'DESC');
 		return $this->db->get()->result();
 	}
 
@@ -69,18 +69,16 @@ class app_model extends CI_Model
 		$this->db->where('a.active', 1);
 		$this->db->where('a.start_date_from IS NULL OR a.start_date_from <=', date('Y-m-d H:i:s'));
 		$this->db->where('a.end_date_to IS NULL OR a.end_date_to >=', date('Y-m-d H:i:s'));
-		$this->db->order_by('a.is_main DESC, a.created_at DESC');
+		$this->db->order_by('a.orderBy', 'ASC');
+		$this->db->order_by('a.created_at', 'DESC');
 		return $this->db->get()->result();
 	}
 
-
 	function getUser($id = false)
 	{
-
 		$this->db->select('*');
 		$this->db->where('id', $id);
 		return $this->db->get('users')->row();
-
 	}
 
 	public function getSliders($onlyActive = false)
@@ -90,8 +88,7 @@ class app_model extends CI_Model
 			$this->db->where('active', '1');
 		}
 		$this->db->where('lang', language());
-		$this->db->order_by('orderBy', 'ASC'); // Sort by orderBy
-
+		$this->db->order_by('orderBy', 'ASC');
 		return $this->db->get('slider')->result();
 	}
 
@@ -107,7 +104,6 @@ class app_model extends CI_Model
 		return $this->db->get()->result();
 	}
 
-
 	function getAllActiveProduct()
 	{
 		$this->db->select('*');
@@ -118,8 +114,6 @@ class app_model extends CI_Model
 		$this->db->order_by('orderBy', 'ASC');
 		return $this->db->get('bestProduct')->result();
 	}
-
-
 
 	public function sendContactMail($data)
 	{
@@ -137,7 +131,6 @@ class app_model extends CI_Model
 
 		$this->email->initialize($config);
 
-		// --- Prvý email: pre admina ---
 		$this->email->from(SMTP_NAME, 'STYX Kontaktformular');
 		$this->email->to(MAIL_ADMIN);
 		$this->email->bcc(MAIL_MODERATOR);
@@ -145,40 +138,26 @@ class app_model extends CI_Model
 		$this->email->subject('Neue Kontaktanfrage über das Formular');
 
 		$adminMessage = $this->load->view('emails/contact_admin', $data, TRUE);
-
-
 		$this->email->message($adminMessage);
 		$adminSent = $this->email->send();
 
-		// --- Druhý email: pre odosielateľa ---
 		$this->email->clear();
-
 		$this->email->from(SMTP_NAME, 'STYX Naturcosmetic');
 		$this->email->to($data['email']);
 		$this->email->subject('Vielen Dank für Ihre Anfrage');
-
 		$userMessage = $this->load->view('emails/contact_reply', [
 			'name' => $data['name']
 		], TRUE);
-
 		$this->email->message($userMessage);
 		$userSent = $this->email->send();
 
 		return $adminSent && $userSent;
 	}
+
 	public function getLocations()
 	{
 		$this->db->where('active', 1);
 		$this->db->order_by('name', 'ASC');
 		return $this->db->get('locations')->result();
 	}
-
-
-
-
-
-
-
-
-
 }

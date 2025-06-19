@@ -67,6 +67,7 @@ if (isset($article) && !empty($article->slug)) {
 				<form method="post" action="<?= base_url($actionUrl) ?>" enctype="multipart/form-data" id="articleForm">
 					<input type="hidden" name="id" value="<?= htmlspecialchars($article->id ?? '') ?>">
 					<input type="hidden" name="category_id" value="<?= htmlspecialchars($categoryId) ?>">
+					<input type="hidden" name="lang" value="de">
 
 					<div class="section-heading mb-3">
 						<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
@@ -78,18 +79,11 @@ if (isset($article) && !empty($article->slug)) {
 					</div>
 
 					<div class="row form-group pb-3">
-						<div class="col-md-2">
-							<label for="lang" class="col-form-label">Sprache</label>
-							<select name="lang" id="lang" class="form-control" required>
-								<option value="de" <?= (isset($article) && $article->lang == 'de') ? 'selected' : '' ?>>Deutsch</option>
-								<option value="en" <?= (isset($article) && $article->lang == 'en') ? 'selected' : '' ?>>Englisch</option>
-							</select>
-						</div>
-						<div class="col-md-5">
+						<div class="col-md-6">
 							<label for="title" class="col-form-label">Titel</label>
 							<input type="text" class="form-control" name="title" id="title" value="<?= htmlspecialchars($article->title ?? '') ?>" required>
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-6">
 							<label for="subtitle" class="col-form-label">Untertitel</label>
 							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>">
 						</div>
@@ -273,17 +267,22 @@ if (isset($article) && !empty($article->slug)) {
 						<small class="text-muted ms-3">Legen Sie Start- und Enddatum fest. Aktiv/Inaktiv erfolgt automatisch.</small>
 					</div>
 					<div class="row form-group pb-3">
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<label for="start_date_from" class="col-form-label">Startdatum</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt das Startdatum des Artikels fest. Der Artikel wird ab diesem Datum um 00:00 Uhr automatisch aktiviert. Ohne Datum wird der Artikel sofort nach dem Speichern angezeigt."></i>
 							<input type="date" class="form-control" name="start_date_from" id="start_date_from" value="<?= htmlspecialchars($article->start_date_from ?? '') ?>">
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<label for="end_date_to" class="col-form-label">Enddatum</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt das Enddatum des Artikels fest. Der Artikel wird am angegebenen Datum um 23:59 Uhr automatisch deaktiviert. Der Status muss ‚Aktiv‘ sein, damit das Datum wirksam ist."></i>
 							<input type="date" class="form-control" name="end_date_to" id="end_date_to" value="<?= htmlspecialchars($article->end_date_to ?? '') ?>">
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-3">
+							<label for="orderBy" class="col-form-label">Poradie</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Určuje poradie zobrazenia článku v zozname článkov v danej kategórii. Menšie číslo znamená vyššiu prioritu (zobrazí sa vyššie)."></i>
+							<input type="number" class="form-control" name="orderBy" id="orderBy" value="<?= htmlspecialchars($article->orderBy ?? '0') ?>" min="0">
+						</div>
+						<div class="col-md-3">
 							<label for="active" class="col-form-label">Status</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestimmt, ob der Artikel aktiv (sichtbar) oder inaktiv (verborgen) ist. Inaktive Artikel sind für die Öffentlichkeit nicht sichtbar, unabhängig von Start- und Enddatum."></i>
 							<select name="active" id="active" class="form-control">
@@ -518,7 +517,6 @@ if (isset($article) && !empty($article->slug)) {
 			});
 		}
 
-
 		initSummer();
 
 		document.getElementById('add-section').onclick = () => {
@@ -603,15 +601,13 @@ if (isset($article) && !empty($article->slug)) {
 		}
 
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
-
-			// 🧼 1. Vyčistenie všetkých font-family vo Summernote na Poppins
 			$('.summernote').each(function () {
 				let content = $(this).summernote('code');
 				content = content.replace(/font-family:[^;"']+;?/gi, '');
 				content = content.replace(/style="([^"]*)"/gi, function(match, style) {
 					let newStyle = style
-						.replace(/font-family:[^;"']+;?/gi, '') // odstráni font-family
-						.replace(/["']?Open Sans["']?,?\s?Arial,?\s?sans-serif;?/gi, '') // odstráni zvyšky
+						.replace(/font-family:[^;"']+;?/gi, '')
+						.replace(/["']?Open Sans["']?,?\s?Arial,?\s?sans-serif;?/gi, '')
 						.trim();
 
 					if (newStyle.length > 0 && !/font-family:/i.test(newStyle)) {
@@ -625,7 +621,6 @@ if (isset($article) && !empty($article->slug)) {
 				$(this).summernote('code', content);
 			});
 
-			// 🧩 2. Ponechaný tvoj pôvodný kód
 			const subpageInputs = document.querySelectorAll('.subpage');
 			const externalUrlInputs = document.querySelectorAll('.external-url');
 
@@ -654,7 +649,6 @@ if (isset($article) && !empty($article->slug)) {
 				}
 			});
 		});
-
 
 		const modalEl = document.getElementById('ftpModal');
 		const modal = new bootstrap.Modal(modalEl);
