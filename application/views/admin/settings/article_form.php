@@ -1,4 +1,5 @@
 <?php
+
 $CI =& get_instance();
 
 $actionUrl = isset($article)

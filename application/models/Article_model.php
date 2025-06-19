@@ -1,4 +1,5 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Article_model extends CI_Model
 {
@@ -143,14 +144,17 @@ class Article_model extends CI_Model
 	{
 		$this->load->helper('app_helper');
 
+		// Spracovanie hlavného obrázka
 		$image = null;
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
 			$uploadPath = uploadImg('image', 'uploads/articles');
+			log_message('debug', 'Upload path for main image: ' . $uploadPath);
 			if ($uploadPath && file_exists($uploadPath)) {
 				$image = $uploadPath;
 			} else {
+				log_message('error', 'Failed to upload main image: ' . ($uploadPath ?: 'No file') . ' Error: ' . print_r($_FILES['image']['error'], true));
 				return false;
 			}
 		} elseif (!empty($post['ftp_image'])) {
@@ -161,28 +165,32 @@ class Article_model extends CI_Model
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 				$localFile = $localDir . basename($ftpPath);
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
-					$image = basename($ftpPath);
+					$image = 'uploads/articles/' . basename($ftpPath);
 				} else {
+					log_message('error', 'Failed to download FTP image: ' . $ftpPath);
 					return false;
 				}
 			} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
 				$src = FCPATH . ltrim($ftpPath, '/');
 				$dst = $localDir . basename($ftpPath);
 				if (@copy($src, $dst)) {
-					$image = basename($ftpPath);
+					$image = 'uploads/articles/' . basename($ftpPath);
 				} else {
+					log_message('error', 'Failed to copy FTP image: ' . $src);
 					return false;
 				}
 			} else {
-				$image = basename($ftpPath);
+				$image = 'uploads/articles/' . basename($ftpPath);
 			}
 		} else {
 			$image = $post['old_image'] ?? null;
 		}
 
+		// Logika pre is_main a slug_title
 		$is_main = isset($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
 		$slug_title = $is_main ? null : url_title($post['title'], 'dash', true);
 
+		// Aktualizácia is_main pre iné články v kategórii
 		if ($is_main && !empty($post['category_id'])) {
 			$this->db->where('category_id', $post['category_id']);
 			$this->db->where('is_main', 1);
@@ -192,6 +200,7 @@ class Article_model extends CI_Model
 			$this->db->update('articles', ['is_main' => 0]);
 		}
 
+		// Príprava dát pre uloženie
 		$data = [
 			'category_id'     => $post['category_id'],
 			'lang'            => $post['lang'] ?? 'de',
@@ -205,15 +214,152 @@ class Article_model extends CI_Model
 			'gallery_id'      => !empty($post['gallery_id']) ? $post['gallery_id'] : null,
 			'active'          => !empty($post['active']) ? 1 : 0,
 			'start_date_from' => $post['start_date_from'] ?: null,
-			'end_date_to'     => $post['end_date_to']   ?: null,
+			'end_date_to'     => $post['end_date_to'] ?: null,
 			'updated_at'      => date('Y-m-d H:i:s'),
 			'is_main'         => $is_main,
 			'slug_title'      => $slug_title,
 			'orderBy'         => isset($post['orderBy']) ? (int)$post['orderBy'] : 0,
 		];
 
-		// Zvyšok metódy zostáva bez zmeny
-		// ...
+		// Pridanie produktov (1-6 produktov v dvoch setoch po 3)
+		for ($set = 0; $set < 2; $set++) {
+			for ($i = 1; $i <= 3; $i++) {
+				$suffix = ($set * 3) + $i;
+				$setNum = $set + 1;
+				$prodNum = $i;
+
+				$data["product_set{$setNum}_product{$prodNum}_name"] = $post["product_name{$suffix}"] ?? null;
+				$data["product_set{$setNum}_product{$prodNum}_description"] = $post["product_description{$suffix}"] ?? null;
+				$data["product_set{$setNum}_product{$prodNum}_image_title"] = $post["product_image{$suffix}_title"] ?? null;
+				$data["product_set{$setNum}_product{$prodNum}_url"] = $post["product_url{$suffix}"] ?? null;
+				$data["product_set{$setNum}_product{$prodNum}_image"] = $post["old_product_image{$suffix}"] ?? null;
+
+				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
+					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
+					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov);
+					if ($up && file_exists($up)) {
+						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
+					} else {
+						log_message('error', "Failed to upload product image set{$setNum}_product{$prodNum}: " . ($up ?: 'No file'));
+						return false;
+					}
+				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
+					$ftpPath = $post["ftp_product_image{$suffix}"];
+					$localDir = FCPATH . 'uploads/articles/products/';
+					@mkdir($localDir, 0755, true);
+
+					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+						$dst = $localDir . basename($ftpPath);
+						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						} else {
+							log_message('error', "Failed to download FTP product image set{$setNum}_product{$prodNum}: " . $ftpPath);
+							return false;
+						}
+					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+						$src = FCPATH . ltrim($ftpPath, '/');
+						$dst = $localDir . basename($ftpPath);
+						if (@copy($src, $dst)) {
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						} else {
+							log_message('error', "Failed to copy FTP product image set{$setNum}_product{$prodNum}: " . $src);
+							return false;
+						}
+					} else {
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+					}
+				}
+			}
+		}
+
+		// Pridanie odporúčaných položiek
+		for ($i = 1; $i <= 3; $i++) {
+			$data["empfohlen_name{$i}"] = $post["empfohlen_name{$i}"] ?? null;
+			$data["empfohlen_url{$i}"] = $post["empfohlen_url{$i}"] ?? null;
+		}
+
+		// Uloženie do databázy
+		if (!empty($post['id']) && is_numeric($post['id'])) {
+			$this->db->where('id', $post['id']);
+			$data['updated_at'] = date('Y-m-d H:i:s');
+			$ok = $this->db->update('articles', $data);
+			$articleId = $post['id'];
+		} else {
+			$data['created_at'] = date('Y-m-d H:i:s');
+			$ok = $this->db->insert('articles', $data);
+			$articleId = $this->db->insert_id();
+		}
+
+		// Spracovanie sekcií
+		if (isset($post['sections']) && is_array($post['sections'])) {
+			$this->db->delete('article_sections', ['article_id' => $articleId]);
+			foreach ($post['sections'] as $idx => $content) {
+				$secImg = $post['old_section_image'][$idx] ?? null;
+				$secImgTitle = $post['section_image_titles'][$idx] ?? null;
+				$buttonName = $post['button_names'][$idx] ?? null;
+				$subpage = $post['subpages'][$idx] ?? null;
+				$externalUrl = $post['external_urls'][$idx] ?? null;
+
+				if (!empty($_FILES['section_images']['name'][$idx])) {
+					$_FILES_SINGLE = [
+						'name' => $_FILES['section_images']['name'][$idx],
+						'type' => $_FILES['section_images']['type'][$idx],
+						'tmp_name' => $_FILES['section_images']['tmp_name'][$idx],
+						'error' => $_FILES['section_images']['error'][$idx],
+						'size' => $_FILES['section_images']['size'][$idx],
+					];
+					$_FILES['temp_section_image'] = $_FILES_SINGLE;
+					$up = uploadImg('temp_section_image', 'uploads/articles/sections');
+					if ($up && file_exists($up)) {
+						$secImg = $up;
+					} else {
+						log_message('error', "Failed to upload section image $idx: " . ($up ?: 'No file'));
+						return false;
+					}
+				} elseif (!empty($post['ftp_section_image'][$idx]) && $post['ftp_section_image'][$idx] !== $post['old_section_image'][$idx]) {
+					$ftpPath = $post['ftp_section_image'][$idx];
+					$localDir = FCPATH . 'uploads/articles/sections/';
+					@mkdir($localDir, 0755, true);
+					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+						$dst = $localDir . basename($ftpPath);
+						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
+							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+						} else {
+							log_message('error', "Failed to download FTP section image $idx: " . $ftpPath);
+							return false;
+						}
+					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+						$src = FCPATH . ltrim($ftpPath, '/');
+						$dst = $localDir . basename($ftpPath);
+						if (@copy($src, $dst)) {
+							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+						} else {
+							log_message('error', "Failed to copy FTP section image $idx: " . $src);
+							return false;
+						}
+					}
+				}
+
+				$sectionData = [
+					'article_id'   => $articleId,
+					'content'      => $content,
+					'image'        => $secImg,
+					'image_title'  => $secImgTitle,
+					'button_name'  => $buttonName,
+					'subpage'      => $subpage,
+					'external_url' => $externalUrl,
+					'order'        => $idx,
+				];
+
+				log_message('debug', "Inserting section $idx: " . print_r($sectionData, true));
+				if (!$this->db->insert('article_sections', $sectionData)) {
+					log_message('error', "Failed to insert section $idx into article_sections: " . $this->db->last_query());
+					return false;
+				}
+			}
+		}
+
+		return $ok;
 	}
 
 	public function deleteArticle($id)
