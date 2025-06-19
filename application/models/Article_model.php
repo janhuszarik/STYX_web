@@ -147,7 +147,7 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'Uploads/articles');
+			$uploadPath = uploadImg('image', 'uploads/articles');
 			if ($uploadPath && file_exists($uploadPath)) {
 				$image = $uploadPath;
 			} else {
@@ -155,7 +155,7 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'Uploads/articles/';
+			$localDir = FCPATH . 'uploads/articles/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
