@@ -198,7 +198,7 @@ class Admin extends CI_Controller
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
 
-			$image = $this->upload_image('image', 'Uploads/sliders/');
+			$image = $this->upload_image('image', 'uploads/sliders/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['slider'] = (object)$post;
@@ -210,8 +210,8 @@ class Admin extends CI_Controller
 			}
 
 			if ($this->Admin_model->save_slider_full($post, $image, $id)) {
-				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/sliders/' . $old_image)) {
-					unlink(FCPATH . 'Uploads/sliders/' . $old_image);
+				if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/sliders/' . $old_image)) {
+					unlink(FCPATH . 'uploads/sliders/' . $old_image);
 				}
 				$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 				redirect(BASE_URL . 'admin/slider');
@@ -287,7 +287,7 @@ class Admin extends CI_Controller
 		}
 	}
 
-	private function upload_image($field_name, $path = 'Uploads/sliders/') {
+	private function upload_image($field_name, $path = 'uploads/sliders/') {
 		if (empty($_FILES[$field_name]['name'])) {
 			return false;
 		}
@@ -325,7 +325,7 @@ class Admin extends CI_Controller
 		return $this->upload->data();
 	}
 
-	private function uploadImageToPath($field_name, $path = 'Uploads/news/') {
+	private function uploadImageToPath($field_name, $path = 'uploads/news/') {
 		$upload_path = FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $path);
 
 		if (!is_dir($upload_path)) {
@@ -358,7 +358,7 @@ class Admin extends CI_Controller
 	}
 
 	public function uploadImage() {
-		$response = $this->uploadImageToPath('file', 'Uploads/news/');
+		$response = $this->uploadImageToPath('file', 'uploads/news/');
 		echo json_encode($response);
 	}
 
@@ -369,7 +369,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'Uploads/news/');
+			$image = $this->upload_image('image', 'uploads/news/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['news'] = (object)$post;
@@ -381,8 +381,8 @@ class Admin extends CI_Controller
 
 			if (!empty($id)) {
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/news/' . $old_image)) {
-						unlink(FCPATH . 'Uploads/news/' . $old_image);
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/news/' . $old_image)) {
+						unlink(FCPATH . 'uploads/news/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect(BASE_URL . 'admin/news');
@@ -447,7 +447,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getProduct($id)->image : false;
-			$image = $this->upload_image('image', 'Uploads/product/');
+			$image = $this->upload_image('image', 'uploads/product/');
 
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
@@ -457,8 +457,8 @@ class Admin extends CI_Controller
 
 			if (!empty($id)) {
 				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'Uploads/product/' . $old_image)) {
-						unlink(FCPATH . 'Uploads/product/' . $old_image);
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/product/' . $old_image)) {
+						unlink(FCPATH . 'uploads/product/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect('admin/bestProduct');
