@@ -149,6 +149,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
+	$route['app/send_kindergeburtstage'] = 'app/send_kindergeburtstage';
 
 	$route['besuchen/kindergeburtstage/anfrage'] 				= 'app/kindergeburtstageAnfrage';
 	$route['besuchen/shopfinder'] 								= 'app/showMap';

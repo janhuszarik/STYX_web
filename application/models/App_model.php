@@ -160,4 +160,34 @@ class App_model extends CI_Model
 		$this->db->order_by('name', 'ASC');
 		return $this->db->get('locations')->result();
 	}
+	public function sendKindergeburtstagMail($data)
+	{
+		$this->load->library('email');
+
+		$this->email->from(MAIL_ADMIN, 'STYX Geburtstage');
+		$this->email->to(MAIL_ADMIN); // alebo vlastný email
+
+		$this->email->subject('Neue Kindergeburtstag Anfrage');
+
+		$message = "<h3>Neue Kindergeburtstag Anfrage</h3>";
+		$message .= "<p><strong>Datum:</strong> {$data['event_date']} um {$data['event_time']}</p>";
+		$message .= "<p><strong>Kind:</strong> {$data['child_name']} ({$data['child_age']} Jahre alt)</p>";
+		$message .= "<p><strong>Anzahl Kinder:</strong> {$data['num_children']}</p>";
+		$message .= "<p><strong>Kontaktperson:</strong> {$data['contact_person']}</p>";
+		$message .= "<p><strong>Email:</strong> {$data['email']}</p>";
+		$message .= "<p><strong>Telefon:</strong> {$data['phone']}</p>";
+		$message .= "<p><strong>Adresse:</strong> {$data['address']}, {$data['zip_city']}</p>";
+		$message .= "<p><strong>Paket:</strong> {$data['paket']}</p>";
+		$message .= "<p><strong>Torte:</strong> {$data['torte']}</p>";
+		$message .= "<p><strong>Jause:</strong> {$data['jause']}</p>";
+		if (!empty($data['notes'])) {
+			$message .= "<p><strong>Anmerkung:</strong><br>" . nl2br($data['notes']) . "</p>";
+		}
+
+		$this->email->set_mailtype('html');
+		$this->email->message($message);
+
+		return $this->email->send();
+	}
+
 }

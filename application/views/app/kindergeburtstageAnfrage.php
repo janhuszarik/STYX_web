@@ -1,6 +1,19 @@
 <?php
 $this->load->view('partials/kinder_assets');
 ?>
+
+<?php if ($this->session->flashdata('success')): ?>
+	<div class="alert alert-success">
+		<?= $this->session->flashdata('success') ?>
+	</div>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('error')): ?>
+	<div class="alert alert-danger">
+		<?= $this->session->flashdata('error') ?>
+	</div>
+<?php endif; ?>
+
 <section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 	<div class="container py-5">
 		<div class="row justify-content-center">
@@ -17,7 +30,7 @@ $this->load->view('partials/kinder_assets');
 </section>
 
 <div class="container my-5">
-	<form id="birthday-form">
+	<form method="post" action="<?= base_url('app/send_kindergeburtstage') ?>">
 		<!-- Contact Information -->
 		<div class="form-section">
 			<h2 class="fw-bold mb-2">Kontaktdaten</h2>
@@ -26,48 +39,47 @@ $this->load->view('partials/kinder_assets');
 			<div class="row mb-3">
 				<div class="col-md-6">
 					<label for="event-date" class="form-label">Gewünschtes Veranstaltungsdatum *</label>
-					<input type="date" class="form-control" id="event-date" required>
+					<input type="date" class="form-control" id="event-date" name="event_date" required>
 				</div>
 				<div class="col-md-6">
 					<label for="event-time" class="form-label">Gewünschte Uhrzeit *</label>
-					<input type="time" class="form-control" id="event-time" required>
+					<input type="time" class="form-control" id="event-time" name="event_time" required>
 				</div>
 			</div>
 
 			<div class="mb-3">
 				<label for="child-name" class="form-label">Name des Geburtstagskindes *</label>
-				<input type="text" class="form-control" id="child-name" required>
+				<input type="text" class="form-control" id="child-name" name="child_name" required>
 			</div>
 			<div class="mb-3">
 				<label for="child-age" class="form-label">Alter des Geburtstagskind *</label>
-				<input type="number" class="form-control" id="child-age" min="1" required>
+				<input type="number" class="form-control" id="child-age" name="child_age" min="1" required>
 			</div>
 			<div class="mb-3">
 				<label for="num-children" class="form-label">Anzahl der Kinder (max. 15) *</label>
-				<input type="number" class="form-control" id="num-children" max="15" min="1" required>
+				<input type="number" class="form-control" id="num-children" name="num_children" max="15" min="1" required>
 			</div>
 			<div class="mb-3">
 				<label for="contact-person" class="form-label">Ansprechperson *</label>
-				<input type="text" class="form-control" id="contact-person" required>
+				<input type="text" class="form-control" id="contact-person" name="contact_person" required>
 			</div>
 			<div class="mb-3">
 				<label for="email" class="form-label">E-Mail *</label>
-				<input type="email" class="form-control" id="email" required>
+				<input type="email" class="form-control" id="email" name="email" required>
 			</div>
 			<div class="mb-3">
 				<label for="phone" class="form-label">Telefonnummer *</label>
-				<input type="tel" class="form-control" id="phone" required>
+				<input type="tel" class="form-control" id="phone" name="phone" required>
 			</div>
 			<div class="mb-3">
 				<label for="address" class="form-label">Straße & Hausnummer *</label>
-				<input type="text" class="form-control" id="address" required>
+				<input type="text" class="form-control" id="address" name="address" required>
 			</div>
 			<div class="mb-3">
 				<label for="zip-city" class="form-label">PLZ, Ort *</label>
-				<input type="text" class="form-control" id="zip-city" required>
+				<input type="text" class="form-control" id="zip-city" name="zip_city" required>
 			</div>
 		</div>
-
 
 		<div class="form-section">
 			<h4 class="fw-bold mb-3">STYX Paket <span class="text-danger">*</span></h4>
@@ -96,6 +108,7 @@ $this->load->view('partials/kinder_assets');
 				</div>
 			</div>
 		</div>
+
 		<div class="form-section">
 			<h4 class="fw-bold mb-3">STYX Torte <span class="text-danger">*</span></h4>
 			<div class="row row-cols-1 row-cols-md-2 g-4">
@@ -112,6 +125,7 @@ $this->load->view('partials/kinder_assets');
 				</div>
 			</div>
 		</div>
+
 		<div class="form-section">
 			<h4 class="fw-bold mb-3">Jause <span class="text-danger">*</span></h4>
 			<div class="row row-cols-1 row-cols-md-2 g-4">
@@ -135,13 +149,10 @@ $this->load->view('partials/kinder_assets');
 			<div class="form-text text-danger mt-2 text-bold">Jause im Paketpreis inklusive!</div>
 		</div>
 
-
-
-
 		<div class="form-section">
 			<div class="mb-3">
 				<label for="notes" class="form-label">Anmerkung</label>
-				<textarea class="form-control" id="notes" rows="4"></textarea>
+				<textarea class="form-control" id="notes" name="notes" rows="4"></textarea>
 			</div>
 			<div class="mb-3">
 				<p class="text-danger">Richten Sie bitte Ihre Terminanfrage <strong>mindestens 2 Wochen</strong> im Voraus an uns!</p>
