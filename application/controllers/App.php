@@ -294,7 +294,6 @@ class App extends CI_Controller
 		$this->load->library('form_validation');
 		$this->load->library('email');
 
-		// Validácia základných polí
 		$this->form_validation->set_rules('event_date', 'Datum', 'required');
 		$this->form_validation->set_rules('event_time', 'Uhrzeit', 'required');
 		$this->form_validation->set_rules('child_name', 'Kind', 'required|trim');
@@ -315,7 +314,6 @@ class App extends CI_Controller
 			return;
 		}
 
-		// Zozbieranie dát
 		$data = [
 			'event_date' => $this->input->post('event_date', true),
 			'event_time' => $this->input->post('event_time', true),
@@ -332,6 +330,8 @@ class App extends CI_Controller
 			'jause' => $this->input->post('jause', true),
 			'notes' => $this->input->post('notes', true),
 		];
+
+		log_message('debug', 'Formulárové dáta: ' . print_r($data, true)); // Debug výpis
 
 		$this->load->model('App_model');
 		$sent = $this->App_model->sendKindergeburtstagMail($data);

@@ -178,7 +178,6 @@ class App_model extends CI_Model
 
 		$this->email->from(MAIL_ADMIN, 'STYX Geburtstage');
 		$this->email->to(MAIL_MODERATOR);
-
 		$this->email->subject('Neue Kindergeburtstag Anfrage');
 
 		$message = "<h3>Neue Kindergeburtstag Anfrage</h3>";
@@ -199,7 +198,12 @@ class App_model extends CI_Model
 		$this->email->set_mailtype('html');
 		$this->email->message($message);
 
-		return $this->email->send();
+		if (!$this->email->send()) {
+			log_message('error', $this->email->print_debugger());
+			return false;
+		}
+
+		return true;
 	}
 
 }
