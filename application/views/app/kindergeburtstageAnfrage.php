@@ -1,75 +1,20 @@
-<style>
-	.select-card {
-		border: 2px solid #ddd;
-		border-radius: 12px;
-		padding: 20px;
-		text-align: center;
-		background-color: #fff;
-		transition: all 0.2s ease-in-out;
-		height: 100%;
-		cursor: pointer;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-		margin-bottom: 2.5rem;
-	}
-	.select-card:hover {
-		border-color: #007bff;
-		box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
-	}
-	.select-card.active {
-		border-color: #28a745;
-		background-color: #eaffea;
-	}
-	.select-card input[type="radio"] {
-		display: none;
-	}
-	.select-card .image-wrapper img {
-		max-height: 100%;
-		width: auto;
-		object-fit: contain;
-		margin-bottom: 15px;
-	}
-	.select-card .fw-bold {
-		font-size: 1.2rem;
-	}
-	.select-card small {
-		font-size: 1rem;
-	}
-	.select-card p {
-		font-size: 0.95rem;
-		line-height: 1.4;
-		margin-bottom: 0;
-	}
-
-	.form-section {
-		margin-bottom: 4rem;
-	}
-	.card-group {
-		margin-bottom: 3rem;
-		gap: 2rem;
-	}
-
-	.card-group h4 {
-		margin-bottom: 1.5rem;
-		margin-top: 2.5rem;
-	}
-	.card-group .select-card {
-		margin-bottom: 2rem;
-	}
-	.card-group.row {
-		margin-bottom: 3rem;
-	}
-
-	.form-control {
-		font-size: 1rem;
-	}
-	.form-label {
-		font-weight: 600;
-		margin-bottom: 0.5rem;
-	}
-	textarea.form-control {
-		margin-bottom: 2rem;
-	}
-</style>
+<?php
+$this->load->view('partials/kinder_assets');
+?>
+<section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-10 text-center">
+				<h1 id="article-heading" class="font-weight-bold mb-3">
+					<?= ($currentLang == 'english') ? 'Contact Form' : 'Kontaktformular' ?>
+				</h1>
+				<p class="text-muted lead mb-0">
+					<?= htmlspecialchars(($currentLang == 'english') ? 'Get in touch with us for any inquiries or support.' : 'Kontaktieren Sie uns für Anfragen oder Unterstützung.') ?>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
 
 <div class="container my-5">
 	<form id="birthday-form">
