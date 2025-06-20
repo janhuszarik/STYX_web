@@ -158,14 +158,13 @@ $this->load->view('partials/kinder_assets');
 				<p class="text-danger">Richten Sie bitte Ihre Terminanfrage <strong>mindestens 2 Wochen</strong> im Voraus an uns!</p>
 			</div>
 			<div class="mb-3">
-				<div class="g-recaptcha" data-sitekey="<?= RECAPTCHA_SITE_KEY ?>"></div>
+				<div class="g-recaptcha" data-sitekey="<?=RECAPTCHA?>"></div>
 			</div>
 			<button type="submit" class="btn btn-success">Anfrage abschicken</button>
 		</div>
+		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	</form>
 </div>
-
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <script>
 	function selectCard(element, group) {
