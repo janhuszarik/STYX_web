@@ -165,7 +165,7 @@ class App_model extends CI_Model
 		$this->load->library('email');
 
 		$this->email->from(MAIL_ADMIN, 'STYX Geburtstage');
-		$this->email->to(MAIL_ADMIN); // alebo vlastný email
+		$this->email->to(MAIL_MODERATOR);
 
 		$this->email->subject('Neue Kindergeburtstag Anfrage');
 
