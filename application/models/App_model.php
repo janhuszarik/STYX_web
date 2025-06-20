@@ -164,6 +164,18 @@ class App_model extends CI_Model
 	{
 		$this->load->library('email');
 
+		$config['protocol']    = 'smtp';
+		$config['smtp_host']   = SMTP;
+		$config['smtp_user']   = SMTP_NAME;
+		$config['smtp_pass']   = SMTP_PASS;
+		$config['smtp_port']   = SMTP_PORT;
+		$config['smtp_crypto'] = 'ssl';
+		$config['mailtype']    = 'html';
+		$config['charset']     = 'utf-8';
+		$config['newline']     = "\r\n";
+
+		$this->email->initialize($config);
+
 		$this->email->from(MAIL_ADMIN, 'STYX Geburtstage');
 		$this->email->to(MAIL_MODERATOR);
 
