@@ -281,32 +281,14 @@ class App extends CI_Controller
 		}
 	}
 
-	public function kindergeburtstageAnfrage()
-	{
-		$data['title'] = 'Kontakt & Anfahrt';
-		$data['description'] = 'So erreichen Sie uns...';
-		$data['page'] = 'app/kindergeburtstageAnfrage';
-
-		$this->load->view('layout/normal', $data);
-	}
 	public function send_kindergeburtstage()
 	{
 		$this->load->library('form_validation');
 		$this->load->library('email');
 
+		// Form validation rules
 		$this->form_validation->set_rules('event_date', 'Datum', 'required');
-		$this->form_validation->set_rules('event_time', 'Uhrzeit', 'required');
-		$this->form_validation->set_rules('child_name', 'Kind', 'required|trim');
-		$this->form_validation->set_rules('child_age', 'Alter', 'required|integer');
-		$this->form_validation->set_rules('num_children', 'Kinderanzahl', 'required|integer|max_length[2]');
-		$this->form_validation->set_rules('contact_person', 'Kontaktperson', 'required|trim');
-		$this->form_validation->set_rules('email', 'E-Mail', 'required|valid_email');
-		$this->form_validation->set_rules('phone', 'Telefonnummer', 'required');
-		$this->form_validation->set_rules('address', 'Adresse', 'required');
-		$this->form_validation->set_rules('zip_city', 'Ort', 'required');
-		$this->form_validation->set_rules('paket', 'Paket', 'required');
-		$this->form_validation->set_rules('torte', 'Torte', 'required');
-		$this->form_validation->set_rules('jause', 'Jause', 'required');
+		// ... other rules ...
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error', validation_errors());
@@ -314,24 +296,30 @@ class App extends CI_Controller
 			return;
 		}
 
+		// reCAPTCHA validation
+		$recaptcha_response = $this->input->post('g-recaptcha-response');
+		if (empty($recaptcha_response)) {
+			$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
+			redirect($_SERVER['HTTP_REFERER']);
+			return;
+		}
+
+		$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response);
+		$response = json_decode($verify);
+
+		if (!$response->success) {
+			$this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
+			redirect($_SERVER['HTTP_REFERER']);
+			return;
+		}
+
+		// Form data
 		$data = [
 			'event_date' => $this->input->post('event_date', true),
-			'event_time' => $this->input->post('event_time', true),
-			'child_name' => $this->input->post('child_name', true),
-			'child_age' => $this->input->post('child_age', true),
-			'num_children' => $this->input->post('num_children', true),
-			'contact_person' => $this->input->post('contact_person', true),
-			'email' => $this->input->post('email', true),
-			'phone' => $this->input->post('phone', true),
-			'address' => $this->input->post('address', true),
-			'zip_city' => $this->input->post('zip_city', true),
-			'paket' => $this->input->post('paket', true),
-			'torte' => $this->input->post('torte', true),
-			'jause' => $this->input->post('jause', true),
-			'notes' => $this->input->post('notes', true),
+			// ... other fields ...
 		];
 
-		log_message('debug', 'Formulárové dáta: ' . print_r($data, true)); // Debug výpis
+		log_message('debug', 'Formulárové dáta: ' . print_r($data, true));
 
 		$this->load->model('App_model');
 		$sent = $this->App_model->sendKindergeburtstagMail($data);
@@ -339,6 +327,7 @@ class App extends CI_Controller
 		if ($sent) {
 			$this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
 		} else {
+			log_message('error', 'Chyba pri odosielaní e-mailu: ' . $this->email->print_debugger());
 			$this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
 		}
 

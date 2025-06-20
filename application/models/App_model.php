@@ -160,50 +160,81 @@ class App_model extends CI_Model
 		$this->db->order_by('name', 'ASC');
 		return $this->db->get('locations')->result();
 	}
-	public function sendKindergeburtstagMail($data)
+	public function send_kindergeburtstage()
 	{
+		$this->load->library('form_validation');
 		$this->load->library('email');
 
-		$config['protocol']    = 'smtp';
-		$config['smtp_host']   = SMTP;
-		$config['smtp_user']   = SMTP_NAME;
-		$config['smtp_pass']   = SMTP_PASS;
-		$config['smtp_port']   = SMTP_PORT;
-		$config['smtp_crypto'] = 'ssl';
-		$config['mailtype']    = 'html';
-		$config['charset']     = 'utf-8';
-		$config['newline']     = "\r\n";
+		// Form validation rules
+		$this->form_validation->set_rules('event_date', 'Datum', 'required');
+		$this->form_validation->set_rules('event_time', 'Uhrzeit', 'required');
+		$this->form_validation->set_rules('child_name', 'Kind', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('child_age', 'Alter', 'required|integer|greater_than[0]');
+		$this->form_validation->set_rules('num_children', 'Kinderanzahl', 'required|integer|greater_than[0]|less_than_equal_to[15]');
+		$this->form_validation->set_rules('contact_person', 'Kontaktperson', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('email', 'E-Mail', 'required|valid_email|max_length[100]');
+		$this->form_validation->set_rules('phone', 'Telefonnummer', 'required|trim|max_length[30]');
+		$this->form_validation->set_rules('address', 'Adresse', 'required|trim|max_length[150]');
+		$this->form_validation->set_rules('zip_city', 'Ort', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('paket', 'Paket', 'required|in_list[shampoo_badesalz,schokolade]');
+		$this->form_validation->set_rules('torte', 'Torte', 'required|in_list[ja]');
+		$this->form_validation->set_rules('jause', 'Jause', 'required|in_list[wurst,toast]');
+		$this->form_validation->set_rules('notes', 'Anmerkung', 'trim|max_length[500]');
 
-		$this->email->initialize($config);
-
-		$this->email->from(MAIL_ADMIN, 'STYX Geburtstage');
-		$this->email->to(MAIL_MODERATOR);
-		$this->email->subject('Neue Kindergeburtstag Anfrage');
-
-		$message = "<h3>Neue Kindergeburtstag Anfrage</h3>";
-		$message .= "<p><strong>Datum:</strong> {$data['event_date']} um {$data['event_time']}</p>";
-		$message .= "<p><strong>Kind:</strong> {$data['child_name']} ({$data['child_age']} Jahre alt)</p>";
-		$message .= "<p><strong>Anzahl Kinder:</strong> {$data['num_children']}</p>";
-		$message .= "<p><strong>Kontaktperson:</strong> {$data['contact_person']}</p>";
-		$message .= "<p><strong>Email:</strong> {$data['email']}</p>";
-		$message .= "<p><strong>Telefon:</strong> {$data['phone']}</p>";
-		$message .= "<p><strong>Adresse:</strong> {$data['address']}, {$data['zip_city']}</p>";
-		$message .= "<p><strong>Paket:</strong> {$data['paket']}</p>";
-		$message .= "<p><strong>Torte:</strong> {$data['torte']}</p>";
-		$message .= "<p><strong>Jause:</strong> {$data['jause']}</p>";
-		if (!empty($data['notes'])) {
-			$message .= "<p><strong>Anmerkung:</strong><br>" . nl2br($data['notes']) . "</p>";
+		if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', validation_errors());
+			redirect($_SERVER['HTTP_REFERER']);
+			return;
 		}
 
-		$this->email->set_mailtype('html');
-		$this->email->message($message);
-
-		if (!$this->email->send()) {
-			log_message('error', $this->email->print_debugger());
-			return false;
+		// reCAPTCHA validation
+		$recaptcha_response = $this->input->post('g-recaptcha-response');
+		if (empty($recaptcha_response)) {
+			$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
+			redirect($_SERVER['HTTP_REFERER']);
+			return;
 		}
 
-		return true;
+		$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response);
+		$response = json_decode($verify);
+
+		if (!$response->success) {
+			$this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
+			redirect($_SERVER['HTTP_REFERER']);
+			return;
+		}
+
+		// Form data
+		$data = [
+			'event_date' => $this->input->post('event_date', true),
+			'event_time' => $this->input->post('event_time', true),
+			'child_name' => $this->input->post('child_name', true),
+			'child_age' => $this->input->post('child_age', true),
+			'num_children' => $this->input->post('num_children', true),
+			'contact_person' => $this->input->post('contact_person', true),
+			'email' => $this->input->post('email', true),
+			'phone' => $this->input->post('phone', true),
+			'address' => $this->input->post('address', true),
+			'zip_city' => $this->input->post('zip_city', true),
+			'paket' => $this->input->post('paket', true),
+			'torte' => $this->input->post('torte', true),
+			'jause' => $this->input->post('jause', true),
+			'notes' => $this->input->post('notes', true),
+		];
+
+		log_message('debug', 'Formulárové dáta: ' . print_r($data, true));
+
+		$this->load->model('App_model');
+		$sent = $this->App_model->sendKindergeburtstagMail($data);
+
+		if ($sent) {
+			$this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
+		} else {
+			log_message('error', 'Chyba pri odosielaní e-mailu: ' . $this->email->print_debugger());
+			$this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
+		}
+
+		redirect($_SERVER['HTTP_REFERER']);
 	}
 
 }
