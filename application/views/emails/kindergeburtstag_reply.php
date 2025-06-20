@@ -28,7 +28,7 @@
 
 			<h3 style="font-size: 18px; margin-bottom: 10px;">Zusammenfassung Ihrer Anfrage</h3>
 			<table width="100%" cellspacing="0" cellpadding="5" style="border-collapse: collapse;">
-				<tr><td style="font-weight: bold;">Datum:</td><td><?= htmlspecialchars($event_date) ?> um <?= htmlspecialchars($event_time) ?></td></tr>
+				<tr><td style="font-weight: bold;">Datum:</td><td><?= date('d.m.Y', strtotime($event_date)) ?> um <?= date('h.m', strtotime($event_time)) ?></td></tr>
 				<tr><td style="font-weight: bold;">Kind:</td><td><?= htmlspecialchars($child_name) ?> (<?= htmlspecialchars($child_age) ?> Jahre alt)</td></tr>
 				<tr><td style="font-weight: bold;">Anzahl Kinder:</td><td><?= htmlspecialchars($num_children) ?></td></tr>
 				<tr><td style="font-weight: bold;">Kontaktperson:</td><td><?= htmlspecialchars($contact_person) ?></td></tr>

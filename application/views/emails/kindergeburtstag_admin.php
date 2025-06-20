@@ -36,7 +36,7 @@
 			<p style="font-size: 20px; margin-bottom: 10px;"><b>Neue Kindergeburtstag Anfrage</b></p>
 
 			<table style="width:100%; border-collapse: collapse; font-size: 14px;">
-				<tr><td style="font-weight:bold; padding: 6px 0;">Datum:</td><td><?= htmlspecialchars($event_date) ?> um <?= htmlspecialchars($event_time) ?></td></tr>
+				<tr><td style="font-weight:bold; padding: 6px 0;">Datum:</td><td><?= date('d.m.Y', strtotime($event_date)) ?> um <?= date('h.m', strtotime($event_time)) ?></td></tr>
 				<tr><td style="font-weight:bold; padding: 6px 0;">Kind:</td><td><?= htmlspecialchars($child_name) ?> (<?= htmlspecialchars($child_age) ?> Jahre alt)</td></tr>
 				<tr><td style="font-weight:bold; padding: 6px 0;">Anzahl Kinder:</td><td><?= htmlspecialchars($num_children) ?></td></tr>
 				<tr><td style="font-weight:bold; padding: 6px 0;">Kontaktperson:</td><td><?= htmlspecialchars($contact_person) ?></td></tr>
