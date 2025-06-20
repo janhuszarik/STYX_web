@@ -289,6 +289,7 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+
 	public function send_kindergeburtstage()
 	{
 		$this->load->library('form_validation');
@@ -296,7 +297,19 @@ class App extends CI_Controller
 
 		// Form validation rules
 		$this->form_validation->set_rules('event_date', 'Datum', 'required');
-		// ... other rules ...
+		$this->form_validation->set_rules('event_time', 'Uhrzeit', 'required');
+		$this->form_validation->set_rules('child_name', 'Kind', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('child_age', 'Alter', 'required|integer|greater_than[0]');
+		$this->form_validation->set_rules('num_children', 'Kinderanzahl', 'required|integer|greater_than[0]|less_than_equal_to[15]');
+		$this->form_validation->set_rules('contact_person', 'Kontaktperson', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('email', 'E-Mail', 'required|valid_email|max_length[100]');
+		$this->form_validation->set_rules('phone', 'Telefonnummer', 'required|trim|max_length[30]');
+		$this->form_validation->set_rules('address', 'Adresse', 'required|trim|max_length[150]');
+		$this->form_validation->set_rules('zip_city', 'Ort', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('paket', 'Paket', 'required|in_list[shampoo_badesalz,schokolade]');
+		$this->form_validation->set_rules('torte', 'Torte', 'required|in_list[ja]');
+		$this->form_validation->set_rules('jause', 'Jause', 'required|in_list[wurst,toast]');
+		$this->form_validation->set_rules('notes', 'Anmerkung', 'trim|max_length[500]');
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error', validation_errors());
@@ -306,16 +319,18 @@ class App extends CI_Controller
 
 		// reCAPTCHA validation
 		$recaptcha_response = $this->input->post('g-recaptcha-response');
+		log_message('debug', 'reCAPTCHA response: ' . $recaptcha_response);
 		if (empty($recaptcha_response)) {
 			$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
 			redirect($_SERVER['HTTP_REFERER']);
 			return;
 		}
 
-		$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response);
+		$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response . "&remoteip=" . $this->input->ip_address());
 		$response = json_decode($verify);
 
 		if (!$response->success) {
+			log_message('error', 'reCAPTCHA failed: ' . print_r($response, true));
 			$this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
 			redirect($_SERVER['HTTP_REFERER']);
 			return;
@@ -324,7 +339,19 @@ class App extends CI_Controller
 		// Form data
 		$data = [
 			'event_date' => $this->input->post('event_date', true),
-			// ... other fields ...
+			'event_time' => $this->input->post('event_time', true),
+			'child_name' => $this->input->post('child_name', true),
+			'child_age' => $this->input->post('child_age', true),
+			'num_children' => $this->input->post('num_children', true),
+			'contact_person' => $this->input->post('contact_person', true),
+			'email' => $this->input->post('email', true),
+			'phone' => $this->input->post('phone', true),
+			'address' => $this->input->post('address', true),
+			'zip_city' => $this->input->post('zip_city', true),
+			'paket' => $this->input->post('paket', true),
+			'torte' => $this->input->post('torte', true),
+			'jause' => $this->input->post('jause', true),
+			'notes' => $this->input->post('notes', true),
 		];
 
 		log_message('debug', 'Formulárové dáta: ' . print_r($data, true));
