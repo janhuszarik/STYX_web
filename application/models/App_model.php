@@ -199,7 +199,6 @@ class App_model extends CI_Model
 		}
 
 		$this->email->message($message);
-
 		$adminSent = $this->email->send();
 
 		// User confirmation email
@@ -207,7 +206,7 @@ class App_model extends CI_Model
 		$this->email->from('support@styxnatur.at', 'STYX Geburtstage');
 		$this->email->to($data['email']);
 		$this->email->subject('Vielen Dank für Ihre Kindergeburtstag Anfrage');
-		$userMessage = "<h3>Vielen Dank für Ihre Anfrage</h3><p>Liebe/r {$data['contact_person']},<br>Vielen Dank für Ihre Anfrage. Wir werden uns baldmöglichst bei Ihnen melden.</p>";
+		$userMessage = $this->load->view('emails/kindergeburtstag_reply', $data, TRUE);
 		$this->email->message($userMessage);
 		$userSent = $this->email->send();
 
