@@ -183,22 +183,8 @@ class App_model extends CI_Model
 		$this->email->reply_to($data['email'], $data['contact_person']);
 		$this->email->subject('Neue Kindergeburtstag Anfrage');
 
-		$message = "<h3>Neue Kindergeburtstag Anfrage</h3>";
-		$message .= "<p><strong>Datum:</strong> {$data['event_date']} um {$data['event_time']}</p>";
-		$message .= "<p><strong>Kind:</strong> {$data['child_name']} ({$data['child_age']} Jahre alt)</p>";
-		$message .= "<p><strong>Anzahl Kinder:</strong> {$data['num_children']}</p>";
-		$message .= "<p><strong>Kontaktperson:</strong> {$data['contact_person']}</p>";
-		$message .= "<p><strong>Email:</strong> {$data['email']}</p>";
-		$message .= "<p><strong>Telefon:</strong> {$data['phone']}</p>";
-		$message .= "<p><strong>Adresse:</strong> {$data['address']}, {$data['zip_city']}</p>";
-		$message .= "<p><strong>Paket:</strong> {$data['paket']}</p>";
-		$message .= "<p><strong>Torte:</strong> {$data['torte']}</p>";
-		$message .= "<p><strong>Jause:</strong> {$data['jause']}</p>";
-		if (!empty($data['notes'])) {
-			$message .= "<p><strong>Anmerkung:</strong><br>" . nl2br($data['notes']) . "</p>";
-		}
-
-		$this->email->message($message);
+		$adminMessage = $this->load->view('emails/kindergeburtstag_admin', $data, TRUE);
+		$this->email->message($adminMessage);
 		$adminSent = $this->email->send();
 
 		// User confirmation email
