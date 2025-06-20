@@ -160,7 +160,7 @@ class App_model extends CI_Model
 		$this->db->order_by('name', 'ASC');
 		return $this->db->get('locations')->result();
 	}
-	public function send_kindergeburtstage()
+	public function sendKindergeburtstagMail()
 	{
 		$this->load->library('form_validation');
 		$this->load->library('email');
