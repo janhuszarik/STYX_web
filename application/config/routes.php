@@ -147,9 +147,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/shopfind/(:any)'] 							= 'shopfind/shopfindSave/$1';
 	$route['admin/shopfind/(:any)/(:num)'] 						= 'shopfind/shopfindSave/$1/$2';
 
+
+
+
+	$route['besuchen/kindergeburtstage/anfrage'] 				= 'app/kindergeburtstageAnfrage';
 	$route['besuchen/shopfinder'] 								= 'app/showMap';
 	$route['visit/shopfinder'] 									= 'app/showMap';
 	$route['kontakt/send'] 										= 'app/send_contact';
+
+
 
 	$route['aktuelles/download-presse-login'] 					= 'app/download_presse_login';
 	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
