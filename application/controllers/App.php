@@ -281,6 +281,14 @@ class App extends CI_Controller
 		}
 	}
 
+	public function kindergeburtstageAnfrage()
+	{
+		$data['title'] = 'Kontakt & Anfahrt';
+		$data['description'] = 'So erreichen Sie uns...';
+		$data['page'] = 'app/kindergeburtstageAnfrage';
+
+		$this->load->view('layout/normal', $data);
+	}
 	public function send_kindergeburtstage()
 	{
 		$this->load->library('form_validation');
