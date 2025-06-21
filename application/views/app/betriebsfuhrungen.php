@@ -415,7 +415,7 @@
 			</a>
 		</div>
 		<div class="col-lg-1 col-md-2 col-3">
-			<a href="https://www.partnerkarte2.at/" target="_blank">
+			<a href="<?=BASE_URL?>" target="_blank">
 				<img src="<?= base_url('img/image/wirfurweinburg.jpg') ?>" class="img-fluid" alt="Partnerkarte 2">
 			</a>
 		</div>
