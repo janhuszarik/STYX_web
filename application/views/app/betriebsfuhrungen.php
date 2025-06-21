@@ -113,7 +113,7 @@
 					</div>
 					<div class="flip-card-back">
 						<h4 class="text-center text-success">Biererlebnis</h4>
-						<p>Verkosten Sie unser hauseigenes Bier im Bistro oder im Bahnhofsbräu in Kombination mit regionaler Kulinarik. Ideal für Gruppenangebote!</p>
+						<p>Verkosten Sie unser hauseigenes Bier im Bistro, oder im Bahnhofsbräu in Kombitation mit einem unser Speisenangebote für Gruppen.</p>
 						<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
 				</div>
@@ -125,7 +125,7 @@
 			<div class="flip-card">
 				<div class="flip-card-inner">
 					<div class="flip-card-front">
-						<img src="<?= base_url('img/image/bahn.jpg') ?>" alt="Bahnerlebnis" class="card-image-fix mb-2">
+						<img src="<?= base_url('img/image/bahnSTYX.jpg') ?>" alt="Bahnerlebnis" class="card-image-fix mb-2">
 						<h3 class="mt-2">Bahnerlebnis</h3>
 					</div>
 					<div class="flip-card-back">
@@ -142,11 +142,12 @@
 			<div class="flip-card">
 				<div class="flip-card-inner">
 					<div class="flip-card-front">
-						<img src="<?= base_url('img/image/kraut.jpg') ?>" alt="Kräutergarten" class="card-image-fix mb-2">
+						<img src="<?= base_url('img/image/kraeutergarten.jpg') ?>" alt="Kräutergarten" class="card-image-fix mb-2">
 						<h3 class="mt-2">Kräutergarten</h3>
 					</div>
 					<div class="flip-card-back">
 						<h4 class="text-center text-success">Kräutergarten</h4>
+						<p><strong>Natur im Garten Schaugarten</strong></p>
 						<p>Unser Schaugarten „Natur im Garten“ gibt Einblick in die Welt der Kräuter und Blüten – informativ, entspannend und nachhaltig zugleich.</p>
 						<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
@@ -159,7 +160,7 @@
 			<div class="flip-card">
 				<div class="flip-card-inner">
 					<div class="flip-card-front">
-						<img src="<?= base_url('img/image/kulinarik.jpg') ?>" alt="Kulinarik für Gruppen" class="card-image-fix mb-2">
+						<img src="<?= base_url('img/image/stelze_bahnhofsbraeu.jpg') ?>" alt="Kulinarik für Gruppen" class="card-image-fix mb-2">
 						<h3 class="mt-2">Kulinarik für Gruppen</h3>
 					</div>
 					<div class="flip-card-back">
@@ -176,7 +177,7 @@
 			<div class="flip-card">
 				<div class="flip-card-inner">
 					<div class="flip-card-front">
-						<img src="<?= base_url('img/image/erm.jpg') ?>" alt="Ermäßigungen" class="card-image-fix mb-2">
+						<img src="<?= base_url('img/image/card_wcc.jpg') ?>" alt="Ermäßigungen" class="card-image-fix mb-2">
 						<h3 class="mt-2">Ermäßigungen</h3>
 					</div>
 					<div class="flip-card-back">
@@ -228,7 +229,7 @@
 				<div class="flip-card">
 					<div class="flip-card-inner">
 						<div class="flip-card-front">
-							<img src="<?= base_url('img/image/englisch.jpg') ?>" alt="Touren auf Englisch" class="card-image-fix mb-2">
+							<img src="<?= base_url('img/image/wcc_fuehrung.jpg') ?>" alt="Touren auf Englisch" class="card-image-fix mb-2">
 							<h3 class="mt-2">Touren auf Englisch</h3>
 						</div>
 						<div class="flip-card-back">
@@ -281,7 +282,7 @@
 				<div class="flip-card">
 					<div class="flip-card-inner">
 						<div class="flip-card-front">
-							<img src="<?= base_url('img/image/geburtstag.jpg') ?>" alt="Kindergeburtstage" class="card-image-fix mb-2">
+							<img src="<?= base_url('img/image/kindergeburtstage.jpg') ?>" alt="Kindergeburtstage" class="card-image-fix mb-2">
 							<h3 class="mt-2">Kindergeburtstage</h3>
 						</div>
 						<div class="flip-card-back">
@@ -300,7 +301,7 @@
 				<div class="flip-card">
 					<div class="flip-card-inner">
 						<div class="flip-card-front">
-							<img src="<?= base_url('img/image/kontakt.jpg') ?>" alt="Kontakt" class="card-image-fix mb-2">
+							<img src="<?= base_url('img/image/wcc_gebeude.jpg') ?>" alt="Kontakt" class="card-image-fix mb-2">
 							<h3 class="mt-2">Kontakt</h3>
 						</div>
 						<div class="flip-card-back">
@@ -317,7 +318,7 @@
 				<div class="flip-card">
 					<div class="flip-card-inner">
 						<div class="flip-card-front">
-							<img src="<?= base_url('img/image/anfahrt.jpg') ?>" alt="Anfahrt" class="card-image-fix mb-2">
+							<img src="<?= base_url('img/image/stender_wcc.jpg') ?>" alt="Anfahrt" class="card-image-fix mb-2">
 							<h3 class="mt-2">Anfahrt</h3>
 						</div>
 						<div class="flip-card-back">
