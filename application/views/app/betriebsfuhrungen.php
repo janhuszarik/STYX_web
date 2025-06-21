@@ -1,6 +1,7 @@
-<style>.flip-card {
+<style>
+	.flip-card {
 		width: 100%;
-		height: 400px; /* pevná výška celej karty */
+		height: 400px;
 		perspective: 1000px;
 	}
 
@@ -29,6 +30,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: start;
+		align-items: center;
 	}
 
 	.flip-card-front {
@@ -39,20 +41,48 @@
 	.flip-card-back {
 		background-color: #f5f5f5;
 		transform: rotateY(180deg);
-		text-align: left;
+		text-align: center;
 		font-size: 14px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+	.flip-card-back h4 {
+		font-size: 1.5rem;
+		margin: 10px 0 0 0;
 	}
 	.card-image-fix {
-		flex: 1 1 auto;
 		width: 100%;
+		max-height: 300px;
 		object-fit: cover;
+		margin-bottom: 30px;
 	}
+
+	.flip-card-front h3 {
+		font-size: 1.5rem;
+		margin: 10px 0;
+		padding: 13px 0;
+	}
+	.flip-card-front h4 {
+		font-size: 1.5rem;
+		padding: 3px 0;
+	}
+
+	.flip-card-back p {
+		margin: 0 10px 10px 10px;
+		flex-grow: 0;
+		margin-top: 5px;
+	}
+
+	.flip-card-back .btn-sm {
+		margin-top: auto;
+	}
+	
+
 	.img-fluid {
 		max-height: 80px;
 		object-fit: contain;
 	}
-
-
 </style>
 <section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 	<div class="container py-5">
