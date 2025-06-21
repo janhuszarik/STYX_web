@@ -12,13 +12,14 @@ class App extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(array('App_model','Mail_model'));
+		$this->load->model(array('App_model', 'Mail_model'));
 		$this->load->language('app_lang');
 		$this->refresh = get_http_referer(); // Speichern des Referers in die Eigenschaft des Controllers / verwende redirect($this->refresh);
-		setlocale(LC_ALL,'de_DE');
+		setlocale(LC_ALL, 'de_DE');
 	}
 
-	function index(){
+	function index()
+	{
 		$this->home();
 	}
 
@@ -26,17 +27,17 @@ class App extends CI_Controller
 	public function home()
 	{
 		// Laden und Senden von Daten
-		$data['user']           = $this->ion_auth->user()->row();
-		$data['sliders']        = $this->App_model->getSliders(true);
-		$data['news']           = $this->App_model->getAllActiveNews(); // angepasst
-		$data['product']        = $this->App_model->getAllActiveProduct(); // angepasst
+		$data['user'] = $this->ion_auth->user()->row();
+		$data['sliders'] = $this->App_model->getSliders(true);
+		$data['news'] = $this->App_model->getAllActiveNews(); // angepasst
+		$data['product'] = $this->App_model->getAllActiveProduct(); // angepasst
 
 		// Laden der Controller-Daten
-		$data['page']           = 'home';
-		$data['title']          = lang('HOME_TITLE');
-		$data['description']    = lang('HOME_DESCRIPTION');
-		$data['keywords']       = lang('HOME_KEYWORDS');
-		$data['image']          = BASE_URL . LOGO;
+		$data['page'] = 'home';
+		$data['title'] = lang('HOME_TITLE');
+		$data['description'] = lang('HOME_DESCRIPTION');
+		$data['keywords'] = lang('HOME_KEYWORDS');
+		$data['image'] = BASE_URL . LOGO;
 
 		$this->load->view('layout/normal', $data);
 	}
@@ -127,6 +128,7 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+
 	public function error404()
 	{
 		log_message('error', '404 Page Not Found: ' . current_url());
@@ -148,9 +150,9 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+
 	public function send_contact()
 	{
-
 
 
 		$this->load->library('form_validation');
@@ -209,11 +211,13 @@ class App extends CI_Controller
 
 		redirect($_SERVER['HTTP_REFERER']);
 	}
+
 	public function preview_email()
 	{
 		$data['name'] = 'Max Mustermann'; // testovacie dáta
 		$this->load->view('emails/contact_reply', $data);
 	}
+
 	public function showMap()
 	{
 		$data['title'] = 'Shopfinder';
@@ -221,7 +225,7 @@ class App extends CI_Controller
 		$data['page'] = 'app/map_view';
 
 		$locations = $this->App_model->getLocations();
-		$data['locations'] = json_encode(array_map(function($loc) {
+		$data['locations'] = json_encode(array_map(function ($loc) {
 			return [
 				'name' => $loc->name,
 				'latitude' => $loc->latitude,
@@ -240,6 +244,7 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+
 	public function download_presse_login()
 	{
 		$post = $this->input->post();
@@ -369,5 +374,14 @@ class App extends CI_Controller
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
+	public function betriebsfuhrungen()
+	{
+		$data['title'] = 'Betriebsführungen';
+		$data['description'] = 'Besuchen Sie uns in Ober-Grafendorf NÖ – Naturkosmetik, BIO Schokolade & vieles mehr';
+		$data['keywords'] = 'World of STYX, Betriebsführung Naturkosmetik, BIO Schokolade Niederösterreich, Ausflugsziel Mostviertel, Erlebnisführung Ober-Grafendorf, Naturkosmetik Führung, Schokoladenführung, Kindergeburtstag STYX, Touren für Gruppen STYX, Führungen Ober-Grafendorf, Bahnerlebnis Niederösterreich, Bierverkostung STYX, Kräutergarten Natur im Garten, NÖ Card Ausflugsziel, Familienausflug STYX';
+		$data['page'] = 'app/betriebsfuhrungen';
 
+		$this->load->view('layout/normal', $data);
+	}
 }
+
