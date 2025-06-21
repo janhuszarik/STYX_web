@@ -94,16 +94,25 @@
 													<?php } ?>
 												</li>
 											<?php } ?>
+											<!-- Mobile-only buttons -->
+											<li class="nav-item mobile-only">
+												<a href="https://shop.styx.at/" class="nav-link mobile-button">
+													<i style="font-weight: bold; color: white" class="fas fa-shopping-cart me-2"></i>
+													<span style="font-weight: bold; color: white">SHOP</span>
+												</a>
+											</li>
+											<li class="nav-item mobile-only">
+												<a style="font-weight: bold; color: white" href="<?=lang('HÄNDLER_URL')?>" class="nav-link mobile-button"><?=lang('HÄNDLER_TEXT')?></a>
+											</li>
 										</ul>
-
 									</nav>
 								</div>
 								<ul class="header-social-icons social-icons d-none d-sm-block">
 									<li class="social-icons-facebook"><a href="https://www.facebook.com/www.styx.at/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
 									<li class="social-icons-instagram"><a href="https://www.instagram.com/styx.naturcosmetic/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a></li>
-									<li class="social-icons-pinterest"><a href="https://at.pinterest.com/styxnaturcosmetic/" target="_blank" title="Linkedin"><i class="fab fa-pinterest"></i></a></li>
-									<li class="social-icons-youtube"><a href="https://www.youtube.com/channel/UCxpLOYYahcENUfVnacBvagA" target="_blank" title="Linkedin"><i class="fab fa-youtube"></i></a></li>
-									<li class="social-icons-email"><a href="mailto:info@styx.at" target="_blank" title="email"><i class="fa fa-envelope"></i></a></li>
+									<li class="social-icons-pinterest"><a href="https://at.pinterest.com/styxnaturcosmetic/" target="_blank" title="Pinterest"><i class="fab fa-pinterest"></i></a></li>
+									<li class="social-icons-youtube"><a href="https://www.youtube.com/channel/UCxpLOYYahcENUfVnacBvagA" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a></li>
+									<li class="social-icons-email"><a href="mailto:info@styx.at" target="_blank" title="Email"><i class="fa fa-envelope"></i></a></li>
 								</ul>
 								<button class="btn header-btn-collapse-nav" data-bs-toggle="collapse" data-bs-target=".header-nav-main nav">
 									<i class="fas fa-bars"></i>
@@ -111,11 +120,10 @@
 								<div class="d-block d-md-none mobile-lang-flags">
 									<?php foreach (getLanguages() as $l){ ?>
 										<div class="lang me-2">
-											<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="40px" alt=""></a>
+											<a href="<?= BASE_URL . $l ?>"><img src="<?= langInfo($l)['flag'] ?>" width="40px" alt="<?= strtoupper($l) ?>"></a>
 										</div>
 									<?php } ?>
 								</div>
-
 							</div>
 						</div>
 					</div>

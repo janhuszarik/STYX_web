@@ -683,3 +683,30 @@ body.accessibility-mode .pulse-button {
 }
 
 
+/* Hide mobile-only buttons on desktop */
+@media (min-width: 768px) {
+	.header-nav-main .nav-pills .mobile-only {
+		display: none !important;
+	}
+}
+
+/* Style mobile buttons */
+@media (max-width: 767px) {
+	.header-nav-main .nav-pills .mobile-only {
+		display: block !important;
+	}
+	.header-nav-main .nav-pills .mobile-button {
+		display: flex;
+		align-items: center;
+		padding: 10px 15px;
+		font-size: 14px;
+		background-color: #64a930; /* Adjust to match your theme */
+		border-radius: 5px;
+		margin: 5px 15px;
+		text-align: center;
+		justify-content: center;
+	}
+	.header-nav-main .nav-pills .mobile-button:hover {
+		background-color: #555; /* Hover effect */
+	}
+}
