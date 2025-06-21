@@ -77,7 +77,7 @@
 	.flip-card-back .btn-sm {
 		margin-top: auto;
 	}
-	
+
 
 	.img-fluid {
 		max-height: 80px;
@@ -386,37 +386,37 @@
 	<div class="row text-center justify-content-center align-items-center gy-4">
 		<div class="col-lg-1 col-md-2 col-3">
 			<a href="https://www.top-ausflug.at/" target="_blank">
-				<img src="<?= base_url('img/cards/top-ausflugsziel.png') ?>" class="img-fluid" alt="TOP-Ausflugsziel">
+				<img src="<?= base_url('img/image/top_ausflugsziel.jpg') ?>" class="img-fluid" alt="TOP-Ausflugsziel">
 			</a>
 		</div>
 		<div class="col-lg-1 col-md-2 col-3">
 			<a href="https://www.niederoesterreich-card.at/" target="_blank">
-				<img src="<?= base_url('img/cards/nocard.png') ?>" class="img-fluid" alt="NÖ-Card">
+				<img src="<?= base_url('img/image/card_niederosterreich.jpg') ?>" class="img-fluid" alt="NÖ-Card">
 			</a>
 		</div>
 		<div class="col-lg-1 col-md-2 col-3">
-			<a href="https://www.familienpass.at/" target="_blank">
-				<img src="<?= base_url('img/cards/familienpass.png') ?>" class="img-fluid" alt="Familienpass">
+			<a href="https://familienpass.at/" target="_blank">
+				<img src="<?= base_url('img/image/familienpass.jpg') ?>" class="img-fluid" alt="Familienpass">
 			</a>
 		</div>
 		<div class="col-lg-1 col-md-2 col-3">
-			<a href="https://www.wildewunder.at/" target="_blank">
-				<img src="<?= base_url('img/cards/wildewunder.png') ?>" class="img-fluid" alt="Wilde Wunder Card">
+			<a href="https://www.mostviertel.at/wilde-wunder-card" target="_blank">
+				<img src="<?= base_url('img/image/WWC_Erwachsene_freigestellt_schraegNEU B990.png') ?>" class="img-fluid" alt="Wilde Wunder Card">
 			</a>
 		</div>
 		<div class="col-lg-1 col-md-2 col-3">
-			<a href="https://www.familybonuscard.at/" target="_blank">
-				<img src="<?= base_url('img/cards/familybonuscard.png') ?>" class="img-fluid" alt="Family Bonus Card">
+			<a href="https://family-cherries.com/events/styx/world-of-styx-1" target="_blank">
+				<img src="<?= base_url('img/image/Partner_Logo_ohne-URL.png') ?>" class="img-fluid" alt="Family Bonus Card">
 			</a>
 		</div>
 		<div class="col-lg-1 col-md-2 col-3">
-			<a href="https://www.partnerkarte1.at/" target="_blank">
-				<img src="<?= base_url('img/cards/partner1.png') ?>" class="img-fluid" alt="Partnerkarte 1">
+			<a href="https://www.naturimgarten.at/schaug%C3%A4rten.html" target="_blank">
+				<img src="<?= base_url('img/image/Schaugarten_logo.jpg') ?>" class="img-fluid" alt="Partnerkarte 1">
 			</a>
 		</div>
 		<div class="col-lg-1 col-md-2 col-3">
 			<a href="https://www.partnerkarte2.at/" target="_blank">
-				<img src="<?= base_url('img/cards/partner2.png') ?>" class="img-fluid" alt="Partnerkarte 2">
+				<img src="<?= base_url('img/image/wirfurweinburg.jpg') ?>" class="img-fluid" alt="Partnerkarte 2">
 			</a>
 		</div>
 	</div>
