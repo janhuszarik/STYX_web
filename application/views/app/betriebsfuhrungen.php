@@ -379,7 +379,7 @@
 		</div>
 	</div>
 	<div class="text-center mt-4">
-		<a href="#" class="btn btn-success me-2 px-4">Partnerbetriebe</a>
+		<a href="<?=BASE_URL.'de/besuchen/partnerbetriebe'?>" class="btn btn-success me-2 px-4">Partnerbetriebe</a>
 		<a href="#" class="btn btn-success px-4">Feedback geben</a>
 	</div>
 	<h3 class="text-success mt-5">Unsere Vorteilspartner</h3>
