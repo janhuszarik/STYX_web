@@ -231,7 +231,7 @@
 						<div class="flip-card-back">
 							<h4 class="text-success text-center">Individualbesucher</h4>
 							<p>Besuchen Sie uns individuell zwischen April und Oktober – entdecken Sie die Welt von STYX auf eigene Faust oder bei einer offenen Führung.</p>
-							<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+							<a href="<?=BASE_URL.'de/besuchen/preise-oeffnungszeiten'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 						</div>
 					</div>
 				</div>
@@ -248,7 +248,7 @@
 						<div class="flip-card-back">
 							<h4 class="text-success text-center">Gruppenangebote</h4>
 							<p>Erleben Sie maßgeschneiderte Führungen für Gruppen – mit optionalem Bier, Schokolade oder kulinarischem Rahmenprogramm.</p>
-							<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+							<a href="<?=BASE_URL.'de/besuchen/gruppenangebote'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 						</div>
 					</div>
 				</div>
