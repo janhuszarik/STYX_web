@@ -144,7 +144,7 @@
 					<div class="flip-card-back">
 						<h4 class="text-center text-success">Biererlebnis</h4>
 						<p>Verkosten Sie unser hauseigenes Bier im Bistro, oder im Bahnhofsbräu in Kombitation mit einem unser Speisenangebote für Gruppen.</p>
-						<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+						<a href="<?=BASE_URL.'de/besuchen/bahnhofsbraeu'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
 				</div>
 			</div>
@@ -161,7 +161,7 @@
 					<div class="flip-card-back">
 						<h4 class="text-center text-success">Bahnerlebnis</h4>
 						<p>Erleben Sie die Faszination der Dampflokomotiven und entdecken Sie die Geschichte der längsten Schmalspurbahn Österreichs – ein Erlebnis für die ganze Familie!</p>
-						<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+						<a href="<?=BASE_URL.'de/besuchen/partnerbetriebe'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
 				</div>
 			</div>
@@ -179,7 +179,7 @@
 						<h4 class="text-center text-success">Kräutergarten</h4>
 						<p><strong>Natur im Garten Schaugarten</strong></p>
 						<p>Unser Schaugarten „Natur im Garten“ gibt Einblick in die Welt der Kräuter und Blüten – informativ, entspannend und nachhaltig zugleich.</p>
-						<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+						<a href="<?=BASE_URL.'de/besuchen/kraeutergarten'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
 				</div>
 			</div>
@@ -196,7 +196,7 @@
 					<div class="flip-card-back">
 						<h4 class="text-center text-success">Kulinarik für Gruppen</h4>
 						<p>Entdecken Sie unsere maßgeschneiderten Kulinarik-Angebote für Gruppen – vom Bier bis zur BIO-Schokolade, alles in entspannter Atmosphäre.</p>
-						<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+						<a href="<?=BASE_URL.'de/besuchen/kulinarik'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
 				</div>
 			</div>
@@ -213,7 +213,7 @@
 					<div class="flip-card-back">
 						<h4 class="text-center text-success">Ermäßigungen</h4>
 						<p>Profitieren Sie von attraktiven Vorteilen mit der NÖ-Card, Familienpass oder Wilde Wunder Card – ideal für Ihren Ausflug ins Pielachtal!</p>
-						<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+						<a href="<?=BASE_URL.'de/besuchen/ermaeßigter-eintritt'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
 				</div>
 			</div>
