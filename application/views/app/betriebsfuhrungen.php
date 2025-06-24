@@ -265,7 +265,7 @@
 						<div class="flip-card-back">
 							<h4 class="text-success text-center">Touren auf Englisch</h4>
 							<p>We also offer guided tours in English for groups or individual visitors. Please contact us in advance for available dates.</p>
-							<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+							<a href="<?=BASE_URL.'de/besuchen/touren-auf-englisch'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 						</div>
 					</div>
 				</div>
