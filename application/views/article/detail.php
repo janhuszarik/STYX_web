@@ -190,4 +190,18 @@ for ($i = 1; $i <= 3; $i++) {
 	<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
 </div>
 
-
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="bookingModalLabel">Onlinebuchung – STYX Erlebnisführung</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+			</div>
+			<div class="modal-body" style="height:80vh;">
+				<iframe src="https://styx.regiondo.de/bookingwidget/vendor/34660/id/167063"
+						width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen>
+				</iframe>
+			</div>
+		</div>
+	</div>
+</div>

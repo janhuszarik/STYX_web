@@ -213,7 +213,7 @@
 					<div class="flip-card-back">
 						<h4 class="text-center text-success">Ermäßigungen</h4>
 						<p>Profitieren Sie von attraktiven Vorteilen mit der NÖ-Card, Familienpass oder Wilde Wunder Card – ideal für Ihren Ausflug ins Pielachtal!</p>
-						<a href="<?=BASE_URL.'de/besuchen/ermaeßigter-eintritt'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+						<a href="<?=BASE_URL.'de/besuchen/ermaesigter-eintritt'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
 				</div>
 			</div>
