@@ -127,7 +127,7 @@
 						<h4 class="text-center text-success">World of STYX</h4>
 						<p><strong>Blicken Sie mit uns hinter die Kulissen!</strong></p>
 						<p>Eine Reise durch die faszinierende Welt von STYX bietet unvergessliche Erlebnisse für alle Sinne. Tauchen Sie ein in die Produktion von duftender Naturkosmetik, verkosten Sie handgemachte BIO-Schokolade und entdecken Sie beim entspannten Shoppen einzigartige Produkte, die unter die Haut gehen!</p>
-						<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+						<a href="<?=BASE_URL.'de/besuchen/world-of-styx-betriebsfuehrungen'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 					</div>
 				</div>
 			</div>
