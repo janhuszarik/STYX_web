@@ -31,7 +31,7 @@ class App_model extends CI_Model
 		$this->db->select('*');
 		$this->db->where('slug_title', $slug_title);
 		$this->db->where('lang', $lang);
-		$this->db->where('active', 1);
+		// $this->db->where('active', 1); // Odstrániť túto podmienku
 		return $this->db->get('articles')->row();
 	}
 
@@ -41,7 +41,7 @@ class App_model extends CI_Model
 		$this->db->from('article_categories ac');
 		$this->db->where('ac.slug', $lang . '/' . $slug);
 		$this->db->where('ac.lang', $lang);
-		$this->db->where('ac.active', 1);
+		// $this->db->where('ac.active', 1);
 		return $this->db->get()->row();
 	}
 
@@ -51,7 +51,6 @@ class App_model extends CI_Model
 		$this->db->from('articles a');
 		$this->db->where('a.category_id', $categoryId);
 		$this->db->where('a.lang', $lang);
-		$this->db->where('a.active', 1);
 		$this->db->where('a.start_date_from IS NULL OR a.start_date_from <=', date('Y-m-d H:i:s'));
 		$this->db->where('a.end_date_to IS NULL OR a.end_date_to >=', date('Y-m-d H:i:s'));
 		$this->db->order_by('a.orderBy', 'ASC');
@@ -66,7 +65,6 @@ class App_model extends CI_Model
 		$this->db->join('article_categories ac', 'a.category_id = ac.id');
 		$this->db->where('ac.slug', $lang . '/' . $slug);
 		$this->db->where('a.lang', $lang);
-		$this->db->where('a.active', 1);
 		$this->db->where('a.start_date_from IS NULL OR a.start_date_from <=', date('Y-m-d H:i:s'));
 		$this->db->where('a.end_date_to IS NULL OR a.end_date_to >=', date('Y-m-d H:i:s'));
 		$this->db->order_by('a.orderBy', 'ASC');

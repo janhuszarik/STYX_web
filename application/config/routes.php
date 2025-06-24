@@ -152,7 +152,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 	$route['app/send_kindergeburtstage'] = 'app/send_kindergeburtstage';
-$route['app/test_mail'] = 'app/test_mail';
+	$route['app/test_mail'] = 'app/test_mail';
 
 	$route['besuchen/betriebsfuehrungen'] 						= 'app/betriebsfuhrungen';
 	$route['besuchen/kindergeburtstage/anfrage'] 				= 'app/kindergeburtstageAnfrage';
