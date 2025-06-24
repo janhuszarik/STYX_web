@@ -284,7 +284,7 @@
 						<div class="flip-card-back">
 							<h4 class="text-success text-center">Kinderführungen</h4>
 							<p>Kindgerechte Erlebnisse mit spannenden Einblicken in die Welt der Naturkosmetik und Schokolade. Ferienangebote inklusive!</p>
-							<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+							<a href="<?=BASE_URL.'de/besuchen/kinder-in-den-sommerferien'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 						</div>
 					</div>
 				</div>
@@ -301,7 +301,7 @@
 						<div class="flip-card-back">
 							<h4 class="text-success text-center">Angebote für Schulen</h4>
 							<p>Interaktive Führungen und Workshops speziell für Schulklassen. Lernen durch Erleben in der World of STYX!</p>
-							<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+							<a href="<?=BASE_URL.'de/besuchen/workshops'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 						</div>
 					</div>
 				</div>
@@ -318,7 +318,7 @@
 						<div class="flip-card-back">
 							<h4 class="text-success text-center">Kindergeburtstage</h4>
 							<p>Feiern Sie Kindergeburtstage der besonderen Art – mit Naturkosmetik oder Schokoladenworkshop als Highlight!</p>
-							<a href="#" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
+							<a href="<?=BASE_URL.'de/besuchen/kindergeburtstage'?>" class="btn btn-outline-success btn-sm mt-auto">Mehr Informationen</a>
 						</div>
 					</div>
 				</div>
@@ -354,7 +354,7 @@
 						<div class="flip-card-back">
 							<h4 class="text-success text-center">Anfahrt</h4>
 							<p>Reisen Sie umweltfreundlich mit der Mariazellerbahn an. Vom Bahnhof Ober-Grafendorf sind es nur 150 m bis zur World of STYX!</p>
-							<a href="#" class="btn btn-outline-success btn-sm mt-auto">Zur Anfahrtskarte</a>
+							<a href="<?=BASE_URL.'de/kontakt/kontakt-anfahrt'?>" class="btn btn-outline-success btn-sm mt-auto">Zur Anfahrtskarte</a>
 						</div>
 					</div>
 				</div>
@@ -371,7 +371,7 @@
 						<div class="flip-card-back">
 							<h4 class="text-success text-center">Gut zu wissen</h4>
 							<p>Barrierefreiheit, Ermäßigungen, Partnerkarten und vieles mehr – alles was Sie für Ihren Besuch wissen sollten.</p>
-							<a href="#" class="btn btn-outline-success btn-sm mt-auto">Alle Infos</a>
+							<a href="<?=BASE_URL.'de/besuchen/gut-zu-wissen'?>" class="btn btn-outline-success btn-sm mt-auto">Alle Infos</a>
 						</div>
 					</div>
 				</div>
