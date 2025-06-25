@@ -41,3 +41,22 @@
 	checkbox.checked = !checkbox.checked;
 	el.classList.toggle('active', checkbox.checked);
 }
+	function selectCard(element, group) {
+		try {
+			document.querySelectorAll(`input[name="${group}"]`).forEach(input => {
+				const card = input.closest('.select-card');
+				if (card) card.classList.remove('active');
+			});
+			element.classList.add('active');
+			const radio = element.querySelector('input[type="radio"]');
+			if (radio) {
+				radio.checked = true;
+			} else {
+				console.error('Radio button not found in selectCard:', element);
+				// Ak rádio tlačidlo nie je nájdené, vyber predvolenú hodnotu
+				document.querySelector(`input[name="${group}"]`)?.checked = true;
+			}
+		} catch (error) {
+			console.error('Error in selectCard:', error);
+		}
+	}

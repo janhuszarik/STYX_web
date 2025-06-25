@@ -397,6 +397,9 @@ class App extends CI_Controller
         $this->load->library('form_validation');
         $this->load->library('email');
 
+        $this->load->library('form_validation');
+        $this->load->library('email');
+
         $this->form_validation->set_rules('group_type', 'Gruppe', 'required');
         $this->form_validation->set_rules('event_date', 'Wunschtermin', 'required');
         $this->form_validation->set_rules('organization', 'Organisation', 'required|trim|max_length[100]');
@@ -407,19 +410,21 @@ class App extends CI_Controller
         $this->form_validation->set_rules('zip_city', 'PLZ / Ort', 'required|trim|max_length[100]');
         $this->form_validation->set_rules('num_persons', 'Personenanzahl', 'required');
         $this->form_validation->set_rules('tour_type', 'Tour', 'required');
-        $this->form_validation->set_rules('payment', 'Zahlung', 'required');
-        $this->form_validation->set_rules('message', 'Nachricht', 'trim|max_length[1000]');
+        $this->form_validation->set_rules('zahlung', 'Zahlung', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect('besuchen/gruppenfuhrungen');
             return;
         }
 
+        log_message('debug', 'send_gruppenfuhrung: Validácia prešla');
+
         $recaptcha_response = $this->input->post('g-recaptcha-response');
         if (empty($recaptcha_response)) {
+            log_message('error', 'reCAPTCHA nebolo vyplnené');
             $this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect('besuchen/gruppenfuhrungen');
             return;
         }
 
@@ -427,11 +432,13 @@ class App extends CI_Controller
         $response = json_decode($verify);
 
         if (!$response->success) {
+            log_message('error', 'reCAPTCHA overenie zlyhalo: ' . print_r($response, true));
             $this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect('besuchen/gruppenfuhrungen');
             return;
         }
 
+        log_message('debug', 'send_gruppenfuhrung: reCAPTCHA overené');
 
         $data = [
             'group_type' => $this->input->post('group_type', true),
@@ -453,17 +460,20 @@ class App extends CI_Controller
             'paket' => $this->input->post('paket', true)
         ];
 
+        log_message('debug', 'send_gruppenfuhrung: Dáta pripravené: ' . print_r($data, true));
 
         $this->load->model('App_model');
         $sent = $this->App_model->sendGruppenfuhrungMail($data);
 
         if ($sent) {
+            log_message('debug', 'send_gruppenfuhrung: E-mail úspešne odoslaný');
             $this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
         } else {
+            log_message('error', 'send_gruppenfuhrung: Chyba pri odosielaní e-mailu');
             $this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
         }
 
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect('besuchen/gruppenfuhrungen');
     }
 
 }

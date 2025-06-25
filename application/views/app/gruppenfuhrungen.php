@@ -1,6 +1,18 @@
+
 <?php
 $this->load->view('partials/gruppenfuhrungForm_assets');
 ?>
+<?php if ($this->session->flashdata('error')): ?>
+	<div class="alert alert-danger">
+		<?= $this->session->flashdata('error') ?>
+	</div>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('success')): ?>
+	<div class="alert alert-success">
+		<?= $this->session->flashdata('success') ?>
+	</div>
+<?php endif; ?>
 <section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 	<div class="container py-5">
 		<div class="row justify-content-center">
@@ -194,15 +206,10 @@ $this->load->view('partials/gruppenfuhrungForm_assets');
 				</div>
 			</div>
 
-
-
-
-			<!-- ZAHLUNG -->
 			<div class="form-section mt-5">
 				<h4 class="fw-bold mb-2">Zahlung</h4>
 
 				<div class="row row-cols-2 row-cols-md-4 g-3">
-					<!-- Každá platobná možnosť ako karta -->
 					<div class="col">
 						<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
 							<input type="radio" name="zahlung" value="Vorauskassa" class="mb-2" required>
