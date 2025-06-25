@@ -397,7 +397,6 @@ class App extends CI_Controller
         $this->load->library('form_validation');
         $this->load->library('email');
 
-        // Overenie formulára
         $this->form_validation->set_rules('group_type', 'Gruppe', 'required');
         $this->form_validation->set_rules('event_date', 'Wunschtermin', 'required');
         $this->form_validation->set_rules('organization', 'Organisation', 'required|trim|max_length[100]');
@@ -417,7 +416,6 @@ class App extends CI_Controller
             return;
         }
 
-        // reCAPTCHA kontrola
         $recaptcha_response = $this->input->post('g-recaptcha-response');
         if (empty($recaptcha_response)) {
             $this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');

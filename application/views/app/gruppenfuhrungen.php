@@ -14,7 +14,6 @@ $this->load->view('partials/gruppenfuhrungForm_assets');
 <div class="container my-5">
 	<div class="mx-auto" style="max-width: 900px;">
 		<form action="<?=base_url('app/send_gruppenfuhrung')?>" method="post">
-	<!-- Sekcia: Kontaktdaten -->
 		<h4 class="mb-3">Kontaktdaten</h4>
 		<div class="row">
 			<div class="col-md-6 form-group">
@@ -244,7 +243,6 @@ $this->load->view('partials/gruppenfuhrungForm_assets');
 				</div>
 			</div>
 
-			<!-- INFO TEXT -->
 			<div class="form-group mt-4">
 				<p class="text-muted">
 					Der angegebene Gruppenpreis ist erst ab einer Teilnehmeranzahl von 20 Personen gültig. Sollte die Gruppe am Tag des Besuches weniger als 20 Personen umfassen, kommt der normale Ticketpreis von EUR 11,50 pro Erwachsene (Einzelticket) zum Tragen. Eine kostenfreie Stornierung des Besuches ist bis 14 Tage vor dem Termin möglich, danach fallen Stornogebühren an.
@@ -256,21 +254,18 @@ $this->load->view('partials/gruppenfuhrungForm_assets');
 			</div>
 
 
-			<!-- reCAPTCHA -->
 		<div class="form-group mt-3">
 			<div class="g-recaptcha" data-sitekey="<?=RECAPTCHA?>"></div>
 		</div>
 
-		<!-- Submit -->
 		<div class="form-group mt-4 text-center">
 			<button type="submit" class="btn btn-success btn-lg px-5">Anfrage abschicken</button>
 		</div>
+			<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 		</form>
 	</div>
 </div>
 
 
-<!-- JS: reCAPTCHA -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
