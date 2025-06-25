@@ -215,7 +215,7 @@ class App_model extends CI_Model
 
 		$this->email->initialize($config);
 
-		// Adminovi
+		// --- ADMIN EMAIL --- //
 		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
 		$this->email->to(MAIL_ADMIN);
 		$this->email->bcc(MAIL_MODERATOR);
@@ -225,21 +225,26 @@ class App_model extends CI_Model
 		$adminMessage = "<h3>Neue Gruppenführungsanfrage</h3><table>";
 		foreach ($data as $key => $value) {
 			if (is_array($value)) $value = implode(', ', $value);
-			$adminMessage .= "<tr><td><strong>".ucfirst($key).":</strong></td><td>" . nl2br(htmlspecialchars($value)) . "</td></tr>";
+			$adminMessage .= "<tr><td><strong>" . ucfirst($key) . ":</strong></td><td>" . nl2br(htmlspecialchars($value)) . "</td></tr>";
 		}
 		$adminMessage .= "</table>";
-
 		$this->email->message($adminMessage);
 		$adminSent = $this->email->send();
 
-		// Používateľovi
+
+		// --- KLIENTSKÝ EMAIL (šablóna) --- //
 		$this->email->clear();
 		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
 		$this->email->to($data['email']);
 		$this->email->subject('Vielen Dank für Ihre Anfrage');
-		$userMessage = "<p>Vielen Dank für Ihre Anfrage für eine Gruppenführung bei STYX.</p><p>Wir melden uns baldmöglichst bei Ihnen.</p>";
+
+		ob_start();
+		include(APPPATH . 'views/emails/gruppen_reply.php');
+		$userMessage = ob_get_clean();
+
 		$this->email->message($userMessage);
 		$userSent = $this->email->send();
+
 
 		if (!$adminSent || !$userSent) {
 			log_message('error', 'E-Mail Fehler: ' . $this->email->print_debugger());
@@ -248,6 +253,7 @@ class App_model extends CI_Model
 
 		return true;
 	}
+
 
 
 }
