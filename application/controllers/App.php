@@ -383,5 +383,84 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+    public function gruppenfuhrungen()
+    {
+        $data['title'] = 'Anfrage | Gruppenführung';
+        $data['description'] = 'Erleben Sie mit Ihrer Gruppe die STYX Erlebniswelt in Ober-Grafendorf: Naturkosmetik-Produktion, BIO-Schokolade-Manufaktur, Führungen, Verkostungen und vieles mehr – ideal für Gruppenreisen, Vereine und Betriebsausflüge.';
+        $data['keywords'] = 'Gruppenführung STYX, Betriebsführung Naturkosmetik, BIO Schokolade Führung, STYX Erlebniswelt, Ausflugsziel Gruppen Niederösterreich, Firmenausflug STYX, Gruppenreise Mostviertel, Naturkosmetik Manufaktur Tour, Schokoladenverkostung Gruppe, STYX Gruppenanfrage, Bahnerlebnis Führung, STYX Kräutergarten Führung, NÖ Card Gruppenführung';
+        $data['page'] = 'app/gruppenfuhrungen';
+
+        $this->load->view('layout/normal', $data);
+    }
+    public function send_gruppenfuhrung()
+    {
+        $this->load->library('form_validation');
+        $this->load->library('email');
+
+        // Overenie formulára
+        $this->form_validation->set_rules('group_type', 'Gruppe', 'required');
+        $this->form_validation->set_rules('event_date', 'Wunschtermin', 'required');
+        $this->form_validation->set_rules('organization', 'Organisation', 'required|trim|max_length[100]');
+        $this->form_validation->set_rules('name', 'Name', 'required|trim|max_length[100]');
+        $this->form_validation->set_rules('email', 'E-Mail', 'required|valid_email|max_length[100]');
+        $this->form_validation->set_rules('phone', 'Telefon', 'required|trim|max_length[30]');
+        $this->form_validation->set_rules('street', 'Straße', 'required|trim|max_length[150]');
+        $this->form_validation->set_rules('zip_city', 'PLZ / Ort', 'required|trim|max_length[100]');
+        $this->form_validation->set_rules('num_persons', 'Personenanzahl', 'required');
+        $this->form_validation->set_rules('tour_type', 'Tour', 'required');
+        $this->form_validation->set_rules('payment', 'Zahlung', 'required');
+        $this->form_validation->set_rules('message', 'Nachricht', 'trim|max_length[1000]');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect($_SERVER['HTTP_REFERER']);
+            return;
+        }
+
+        // reCAPTCHA kontrola
+        $recaptcha_response = $this->input->post('g-recaptcha-response');
+        if (empty($recaptcha_response)) {
+            $this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
+            redirect($_SERVER['HTTP_REFERER']);
+            return;
+        }
+
+        $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response . "&remoteip=" . $this->input->ip_address());
+        $response = json_decode($verify);
+
+        if (!$response->success) {
+            $this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
+            redirect($_SERVER['HTTP_REFERER']);
+            return;
+        }
+
+
+        $data = [
+            'group_type' => $this->input->post('group_type', true),
+            'event_date' => $this->input->post('event_date', true),
+            'organization' => $this->input->post('organization', true),
+            'name' => $this->input->post('name', true),
+            'email' => $this->input->post('email', true),
+            'phone' => $this->input->post('phone', true),
+            'street' => $this->input->post('street', true),
+            'zip_city' => $this->input->post('zip_city', true),
+            'num_persons' => $this->input->post('num_persons', true),
+            'tour_type' => $this->input->post('tour_type', true),
+            'payment' => $this->input->post('payment', true),
+            'message' => $this->input->post('message', true)
+        ];
+
+        $this->load->model('App_model');
+        $sent = $this->App_model->sendGruppenfuhrungMail($data);
+
+        if ($sent) {
+            $this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
+        } else {
+            $this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
 }
 

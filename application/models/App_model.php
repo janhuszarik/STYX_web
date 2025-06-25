@@ -174,7 +174,6 @@ class App_model extends CI_Model
 
 		$this->email->initialize($config);
 
-		// Admin email
 		$this->email->from('support@styxnatur.at', 'STYX Geburtstage');
 		$this->email->to(MAIL_ADMIN);
 		$this->email->bcc(MAIL_MODERATOR);
@@ -185,7 +184,6 @@ class App_model extends CI_Model
 		$this->email->message($adminMessage);
 		$adminSent = $this->email->send();
 
-		// User confirmation email
 		$this->email->clear();
 		$this->email->from('support@styxnatur.at', 'STYX Geburtstage');
 		$this->email->to($data['email']);
@@ -200,6 +198,22 @@ class App_model extends CI_Model
 		}
 
 		return true;
+	}
+	public function sendGruppenfuhrungMail($data)
+	{
+		$this->load->library('email');
+
+		$this->email->from($data['email'], $data['name']);
+		$this->email->to('info@styx.at');
+		$this->email->subject('Neue Gruppenführungsanfrage');
+
+		$message = "<h3>Neue Anfrage für Gruppenführung</h3>";
+		foreach ($data as $key => $value) {
+			$message .= "<strong>" . ucfirst($key) . ":</strong> " . nl2br(htmlspecialchars($value)) . "<br>";
+		}
+
+		$this->email->message($message);
+		return $this->email->send();
 	}
 
 }
