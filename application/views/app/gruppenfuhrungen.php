@@ -1,13 +1,9 @@
-<style>/* custom.css */
+<style>/* --- CSS STYLES --- */
+	/* ZÁKLADNÉ NASTAVENIA */
+	form .form-group { margin-bottom: 1rem; }
+	form label { font-weight: 500; }
 
-	form .form-group {
-		margin-bottom: 1rem;
-	}
-
-	form label {
-		font-weight: 500;
-	}
-
+	/* RESPONSIVE: dvojstĺpcové rozloženie pre form-group */
 	@media (min-width: 768px) {
 		form .form-group.half {
 			width: 48%;
@@ -20,126 +16,92 @@
 		}
 	}
 
-	.radio-block {
-		border: 1px solid #ccc;
-		padding: 1rem;
-		border-radius: 0.5rem;
-		text-align: center;
+	/* --- KARTY --- */
+	.select-card, .radio-card, .kombi-card {
 		cursor: pointer;
 		transition: all 0.2s ease;
+		min-height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		position: relative;
+		padding: 1.2rem;
+		border: 1px solid #ccc;
+		border-radius: 0.5rem;
+		text-align: center;
+	}
+	.select-card.active, .radio-card.active, .kombi-card.active {
+		border: 2px solid #8cc63f !important;
+		box-shadow: 0 0 10px rgba(140,198,63,0.3);
 	}
 
-	.radio-block:hover {
-		background-color: #f8f8f8;
-	}
-
-	.radio-block input {
-		display: none;
-	}
-
-	.radio-block.selected {
-		border-color: #8cc63f;
-		background-color: #f1fbea;
-	}
-	/* ZAROVNANIE OBRÁZKOV – rovnaká výška obrázkového boxu */
+	/* OBRÁZKY V KARTÁCH */
 	.select-card .img-wrapper {
-		height: 180px; /* rovnaká výška pre všetky obrázky */
+		height: 180px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		margin-bottom: 1rem;
 	}
+	.select-card img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-	/* OBRÁZKY – zmenšiť, aby sa zmestili pekne do rámca */
-	.select-card img {
-		max-height: 100%;
-		max-width: 100%;
-		object-fit: contain;
-	}
-
-	/* VÄČŠÍ MALÝ TEXT */
-	.select-card .small {
-		font-size: 0.95rem !important; /* namiesto .875rem napr. */
+	/* TEXTY */
+	.select-card .small, .select-card ul, .radio-card small {
+		font-size: 0.95rem;
 		line-height: 1.5;
 	}
 
-	/* UL zoznam pri Platin – lepšia čitateľnosť */
-	.select-card ul {
-		font-size: 0.95rem;
-		padding-left: 1.2rem;
-		line-height: 1.5;
-	}
-
-	/* ZABEZPEČIŤ ROVNAKÚ VÝŠKU KARIET */
-	.select-card {
-		min-height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-	}
-	.select-card.active {
-		border: 2px solid #8cc63f !important;
-		box-shadow: 0 0 10px rgba(140, 198, 63, 0.3);
-	}
-
-	/* PERSONENANZAHL: karta vo výbere */
-	.radio-card {
-		cursor: pointer;
-		transition: all 0.2s ease-in-out;
-		width: 100%;
-		text-align: left;
-		min-height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		padding: 1.2rem;
-	}
-
-	.radio-card span {
-		font-size: 1.1rem;
-		margin-bottom: 0.3rem;
-		display: inline-block;
-	}
-
-	.radio-card small {
-		font-size: 0.95rem;
-		color: #555;
-	}
-
-	/* Vizuálne vyznačenie */
-	.radio-card input[type="radio"] {
+	/* RADIO / CHECKBOX INPUTS SKRYŤ */
+	.select-card input[type="radio"],
+	.select-card input[type="checkbox"],
+	.radio-card input[type="radio"],
+	.kombi-card input[type="checkbox"] {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
 		display: none;
 	}
 
-	.radio-card.active {
-		border: 2px solid #8cc63f !important;
-		box-shadow: 0 0 10px rgba(140, 198, 63, 0.3);
-		background-color: #f6fff2;
+
+	/* VLASTNÁ IKONA CHECKU */
+	.custom-check-icon {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		border: 2px solid #ccc;
+		background-color: #fff;
+		transition: all 0.2s ease;
+	}
+	.select-card.active .custom-check-icon {
+		background-color: #28a745;
+		border-color: #28a745;
+		box-shadow: 0 0 0 2px rgba(40,167,69,0.3);
 	}
 
-	/* Vnútorný spacing medzi sekciami */
-	.form-section + .form-section,
-	.radio-card + .radio-card {
-		margin-top: 1.5rem;
-	}
-
-	/* Riadkovanie – max 5 kariet v riadku na veľkých obrazovkách */
-	@media (min-width: 992px) {
-		.person-count-row {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-			gap: 1rem;
-		}
-	}
-	.form-section + .form-section {
-		margin-top: 5rem;
-	}
-
-	.person-count-row {
+	/* GRID: karty v jednom riadku */
+	.person-count-row,
+	.payment-row,
+	.kombi-row {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 		gap: 1rem;
 		align-items: stretch;
+	}
+	@media (min-width: 992px) {
+		.person-count-row { grid-template-columns: repeat(5, 1fr); }
+	}
+
+	.select-card .form-check,
+	.select-card ul,
+	.select-card p,
+	.select-card  {
+		text-align: left !important;
+	}
+	.text-small{
+		font-size: 13px;
 	}
 
 </style>
@@ -224,7 +186,7 @@
 							<input type="radio" name="tour_type" value="silber" required class="mb-2">
 							<img src="<?=base_url('img/webImage/STYX_Tour_Silber.jpg')?>" alt="Tour Silber" class="img-fluid mb-2">
 							<h4 class="fw-bold fs-5 mb-1">Silber</h4>
-							<small class="text-muted d-block mb-2">2 h inkl. Schokoladenverkostung – 7 €</small>
+							<p class="d-block mb-2 text-small">2 h inkl. Schokoladenverkostung – 7 €</p>
 
 							<div class="form-check">
 								<input type="checkbox" name="extras_silber[]" value="bierverkostung" class="form-check-input" id="silber_bier">
@@ -239,7 +201,7 @@
 							<input type="radio" name="tour_type" value="gold" required class="mb-2">
 							<img src="<?=base_url('img/webImage/STYX_Tour_Gold.jpg')?>" alt="Tour Gold" class="img-fluid mb-2">
 							<h4 class="fw-bold fs-5 mb-1">Gold</h4>
-							<small class="text-muted d-block mb-2">2,5 h inkl. Vorführung – ab 18,50€</small>
+							<p class="d-block mb-2 text-small">2,5 h inkl. Vorführung – ab 18,50€</p>
 
 							<div class="form-check">
 								<input type="radio" name="gold_option" value="kosmetik" class="form-check-input" id="gold_kosmetik">
@@ -267,7 +229,7 @@
 							<input type="radio" name="tour_type" value="platin" required class="mb-2">
 							<img src="<?=base_url('img/webImage/STYX_Tour_Platin.jpg')?>" alt="Tour Platin" class="img-fluid mb-2">
 							<h4 class="fw-bold fs-5 mb-1">Platin</h4>
-							<small class="text-muted d-block mb-2">Ganztägig – Preis auf Anfrage</small>
+							<p class="d-block mb-2 text-small">Ganztägig – Preis auf Anfrage</p>
 
 							<ul class="small text-muted ps-3 mb-0">
 								<li>Empfang durch GF Wolfgang Stix</li>
@@ -282,30 +244,114 @@
 				</div>
 			</div>
 
+			<div class="img-wrapper"><img src=" <?=BASE_URL.'img/webImage/Info_Busfahrer_GRATIS.jpg'?>" width="400" alt="Reisebegleitung_gartis_logo"></div>
 
-		<h5 class="mt-4">Zahlung *</h5>
-		<div class="form-group d-flex flex-wrap">
-			<div class="form-check mr-3">
-				<input class="form-check-input" type="radio" name="payment" id="bar" value="Barzahlung" required>
-				<label class="form-check-label" for="bar">Barzahlung</label>
-			</div>
-			<div class="form-check mr-3">
-				<input class="form-check-input" type="radio" name="payment" id="ueberweisung" value="Überweisung">
-				<label class="form-check-label" for="ueberweisung">Überweisung</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="radio" name="payment" id="rechnung" value="Rechnung">
-				<label class="form-check-label" for="rechnung">Rechnung</label>
-			</div>
-		</div>
+			<div class="form-section mt-5">
+				<h4 class="fw-bold mb-2">Kombi - Pakete</h4>
+				<p><strong>Silbertour inkludiert</strong> (Konsumption im Bahnhofsbräu / max. 80 Personen)</p>
+				<p class="text-muted">Mittagessen mit zwei Speisen zur Auswahl auf Anfrage möglich</p>
 
-		<!-- Sekcia: Nachricht -->
-		<div class="form-group mt-3">
-			<label>Ihre Nachricht</label>
-			<textarea name="message" rows="4" class="form-control" placeholder="Anmerkungen, Sonderwünsche, etc."></textarea>
-		</div>
+				<div class="row">
+					<!-- 1. Karte -->
+					<div class="col-md-6 col-lg-3 mb-4">
+						<label class="select-card card h-100 shadow-sm p-3 text-center border rounded" onclick="toggleCheckbox(this)">
+							<input type="checkbox" name="paket[]" value="Frühstück" class="d-none">
+							<div class="fw-bold h6 mb-2">Herzhaftes Frühstück</div>
+							<div class="text-muted">19,90 € pro Person</div>
+						</label>
+					</div>
 
-		<!-- reCAPTCHA -->
+					<!-- 2. Karte -->
+					<div class="col-md-6 col-lg-3 mb-4">
+						<label class="select-card card h-100 shadow-sm p-3 text-center border rounded" onclick="toggleCheckbox(this)">
+							<input type="checkbox" name="paket[]" value="Jausn" class="d-none">
+							<div class="fw-bold h6 mb-2">Rustikale Jaus'n <br>aus der Region</div>
+							<div class="text-muted">17,50 € pro Person</div>
+						</label>
+					</div>
+
+					<!-- 3. Karte -->
+					<div class="col-md-6 col-lg-3 mb-4">
+						<label class="select-card card h-100 shadow-sm p-3 text-center border rounded" onclick="toggleCheckbox(this)">
+							<input type="checkbox" name="paket[]" value="Kaffee" class="d-none">
+							<div class="fw-bold h6 mb-2">Kaffee & Kuchen <br><small>(STYX Bistro)</small></div>
+							<div class="text-muted">15,50 € pro Person</div>
+						</label>
+					</div>
+
+					<!-- 4. Karte -->
+					<div class="col-md-6 col-lg-3 mb-4">
+						<label class="select-card card h-100 shadow-sm p-3 text-center border rounded" onclick="toggleCheckbox(this)">
+							<input type="checkbox" name="paket[]" value="Stelzen" class="d-none">
+							<div class="fw-bold h6 mb-2">Knuspriges <br>Stelzen-Essen</div>
+							<div class="text-muted">19,90 € pro Person</div>
+						</label>
+					</div>
+				</div>
+			</div>
+
+
+
+
+			<!-- ZAHLUNG -->
+			<div class="form-section mt-5">
+				<h4 class="fw-bold mb-2">Zahlung</h4>
+
+				<div class="row row-cols-2 row-cols-md-4 g-3">
+					<!-- Každá platobná možnosť ako karta -->
+					<div class="col">
+						<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
+							<input type="radio" name="zahlung" value="Vorauskassa" class="mb-2" required>
+							<span class="fw-bold text-center">Vorauskassa</span>
+						</label>
+					</div>
+					<div class="col">
+						<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
+							<input type="radio" name="zahlung" value="vor Ort" class="mb-2" required>
+							<span class="fw-bold text-center">vor Ort</span>
+						</label>
+					</div>
+					<div class="col">
+						<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
+							<input type="radio" name="zahlung" value="Voucher" class="mb-2" required>
+							<span class="fw-bold text-center">Voucher</span>
+						</label>
+					</div>
+					<div class="col">
+						<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
+							<input type="radio" name="zahlung" value="Rechnung" class="mb-2" required>
+							<span class="fw-bold text-center">Rechnung</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group mt-3">
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="rechnung_adresse" id="adresse1" value="gleich" checked>
+						<label class="form-check-label fw-bold" for="adresse1">Rechnungsadresse gleich Anfrageadresse <span class="text-danger">*</span></label>
+					</div>
+					<div class="form-check mt-2">
+						<input class="form-check-input" type="radio" name="rechnung_adresse" id="adresse2" value="andere">
+						<label class="form-check-label" for="adresse2">andere Rechnungsadresse</label>
+					</div>
+
+					<textarea class="form-control mt-2" rows="4" name="andere_adresse" placeholder="Bei anderer Rechnungsadresse bitte ausfüllen (Firma, Verein, Organisation / E-Mail / Straße, PLZ, Ort / UID-Nr)"></textarea>
+				</div>
+			</div>
+
+			<!-- INFO TEXT -->
+			<div class="form-group mt-4">
+				<p class="text-muted">
+					Der angegebene Gruppenpreis ist erst ab einer Teilnehmeranzahl von 20 Personen gültig. Sollte die Gruppe am Tag des Besuches weniger als 20 Personen umfassen, kommt der normale Ticketpreis von EUR 11,50 pro Erwachsene (Einzelticket) zum Tragen. Eine kostenfreie Stornierung des Besuches ist bis 14 Tage vor dem Termin möglich, danach fallen Stornogebühren an.
+				</p>
+
+				<p class="mt-3"><strong>Bankverbindung:</strong><br>
+					RAIBA St. Pölten IBAN: AT42 3258 5000 0000 5520 BIC: RLNWATWWOBG
+				</p>
+			</div>
+
+
+			<!-- reCAPTCHA -->
 		<div class="form-group mt-3">
 			<div class="g-recaptcha" data-sitekey="<?=RECAPTCHA?>"></div>
 		</div>
@@ -323,24 +369,20 @@
 <!-- JS: reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
+	// VŠEOBECNÁ FUNKCIA: výber karty (radio button)
 	function selectCard(element, group) {
-		// Vyčisti pre všetky inputy tejto skupiny
 		document.querySelectorAll(`input[name="${group}"]`).forEach(input => {
 			const card = input.closest('.select-card');
 			if (card) card.classList.remove('active');
 		});
-
-		// Aktivuj aktuálnu
 		element.classList.add('active');
 		element.querySelector('input[type="radio"]').checked = true;
 	}
-</script>
 
-<script>
+	// DYNAMICKÝ VÝSTUP POČTU OSÔB
 	document.addEventListener('DOMContentLoaded', function () {
 		const input = document.getElementById('num_persons_input');
 		const output = document.getElementById('person_info_output');
-
 		const options = [
 			{ range: [20, 40], text: '20–40 Pers.', time: '2 h' },
 			{ range: [41, 60], text: '41–60 Pers.', time: '2,5 h' },
@@ -348,7 +390,6 @@
 			{ range: [81, 100], text: '81–100 Pers.', time: '3,5 h' },
 			{ range: [101, 150], text: '101–150 Pers.', time: '4 h' }
 		];
-
 		input.addEventListener('input', function () {
 			const val = parseInt(input.value, 10);
 			if (!val || val < 1) {
@@ -356,9 +397,7 @@
 				output.innerHTML = '';
 				return;
 			}
-
 			let match = options.find(opt => val >= opt.range[0] && val <= opt.range[1]);
-
 			if (match) {
 				output.classList.remove('d-none');
 				output.innerHTML = `Für <strong>${val} Personen</strong> haben wir das Paket im Bereich von <strong>${match.text}</strong> mit einer ungefähren Dauer von <strong>${match.time}</strong> zur Verfügung.`;
@@ -368,5 +407,11 @@
 			}
 		});
 	});
-</script>
 
+	// TOGGLE CHECKBOX (napr. pre Kombi karty)
+	function toggleCheckbox(el) {
+		const checkbox = el.querySelector('input[type="checkbox"]');
+		checkbox.checked = !checkbox.checked;
+		el.classList.toggle('active', checkbox.checked);
+	}
+</script>
