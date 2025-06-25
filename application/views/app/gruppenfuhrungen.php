@@ -188,7 +188,7 @@
 			<div class="row row-cols-2 row-cols-md-4 g-3">
 				<div class="col">
 					<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
-						<input type="radio" name="zahlung" value="Vorauskassa" class="mb-2" required>
+						<input type="radio" name="zahlung" value="Vorauskassa" class="mb-2">
 						<span class="fw-bold text-center">Vorauskassa</span>
 					</label>
 				</div>

@@ -47,8 +47,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	const form = document.querySelector(formSelector);
 	if (form) {
 		form.addEventListener('submit', function (event) {
-			console.log('Form submit triggered, form data:', new FormData(form));
+			const zahlung = form.querySelector('input[name="zahlung"]:checked');
+			if (!zahlung) {
+				alert('Bitte wählen Sie eine Zahlungsart.');
+				event.preventDefault();
+			}
 		});
+
 	} else {
 		console.warn('Form element not found with selector:', formSelector);
 	}
@@ -130,29 +135,30 @@ function toggleCheckbox(el) {
 	}
 }
 
-// Funkcia pre výber kariet s rádiovými tlačidlami
 function selectCard(element, group) {
 	try {
 		console.log('selectCard called for group:', group, 'element:', element);
 
-		// Zruš aktívne triedy z ostatných kariet
+		// Zruš aktívne triedy z ostatných kariet v tejto skupine
 		document.querySelectorAll(`input[name="${group}"]`).forEach(input => {
 			const card = input.closest('.select-card');
 			if (card) {
 				card.classList.remove('active');
 			}
+			input.checked = false;
 		});
 
 		if (element) {
 			element.classList.add('active');
 
-			const radio = element.querySelector('input[type="radio"]');
+			const radio = element.querySelector(`input[type="radio"][name="${group}"]`);
 			if (radio) {
-				// Simuluj natívne kliknutie – aby fungoval "required"
-				if (!radio.checked) {
-					radio.click();
-				}
+				// Priamo nastavíme checked, bez click(), kvôli problémom s required
+				radio.disabled = false;
+				radio.checked = true;
+
 				radio.dispatchEvent(new Event('change', { bubbles: true }));
+
 				console.log('Checked radio button:', radio);
 
 				if (group === 'tour_type') {

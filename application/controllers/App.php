@@ -394,6 +394,8 @@ class App extends CI_Controller
     }
     public function send_gruppenfuhrung()
     {
+        log_message('debug', 'Prijaté POST dáta: ' . print_r($_POST, true));
+
         $this->load->library('form_validation');
         $this->load->library('email');
 
