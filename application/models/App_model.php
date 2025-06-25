@@ -203,6 +203,7 @@ class App_model extends CI_Model
 	{
 		$this->load->library('email');
 
+		// Konfigurácia SMTP
 		$config['protocol']    = 'smtp';
 		$config['smtp_host']   = 'smtp.hostcreators.sk';
 		$config['smtp_user']   = 'support@styxnatur.at';
@@ -215,37 +216,48 @@ class App_model extends CI_Model
 
 		$this->email->initialize($config);
 
-		// --- ADMIN EMAIL --- //
+		// ---------- ADMIN E-MAIL ----------
 		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
 		$this->email->to(MAIL_ADMIN);
 		$this->email->bcc(MAIL_MODERATOR);
 		$this->email->reply_to($data['email'], $data['name']);
 		$this->email->subject('Neue Gruppenführungsanfrage');
 
-		$adminMessage = "<h3>Neue Gruppenführungsanfrage</h3><table>";
+		$adminMessage = "<h3>Neue Gruppenführungsanfrage</h3><table cellpadding='6' border='0' cellspacing='0'>";
 		foreach ($data as $key => $value) {
-			if (is_array($value)) $value = implode(', ', $value);
+			if (is_array($value)) {
+				$value = implode(', ', $value);
+			}
 			$adminMessage .= "<tr><td><strong>" . ucfirst($key) . ":</strong></td><td>" . nl2br(htmlspecialchars($value)) . "</td></tr>";
 		}
 		$adminMessage .= "</table>";
+
 		$this->email->message($adminMessage);
 		$adminSent = $this->email->send();
 
-
-		// --- KLIENTSKÝ EMAIL (šablóna) --- //
-		$this->email->clear();
+		// ---------- KLIENTSKÝ E-MAIL ----------
+		$this->email->clear(true); // resetuj aj headers aj body
 		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
 		$this->email->to($data['email']);
 		$this->email->subject('Vielen Dank für Ihre Anfrage');
 
-		ob_start();
-		include(APPPATH . 'views/emails/gruppen_reply.php');
-		$userMessage = ob_get_clean();
+		// Vygeneruj HTML šablónu z view
+		$templatePath = APPPATH . 'views/emails/gruppen_reply.php';
+
+		if (file_exists($templatePath)) {
+			extract($data); // sprístupní $name, $zahlung, atď. pre šablónu
+			ob_start();
+			include($templatePath);
+			$userMessage = ob_get_clean();
+		} else {
+			log_message('error', 'Email template not found: ' . $templatePath);
+			return false;
+		}
 
 		$this->email->message($userMessage);
 		$userSent = $this->email->send();
 
-
+		// Kontrola oboch e-mailov
 		if (!$adminSent || !$userSent) {
 			log_message('error', 'E-Mail Fehler: ' . $this->email->print_debugger());
 			return false;
@@ -253,6 +265,7 @@ class App_model extends CI_Model
 
 		return true;
 	}
+
 
 
 
