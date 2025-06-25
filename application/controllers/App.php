@@ -386,7 +386,7 @@ class App extends CI_Controller
     public function gruppenfuhrungen()
     {
         $data['title'] = 'Anfrage | Gruppenführung';
-        $data['description'] = 'Erleben Sie mit Ihrer Gruppe die STYX Erlebniswelt in Ober-Grafendorf: Naturkosmetik-Produktion, BIO-Schokolade-Manufaktur, Führungen, Verkostungen und vieles mehr – ideal für Gruppenreisen, Vereine und Betriebsausflüge.';
+        $data['description'] = 'Besuchen Sie uns in Ober-Grafendorf NÖ – Naturkosmetik, BIO Schokolade & vieles mehr';
         $data['keywords'] = 'Gruppenführung STYX, Betriebsführung Naturkosmetik, BIO Schokolade Führung, STYX Erlebniswelt, Ausflugsziel Gruppen Niederösterreich, Firmenausflug STYX, Gruppenreise Mostviertel, Naturkosmetik Manufaktur Tour, Schokoladenverkostung Gruppe, STYX Gruppenanfrage, Bahnerlebnis Führung, STYX Kräutergarten Führung, NÖ Card Gruppenführung';
         $data['page'] = 'app/gruppenfuhrungen';
 

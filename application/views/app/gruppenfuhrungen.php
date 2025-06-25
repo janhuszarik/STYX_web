@@ -1,110 +1,16 @@
-<style>/* --- CSS STYLES --- */
-	/* ZÁKLADNÉ NASTAVENIA */
-	form .form-group { margin-bottom: 1rem; }
-	form label { font-weight: 500; }
-
-	/* RESPONSIVE: dvojstĺpcové rozloženie pre form-group */
-	@media (min-width: 768px) {
-		form .form-group.half {
-			width: 48%;
-			display: inline-block;
-			vertical-align: top;
-			margin-right: 4%;
-		}
-		form .form-group.half:nth-child(even) {
-			margin-right: 0;
-		}
-	}
-
-	/* --- KARTY --- */
-	.select-card, .radio-card, .kombi-card {
-		cursor: pointer;
-		transition: all 0.2s ease;
-		min-height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-		position: relative;
-		padding: 1.2rem;
-		border: 1px solid #ccc;
-		border-radius: 0.5rem;
-		text-align: center;
-	}
-	.select-card.active, .radio-card.active, .kombi-card.active {
-		border: 2px solid #8cc63f !important;
-		box-shadow: 0 0 10px rgba(140,198,63,0.3);
-	}
-
-	/* OBRÁZKY V KARTÁCH */
-	.select-card .img-wrapper {
-		height: 180px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin-bottom: 1rem;
-	}
-	.select-card img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
-	/* TEXTY */
-	.select-card .small, .select-card ul, .radio-card small {
-		font-size: 0.95rem;
-		line-height: 1.5;
-	}
-
-	/* RADIO / CHECKBOX INPUTS SKRYŤ */
-	.select-card input[type="radio"],
-	.select-card input[type="checkbox"],
-	.radio-card input[type="radio"],
-	.kombi-card input[type="checkbox"] {
-		appearance: none;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		display: none;
-	}
-
-
-	/* VLASTNÁ IKONA CHECKU */
-	.custom-check-icon {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-		width: 18px;
-		height: 18px;
-		border-radius: 50%;
-		border: 2px solid #ccc;
-		background-color: #fff;
-		transition: all 0.2s ease;
-	}
-	.select-card.active .custom-check-icon {
-		background-color: #28a745;
-		border-color: #28a745;
-		box-shadow: 0 0 0 2px rgba(40,167,69,0.3);
-	}
-
-	/* GRID: karty v jednom riadku */
-	.person-count-row,
-	.payment-row,
-	.kombi-row {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-		gap: 1rem;
-		align-items: stretch;
-	}
-	@media (min-width: 992px) {
-		.person-count-row { grid-template-columns: repeat(5, 1fr); }
-	}
-
-	.select-card .form-check,
-	.select-card ul,
-	.select-card p,
-	.select-card  {
-		text-align: left !important;
-	}
-	.text-small{
-		font-size: 13px;
-	}
-
-</style>
+<?php
+$this->load->view('partials/gruppenfuhrungForm_assets');
+?>
+<section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-10 text-center">
+				<h1 id="article-heading" class="font-weight-bold mb-3"><?= $title ?></h1>
+				<p class="text-muted lead mb-0"><?= htmlspecialchars($description) ?></p>
+			</div>
+		</div>
+	</div>
+</section>
 <div class="container my-5">
 	<div class="mx-auto" style="max-width: 900px;">
 		<form action="<?=base_url('app/send_gruppenfuhrung')?>" method="post">
@@ -368,50 +274,4 @@
 
 <!-- JS: reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script>
-	// VŠEOBECNÁ FUNKCIA: výber karty (radio button)
-	function selectCard(element, group) {
-		document.querySelectorAll(`input[name="${group}"]`).forEach(input => {
-			const card = input.closest('.select-card');
-			if (card) card.classList.remove('active');
-		});
-		element.classList.add('active');
-		element.querySelector('input[type="radio"]').checked = true;
-	}
 
-	// DYNAMICKÝ VÝSTUP POČTU OSÔB
-	document.addEventListener('DOMContentLoaded', function () {
-		const input = document.getElementById('num_persons_input');
-		const output = document.getElementById('person_info_output');
-		const options = [
-			{ range: [20, 40], text: '20–40 Pers.', time: '2 h' },
-			{ range: [41, 60], text: '41–60 Pers.', time: '2,5 h' },
-			{ range: [61, 80], text: '61–80 Pers.', time: '3 h' },
-			{ range: [81, 100], text: '81–100 Pers.', time: '3,5 h' },
-			{ range: [101, 150], text: '101–150 Pers.', time: '4 h' }
-		];
-		input.addEventListener('input', function () {
-			const val = parseInt(input.value, 10);
-			if (!val || val < 1) {
-				output.classList.add('d-none');
-				output.innerHTML = '';
-				return;
-			}
-			let match = options.find(opt => val >= opt.range[0] && val <= opt.range[1]);
-			if (match) {
-				output.classList.remove('d-none');
-				output.innerHTML = `Für <strong>${val} Personen</strong> haben wir das Paket im Bereich von <strong>${match.text}</strong> mit einer ungefähren Dauer von <strong>${match.time}</strong> zur Verfügung.`;
-			} else {
-				output.classList.remove('d-none');
-				output.innerHTML = `Für <strong>${val} Personen</strong> haben wir derzeit kein passendes Paket verfügbar. Bitte kontaktieren Sie uns direkt.`;
-			}
-		});
-	});
-
-	// TOGGLE CHECKBOX (napr. pre Kombi karty)
-	function toggleCheckbox(el) {
-		const checkbox = el.querySelector('input[type="checkbox"]');
-		checkbox.checked = !checkbox.checked;
-		el.classList.toggle('active', checkbox.checked);
-	}
-</script>

@@ -1,0 +1,96 @@
+form .form-group { margin-bottom: 1rem; }
+form label { font-weight: 500; }
+
+@media (min-width: 768px) {
+	form .form-group.half {
+		width: 48%;
+		display: inline-block;
+		vertical-align: top;
+		margin-right: 4%;
+	}
+	form .form-group.half:nth-child(even) {
+		margin-right: 0;
+	}
+}
+
+.select-card, .radio-card, .kombi-card {
+	cursor: pointer;
+	transition: all 0.2s ease;
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	position: relative;
+	padding: 1.2rem;
+	border: 1px solid #ccc;
+	border-radius: 0.5rem;
+	text-align: center;
+}
+.select-card.active, .radio-card.active, .kombi-card.active {
+	border: 2px solid #8cc63f !important;
+	box-shadow: 0 0 10px rgba(140,198,63,0.3);
+}
+
+.select-card .img-wrapper {
+	height: 180px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+.select-card img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+.select-card .small, .select-card ul, .radio-card small {
+	font-size: 0.95rem;
+	line-height: 1.5;
+}
+
+.select-card input[type="radio"],
+.select-card input[type="checkbox"],
+.radio-card input[type="radio"],
+.kombi-card input[type="checkbox"] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	display: none;
+}
+
+
+.custom-check-icon {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	border: 2px solid #ccc;
+	background-color: #fff;
+	transition: all 0.2s ease;
+}
+.select-card.active .custom-check-icon {
+	background-color: #28a745;
+	border-color: #28a745;
+	box-shadow: 0 0 0 2px rgba(40,167,69,0.3);
+}
+
+.person-count-row,
+.payment-row,
+.kombi-row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: 1rem;
+	align-items: stretch;
+}
+@media (min-width: 992px) {
+	.person-count-row { grid-template-columns: repeat(5, 1fr); }
+}
+
+.select-card .form-check,
+.select-card ul,
+.select-card p,
+.select-card  {
+	text-align: left !important;
+}
+.text-small{
+	font-size: 13px;
+}
