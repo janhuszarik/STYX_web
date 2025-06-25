@@ -1,4 +1,4 @@
-<?php // view/emails/gruppen_admin.php ?>
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -43,10 +43,40 @@
 				<li><strong>Andere Adresse:</strong><br><?= !empty($andere_adresse) ? nl2br(htmlspecialchars($andere_adresse)) : 'Keine' ?></li>
 				<li><strong>Nachricht:</strong><br><?= !empty($message) ? nl2br(htmlspecialchars($message)) : 'Keine Nachricht angegeben' ?></li>
 			</ul>
-
-			<p style="margin-top: 30px; font-size: 14px;">Bitte loggen Sie sich ins Admin-Panel ein, um weitere Schritte zu unternehmen.</p>
 		</td>
 	</tr>
+	<tr style="background-color: #f0f0f0;">
+		<td style="padding: 15px; text-align: center;">
+
+			<p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">
+				Versuchen Sie auch unsere App für Ihr mobiles Gerät:
+			</p>
+
+			<a href="https://play.google.com/store/apps/details?id=at.helloagain.styx" style="margin: 0 5px; text-decoration: none;">
+				<img src="<?= base_url('img/icon/android_app.png') ?>"  alt="Google Play">
+			</a>
+			<a href="https://apps.apple.com/app/id6743492896" style="margin: 0 5px; text-decoration: none;">
+				<img src="<?= base_url('img/icon/apple_app.png') ?>"  alt="App Store">
+			</a>
+
+			<div style="margin-top: 20px;">
+				<a href="https://www.facebook.com/STYX.Naturcosmetic/" style="margin: 0 10px; text-decoration: none;">
+					<img src="<?= base_url('img/icon/facebook.png') ?>" width="24" height="24" alt="Facebook">
+				</a>
+				<a href="https://www.instagram.com/styx_naturcosmetic/" style="margin: 0 10px; text-decoration: none;">
+					<img src="<?= base_url('img/icon/instagram.png') ?>" width="24" height="24" alt="Instagram">
+				</a>
+				<a href="https://www.youtube.com/@STYXNaturcosmetic" style="margin: 0 10px; text-decoration: none;">
+					<img src="<?= base_url('img/icon/youtube.png') ?>" width="24" height="24" alt="YouTube">
+				</a>
+				<a href="mailto:office@styx.at" style="margin: 0 10px; text-decoration: none;">
+					<img src="<?= base_url('img/icon/email.png') ?>" width="24" height="24" alt="E-Mail">
+				</a>
+			</div>
+		</td>
+	</tr>
+
+
 	<tr style="background-color: #e8e8e8;">
 		<td style="padding: 10px; text-align: center; font-size: 11px; color: #777;">
 			&copy; <?= date('Y') ?> STYX Naturcosmetic. Alle Rechte vorbehalten. | Powered by STYX Naturcosmetic GmbH.

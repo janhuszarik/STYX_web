@@ -56,7 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     define ('SMTP_NAME','support@styxnatur.at');
     define ('SMTP_PASS','5pE3RE31P_!_i!lb');
     define ('SMTP_PORT','465');
-    define ('MAIL_ADMIN','janohuszarik@gmail.com');
+    define ('MAIL_ADMIN','jan.huszarik@styx.at');
     define ('MAIL_MODERATOR','jan.huszarik@styx.at');
 
 
