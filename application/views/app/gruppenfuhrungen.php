@@ -194,19 +194,19 @@
 				</div>
 				<div class="col">
 					<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
-						<input type="radio" name="zahlung" value="vor Ort" class="mb-2" required>
+						<input type="radio" name="zahlung" value="vor Ort" class="mb-2">
 						<span class="fw-bold text-center">vor Ort</span>
 					</label>
 				</div>
 				<div class="col">
 					<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
-						<input type="radio" name="zahlung" value="Voucher" class="mb-2" required>
+						<input type="radio" name="zahlung" value="Voucher" class="mb-2">
 						<span class="fw-bold text-center">Voucher</span>
 					</label>
 				</div>
 				<div class="col">
 					<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm text-center" onclick="selectCard(this, 'zahlung')">
-						<input type="radio" name="zahlung" value="Rechnung" class="mb-2" required>
+						<input type="radio" name="zahlung" value="Rechnung" class="mb-2">
 						<span class="fw-bold text-center">Rechnung</span>
 					</label>
 				</div>

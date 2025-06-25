@@ -152,12 +152,9 @@ function selectCard(element, group) {
 				if (!radio.checked) {
 					radio.click();
 				}
-
-				// Spusť aj change event pre istotu
 				radio.dispatchEvent(new Event('change', { bubbles: true }));
 				console.log('Checked radio button:', radio);
 
-				// Extra logika pre tour_type – deaktivuj ostatné možnosti
 				if (group === 'tour_type') {
 					handleTourSelection(element);
 				}
