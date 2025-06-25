@@ -1,3 +1,4 @@
+<?php // view/emails/gruppen_admin.php ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -22,24 +23,24 @@
 			<hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc; width: 100%;">
 
 			<h3 style="margin-bottom: 10px;">Alle Übermittelten Daten:</h3>
-			<ul style="padding-left: 20px;">
+			<ul style="padding-left: 20px; font-size: 14px; line-height: 1.6;">
 				<li><strong>Datum der Führung:</strong> <?= !empty($event_date) ? date('d.m.Y', strtotime($event_date)) : 'Nicht angegeben' ?></li>
-				<li><strong>Gruppentyp:</strong> <?= $group_type ?? 'Nicht angegeben' ?></li>
-				<li><strong>Organisation:</strong> <?= $organization ?? 'Nicht angegeben' ?></li>
-				<li><strong>Kontaktperson:</strong> <?= $name ?? 'Nicht angegeben' ?></li>
-				<li><strong>Telefonnummer:</strong> <?= $phone ?? 'Nicht angegeben' ?></li>
-				<li><strong>E-Mail:</strong> <?= $email ?? 'Nicht angegeben' ?></li>
-				<li><strong>Straße:</strong> <?= $street ?? 'Nicht angegeben' ?></li>
-				<li><strong>PLZ / Ort:</strong> <?= $zip_city ?? 'Nicht angegeben' ?></li>
-				<li><strong>Teilnehmeranzahl:</strong> <?= $num_persons ?? 'Nicht angegeben' ?></li>
-				<li><strong>Gewählte Tour:</strong> <?= $tour_type ?? 'Nicht angegeben' ?></li>
-				<li><strong>Zahlungsart:</strong> <?= $zahlung ?? 'Nicht angegeben' ?></li>
-				<li><strong>Gold-Option:</strong> <?= !empty($gold_option) ? (is_array($gold_option) ? implode(', ', $gold_option) : $gold_option) : 'Keine' ?></li>
-				<li><strong>Gold-Extras:</strong> <?= !empty($extras_gold) ? (is_array($extras_gold) ? implode(', ', $extras_gold) : $extras_gold) : 'Keine' ?></li>
-				<li><strong>Silber-Extras:</strong> <?= !empty($extras_silber) ? (is_array($extras_silber) ? implode(', ', $extras_silber) : $extras_silber) : 'Keine' ?></li>
-				<li><strong>Kombi-Pakete:</strong> <?= !empty($paket) ? (is_array($paket) ? implode(', ', $paket) : $paket) : 'Keine' ?></li>
-				<li><strong>Rechnungsadresse:</strong> <?= $rechnung_adresse ?? 'Nicht angegeben' ?></li>
-				<li><strong>Andere Adresse:</strong> <?= !empty($andere_adresse) ? nl2br(htmlspecialchars($andere_adresse)) : 'Keine' ?></li>
+				<li><strong>Gruppentyp:</strong> <?= htmlspecialchars($group_type ?? 'Nicht angegeben') ?></li>
+				<li><strong>Organisation:</strong> <?= htmlspecialchars($organization ?? 'Nicht angegeben') ?></li>
+				<li><strong>Kontaktperson:</strong> <?= htmlspecialchars($name ?? 'Nicht angegeben') ?></li>
+				<li><strong>Telefonnummer:</strong> <?= htmlspecialchars($phone ?? 'Nicht angegeben') ?></li>
+				<li><strong>E-Mail:</strong> <?= htmlspecialchars($email ?? 'Nicht angegeben') ?></li>
+				<li><strong>Straße:</strong> <?= htmlspecialchars($street ?? 'Nicht angegeben') ?></li>
+				<li><strong>PLZ / Ort:</strong> <?= htmlspecialchars($zip_city ?? 'Nicht angegeben') ?></li>
+				<li><strong>Teilnehmeranzahl:</strong> <?= htmlspecialchars($num_persons ?? 'Nicht angegeben') ?></li>
+				<li><strong>Gewählte Tour:</strong> <?= htmlspecialchars($tour_type ?? 'Nicht angegeben') ?></li>
+				<li><strong>Zahlungsart:</strong> <?= htmlspecialchars($zahlung ?? 'Nicht angegeben') ?></li>
+				<li><strong>Gold-Option:</strong> <?= !empty($gold_option) ? htmlspecialchars(is_array($gold_option) ? implode(', ', $gold_option) : $gold_option) : 'Keine' ?></li>
+				<li><strong>Gold-Extras:</strong> <?= !empty($extras_gold) ? htmlspecialchars(is_array($extras_gold) ? implode(', ', $extras_gold) : $extras_gold) : 'Keine' ?></li>
+				<li><strong>Silber-Extras:</strong> <?= !empty($extras_silber) ? htmlspecialchars(is_array($extras_silber) ? implode(', ', $extras_silber) : $extras_silber) : 'Keine' ?></li>
+				<li><strong>Kombi-Pakete:</strong> <?= !empty($paket) ? htmlspecialchars(is_array($paket) ? implode(', ', $paket) : $paket) : 'Keine' ?></li>
+				<li><strong>Rechnungsadresse:</strong> <?= htmlspecialchars($rechnung_adresse ?? 'Nicht angegeben') ?></li>
+				<li><strong>Andere Adresse:</strong><br><?= !empty($andere_adresse) ? nl2br(htmlspecialchars($andere_adresse)) : 'Keine' ?></li>
 				<li><strong>Nachricht:</strong><br><?= !empty($message) ? nl2br(htmlspecialchars($message)) : 'Keine Nachricht angegeben' ?></li>
 			</ul>
 
