@@ -35,7 +35,11 @@
 	<li><strong>Teilnehmeranzahl:</strong> <?= htmlspecialchars($num_persons ?? '-') ?></li>
 	<li><strong>Gewählte Tour:</strong> <?= htmlspecialchars($tour_type ?? '-') ?></li>
 </ul>
-
+<?php if (!empty($gold_option)): ?>
+	<p><strong>Gold-Extras:</strong>
+		<?= is_array($gold_option) ? htmlspecialchars(implode(', ', $gold_option)) : htmlspecialchars($gold_option) ?>
+	</p>
+<?php endif; ?>
 <?php if (!empty($paket)): ?>
 	<p><strong>Sie haben folgendes Paket gewählt:</strong> <?= htmlspecialchars($paket) ?></p>
 <?php endif; ?>
