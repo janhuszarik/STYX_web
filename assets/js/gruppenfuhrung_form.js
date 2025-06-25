@@ -61,6 +61,57 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.warn('reCAPTCHA failed to load, check network or sitekey');
 		}
 	});
+
+	// Podmienka pre Tour auswahl
+	const tourRadios = document.querySelectorAll('input[name="tour_type"]');
+	if (tourRadios.length > 0) {
+		tourRadios.forEach(radio => {
+			radio.addEventListener('change', function () {
+				const selectedValue = this.value;
+				tourRadios.forEach(r => {
+					const card = r.closest('.select-card');
+					if (card) {
+						if (selectedValue === 'silber' && r.value !== 'silber') {
+							r.disabled = true;
+							card.classList.remove('active');
+							console.log(`Disabled ${r.value} due to Silber selection`);
+						} else if (selectedValue !== 'silber' && r.value === 'silber') {
+							r.disabled = false;
+							console.log(`Enabled Silber as another option is selected`);
+						} else if (selectedValue !== r.value) {
+							r.disabled = false;
+							card.classList.remove('active');
+						}
+					}
+				});
+				selectCard(this.closest('.select-card'), 'tour_type');
+			});
+		});
+	}
+
+	// Podmienka pre Rechnungsadresse
+	const addressRadios = document.querySelectorAll('input[name="rechnung_adresse"]');
+	const otherAddressField = document.querySelector('textarea[name="andere_adresse"]');
+	if (addressRadios.length > 0 && otherAddressField) {
+		addressRadios.forEach(radio => {
+			radio.addEventListener('change', function () {
+				if (this.value === 'gleich') {
+					otherAddressField.disabled = true;
+					otherAddressField.value = ''; // Vymaže obsah pri deaktivácii
+					console.log('Disabled andere_adresse field');
+				} else if (this.value === 'andere') {
+					otherAddressField.disabled = false;
+					console.log('Enabled andere_adresse field');
+				}
+			});
+		});
+		// Nastavenie počiatočného stavu (predvolená hodnota je 'gleich')
+		const defaultRadio = document.querySelector('input[name="rechnung_adresse"][value="gleich"]');
+		if (defaultRadio) {
+			defaultRadio.checked = true;
+			otherAddressField.disabled = true;
+		}
+	}
 });
 
 // Funkcia pre prepínanie zaškrtávacích políčok
@@ -87,22 +138,17 @@ function selectCard(element, group) {
 			const card = input.closest('.select-card');
 			if (card) {
 				card.classList.remove('active');
-				console.log('Removed active from card:', card);
 			}
 		});
 		if (element) {
 			element.classList.add('active');
-			console.log('Added active to element:', element);
 			const radio = element.querySelector('input[type="radio"]');
 			if (radio) {
 				radio.checked = true;
 				console.log('Checked radio button:', radio);
-			} else {
-				console.error('Radio button not found in selectCard:', element);
-				const fallbackRadio = document.querySelector(`input[name="${group}"]`);
-				if (fallbackRadio) {
-					fallbackRadio.checked = true;
-					console.log('Fallback radio button checked:', fallbackRadio);
+				// ⬅️ Tu pridáš túto podmienku:
+				if (group === 'tour_type') {
+					handleTourSelection(element); // deaktivuje ostatné
 				}
 			}
 		}
@@ -110,3 +156,22 @@ function selectCard(element, group) {
 		console.error('Error in selectCard:', error);
 	}
 }
+
+// Funkcia na deaktiváciu všetkých extra možností mimo vybratej karty
+function handleTourSelection(selectedCard) {
+	const allCards = document.querySelectorAll('.select-card');
+	allCards.forEach(card => {
+		const inputs = card.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+		const isCurrent = card === selectedCard;
+
+		inputs.forEach(input => {
+			if (!isCurrent) {
+				input.disabled = true;
+				input.checked = false;
+			} else {
+				input.disabled = false;
+			}
+		});
+	});
+}
+
