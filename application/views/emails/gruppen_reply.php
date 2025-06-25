@@ -24,34 +24,48 @@
 			<hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc; width: 100%;">
 
 			<h3 style="margin-bottom: 10px;">Zusammenfassung Ihrer Anfrage:</h3>
-			<ul style="padding-left: 20px;">
-				<li><strong>Datum der Führung:</strong> <?= htmlspecialchars($event_date ?? '-') ?></li>
-				<li><strong>Gruppentyp:</strong> <?= htmlspecialchars($group_type ?? '-') ?></li>
-				<li><strong>Kontaktperson:</strong> <?= htmlspecialchars($name ?? '-') ?></li>
-				<li><strong>Telefonnummer:</strong> <?= htmlspecialchars($phone ?? '-') ?></li>
-				<li><strong>E-Mail:</strong> <?= htmlspecialchars($email ?? '-') ?></li>
-				<li><strong>Organisation:</strong> <?= htmlspecialchars($organization ?? '-') ?></li>
-				<li><strong>Teilnehmeranzahl:</strong> <?= htmlspecialchars($num_persons ?? '-') ?></li>
-				<li><strong>Gewählte Tour:</strong> <?= htmlspecialchars($tour_type ?? '-') ?></li>
-				<?php if (!empty($gold_option)): ?>
-					<li><strong>Gold-Option:</strong> <?= is_array($gold_option) ? htmlspecialchars(implode(', ', $gold_option)) : htmlspecialchars($gold_option) ?></li>
-				<?php endif; ?>
-				<?php if (!empty($extras_gold)): ?>
-					<li><strong>Gold-Extras:</strong> <?= is_array($extras_gold) ? htmlspecialchars(implode(', ', $extras_gold)) : htmlspecialchars($extras_gold) ?></li>
-				<?php endif; ?>
-				<?php if (!empty($extras_silber)): ?>
-					<li><strong>Silber-Extras:</strong> <?= is_array($extras_silber) ? htmlspecialchars(implode(', ', $extras_silber)) : htmlspecialchars($extras_silber) ?></li>
-				<?php endif; ?>
-				<?php if (!empty($paket)): ?>
-					<li><strong>Gewähltes Paket:</strong> <?= is_array($paket) ? htmlspecialchars(implode(', ', $paket)) : htmlspecialchars($paket) ?></li>
-				<?php endif; ?>
-				<?php if (!empty($zahlung)): ?>
-					<li><strong>Zahlungsart:</strong> <?= htmlspecialchars($zahlung) ?></li>
-				<?php endif; ?>
-				<?php if (!empty($rechnung_adresse) && $rechnung_adresse === 'andere' && !empty($andere_adresse)): ?>
-					<li><strong>Abweichende Rechnungsadresse:</strong><br><?= nl2br(htmlspecialchars($andere_adresse)) ?></li>
-				<?php endif; ?>
-			</ul>
+						<ul style="padding-left: 20px;">
+							<li><strong>Datum der Führung:</strong> <?= htmlspecialchars($event_date ?? '-') ?></li>
+							<li><strong>Gruppentyp:</strong> <?= htmlspecialchars($group_type ?? '-') ?></li>
+							<li><strong>Kontaktperson:</strong> <?= htmlspecialchars($name ?? '-') ?></li>
+							<li><strong>Telefonnummer:</strong> <?= htmlspecialchars($phone ?? '-') ?></li>
+							<li><strong>E-Mail:</strong> <?= htmlspecialchars($email ?? '-') ?></li>
+							<li><strong>Organisation:</strong> <?= htmlspecialchars($organization ?? '-') ?></li>
+							<li><strong>Teilnehmeranzahl:</strong> <?= htmlspecialchars($num_persons ?? '-') ?></li>
+							<li><strong>Gewählte Tour:</strong> <?= htmlspecialchars($tour_type ?? '-') ?></li>
+							<?php if (!empty($gold_option)): ?>
+								<li><strong>Gold-Option:</strong> <?= is_array($gold_option) ? htmlspecialchars(implode(', ', $gold_option)) : htmlspecialchars($gold_option) ?></li>
+							<?php endif; ?>
+							<?php if (!empty($extras_gold)): ?>
+								<li><strong>Gold-Extras:</strong> <?= is_array($extras_gold) ? htmlspecialchars(implode(', ', $extras_gold)) : htmlspecialchars($extras_gold) ?></li>
+							<?php endif; ?>
+							<?php if (!empty($extras_silber)): ?>
+								<li><strong>Silber-Extras:</strong> <?= is_array($extras_silber) ? htmlspecialchars(implode(', ', $extras_silber)) : htmlspecialchars($extras_silber) ?></li>
+							<?php endif; ?>
+							<?php if (!empty($paket)): ?>
+								<li><strong>Gewähltes Kombi-Paket:</strong> <?= is_array($paket) ? htmlspecialchars(implode(', ', $paket)) : htmlspecialchars($paket) ?></li>
+							<?php endif; ?>
+							<?php if (!empty($zahlung)): ?>
+								<li><strong>Zahlungsart:</strong> <?= htmlspecialchars($zahlung) ?></li>
+							<?php endif; ?>
+							<?php if (!empty($rechnung_adresse) && $rechnung_adresse === 'andere' && !empty($andere_adresse)): ?>
+								<li><strong>Abweichende Rechnungsadresse:</strong><br><?= nl2br(htmlspecialchars($andere_adresse)) ?></li>
+							<?php endif; ?>
+						</ul>
+
+						<p style="margin-top: 30px;">Mit freundlichen Grüßen,<br>Ihr STYX Erlebniswelt Team</p>
+					</td>
+				</tr>
+
+				<tr style="background-color: #e8e8e8;">
+					<td style="padding: 10px; text-align: center; font-size: 11px; color: #777;">
+						&copy; <?= date('Y') ?> STYX Naturcosmetic. Alle Rechte vorbehalten. | Powered by STYX Naturcosmetic GmbH.
+					</td>
+				</tr>
+			</table>
+			</body>
+			</html>
+
 
 			<p style="margin-top: 30px;">Mit freundlichen Grüßen,<br>Ihr STYX Erlebniswelt Team</p>
 		</td>
