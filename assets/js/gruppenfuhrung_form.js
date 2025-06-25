@@ -145,6 +145,8 @@ function selectCard(element, group) {
 			const radio = element.querySelector('input[type="radio"]');
 			if (radio) {
 				radio.checked = true;
+				radio.dispatchEvent(new Event('change', { bubbles: true })); // ✅ toto doplníš
+
 				console.log('Checked radio button:', radio);
 				// ⬅️ Tu pridáš túto podmienku:
 				if (group === 'tour_type') {
