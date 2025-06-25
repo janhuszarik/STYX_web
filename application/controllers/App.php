@@ -446,9 +446,15 @@ class App extends CI_Controller
             'zip_city' => $this->input->post('zip_city', true),
             'num_persons' => $this->input->post('num_persons', true),
             'tour_type' => $this->input->post('tour_type', true),
-            'payment' => $this->input->post('payment', true),
-            'message' => $this->input->post('message', true)
+            'zahlung' => $this->input->post('zahlung', true),
+            'rechnung_adresse' => $this->input->post('rechnung_adresse', true),
+            'andere_adresse' => $this->input->post('andere_adresse', true),
+            'extras_silber' => $this->input->post('extras_silber', true),
+            'gold_option' => $this->input->post('gold_option', true),
+            'extras_gold' => $this->input->post('extras_gold', true),
+            'paket' => $this->input->post('paket', true)
         ];
+
 
         $this->load->model('App_model');
         $sent = $this->App_model->sendGruppenfuhrungMail($data);

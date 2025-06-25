@@ -203,17 +203,51 @@ class App_model extends CI_Model
 	{
 		$this->load->library('email');
 
-		$this->email->from($data['email'], $data['name']);
-		$this->email->to('info@styx.at');
+		$config['protocol']    = 'smtp';
+		$config['smtp_host']   = 'smtp.hostcreators.sk';
+		$config['smtp_user']   = 'support@styxnatur.at';
+		$config['smtp_pass']   = '5pE3RE31P_!_i!lb';
+		$config['smtp_port']   = 587;
+		$config['smtp_crypto'] = 'tls';
+		$config['mailtype']    = 'html';
+		$config['charset']     = 'utf-8';
+		$config['newline']     = "\r\n";
+
+		$this->email->initialize($config);
+
+		// Adminovi
+		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
+		$this->email->to(MAIL_ADMIN);
+		$this->email->bcc(MAIL_MODERATOR);
+		$this->email->reply_to($data['email'], $data['name']);
 		$this->email->subject('Neue Gruppenführungsanfrage');
 
-		$message = "<h3>Neue Anfrage für Gruppenführung</h3>";
+		$adminMessage = "<h3>Neue Gruppenführungsanfrage</h3><table>";
 		foreach ($data as $key => $value) {
-			$message .= "<strong>" . ucfirst($key) . ":</strong> " . nl2br(htmlspecialchars($value)) . "<br>";
+			if (is_array($value)) $value = implode(', ', $value);
+			$adminMessage .= "<tr><td><strong>".ucfirst($key).":</strong></td><td>" . nl2br(htmlspecialchars($value)) . "</td></tr>";
+		}
+		$adminMessage .= "</table>";
+
+		$this->email->message($adminMessage);
+		$adminSent = $this->email->send();
+
+		// Používateľovi
+		$this->email->clear();
+		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
+		$this->email->to($data['email']);
+		$this->email->subject('Vielen Dank für Ihre Anfrage');
+		$userMessage = "<p>Vielen Dank für Ihre Anfrage für eine Gruppenführung bei STYX.</p><p>Wir melden uns baldmöglichst bei Ihnen.</p>";
+		$this->email->message($userMessage);
+		$userSent = $this->email->send();
+
+		if (!$adminSent || !$userSent) {
+			log_message('error', 'E-Mail Fehler: ' . $this->email->print_debugger());
+			return false;
 		}
 
-		$this->email->message($message);
-		return $this->email->send();
+		return true;
 	}
+
 
 }

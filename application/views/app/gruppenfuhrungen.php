@@ -85,30 +85,30 @@ $this->load->view('partials/gruppenfuhrungForm_assets');
 			<div class="form-section">
 				<h4 class="fw-bold mb-3">Tour auswählen <span class="text-danger">*</span></h4>
 				<div class="row row-cols-1 row-cols-md-3 g-4">
-
 					<!-- SILBER -->
 					<div class="col">
 						<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm" onclick="selectCard(this, 'tour_type')">
 							<input type="radio" name="tour_type" value="silber" required class="mb-2">
-							<img src="<?=base_url('img/webImage/STYX_Tour_Silber.jpg')?>" alt="Tour Silber" class="img-fluid mb-2">
+							<div class="img-wrapper">
+								<img src="<?=base_url('img/webImage/STYX_Tour_Silber.jpg')?>" alt="Tour Silber" class="img-fluid">
+							</div>
 							<h4 class="fw-bold fs-5 mb-1">Silber</h4>
-							<p class="d-block mb-2 text-small">2 h inkl. Schokoladenverkostung – 7 €</p>
-
+							<small class="text-muted d-block mb-2">2 h inkl. Schokoladenverkostung – 7 €</small>
 							<div class="form-check">
 								<input type="checkbox" name="extras_silber[]" value="bierverkostung" class="form-check-input" id="silber_bier">
 								<label class="form-check-label small" for="silber_bier"><strong>mit Bierverkostung <br></strong> (4€ – 20–30min)</label>
 							</div>
 						</label>
 					</div>
-
 					<!-- GOLD -->
 					<div class="col">
 						<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm" onclick="selectCard(this, 'tour_type')">
 							<input type="radio" name="tour_type" value="gold" required class="mb-2">
-							<img src="<?=base_url('img/webImage/STYX_Tour_Gold.jpg')?>" alt="Tour Gold" class="img-fluid mb-2">
+							<div class="img-wrapper">
+								<img src="<?=base_url('img/webImage/STYX_Tour_Gold.jpg')?>" alt="Tour Gold" class="img-fluid">
+							</div>
 							<h4 class="fw-bold fs-5 mb-1">Gold</h4>
-							<p class="d-block mb-2 text-small">2,5 h inkl. Vorführung – ab 18,50€</p>
-
+							<small class="text-muted d-block mb-2">2,5 h inkl. Vorführung – ab 18,50€</small>
 							<div class="form-check">
 								<input type="radio" name="gold_option" value="kosmetik" class="form-check-input" id="gold_kosmetik">
 								<label class="form-check-label small" for="gold_kosmetik">Kosmetikvorführung</label>
@@ -121,22 +121,21 @@ $this->load->view('partials/gruppenfuhrungForm_assets');
 								<input type="radio" name="gold_option" value="beides" class="form-check-input" id="gold_beides">
 								<label class="form-check-label small" for="gold_beides">Beides – 28,50 €</label>
 							</div>
-
 							<div class="form-check">
 								<input type="checkbox" name="extras_gold[]" value="bierverkostung" class="form-check-input" id="gold_bier">
 								<label class="form-check-label small" for="gold_bier"><strong>mit Bierverkostung</strong> (4€ – 20–30min)</label>
 							</div>
 						</label>
 					</div>
-
 					<!-- PLATIN -->
 					<div class="col">
 						<label class="select-card d-flex flex-column h-100 p-3 border rounded shadow-sm" onclick="selectCard(this, 'tour_type')">
 							<input type="radio" name="tour_type" value="platin" required class="mb-2">
-							<img src="<?=base_url('img/webImage/STYX_Tour_Platin.jpg')?>" alt="Tour Platin" class="img-fluid mb-2">
+							<div class="img-wrapper">
+								<img src="<?=base_url('img/webImage/STYX_Tour_Platin.jpg')?>" alt="Tour Platin" class="img-fluid">
+							</div>
 							<h4 class="fw-bold fs-5 mb-1">Platin</h4>
-							<p class="d-block mb-2 text-small">Ganztägig – Preis auf Anfrage</p>
-
+							<small class="text-muted d-block mb-2">Ganztägig – Preis auf Anfrage</small>
 							<ul class="small text-muted ps-3 mb-0">
 								<li>Empfang durch GF Wolfgang Stix</li>
 								<li>Kosmetik- oder Schokovorführung</li>
@@ -146,9 +145,9 @@ $this->load->view('partials/gruppenfuhrungForm_assets');
 							</ul>
 						</label>
 					</div>
-
 				</div>
 			</div>
+
 
 			<div class="img-wrapper"><img src=" <?=BASE_URL.'img/webImage/Info_Busfahrer_GRATIS.jpg'?>" width="400" alt="Reisebegleitung_gartis_logo"></div>
 

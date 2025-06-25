@@ -45,15 +45,13 @@ form label { font-weight: 500; }
 	line-height: 1.5;
 }
 
-.select-card input[type="radio"],
-.select-card input[type="checkbox"],
-.radio-card input[type="radio"],
-.kombi-card input[type="checkbox"] {
+.select-card > input[type="radio"] {
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	display: none;
 }
+
 
 
 .custom-check-icon {
