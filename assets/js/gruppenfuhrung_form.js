@@ -134,23 +134,32 @@ function toggleCheckbox(el) {
 function selectCard(element, group) {
 	try {
 		console.log('selectCard called for group:', group, 'element:', element);
+
+		// Zruš aktívne triedy z ostatných kariet
 		document.querySelectorAll(`input[name="${group}"]`).forEach(input => {
 			const card = input.closest('.select-card');
 			if (card) {
 				card.classList.remove('active');
 			}
 		});
+
 		if (element) {
 			element.classList.add('active');
+
 			const radio = element.querySelector('input[type="radio"]');
 			if (radio) {
-				radio.checked = true;
-				radio.dispatchEvent(new Event('change', { bubbles: true })); // ✅ toto doplníš
+				// Simuluj natívne kliknutie – aby fungoval "required"
+				if (!radio.checked) {
+					radio.click();
+				}
 
+				// Spusť aj change event pre istotu
+				radio.dispatchEvent(new Event('change', { bubbles: true }));
 				console.log('Checked radio button:', radio);
-				// ⬅️ Tu pridáš túto podmienku:
+
+				// Extra logika pre tour_type – deaktivuj ostatné možnosti
 				if (group === 'tour_type') {
-					handleTourSelection(element); // deaktivuje ostatné
+					handleTourSelection(element);
 				}
 			}
 		}
@@ -158,6 +167,7 @@ function selectCard(element, group) {
 		console.error('Error in selectCard:', error);
 	}
 }
+
 
 // Funkcia na deaktiváciu všetkých extra možností mimo vybratej karty
 function handleTourSelection(selectedCard) {
