@@ -52,8 +52,6 @@
 					<li><strong>Abweichende Rechnungsadresse:</strong><br><?= nl2br(htmlspecialchars($andere_adresse)) ?></li>
 				<?php endif; ?>
 			</ul>
-
-			<p style="margin-top: 30px;">Mit freundlichen Grüßen,<br>Ihr STYX Erlebniswelt Team</p>
 		</td>
 	</tr>
 
@@ -85,6 +83,13 @@
 					<img src="<?= base_url('img/icon/email.png') ?>" width="24" height="24" alt="E-Mail">
 				</a>
 			</div>
+		</td>
+	</tr>
+
+
+	<tr style="background-color: #e8e8e8;">
+		<td style="padding: 10px; text-align: center; font-size: 11px; color: #777;">
+			&copy; <?= date('Y') ?> STYX Naturcosmetic. Alle Rechte vorbehalten. | Powered by STYX Naturcosmetic GmbH.
 		</td>
 	</tr>
 </table>
