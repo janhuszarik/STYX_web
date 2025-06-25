@@ -123,17 +123,14 @@ function selectCard(element, group) {
 
 function handleTourSelection(selectedCard) {
 	const allCards = document.querySelectorAll('.select-card');
-	allCards.forEach(card => {
-		const inputs = card.querySelectorAll('input[type="radio"], input[type="checkbox"]');
-		const isCurrent = card === selectedCard;
 
-		inputs.forEach(input => {
-			if (!isCurrent) {
-				input.disabled = true;
-				input.checked = false;
-			} else {
-				input.disabled = false;
-			}
-		});
+	allCards.forEach(card => {
+		const radio = card.querySelector('input[type="radio"][name="tour_type"]');
+		if (radio) {
+			const isCurrent = card === selectedCard;
+			radio.disabled = !isCurrent;
+			radio.checked = isCurrent;
+		}
 	});
 }
+
