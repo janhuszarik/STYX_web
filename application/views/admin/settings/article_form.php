@@ -51,6 +51,20 @@ if (isset($article) && !empty($article->slug)) {
 	.section-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
 	.form-group .col-form-label { font-weight: 500; margin-bottom: 0.25rem; }
 	.form-group .form-control { margin-bottom: 0.5rem; }
+	.file-info {
+		font-size: 0.9rem;
+	}
+	.file-info p {
+		margin: 0.25rem 0;
+	}
+	.file-info .text-warning {
+		color: #b80000;
+		font-weight: 500;
+	}
+	.file-info .text-danger {
+		color: #d60015;
+		font-weight: 500;
+	}
 </style>
 
 <div class="row">
@@ -282,7 +296,7 @@ if (isset($article) && !empty($article->slug)) {
 							<input type="date" class="form-control" name="end_date_to" id="end_date_to" value="<?= htmlspecialchars($article->end_date_to ?? '') ?>">
 						</div>
 						<div class="col-md-3">
-							<label for="orderBy" class="col-form-label">Poradie</label>
+							<label for="orderBy" class="col-form-label">Reihenfolge</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Určuje poradie zobrazenia článku v zozname článkov v danej kategórii. Menšie číslo znamená vyššiu prioritu (zobrazí sa vyššie)."></i>
 							<input type="number" class="form-control" name="orderBy" id="orderBy" value="<?= htmlspecialchars($article->orderBy ?? '0') ?>" min="0">
 						</div>
@@ -683,4 +697,98 @@ if (isset($article) && !empty($article->slug)) {
 			loadFolder(parent);
 		};
 	});
-</script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Empfohlene Werte
+		const MAX_FILE_SIZE_MB = 5; // Maximale Dateigröße in MB
+		const RECOMMENDED_WIDTH = 1920; // Empfohlene Breite in px
+		const RECOMMENDED_HEIGHT = 1080; // Empfohlene Höhe in px
+
+		// Funktion zur Formatierung der Dateigröße
+		function formatFileSize(bytes) {
+			if (bytes < 1024) return bytes + ' B';
+			if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+			return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+		}
+
+		// Funktion zur Verarbeitung der hochgeladenen Datei
+		function handleFileUpload(input, previewContainerId) {
+			const file = input.files[0];
+			const previewContainer = document.getElementById(previewContainerId);
+
+			// Vorherige Informationen entfernen, falls vorhanden
+			let infoDiv = input.parentElement.querySelector('.file-info');
+			if (infoDiv) infoDiv.remove();
+
+			if (!file) return;
+
+			// Neues Div für Informationen erstellen
+			infoDiv = document.createElement('div');
+			infoDiv.className = 'file-info mt-2';
+			input.parentElement.appendChild(infoDiv);
+
+			// Dateigröße ermitteln
+			const fileSize = file.size;
+			const fileSizeText = formatFileSize(fileSize);
+
+			// Überprüfen, ob die Datei ein Bild ist
+			if (!file.type.startsWith('image/')) {
+				infoDiv.innerHTML = `<p class="text-danger">Die ausgewählte Datei ist kein Bild!</p>`;
+				input.value = ''; // Input zurücksetzen
+				return;
+			}
+
+			// Bild laden, um die Abmessungen zu ermitteln
+			const img = new Image();
+			const objectUrl = URL.createObjectURL(file);
+			img.onload = function () {
+				const width = img.width;
+				const height = img.height;
+
+				// Informationen anzeigen
+				infoDiv.innerHTML = `
+                <p><strong>Dateigröße:</strong> ${fileSizeText}</p>
+                <p><strong>Abmessungen:</strong> ${width} x ${height} px</p>
+            `;
+
+				// Dateigröße überprüfen
+				const fileSizeMB = fileSize / (1024 * 1024);
+				if (fileSizeMB > MAX_FILE_SIZE_MB) {
+					infoDiv.innerHTML += `
+                    <p class="text-warning">
+                        <strong>Warnung:</strong> Die Datei ist zu groß (${fileSizeText}).
+                        Empfohlene maximale Größe: ${MAX_FILE_SIZE_MB} MB.
+                    </p>
+                `;
+				}
+
+				// Abmessungen überprüfen
+				if (width > RECOMMENDED_WIDTH || height > RECOMMENDED_HEIGHT) {
+					infoDiv.innerHTML += `
+                    <p class="text-warning">
+                        <strong>Warnung:</strong> Die Bildabmessungen (${width}x${height} px)
+                        überschreiten die empfohlenen Werte (${RECOMMENDED_WIDTH}x${RECOMMENDED_HEIGHT} px).
+                    </p>
+                `;
+				}
+
+				URL.revokeObjectURL(objectUrl);
+			};
+			img.src = objectUrl;
+		}
+
+		// Event-Listener für das Hauptbild hinzufügen
+		const mainImageInput = document.getElementById('image');
+		if (mainImageInput) {
+			mainImageInput.addEventListener('change', () => {
+				handleFileUpload(mainImageInput, 'ftpImagePreview');
+			});
+		}
+
+		// Event-Listener für Abschnittsbilder hinzufügen (dynamisch hinzugefügt)
+		document.getElementById('sections-container').addEventListener('change', (e) => {
+			if (e.target.matches('input[type="file"][id^="section_image"]')) {
+				const sectionIndex = e.target.closest('[data-section]').dataset.section;
+				handleFileUpload(e.target, `sectionImagePreview${sectionIndex}`);
+			}
+		});
+	});</script>
