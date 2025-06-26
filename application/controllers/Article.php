@@ -193,15 +193,11 @@ class Article extends CI_Controller
 				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			}
 
+			// Presunuté nahrávanie hlavného obrázka do saveArticle
 			if (!empty($_FILES['image']['name'])) {
-				$this->upload->initialize(['upload_path' => $dirs['articles'], 'allowed_types' => 'jpg|jpeg|png|gif|webp']);
-				if ($this->upload->do_upload('image')) {
-					$upload_data = $this->upload->data();
-					$post['image'] = 'uploads/articles/' . $upload_data['file_name'];
-				} else {
-					$this->session->set_flashdata('error', 'Fehler beim Hochladen des Hauptbildes: ' . $this->upload->display_errors());
-					$post['image'] = $post['old_image'] ?? null;
-				}
+				$post['image'] = ''; // Bude nastavené v saveArticle
+			} else {
+				$post['image'] = $post['old_image'] ?? null;
 			}
 
 			$sections = [];

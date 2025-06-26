@@ -161,7 +161,7 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadResult = uploadImg('image', 'uploads/articles', $post['title'], false); // Bez resize a thumbnail
+			$uploadResult = uploadImg('image', 'uploads/articles/title_image', $post['title'], false); // Ukladanie do title_image
 			if ($uploadResult && file_exists($uploadResult)) {
 				$image = $uploadResult;
 			} else {
@@ -170,13 +170,13 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'uploads/articles/';
-			@mkdir($localDir, 0755, true);
+			$localDir = FCPATH . 'uploads/articles/title_image/';
+			@mkdir($localDir, 0755, true); // Vytvorenie priečinka, ak neexistuje
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 				$localFile = $localDir . basename($ftpPath);
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
-					$image = 'uploads/articles/' . basename($ftpPath);
+					$image = 'uploads/articles/title_image/' . basename($ftpPath);
 				} else {
 					log_message('error', 'Failed to download FTP image: ' . $ftpPath);
 					return false;
@@ -185,13 +185,13 @@ class Article_model extends CI_Model
 				$src = FCPATH . ltrim($ftpPath, '/');
 				$dst = $localDir . basename($ftpPath);
 				if (@copy($src, $dst)) {
-					$image = 'uploads/articles/' . basename($ftpPath);
+					$image = 'uploads/articles/title_image/' . basename($ftpPath);
 				} else {
 					log_message('error', 'Failed to copy FTP image: ' . $src);
 					return false;
 				}
 			} else {
-				$image = 'uploads/articles/' . basename($ftpPath);
+				$image = 'uploads/articles/title_image/' . basename($ftpPath);
 			}
 		} else {
 			$image = $post['old_image'] ?? null;
@@ -317,7 +317,6 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES['section_images']['name'][$idx])) {
 					log_message('debug', 'Processing section image upload for index ' . $idx . ': ' . print_r($_FILES['section_images']['name'][$idx], true));
-					// Použitie explicitného indexu a unikátneho názvu
 					$sectionName = url_oprava($post['title'] . '_section_' . $idx . '_' . time());
 					$_FILES['temp_section_image'] = [
 						'name' => $_FILES['section_images']['name'][$idx],
