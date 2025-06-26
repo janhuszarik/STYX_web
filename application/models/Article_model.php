@@ -156,15 +156,16 @@ class Article_model extends CI_Model
 
 		// Spracovanie hlavného obrázka
 		$image = null;
+		$thumb_image = null;
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'uploads/articles');
-			log_message('debug', 'Upload path for main image: ' . $uploadPath);
-			if ($uploadPath && file_exists($uploadPath)) {
-				$image = $uploadPath;
+			$uploadResult = uploadImg('image', 'uploads/articles', $post['title'], true);
+			if ($uploadResult && file_exists($uploadResult['original'])) {
+				$image = $uploadResult['original'];
+				$thumb_image = $uploadResult['thumb'];
 			} else {
-				log_message('error', 'Failed to upload main image: ' . ($uploadPath ?: 'No file') . ' Error: ' . print_r($_FILES['image']['error'], true));
+				log_message('error', 'Failed to upload main image: ' . print_r($uploadResult, true));
 				return false;
 			}
 		} elseif (!empty($post['ftp_image'])) {
@@ -176,6 +177,8 @@ class Article_model extends CI_Model
 				$localFile = $localDir . basename($ftpPath);
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
 					$image = 'uploads/articles/' . basename($ftpPath);
+					$thumb_image = 'uploads/articles/' . basename($ftpPath, '.' . pathinfo($ftpPath, PATHINFO_EXTENSION)) . '_thumb.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
+					obrazokfinal($image, true, $thumb_image);
 				} else {
 					log_message('error', 'Failed to download FTP image: ' . $ftpPath);
 					return false;
@@ -185,15 +188,19 @@ class Article_model extends CI_Model
 				$dst = $localDir . basename($ftpPath);
 				if (@copy($src, $dst)) {
 					$image = 'uploads/articles/' . basename($ftpPath);
+					$thumb_image = 'uploads/articles/' . basename($ftpPath, '.' . pathinfo($ftpPath, PATHINFO_EXTENSION)) . '_thumb.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
+					obrazokfinal($image, true, $thumb_image);
 				} else {
 					log_message('error', 'Failed to copy FTP image: ' . $src);
 					return false;
 				}
 			} else {
 				$image = 'uploads/articles/' . basename($ftpPath);
+				$thumb_image = 'uploads/articles/' . basename($ftpPath, '.' . pathinfo($ftpPath, PATHINFO_EXTENSION)) . '_thumb.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
 			}
 		} else {
 			$image = $post['old_image'] ?? null;
+			$thumb_image = $post['old_thumb_image'] ?? null;
 		}
 
 		// Logika pre is_main a slug_title
@@ -218,6 +225,7 @@ class Article_model extends CI_Model
 			'subtitle'        => $post['subtitle'],
 			'slug'            => $post['slug'],
 			'image'           => $image,
+			'thumb_image'     => $thumb_image,
 			'image_title'     => $image_title,
 			'keywords'        => $post['keywords'] ?? null,
 			'meta'            => $post['meta'] ?? null,
@@ -311,19 +319,11 @@ class Article_model extends CI_Model
 				$externalUrl = $post['external_urls'][$idx] ?? null;
 
 				if (!empty($_FILES['section_images']['name'][$idx])) {
-					$_FILES_SINGLE = [
-						'name' => $_FILES['section_images']['name'][$idx],
-						'type' => $_FILES['section_images']['type'][$idx],
-						'tmp_name' => $_FILES['section_images']['tmp_name'][$idx],
-						'error' => $_FILES['section_images']['error'][$idx],
-						'size' => $_FILES['section_images']['size'][$idx],
-					];
-					$_FILES['temp_section_image'] = $_FILES_SINGLE;
-					$up = uploadImg('temp_section_image', 'uploads/articles/sections');
-					if ($up && file_exists($up)) {
-						$secImg = $up;
+					$uploadResult = uploadImg('temp_section_image', 'uploads/articles/sections', "section_$idx", true);
+					if ($uploadResult && file_exists($uploadResult['original'])) {
+						$secImg = $uploadResult['original'];
 					} else {
-						log_message('error', "Failed to upload section image $idx: " . ($up ?: 'No file'));
+						log_message('error', "Failed to upload section image $idx: " . print_r($uploadResult, true));
 						return false;
 					}
 				} elseif (!empty($post['ftp_section_image'][$idx]) && $post['ftp_section_image'][$idx] !== $post['old_section_image'][$idx]) {
@@ -334,18 +334,12 @@ class Article_model extends CI_Model
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
 							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
-						} else {
-							log_message('error', "Failed to download FTP section image $idx: " . $ftpPath);
-							return false;
 						}
 					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
 							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
-						} else {
-							log_message('error', "Failed to copy FTP section image $idx: " . $src);
-							return false;
 						}
 					}
 				}

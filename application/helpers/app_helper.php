@@ -183,7 +183,7 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 	$CI->load->library('image_lib');
 
 	if ($dir === false) {
-		$dir = 'Gallery/';
+		$dir = 'uploads/';
 	} else {
 		$dir = rtrim($dir, '/') . '/';
 	}
@@ -201,7 +201,7 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 	}
 
 	if (empty($_FILES[$file]['name'])) {
-		return '';
+		return ['original' => '', 'thumb' => ''];
 	}
 
 	$tmpName = $_FILES[$file]['tmp_name'];
@@ -213,42 +213,43 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 			? trim(url_oprava($saveAsNameFile))
 			: trim(url_oprava($originalName)) . '_' . time();
 
-		$urlimg = $dir . $baseName . '.' . $extension;
+		$originalPath = $dir . $baseName . '.' . $extension;
+		$thumbPath = $dir . $baseName . '_thumb.' . $extension;
 
 		if (in_array(strtolower($extension), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
-			if (move_uploaded_file($tmpName, $urlimg)) {
-				// Vraciame celú cestu relatívne k base_path
-				return $resizeImage ? obrazokfinal($urlimg, $watermark) : $urlimg;
+			if (move_uploaded_file($tmpName, $originalPath)) {
+				$result = ['original' => $originalPath, 'thumb' => $thumbPath];
+				if ($resizeImage) {
+					$result = obrazokfinal($originalPath, $watermark, $thumbPath);
+				}
+				return $result;
 			} else {
-				log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $urlimg");
-				return '';
+				log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $originalPath");
+				return ['original' => '', 'thumb' => ''];
 			}
 		} else {
 			log_message('error', "Nepodporovaný formát súboru alebo súbor nie je nahratý: " . $_FILES[$file]['name']);
-			return '';
+			return ['original' => '', 'thumb' => ''];
 		}
 	}
 
-	return '';
+	return ['original' => '', 'thumb' => ''];
 }
 
-
-
-function obrazokfinal($adresaimg, $offLogo = true, $defaultWidthImage = 1600) {
+function obrazokfinal($originalPath, $offLogo = true, $thumbPath = null, $defaultWidthImage = 1600)
+{
 	$CI =& get_instance();
 	$CI->load->library('image_lib');
 
-	if ($adresaimg && file_exists($adresaimg)) {
-		// Resize obrázka
+	if ($originalPath && file_exists($originalPath)) {
+		// Resize original image
 		$configi['image_library'] = 'gd2';
-		$configi['source_image'] = $adresaimg;
+		$configi['source_image'] = $originalPath;
 		$configi['create_thumb'] = FALSE;
 		$configi['maintain_ratio'] = TRUE;
 		$configi['master_dim'] = 'width';
 		$configi['max_size'] = '0';
 		$configi['quality'] = "70%";
-		$configi['x_axis'] = 100;
-		$configi['y_axis'] = 40;
 		$configi['width'] = $defaultWidthImage;
 		$configi['height'] = $defaultWidthImage;
 
@@ -257,7 +258,7 @@ function obrazokfinal($adresaimg, $offLogo = true, $defaultWidthImage = 1600) {
 			log_message('error', "Chyba pri zmene veľkosti obrázka: " . $CI->image_lib->display_errors());
 		}
 
-		// Vodoznak
+		// Watermark
 		if ($offLogo == true) {
 			$configw['wm_type'] = 'overlay';
 			$configw['wm_overlay_path'] = APP_PATH . '/' . LOGO_PNG;
@@ -271,23 +272,25 @@ function obrazokfinal($adresaimg, $offLogo = true, $defaultWidthImage = 1600) {
 			}
 		}
 
-		// Vytvorenie náhľadu (thumbnail)
-		$config['image_library'] = 'gd2';
-		$config['source_image'] = $adresaimg;
-		$config['thumb_marker'] = '_thumb';
-		$config['create_thumb'] = TRUE;
-		$config['maintain_ratio'] = TRUE;
-		$config['width'] = 500;
-		$config['height'] = 400;
+		// Create thumbnail
+		if ($thumbPath) {
+			$config['image_library'] = 'gd2';
+			$config['source_image'] = $originalPath;
+			$config['new_image'] = $thumbPath;
+			$config['maintain_ratio'] = TRUE;
+			$config['width'] = 500;
+			$config['height'] = 400;
 
-		$CI->image_lib->initialize($config);
-		if (!$CI->image_lib->resize()) {
-			log_message('error', "Chyba pri vytváraní náhľadu: " . $CI->image_lib->display_errors());
+			$CI->image_lib->initialize($config);
+			if (!$CI->image_lib->resize()) {
+				log_message('error', "Chyba pri vytváraní náhľadu: " . $CI->image_lib->display_errors());
+			}
 		}
 	}
 
-	return $adresaimg;
+	return ['original' => $originalPath, 'thumb' => $thumbPath];
 }
+
 
 function url_oprava($str, $separator = '-', $lowercase = TRUE) {
 	if ($separator === 'dash') {
