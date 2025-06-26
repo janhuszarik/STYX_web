@@ -201,7 +201,7 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 	}
 
 	if (empty($_FILES[$file]['name'])) {
-		return ['original' => '', 'thumb' => ''];
+		return '';
 	}
 
 	$tmpName = $_FILES[$file]['tmp_name'];
@@ -214,26 +214,49 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 			: trim(url_oprava($originalName)) . '_' . time();
 
 		$originalPath = $dir . $baseName . '.' . $extension;
-		$thumbPath = $dir . $baseName . '_thumb.' . $extension;
 
 		if (in_array(strtolower($extension), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
 			if (move_uploaded_file($tmpName, $originalPath)) {
-				$result = ['original' => $originalPath, 'thumb' => $thumbPath];
+				$result = $originalPath;
 				if ($resizeImage) {
-					$result = obrazokfinal($originalPath, $watermark, $thumbPath);
+					$configi['image_library'] = 'gd2';
+					$configi['source_image'] = $originalPath;
+					$configi['create_thumb'] = FALSE;
+					$configi['maintain_ratio'] = TRUE;
+					$configi['master_dim'] = 'width';
+					$configi['max_size'] = '0';
+					$configi['quality'] = "70%";
+					$configi['width'] = 1600;
+					$configi['height'] = 1600;
+					$CI->image_lib->initialize($configi);
+					if (!$CI->image_lib->resize()) {
+						log_message('error', "Chyba pri zmene veľkosti obrázka: " . $CI->image_lib->display_errors());
+					}
+					if ($watermark == true) {
+						$configw['wm_type'] = 'overlay';
+						$configw['wm_overlay_path'] = APP_PATH . '/' . LOGO_PNG;
+						$configw['wm_opacity'] = '50';
+						$configw['wm_vrt_alignment'] = 'bottom';
+						$configw['wm_hor_alignment'] = 'right';
+						$configw['wm_padding'] = '-20';
+						$CI->image_lib->initialize($configw);
+						if (!$CI->image_lib->watermark()) {
+							log_message('error', "Chyba pri pridávaní vodoznaku: " . $CI->image_lib->display_errors());
+						}
+					}
 				}
 				return $result;
 			} else {
 				log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $originalPath");
-				return ['original' => '', 'thumb' => ''];
+				return '';
 			}
 		} else {
 			log_message('error', "Nepodporovaný formát súboru alebo súbor nie je nahratý: " . $_FILES[$file]['name']);
-			return ['original' => '', 'thumb' => ''];
+			return '';
 		}
 	}
 
-	return ['original' => '', 'thumb' => ''];
+	return '';
 }
 
 function obrazokfinal($originalPath, $offLogo = true, $thumbPath = null, $defaultWidthImage = 1600)

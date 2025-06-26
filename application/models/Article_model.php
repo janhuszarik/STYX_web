@@ -154,18 +154,18 @@ class Article_model extends CI_Model
 	{
 		$this->load->helper('app_helper');
 
+		log_message('debug', 'Starting saveArticle with post data: ' . print_r($post, true));
+
 		// Spracovanie hlavného obrázka
 		$image = null;
-		$thumb_image = null;
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadResult = uploadImg('image', 'uploads/articles', $post['title'], true);
-			if ($uploadResult && file_exists($uploadResult['original'])) {
-				$image = $uploadResult['original'];
-				$thumb_image = $uploadResult['thumb'];
+			$uploadResult = uploadImg('image', 'uploads/articles', $post['title'], false); // Bez resize a thumbnail
+			if ($uploadResult && file_exists($uploadResult)) {
+				$image = $uploadResult;
 			} else {
-				log_message('error', 'Failed to upload main image: ' . print_r($uploadResult, true) . ' Files: ' . print_r($_FILES['image'], true));
+				log_message('error', 'Failed to upload main image: ' . $uploadResult . ' Files: ' . print_r($_FILES['image'], true));
 				return false;
 			}
 		} elseif (!empty($post['ftp_image'])) {
@@ -177,8 +177,6 @@ class Article_model extends CI_Model
 				$localFile = $localDir . basename($ftpPath);
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
 					$image = 'uploads/articles/' . basename($ftpPath);
-					$thumb_image = 'uploads/articles/' . basename($ftpPath, '.' . pathinfo($ftpPath, PATHINFO_EXTENSION)) . '_thumb.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
-					obrazokfinal($image, true, $thumb_image);
 				} else {
 					log_message('error', 'Failed to download FTP image: ' . $ftpPath);
 					return false;
@@ -188,19 +186,15 @@ class Article_model extends CI_Model
 				$dst = $localDir . basename($ftpPath);
 				if (@copy($src, $dst)) {
 					$image = 'uploads/articles/' . basename($ftpPath);
-					$thumb_image = 'uploads/articles/' . basename($ftpPath, '.' . pathinfo($ftpPath, PATHINFO_EXTENSION)) . '_thumb.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
-					obrazokfinal($image, true, $thumb_image);
 				} else {
 					log_message('error', 'Failed to copy FTP image: ' . $src);
 					return false;
 				}
 			} else {
 				$image = 'uploads/articles/' . basename($ftpPath);
-				$thumb_image = 'uploads/articles/' . basename($ftpPath, '.' . pathinfo($ftpPath, PATHINFO_EXTENSION)) . '_thumb.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
 			}
 		} else {
 			$image = $post['old_image'] ?? null;
-			$thumb_image = $post['old_thumb_image'] ?? null;
 		}
 
 		// Logika pre is_main a slug_title
@@ -225,7 +219,6 @@ class Article_model extends CI_Model
 			'subtitle'        => $post['subtitle'],
 			'slug'            => $post['slug'],
 			'image'           => $image,
-			'thumb_image'     => $thumb_image,
 			'image_title'     => $image_title,
 			'keywords'        => $post['keywords'] ?? null,
 			'meta'            => $post['meta'] ?? null,
@@ -254,7 +247,7 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov);
+					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov, false); // Bez resize a thumbnail
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
@@ -323,13 +316,22 @@ class Article_model extends CI_Model
 				$externalUrl = $post['external_urls'][$idx] ?? null;
 
 				if (!empty($_FILES['section_images']['name'][$idx])) {
-					// Use a unique name based on the section index and article title
-					$sectionName = url_oprava($post['title'] . '_section_' . $idx);
-					$uploadResult = uploadImg('section_images', 'uploads/articles/sections', $sectionName, true);
-					if ($uploadResult && file_exists($uploadResult['original'])) {
-						$secImg = $uploadResult['original'];
+					log_message('debug', 'Processing section image upload for index ' . $idx . ': ' . print_r($_FILES['section_images']['name'][$idx], true));
+					// Použitie explicitného indexu a unikátneho názvu
+					$sectionName = url_oprava($post['title'] . '_section_' . $idx . '_' . time());
+					$_FILES['temp_section_image'] = [
+						'name' => $_FILES['section_images']['name'][$idx],
+						'type' => $_FILES['section_images']['type'][$idx],
+						'tmp_name' => $_FILES['section_images']['tmp_name'][$idx],
+						'error' => $_FILES['section_images']['error'][$idx],
+						'size' => $_FILES['section_images']['size'][$idx],
+					];
+					$uploadResult = uploadImg('temp_section_image', 'uploads/articles/sections', $sectionName, false); // Bez resize a thumbnail
+					if ($uploadResult && file_exists($uploadResult)) {
+						$secImg = $uploadResult;
+						log_message('debug', 'Section image uploaded successfully for index ' . $idx . ': ' . $secImg);
 					} else {
-						log_message('error', "Failed to upload section image $idx: " . print_r($uploadResult, true));
+						log_message('error', 'Failed to upload section image for index ' . $idx . ': ' . $uploadResult . ' Temp file: ' . print_r($_FILES['temp_section_image'], true));
 						return false;
 					}
 				} elseif (!empty($post['ftp_section_image'][$idx]) && $post['ftp_section_image'][$idx] !== $post['old_section_image'][$idx]) {

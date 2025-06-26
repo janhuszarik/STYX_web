@@ -207,31 +207,13 @@ class Article extends CI_Controller
 			$sections = [];
 			if (!empty($post['sections'])) {
 				foreach ($post['sections'] as $i => $content) {
-					$image = '';
+					$image = $post['old_section_image'][$i] ?? '';
 
-					if (!empty($post['ftp_section_image'][$i])) {
+					if (!empty($_FILES['section_images']['name'][$i])) {
+						// Necháme spracovanie na saveArticle
+						$image = ''; // Bude nastavené v saveArticle
+					} elseif (!empty($post['ftp_section_image'][$i])) {
 						$image = $post['ftp_section_image'][$i];
-					} elseif (!empty($_FILES['section_images']['name'][$i])) {
-						$_FILES_SINGLE = [
-							'name'     => $_FILES['section_images']['name'][$i],
-							'type'     => $_FILES['section_images']['type'][$i],
-							'tmp_name' => $_FILES['section_images']['tmp_name'][$i],
-							'error'    => $_FILES['section_images']['error'][$i],
-							'size'     => $_FILES['section_images']['size'][$i],
-						];
-
-						$_FILES['temp_section_image'] = $_FILES_SINGLE;
-						$this->upload->initialize([
-							'upload_path' => $dirs['sections'],
-							'allowed_types' => 'jpg|jpeg|png|gif|webp',
-						]);
-
-						if ($this->upload->do_upload('temp_section_image')) {
-							$upload_data = $this->upload->data();
-							$image = 'uploads/articles/sections/' . $upload_data['file_name'];
-						}
-					} elseif (!empty($post['old_section_image'][$i])) {
-						$image = $post['old_section_image'][$i];
 					}
 
 					$sections[$i] = [
@@ -266,12 +248,10 @@ class Article extends CI_Controller
 				$data['sections'] = [];
 				if (!empty($post['sections'])) {
 					foreach ($post['sections'] as $i => $content) {
-						$image = '';
+						$image = $post['old_section_image'][$i] ?? '';
 
 						if (!empty($post['ftp_section_image'][$i])) {
 							$image = $post['ftp_section_image'][$i];
-						} elseif (!empty($post['old_section_image'][$i])) {
-							$image = $post['old_section_image'][$i];
 						}
 
 						$data['sections'][$i] = (object)[
