@@ -165,7 +165,7 @@ class Article_model extends CI_Model
 				$image = $uploadResult['original'];
 				$thumb_image = $uploadResult['thumb'];
 			} else {
-				log_message('error', 'Failed to upload main image: ' . print_r($uploadResult, true));
+				log_message('error', 'Failed to upload main image: ' . print_r($uploadResult, true) . ' Files: ' . print_r($_FILES['image'], true));
 				return false;
 			}
 		} elseif (!empty($post['ftp_image'])) {
@@ -308,6 +308,10 @@ class Article_model extends CI_Model
 			$articleId = $this->db->insert_id();
 		}
 
+		if (!$ok) {
+			log_message('error', 'Database save failed: ' . $this->db->last_query() . ' Error: ' . $this->db->error()['message']);
+		}
+
 		// Spracovanie sekcií
 		if (isset($post['sections']) && is_array($post['sections'])) {
 			$this->db->delete('article_sections', ['article_id' => $articleId]);
@@ -357,7 +361,7 @@ class Article_model extends CI_Model
 
 				log_message('debug', "Inserting section $idx: " . print_r($sectionData, true));
 				if (!$this->db->insert('article_sections', $sectionData)) {
-					log_message('error', "Failed to insert section $idx into article_sections: " . $this->db->last_query());
+					log_message('error', "Failed to insert section $idx into article_sections: " . $this->db->last_query() . ' Error: ' . $this->db->error()['message']);
 					return false;
 				}
 			}
