@@ -131,6 +131,16 @@ class Article_model extends CI_Model
 		return $this->db->get_where('articles', ['id' => $id])->row();
 	}
 
+	public function getAllArticlesExcept($excludeId = null)
+	{
+		$this->db->select('id, title, slug, lang');
+		if ($excludeId) {
+			$this->db->where('id !=', $excludeId);
+		}
+		$this->db->order_by('title', 'ASC');
+		return $this->db->get('articles')->result();
+	}
+
 	public function getSections($articleId)
 	{
 		$this->db->where('article_id', $articleId);
@@ -149,7 +159,7 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadPath = uploadImg('image', 'uploads/articles');
+			$uploadPath = uploadImg('image', 'Uploads/articles');
 			log_message('debug', 'Upload path for main image: ' . $uploadPath);
 			if ($uploadPath && file_exists($uploadPath)) {
 				$image = $uploadPath;
@@ -159,13 +169,13 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'uploads/articles/';
+			$localDir = FCPATH . 'Uploads/articles/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 				$localFile = $localDir . basename($ftpPath);
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
-					$image = 'uploads/articles/' . basename($ftpPath);
+					$image = 'Uploads/articles/' . basename($ftpPath);
 				} else {
 					log_message('error', 'Failed to download FTP image: ' . $ftpPath);
 					return false;
@@ -174,13 +184,13 @@ class Article_model extends CI_Model
 				$src = FCPATH . ltrim($ftpPath, '/');
 				$dst = $localDir . basename($ftpPath);
 				if (@copy($src, $dst)) {
-					$image = 'uploads/articles/' . basename($ftpPath);
+					$image = 'Uploads/articles/' . basename($ftpPath);
 				} else {
 					log_message('error', 'Failed to copy FTP image: ' . $src);
 					return false;
 				}
 			} else {
-				$image = 'uploads/articles/' . basename($ftpPath);
+				$image = 'Uploads/articles/' . basename($ftpPath);
 			}
 		} else {
 			$image = $post['old_image'] ?? null;
@@ -236,7 +246,7 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov);
+					$up = uploadImg("product_image{$suffix}", 'Uploads/articles/products', $nazov);
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
@@ -245,13 +255,13 @@ class Article_model extends CI_Model
 					}
 				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
 					$ftpPath = $post["ftp_product_image{$suffix}"];
-					$localDir = FCPATH . 'uploads/articles/products/';
+					$localDir = FCPATH . 'Uploads/articles/products/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to download FTP product image set{$setNum}_product{$prodNum}: " . $ftpPath);
 							return false;
@@ -260,13 +270,13 @@ class Article_model extends CI_Model
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to copy FTP product image set{$setNum}_product{$prodNum}: " . $src);
 							return false;
 						}
 					} else {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 					}
 				}
 			}
@@ -309,7 +319,7 @@ class Article_model extends CI_Model
 						'size' => $_FILES['section_images']['size'][$idx],
 					];
 					$_FILES['temp_section_image'] = $_FILES_SINGLE;
-					$up = uploadImg('temp_section_image', 'uploads/articles/sections');
+					$up = uploadImg('temp_section_image', 'Uploads/articles/sections');
 					if ($up && file_exists($up)) {
 						$secImg = $up;
 					} else {
@@ -318,12 +328,12 @@ class Article_model extends CI_Model
 					}
 				} elseif (!empty($post['ftp_section_image'][$idx]) && $post['ftp_section_image'][$idx] !== $post['old_section_image'][$idx]) {
 					$ftpPath = $post['ftp_section_image'][$idx];
-					$localDir = FCPATH . 'uploads/articles/sections/';
+					$localDir = FCPATH . 'Uploads/articles/sections/';
 					@mkdir($localDir, 0755, true);
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+							$secImg = 'Uploads/articles/sections/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to download FTP section image $idx: " . $ftpPath);
 							return false;
@@ -332,7 +342,7 @@ class Article_model extends CI_Model
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+							$secImg = 'Uploads/articles/sections/' . basename($ftpPath);
 						} else {
 							log_message('error', "Failed to copy FTP section image $idx: " . $src);
 							return false;

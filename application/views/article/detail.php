@@ -48,7 +48,7 @@ $this->load->view('partials/article_assets');
 							? base_url($section->subpage)
 							: (!empty($section->external_url) ? $section->external_url : '#');
 						?>
-						<a href="<?= $btnLink ?>" class="btn btn-success mt-3" <?= strpos($btnLink, 'http') === 0 ? 'target="_blank"' : '' ?>>
+						<a href="<?= htmlspecialchars($btnLink) ?>" class="btn btn-success mt-3" <?= strpos($btnLink, 'http') === 0 ? 'target="_blank"' : '' ?>>
 							<?= htmlspecialchars($section->button_name) ?>
 						</a>
 					<?php endif; ?>
@@ -189,4 +189,3 @@ for ($i = 1; $i <= 3; $i++) {
 	<span class="lightbox-close" onclick="closeLightbox()">×</span>
 	<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
 </div>
-

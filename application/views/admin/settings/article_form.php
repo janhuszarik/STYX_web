@@ -16,23 +16,20 @@ $titleSub = isset($article)
 $categoryId = isset($article) ? $article->category_id : ($categoryId ?? $CI->uri->segment(3));
 
 $CI->load->helper('app_helper');
-$menuItems = getMenu();
-$menuOptions = [];
 
-foreach ($menuItems as $menu) {
-	$menuOptions[] = [
-		'value' => $menu['url'],
-		'label' => $menu['name']
+// Načítaj zoznam všetkých článkov okrem aktuálneho
+$CI->load->model('Article_model');
+$articles = $CI->Article_model->getAllArticlesExcept($article->id ?? null);
+$articleOptions = [];
+foreach ($articles as $art) {
+	$articleOptions[] = [
+		'value' => $art->id,
+		'label' => $art->title,
+		'slug' => $art->slug,
+		'lang' => $art->lang
 	];
-	foreach ($menu['children'] as $submenu) {
-		$menuOptions[] = [
-			'value' => $submenu['url'],
-			'label' => ' - ' . $submenu['name']
-		];
-	}
 }
-
-$menuOptionsJson = json_encode($menuOptions);
+$articleOptionsJson = json_encode($articleOptions);
 
 $defaultMenuUrl = '';
 if (isset($article) && !empty($article->slug)) {
@@ -312,7 +309,7 @@ if (isset($article) && !empty($article->slug)) {
 <script>const BASE_URL = "<?= base_url() ?>";</script>
 <script>
 	let sectionCount = 0, maxSections = 10, sectionsData = <?= json_encode($sections ?? []) ?>;
-	const menuOptions = <?= $menuOptionsJson ?>;
+	const articleOptions = <?= $articleOptionsJson ?>;
 
 	function updateSectionIndexes() {
 		const sections = document.querySelectorAll('[data-section]');
@@ -335,10 +332,10 @@ if (isset($article) && !empty($article->slug)) {
 		const sectionIndex = index !== null ? index : sectionCount;
 		sectionCount++;
 
-		let optionsHtml = '<option value="">-- Unterseite auswählen --</option>';
-		menuOptions.forEach(opt => {
-			const selected = opt.value === subpage ? 'selected' : '';
-			optionsHtml += `<option value="${opt.value}" ${selected}>${opt.label}</option>`;
+		let optionsHtml = '<option value="">-- Artikel auswählen --</option>';
+		articleOptions.forEach(opt => {
+			const selected = opt.slug === subpage ? 'selected' : '';
+			optionsHtml += `<option value="${opt.slug}" data-id="${opt.id}" data-slug="${opt.slug}" data-lang="${opt.lang}" ${selected}>${opt.label}</option>`;
 		});
 
 		const html = `
@@ -376,19 +373,19 @@ if (isset($article) && !empty($article->slug)) {
                 <div class="row">
                     <div class="col-md-4">
                         <label for="button_name${sectionIndex}" class="col-form-label">Button-Name</label>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Text des Buttons in dieser Sektion. Wenn angegeben, wird ein Button angezeigt, der mit einer Unterseite oder externen URL verknüpft werden kann."></i>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Text des Buttons in dieser Sektion. Wenn angegeben, wird ein Button angezeigt, der mit einem Artikel oder externen URL verknüpft werden kann."></i>
                         <input type="text" name="button_names[${sectionIndex}]" class="form-control button-name" id="button_name${sectionIndex}" placeholder="Name des Buttons" value="${buttonName}">
                     </div>
                     <div class="col-md-4">
-                        <label for="subpage${sectionIndex}" class="col-form-label">Unterseite</label>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer internen Unterseite aus dem Menü. Aktiviert, wenn ein Button-Name angegeben ist. Hat Vorrang vor einer externen URL."></i>
+                        <label for="subpage${sectionIndex}" class="col-form-label">Artikel</label>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einem existierenden Artikel. Aktiviert, wenn ein Button-Name angegeben ist. Hat Vorrang vor einer externen URL."></i>
                         <select name="subpages[${sectionIndex}]" class="form-control subpage" id="subpage${sectionIndex}" ${!buttonName ? 'disabled' : ''}>
                             ${optionsHtml}
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="external_url${sectionIndex}" class="col-form-label">Externe URL</label>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer externen URL. Aktiviert, wenn ein Button-Name angegeben ist. Wird ignoriert, wenn eine Unterseite ausgewählt ist."></i>
+                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer externen URL. Aktiviert, keď je zadaný názov tlačidla. Ignoruje sa, ak je vybraný článok."></i>
                         <input type="url" name="external_urls[${sectionIndex}]" class="form-control external-url" id="external_url${sectionIndex}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
                     </div>
                 </div>
@@ -438,14 +435,6 @@ if (isset($article) && !empty($article->slug)) {
 		const buttonNameInput = document.getElementById(`button_name${sectionIndex}`);
 		const subpageInput = document.getElementById(`subpage${sectionIndex}`);
 		const externalUrlInput = document.getElementById(`external_url${sectionIndex}`);
-
-		if (subpage && subpage !== '') {
-			subpageInput.value = subpage;
-			externalUrlInput.value = '';
-		} else if (externalUrl && externalUrl !== '') {
-			externalUrlInput.value = externalUrl;
-			subpageInput.value = '';
-		}
 
 		buttonNameInput.addEventListener('input', function () {
 			const hasValue = this.value.trim() !== '';
@@ -574,39 +563,6 @@ if (isset($article) && !empty($article->slug)) {
 			});
 		}
 
-		const menuSelect = document.getElementById('menuSelect');
-		const slugInput = document.getElementById('slug');
-		const slugDisplay = document.getElementById('slug_display');
-
-		if (menuSelect && slugInput && slugDisplay) {
-			menuSelect.addEventListener("change", function () {
-				const selectedValue = this.value;
-				if (selectedValue) {
-					const parts = selectedValue.split('/').filter(val => val && !['de', 'en'].includes(val));
-					const newSlug = parts.join('/');
-					slugInput.value = newSlug;
-					slugDisplay.value = '#' + newSlug;
-				} else {
-					slugInput.value = '';
-					slugDisplay.value = '';
-				}
-			});
-
-			const initialSlug = "<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>";
-			if (initialSlug) {
-				const matchingOption = Array.from(menuSelect.options).find(option => {
-					const optionParts = option.value.split('/').filter(part => part && !['de', 'en'].includes(part));
-					const optionSlug = optionParts.join(' ');
-					return optionSlug === initialSlug;
-				});
-				if (matchingOption) {
-					menuSelect.value = matchingOption.value;
-					slugInput.value = initialSlug;
-					slugDisplay.value = '#' + initialSlug;
-				}
-			}
-		}
-
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
 			$('.summernote').each(function () {
 				let content = $(this).summernote('code');
@@ -640,19 +596,6 @@ if (isset($article) && !empty($article->slug)) {
 			externalUrlInputs.forEach(input => {
 				if (input.value) {
 					input.disabled = false;
-				}
-			});
-
-			const formData = new FormData(this);
-			const formObject = {};
-			formData.forEach((value, key) => {
-				if (!formObject[key]) {
-					formObject[key] = value;
-				} else {
-					if (!Array.isArray(formObject[key])) {
-						formObject[key] = [formObject[key]];
-					}
-					formObject[key].push(value);
 				}
 			});
 		});
