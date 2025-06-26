@@ -63,6 +63,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['auth/forgot_password'] 								= 'auth/forgot_password';
 	$route['auth/change_password'] 								= 'auth/change_password';
 	$route['admin/auth'] 										= 'auth';
+	$route['auth/edit_user/(:num)'] 							= 'auth/edit_user/$1';
 	$route['sitemap.xml'] 										= 'xml/sitemap';
 	$route['sitemap'] 											= 'xml/sitemap';
 	$route['translate_uri_dashes'] 								= FALSE;

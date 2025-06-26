@@ -34,36 +34,27 @@
 							<?php echo form_input(['name' => 'email', 'id' => 'email', 'type' => 'email', 'value' => set_value('email', $user->email), 'class' => 'form-control']); ?>
 						</div>
 						<div class="col-lg-6">
-							<label class="col-form-label"><?php echo lang('edit_user_company_label'); ?>
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Name des Unternehmens, zu dem der Benutzer gehört (optional)."></i>
-							</label>
-							<?php echo form_input($company, '', ['class' => 'form-control']); ?>
-						</div>
-					</div>
-
-					<div class="row form-group pb-3">
-						<div class="col-lg-6">
 							<label class="col-form-label"><?php echo lang('edit_user_phone_label'); ?>
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Telefonnummer des Benutzers (optional)."></i>
 							</label>
 							<?php echo form_input($phone, '', ['class' => 'form-control']); ?>
 						</div>
+					</div>
+
+					<div class="row form-group pb-3">
+
 						<div class="col-lg-6">
 							<label class="col-form-label"><?php echo lang('edit_user_password_label'); ?>
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Neues Passwort (leer lassen, wenn Sie es nicht ändern möchten)."></i>
 							</label>
 							<?php echo form_input($password, '', ['class' => 'form-control', 'autocomplete' => 'off']); ?>
 						</div>
-					</div>
-
-					<div class="row form-group pb-3">
 						<div class="col-lg-6">
 							<label class="col-form-label"><?php echo lang('edit_user_password_confirm_label'); ?>
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestätigung des neuen Passworts (leer lassen, wenn Sie es nicht ändern möchten)."></i>
 							</label>
 							<?php echo form_input($password_confirm, '', ['class' => 'form-control', 'autocomplete' => 'off']); ?>
 						</div>
-						<div class="col-lg-6"></div>
 					</div>
 
 					<?php if ($this->ion_auth->is_admin()): ?>
