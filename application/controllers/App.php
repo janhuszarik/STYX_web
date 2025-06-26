@@ -394,7 +394,6 @@ class App extends CI_Controller
     }
     public function send_gruppenfuhrung()
     {
-        log_message('debug', 'Prijaté POST dáta: ' . print_r($_POST, true));
 
         $this->load->library('form_validation');
         $this->load->library('email');
@@ -420,11 +419,9 @@ class App extends CI_Controller
             return;
         }
 
-        log_message('debug', 'send_gruppenfuhrung: Validácia prešla');
 
         $recaptcha_response = $this->input->post('g-recaptcha-response');
         if (empty($recaptcha_response)) {
-            log_message('error', 'reCAPTCHA nebolo vyplnené');
             $this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
             redirect('besuchen/gruppenfuhrungen');
             return;
@@ -434,13 +431,10 @@ class App extends CI_Controller
         $response = json_decode($verify);
 
         if (!$response->success) {
-            log_message('error', 'reCAPTCHA overenie zlyhalo: ' . print_r($response, true));
             $this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
             redirect('besuchen/gruppenfuhrungen');
             return;
         }
-
-        log_message('debug', 'send_gruppenfuhrung: reCAPTCHA overené');
 
         $data = [
             'group_type' => $this->input->post('group_type', true),
@@ -462,16 +456,13 @@ class App extends CI_Controller
             'paket' => $this->input->post('paket', true)
         ];
 
-        log_message('debug', 'send_gruppenfuhrung: Dáta pripravené: ' . print_r($data, true));
 
         $this->load->model('App_model');
         $sent = $this->App_model->sendGruppenfuhrungMail($data);
 
         if ($sent) {
-            log_message('debug', 'send_gruppenfuhrung: E-mail úspešne odoslaný');
             $this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
         } else {
-            log_message('error', 'send_gruppenfuhrung: Chyba pri odosielaní e-mailu');
             $this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
         }
 

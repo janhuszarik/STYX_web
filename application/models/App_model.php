@@ -203,7 +203,6 @@ class App_model extends CI_Model
 	{
 		$this->load->library('email');
 
-		// Konfigurácia SMTP
 		$config['protocol']    = 'smtp';
 		$config['smtp_host']   = 'smtp.hostcreators.sk';
 		$config['smtp_user']   = 'support@styxnatur.at';
@@ -223,48 +222,47 @@ class App_model extends CI_Model
 		$this->email->reply_to($data['email'], $data['name']);
 		$this->email->subject('Neue Gruppenführungsanfrage');
 
-		$adminMessage = "<h3>Neue Gruppenführungsanfrage</h3><table cellpadding='6' border='0' cellspacing='0'>";
-		foreach ($data as $key => $value) {
-			if (is_array($value)) {
-				$value = implode(', ', $value);
-			}
-			$adminMessage .= "<tr><td><strong>" . ucfirst($key) . ":</strong></td><td>" . nl2br(htmlspecialchars($value)) . "</td></tr>";
+		$templatePathAdmin = APPPATH . 'views/emails/gruppen_admin.php';
+
+		if (file_exists($templatePathAdmin)) {
+			extract($data);
+			ob_start();
+			include($templatePathAdmin);
+			$adminMessage = ob_get_clean();
+		} else {
+			return false;
 		}
-		$adminMessage .= "</table>";
 
 		$this->email->message($adminMessage);
 		$adminSent = $this->email->send();
 
-		// ---------- KLIENTSKÝ E-MAIL ----------
-		$this->email->clear(true); // resetuj aj headers aj body
+		// ---------- USER E-MAIL ----------
+		$this->email->clear(true);
 		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
 		$this->email->to($data['email']);
 		$this->email->subject('Vielen Dank für Ihre Anfrage');
 
-		// Vygeneruj HTML šablónu z view
-		$templatePath = APPPATH . 'views/emails/gruppen_reply.php';
+		$templatePathUser = APPPATH . 'views/emails/gruppen_reply.php';
 
-		if (file_exists($templatePath)) {
-			extract($data); // sprístupní $name, $zahlung, atď. pre šablónu
+		if (file_exists($templatePathUser)) {
+			extract($data);
 			ob_start();
-			include($templatePath);
+			include($templatePathUser);
 			$userMessage = ob_get_clean();
 		} else {
-			log_message('error', 'Email template not found: ' . $templatePath);
 			return false;
 		}
 
 		$this->email->message($userMessage);
 		$userSent = $this->email->send();
 
-		// Kontrola oboch e-mailov
 		if (!$adminSent || !$userSent) {
-			log_message('error', 'E-Mail Fehler: ' . $this->email->print_debugger());
 			return false;
 		}
 
 		return true;
 	}
+
 
 
 
