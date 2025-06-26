@@ -323,7 +323,9 @@ class Article_model extends CI_Model
 				$externalUrl = $post['external_urls'][$idx] ?? null;
 
 				if (!empty($_FILES['section_images']['name'][$idx])) {
-					$uploadResult = uploadImg('temp_section_image', 'uploads/articles/sections', "section_$idx", true);
+					// Use a unique name based on the section index and article title
+					$sectionName = url_oprava($post['title'] . '_section_' . $idx);
+					$uploadResult = uploadImg('section_images', 'uploads/articles/sections', $sectionName, true);
 					if ($uploadResult && file_exists($uploadResult['original'])) {
 						$secImg = $uploadResult['original'];
 					} else {
