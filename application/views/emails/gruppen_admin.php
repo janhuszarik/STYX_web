@@ -41,7 +41,6 @@
 				<li><strong>Kombi-Pakete:</strong> <?= !empty($paket) ? htmlspecialchars(is_array($paket) ? implode(', ', $paket) : $paket) : 'Keine' ?></li>
 				<li><strong>Rechnungsadresse:</strong> <?= htmlspecialchars($rechnung_adresse ?? 'Nicht angegeben') ?></li>
 				<li><strong>Andere Adresse:</strong><br><?= !empty($andere_adresse) ? nl2br(htmlspecialchars($andere_adresse)) : 'Keine' ?></li>
-				<li><strong>Nachricht:</strong><br><?= !empty($message) ? nl2br(htmlspecialchars($message)) : 'Keine Nachricht angegeben' ?></li>
 			</ul>
 		</td>
 	</tr>
