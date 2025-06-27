@@ -150,6 +150,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/shopfind/(:any)'] 							= 'shopfind/shopfindSave/$1';
 	$route['admin/shopfind/(:any)/(:num)'] 						= 'shopfind/shopfindSave/$1/$2';
 
+	$route['admin/documentation'] 								= 'admin/dokumentation';
 
 
 	$route['besuchen/gruppenfuhrungen'] 						= 'app/gruppenfuhrungen';

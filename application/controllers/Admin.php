@@ -501,4 +501,11 @@ class Admin extends CI_Controller
 			$this->load->view('admin/layout/normal', $data);
 		}
 	}
+
+	public function dokumentation()
+	{
+		$data['title'] = 'Dokumentation';
+		$data['page']  = 'admin/settings/documentation';
+		$this->load->view('admin/layout/normal', $data);
+	}
 }

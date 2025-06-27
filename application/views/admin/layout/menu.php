@@ -121,6 +121,15 @@
 									<span>Benutzerverwaltung</span>
 								</a>
 							</li>
+							<li class="<?= ($current_url == BASE_URL.'admin/documentation') ? 'active' : '' ?>">
+								<a class="nav-link" href="<?=BASE_URL.'admin/documentation'?>">
+									<span class="float-end badge badge-primary"></span>
+									<i class="bx bx-book" aria-hidden="true"></i>
+									<span>Dokumentation</span>
+								</a>
+							</li>
+
+
 							<li>
 								<a class="nav-link" href="<?=BASE_URL.'logout'?>">
 									<span class="float-end badge badge-danger">Abmelden</span>
