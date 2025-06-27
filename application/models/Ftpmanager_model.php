@@ -5,6 +5,14 @@ class Ftpmanager_model extends CI_Model
 {
 	public function connect_to_ftp($path = '')
 	{
+		$this->load->driver('cache', ['adapter' => 'file']); // Použijeme súborovú cache
+		$cache_key = 'ftp_list_' . md5($path);
+
+		// Skontrolujeme, či je zoznam v cache
+		if ($cached = $this->cache->get($cache_key)) {
+			return $cached;
+		}
+
 		$ftp_server = "ftp.styxnatur.at";
 		$ftp_user = "testujem@styxnatur.at";
 		$ftp_pass = "tQS!2g-x6Oy3S_7.";
@@ -18,8 +26,7 @@ class Ftpmanager_model extends CI_Model
 			return ['__error' => 'Fehler beim Anmelden.'];
 		}
 
-		ftp_pasv($conn, true); // Passiver Modus
-
+		ftp_pasv($conn, true);
 		$path = trim($path ?? '', '/');
 		$raw_list = @ftp_rawlist($conn, $path === '' ? '.' : $path);
 		if ($raw_list === false) {
@@ -37,7 +44,7 @@ class Ftpmanager_model extends CI_Model
 			if ($name === '.' || $name === '..') continue;
 
 			$full_path = $path === '' ? $name : $path . '/' . $name;
-			$size = $type === 'file' ? ftp_size($conn, $full_path) : null;
+			$size = $type === 'file' ? (int)$info[4] : null;
 
 			$list[] = [
 				'name' => $name,
@@ -48,6 +55,10 @@ class Ftpmanager_model extends CI_Model
 		}
 
 		ftp_close($conn);
+
+		// Uložíme do cache na 5 minút
+		$this->cache->save($cache_key, $list, 300);
+
 		return $list;
 	}
 
@@ -116,9 +127,16 @@ class Ftpmanager_model extends CI_Model
 		$upload = ftp_put($conn, $remote_path, $local_path, FTP_BINARY);
 		ftp_close($conn);
 
-		if (!$upload) {
-			return ['__error' => 'Datei konnte nicht auf den FTP-Server hochgeladen werden.'];
+		if ($upload) {
+			$this->invalidate_cache(dirname($remote_path)); // Invalidovať cache pre rodičovskú zložku
+			return true;
 		}
-		return true;
+		return ['__error' => 'Datei konnte nicht auf den FTP-Server hochgeladen werden.'];
+	}
+	public function invalidate_cache($path)
+	{
+		$this->load->driver('cache', ['adapter' => 'file']);
+		$cache_key = 'ftp_list_' . md5(trim($path, '/'));
+		$this->cache->delete($cache_key);
 	}
 }

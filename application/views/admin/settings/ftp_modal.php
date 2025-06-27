@@ -1,31 +1,40 @@
-
 <style>
 	#ftpImagePreview img {
-		max-width: 150px;
-		max-height: 150px;
+		max-width: 200px; /* Zväčšený náhľad pre náhľadové okno */
+		max-height: 200px;
 		object-fit: contain;
 	}
 	#ftp-browser-container {
-		max-height: 400px;
+		max-height: 600px; /* Väčší kontajner pre obsah */
 		overflow-y: auto;
 	}
+	.modal-dialog {
+		max-width: 90vw; /* Väčší width, 90% šírky obrazovky */
+	}
+	#ftp-items-list {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr); /* Dva stĺpce */
+		gap: 10px;
+	}
 	.ftp-item {
-		padding: 8px;
+		padding: 12px;
 		cursor: pointer;
-		border-bottom: 1px solid #dee2e6;
+		border: 1px solid #dee2e6;
+		border-radius: 4px;
 		display: flex;
 		align-items: center;
 		gap: 10px;
+		background-color: #fff;
 	}
 	.ftp-item:hover {
 		background-color: #f8f9fa;
 	}
 	.ftp-item i {
-		font-size: 20px;
+		font-size: 24px; /* Väčšie ikony */
 	}
 	.ftp-item img {
-		width: 40px;
-		height: 40px;
+		width: 60px; /* Väčší náhľad */
+		height: 60px;
 		object-fit: cover;
 		border: 1px solid #ddd;
 	}
@@ -48,6 +57,7 @@
 		text-align: center;
 		padding: 20px;
 		color: #666;
+		grid-column: span 2; /* Zaberá oba stĺpce */
 	}
 </style>
 
@@ -129,7 +139,7 @@
 						const icon = item.type === 'dir'
 							? '<i class="bi bi-folder-fill text-warning"></i>'
 							: (isImage
-								? `<img src="${item.url}" alt="${item.name}">`
+								? `<img src="${item.url}" alt="${item.name}" loading="lazy">`
 								: '<i class="bi bi-file-earmark-fill text-primary"></i>');
 						const actionClass = item.type === 'dir' ? 'ftp-folder' : (isImage ? 'ftp-image-choose' : '');
 						const size = item.size && item.size !== -1 ? (item.size / 1024).toFixed(2) + ' KB' : '-';
@@ -188,14 +198,11 @@
 		});
 
 		modalEl.addEventListener('hidden.bs.modal', () => {
-			// Odstránenie backdropu po zatvorení modálu
 			const backdrop = document.querySelector('.modal-backdrop');
 			if (backdrop) {
 				backdrop.remove();
 			}
-			// Odstránenie triedy modal-open z body
 			document.body.classList.remove('modal-open');
-			// Reset štýlu body
 			document.body.style.overflow = '';
 			document.body.style.paddingRight = '';
 		});
