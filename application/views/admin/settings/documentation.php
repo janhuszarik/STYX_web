@@ -1,3 +1,7 @@
+<style>
+	.doc-section ul li { margin-bottom: 1.1em; }
+</style>
+
 <div class="row">
 	<div class="col-lg-12">
 		<section class="card card-yellow">
@@ -28,7 +32,7 @@
 						<div class="tab-content" id="doc-tabContent">
 							<div class="tab-pane fade show active" id="uebersicht" role="tabpanel" aria-labelledby="uebersicht-tab">
 								<div class="text-center py-5">
-									<img src="<?= base_url('assets/img/logo_styx_black.png') ?>" alt="STYX Logo" style="max-width: 180px;" class="mb-4">
+									<img src="<?= BASE_URL.LOGO?>" alt="STYX Logo" style="max-width: 180px;" class="mb-4">
 									<h2 class="fw-bold mb-3">📘 STYX Admin Dokumentation</h2>
 									<p class="text-muted mx-auto" style="max-width: 600px;">
 										Diese Dokumentation bietet dir eine vollständige Übersicht über alle administrativen Module im System von STYX Naturkosmetik.
@@ -37,24 +41,90 @@
 									<p class="text-secondary">
 										Klicke links auf eine Sektion, um deren Beschreibung und technische Details anzuzeigen.
 									</p>
+									<p>Erstellt von: Huszarik Jan | STYX Grafik & Marketing</p>
 								</div>
 							</div>
 							<div class="tab-pane fade" id="menuverwaltung" role="tabpanel" aria-labelledby="menuverwaltung-tab">
 								<div class="doc-section">
-									<h4 class="mb-3"><i class="fas fa-folder-open text-primary me-2"></i>📁 Menüverwaltung</h4>
+									<h3 class="mb-4"><i></i>📁 Menüverwaltung</h3>
 									<section class="mb-4">
 										<h5 class="text-success"><i class="fas fa-user me-1"></i>Was macht dieses Modul?</h5>
 										<p>
-											In der Menüverwaltung kannst du alle Navigationspunkte der Website zentral verwalten.
-											Du kannst neue Menüpunkte erstellen, bestehende bearbeiten, sortieren oder löschen.
-											Dabei ist es wichtig, dass die Struktur übersichtlich bleibt, um die Benutzerfreundlichkeit im Frontend zu gewährleisten.
+											Im Modul Menüverwaltung kannst du zentral alle Navigationspunkte deiner Website verwalten. <br>
+											<b>In diesem Bereich werden auch die Hauptkategorien für Artikel im Bereich „Beiträge Manager“ automatisch erstellt.</b> <br>
+											Dies bedeutet: Sobald du einen neuen Menüpunkt erstellst, die Hauptinformationen im Formular ausfüllst und speicherst, wird gleichzeitig ein Menüpunkt <b>und</b> auch eine neue Kategorie im Beiträge Manager angelegt.
 										</p>
+									</section>
+
+									<section class="mb-4">
+										<h5 class="text-primary"><i class="fas fa-list-ol me-1"></i>Wie funktioniert das Erstellen eines Menüpunktes?</h5>
 										<ul>
-											<li>Jeder Menüpunkt besitzt eine Sprache, Bezeichnung und Ziel-URL.</li>
-											<li>Untermenüs lassen sich durch Hierarchie (Parent-ID) erstellen.</li>
-											<li>Die Reihenfolge kann per Drag & Drop angepasst werden.</li>
+											<li>
+												<strong>Sprache einstellen:</strong><br>
+												Beim Anlegen eines Menüpunkts ist der erste Schritt die Spracheinstellung. Stelle die gewünschte Anzeigesprache ein. Wird zum Beispiel „Deutsch“ gewählt, erscheint dieser Menüpunkt <b>nur</b> in der deutschen Version der Webseite. Im Beiträge Manager wird automatisch eine neue Kategorie mit der Sprache Deutsch erstellt.<br>
+												<strong>Hinweis:</strong> Achte darauf, beim Erstellen die Sprache korrekt zu setzen – bei Bedarf sollten gleich beide Sprachversionen angelegt werden.
+											</li>
+											<li>
+												<strong>Aktiv/Inaktiv:</strong><br>
+												Lege fest, ob der Menüpunkt aktiv (sichtbar im Menü) oder inaktiv (unsichtbar im Menü, aber als Unterseite verfügbar) sein soll.<br>
+												<strong>Tipp:</strong> Für neue Kategorien, die auf der Webseite verwendet werden, aber nicht im Menü sichtbar sein sollen, wähle „Inaktiv“. Die Kategorie ist dann im Beiträge Manager nutzbar, aber nicht im Hauptmenü sichtbar.
+											</li>
+											<li>
+												<strong>Hauptname:</strong><br>
+												Der eingegebene Name ist sichtbar in der Menüleiste und wird ein Teil der URL-Adresse für die zugehörigen Beiträge.<br>
+												Verwende <b>keine</b> Sonderzeichen und Umlaute (z. B. ß, ä, ü usw.) als Namen – das System ersetzt sie automatisch, aber das kann zu unschönen URLs führen.<br>
+												<strong>Empfehlung:</strong> Wähle möglichst einfache, klare Namen ohne Akzente oder Sonderzeichen.
+											</li>
+											<li>
+												<strong>URL:</strong><br>
+												Die URL wird automatisch aus dem Namen generiert. Sie kann beim Bearbeiten angepasst werden, falls das System Sonderzeichen nicht korrekt verarbeitet.
+											</li>
+											<li>
+												<strong>Zugehörigkeit/Hierarchie:</strong><br>
+												Dies ist der wichtigste Schritt für die Struktur.<br>
+												Es gibt zwei Möglichkeiten:
+												<ul>
+													<li><b>Hauptmenü:</b> Der Menüpunkt steht ganz oben in der Navigation.</li>
+													<li><b>Unterpunkt:</b> Wenn der Menüpunkt einem bestehenden Hauptmenüpunkt zugeordnet werden soll, wähle den gewünschten „Elternpunkt“ (Parent) aus.<br>
+														<strong>Beispiel:</strong> Erstellst du einen Menüpunkt „Kontakt“, und das soll ein Hauptmenüpunkt sein, dann wähle „Hauptmenü: Ja“. <br>
+														Erstellst du z.B. „Kontaktformular“ als Unterseite, wähle als Parent „Kontakt“.
+													</li>
+												</ul>
+												<strong>Hinweis:</strong> Damit ein Menüpunkt als „Elternpunkt“ wählbar ist, muss dieser zuerst erstellt und als „Leerer Menü Button“ markiert werden!
+											</li>
+											<li>
+												<strong>Position:</strong><br>
+												Die Reihenfolge der Menüpunkte wird durch Positionsnummern bestimmt (beginnend bei 0 = ganz oben). Unterpunkte haben ebenfalls eigene Positionsnummern (ab 0).
+											</li>
+											<li>
+												<strong>Leerer Menü Button:</strong><br>
+												Dies sollte aktiviert werden, wenn ein Hauptmenüpunkt nicht anklickbar sein soll (z. B. als reiner „Kategoriekopf“).<br>
+												<strong>Sehr wichtig:</strong> Ist dies nicht aktiviert, kann der Hauptmenüpunkt angeklickt werden, was dazu führt, dass auf Mobilgeräten das Ausklappen der Unterpunkte nicht korrekt funktioniert.
+											</li>
 										</ul>
 									</section>
+
+									<section class="mb-4">
+										<h5 class="text-warning"><i class="fas fa-info-circle me-1"></i>Zusätzliche Hinweise & Tipps</h5>
+										<ul>
+											<li>
+												Hauptmenüpunkte, denen Unterpunkte zugeordnet werden sollen, <b>müssen</b> als „Leerer Menü Button“ markiert sein, damit die Navigation – besonders auf Mobilgeräten – korrekt funktioniert.
+											</li>
+											<li>
+												Änderungen werden sofort im Frontend sichtbar – teste die Navigation nach jeder Änderung.
+											</li>
+											<li>
+												Vermeide doppelte Slugs, um Routing-Probleme zu verhindern.
+											</li>
+											<li>
+												Halte die Struktur möglichst flach (maximal 2–3 Hierarchieebenen).
+											</li>
+											<li>
+												Menüpunkte und Kategorien werden automatisch im Beiträge Manager angelegt – beachte immer die richtige Spracheinstellung.
+											</li>
+										</ul>
+									</section>
+
 									<section class="mb-4">
 										<h5 class="text-primary"><i class="fas fa-code me-1"></i>Technische Umsetzung</h5>
 										<ul>
@@ -62,22 +132,15 @@
 											<li><strong>Model:</strong> <code>Admin_model::menuSave()</code>, <code>getFullMenu()</code></li>
 											<li><strong>View (Formular):</strong> <code>views/admin/settings/menu_form.php</code></li>
 											<li><strong>View (Liste):</strong> <code>views/admin/settings/menu.php</code></li>
-											<li><strong>Datenbank:</strong> Tabelle <code>menu</code> mit:
+											<li>
+												<strong>Datenbank:</strong> Tabelle <code>menu</code> mit:
 												<code>id</code>, <code>name</code>, <code>url</code>, <code>lang</code>, <code>parent</code>, <code>orderBy</code>, <code>active</code>, <code>created_at</code>, <code>updated_at</code>
 											</li>
 											<li><strong>Validierung:</strong> Alle Felder sind verpflichtend, außer <code>parent</code></li>
 										</ul>
 									</section>
-									<section>
-										<h5 class="text-warning"><i class="fas fa-info-circle me-1"></i>Hinweise & Tipps</h5>
-										<ul>
-											<li>Änderungen werden sofort im Frontend sichtbar – teste die Navigation nach jeder Änderung.</li>
-											<li>Jede Sprache hat ihre eigene Menüstruktur (z. B. <code>de</code>, <code>en</code>, <code>sk</code>).</li>
-											<li>Vermeide doppelte Slugs – das kann zu Routing-Problemen führen.</li>
-											<li>Halte die Struktur flach (max. 2–3 Hierarchieebenen).</li>
-										</ul>
-									</section>
 								</div>
+
 							</div>
 							<div class="tab-pane fade" id="slider" role="tabpanel" aria-labelledby="slider-tab">
 								<div class="doc-section">
@@ -117,12 +180,9 @@
 							</div>
 						</div>
 					</div>
-					<!-- /Pravý obsah -->
 				</div>
 			</div>
 		</section>
 	</div>
 </div>
 
-<!-- Bootstrap JS (na koniec body ak ešte nemáš) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
