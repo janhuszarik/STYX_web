@@ -76,6 +76,11 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 		width: 100%;
 		margin-top: 10px;
 	}
+	.input-group .btn {
+		height: 38px;
+		padding: 6px 12px;
+		margin-left: -1px;
+	}
 </style>
 
 <div class="row">
@@ -119,11 +124,19 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 					</div>
 
 					<div class="row form-group pb-3">
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<label for="category_name" class="col-form-label">Kategorie</label>
 							<input type="text" class="form-control" id="category_name" name="category_name" value="<?= htmlspecialchars($categoryName) ?>" readonly>
 						</div>
-						<div class="col-md-4">
+
+						<div class="col-md-3">
+							<label for="slug_display" class="col-form-label">URL-Adresse
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-Adresse wird automatisch generiert und setzt sich aus der gewählten Sprache, dem Hauptmenüpunkt und dem letzten Menüpunkt zusammen, unter dem dieser Artikel gespeichen wird."></i>
+							</label>
+							<input type="text" class="form-control" id="slug_display" name="slug_display" value="https://www.styx.at/<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
+							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>">
+						</div>
+						<div class="col-md-3">
 							<label for="subcategory_id" class="col-form-label">Unterkategorie
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wählen Sie eine Unterkategorie für den Artikel aus oder erstellen Sie eine neue. Dies ermöglicht eine detaillierte Filterung der Artikel, z. B. nach Themen wie ‚Schokolade‘."></i>
 							</label>
@@ -142,17 +155,7 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 								</button>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<label for="slug_display" class="col-form-label">URL-Adresse
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-Adresse wird automatisch generiert und setzt sich aus der gewählten Sprache, dem Hauptmenüpunkt und dem letzten Menüpunkt zusammen, unter dem dieser Artikel gespeichen wird."></i>
-							</label>
-							<input type="text" class="form-control" id="slug_display" name="slug_display" value="https://www.styx.at/<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
-							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>">
-						</div>
-					</div>
-
-					<div class="row form-group pb-3">
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<label for="is_main" class="col-form-label">Hauptartikel
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Dieser Abschnitt legt fest, ob dieser Artikel als Hauptartikel bestimmt ist oder ob er zur Artikelliste gehören soll, in der die Artikel den Benutzern als Liste angezeigt werden. Wenn „Ja“ gewählt ist, handelt es sich um einen eigenständigen / einzigen Artikel in dieser Kategorie."></i>
 							</label>
@@ -162,7 +165,6 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 							</select>
 						</div>
 					</div>
-
 					<div class="row form-group pb-3">
 						<div class="col-md-8">
 							<label for="image" class="col-form-label">Hauptbild hochladen</label>
@@ -582,6 +584,10 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 
 		// Inicializácia Summernote
 		const initSummernote = (selector) => {
+			if (typeof jQuery === 'undefined') {
+				console.error('jQuery is not loaded. Please include jQuery before this script.');
+				return;
+			}
 			$(selector).summernote({
 				height: 300,
 				lang: 'de-DE',
@@ -635,54 +641,60 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 
 		// Funkcia pre pridanie sekcie
 		const addSection = (content = '', image = '', imageTitle = '', buttonName = '', subpage = '', externalUrl = '', index) => {
+			console.log('Adding section with index:', index); // Debug log
 			const sectionHtml = `
-            <div class="section mb-4 p-3 border rounded">
-                <input type="hidden" name="sections[${index}]" value="section-${index}">
-                <div class="mb-3">
-                    <label class="col-form-label">Inhalt</label>
-                    <textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-form-label">Bild hochladen</label>
-                        <input type="file" class="form-control mb-1" name="section_images[${index}]">
-                        <input type="hidden" name="old_section_image[${index}]" value="${image}">
-                        <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
-                        <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
-                            Bild aus FTP wählen
-                        </button>
-                        <div id="ftpSectionImagePreview_${index}" class="mb-2">
-                            ${image ? `<img src="${image}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
+                <div class="section mb-4 p-3 border rounded">
+                    <input type="hidden" name="sections[${index}]" value="section-${index}">
+                    <div class="mb-3">
+                        <label class="col-form-label">Inhalt</label>
+                        <textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-form-label">Bild hochladen</label>
+                            <input type="file" class="form-control mb-1" name="section_images[${index}]">
+                            <input type="hidden" name="old_section_image[${index}]" value="${image}">
+                            <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
+                            <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
+                                Bild aus FTP wählen
+                            </button>
+                            <div id="ftpSectionImagePreview_${index}" class="mb-2">
+                                ${image ? `<img src="${image}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
+                            </div>
+                            <label class="col-form-label">Bildtitel (SEO)</label>
+                            <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
                         </div>
-                        <label class="col-form-label">Bildtitel (SEO)</label>
-                        <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
+                        <div class="col-md-6">
+                            <label class="col-form-label">Button-Text</label>
+                            <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
+                            <label class="col-form-label">Unterseite</label>
+                            <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
+                                <option value="">-- Unterseite auswählen --</option>
+                                ${articleOptions.map(opt => `
+                                    <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
+                                        ${opt.label} (${opt.lang})
+                                    </option>
+                                `).join('')}
+                            </select>
+                            <label class="col-form-label">Externe URL</label>
+                            <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label">Button-Text</label>
-                        <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
-                        <label class="col-form-label">Unterseite</label>
-                        <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
-                            <option value="">-- Unterseite auswählen --</option>
-                            ${articleOptions.map(opt => `
-                                <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
-                                    ${opt.label} (${opt.lang})
-                                </option>
-                            `).join('')}
-                        </select>
-                        <label class="col-form-label">Externe URL</label>
-                        <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
+                    <div class="section-actions">
+                        <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
                     </div>
                 </div>
-                <div class="section-actions">
-                    <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
-                </div>
-            </div>
-        `;
+            `;
 			const sectionsContainer = document.getElementById('sections-container');
-			sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
-			initSummernote(`#sections-container .section:last-child .section-content`);
-			bindRemoveSection();
-			bindFtpPicker();
+			if (sectionsContainer) {
+				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
+				initSummernote(`#sections-container .section:last-child .section-content`);
+				bindRemoveSection();
+				bindFtpPicker();
+				console.log('Section added successfully'); // Debug log
+			} else {
+				console.error('Sections container not found'); // Debug log
+			}
 		};
 
 		// Funkcia pre viazanie tlačidla na odstránenie sekcie
@@ -726,7 +738,8 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 		<?php endif; ?>
 
 		// Pridanie novej sekcie
-		document.getElementById('add-section').addEventListener('click', () => {
+		document.getElementById('add-section').addEventListener('click', function () {
+			console.log('Add section button clicked'); // Debug log
 			const sections = document.querySelectorAll('#sections-container .section').length;
 			addSection('', '', '', '', '', '', sections);
 		});
