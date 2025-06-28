@@ -639,52 +639,63 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 			});
 		};
 
-		// Funkcia pre pridanie sekcie
+
 		const addSection = (content = '', image = '', imageTitle = '', buttonName = '', subpage = '', externalUrl = '', index) => {
 			console.log('Adding section with index:', index); // Debug log
 			const sectionHtml = `
-                <div class="section mb-4 p-3 border rounded">
-                    <input type="hidden" name="sections[${index}]" value="section-${index}">
-                    <div class="mb-3">
-                        <label class="col-form-label">Inhalt</label>
-                        <textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-form-label">Bild hochladen</label>
-                            <input type="file" class="form-control mb-1" name="section_images[${index}]">
-                            <input type="hidden" name="old_section_image[${index}]" value="${image}">
-                            <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
-                            <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
-                                Bild aus FTP wählen
-                            </button>
-                            <div id="ftpSectionImagePreview_${index}" class="mb-2">
-                                ${image ? `<img src="${image}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
-                            </div>
-                            <label class="col-form-label">Bildtitel (SEO)</label>
-                            <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="col-form-label">Button-Text</label>
-                            <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
-                            <label class="col-form-label">Unterseite</label>
-                            <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
-                                <option value="">-- Unterseite auswählen --</option>
-                                ${articleOptions.map(opt => `
-                                    <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
-                                        ${opt.label} (${opt.lang})
-                                    </option>
-                                `).join('')}
-                            </select>
-                            <label class="col-form-label">Externe URL</label>
-                            <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
-                        </div>
-                    </div>
-                    <div class="section-actions">
-                        <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
-                    </div>
+        <div class="section mb-4 p-3 border rounded">
+            <input type="hidden" name="sections[${index}]" value="section-${index}">
+            <div class="row">
+                <div class="col-md-9">
+                    <label class="col-form-label">Inhalt</label>
+                    <textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
                 </div>
-            `;
+                <div class="col-md-3">
+                    <label class="col-form-label">Bild hochladen</label>
+                    <input type="file" class="form-control mb-1" name="section_images[${index}]">
+                    <input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
+                    <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
+                    <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
+                        Bild aus FTP wählen
+                    </button>
+                    <div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
+                        ${image ? `
+                            <img src="${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
+                            <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
+                                &times;
+                            </button>
+                        ` : ''}
+                    </div>
+                    <label class="col-form-label">Bildtitel (SEO)</label>
+                    <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <label class="col-form-label">Button-Text</label>
+                    <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
+                </div>
+                <div class="col-md-4">
+                    <label class="col-form-label">Unterseite</label>
+                    <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
+                        <option value="">-- Unterseite auswählen --</option>
+                        ${articleOptions.map(opt => `
+                            <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
+                                ${opt.label} (${opt.lang})
+                            </option>
+                        `).join('')}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="col-form-label">Externe URL</label>
+                    <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
+                </div>
+            </div>
+            <div class="section-actions mt-3">
+                <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+            </div>
+        </div>
+    `;
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
