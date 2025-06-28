@@ -660,9 +660,9 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
                     </button>
                     <div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
                         ${image ? `
-                            <img src="${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
+                            <img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
                             <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
-                                &times;
+                                ×
                             </button>
                         ` : ''}
                     </div>
