@@ -19,8 +19,6 @@ class Article extends CI_Controller
 		$this->Article_model->syncMenuWithArticleCategories();
 
 		if (!empty($post)) {
-			log_message('debug', 'Received POST data in articleCategoriesSave: ' . print_r($post, true));
-
 			if (!empty($post['id'])) {
 				$existing = $this->Article_model->getArticleCategories($post['id']);
 				if (!empty($existing->menu_id) || !empty($existing->submenu_id)) {
@@ -161,8 +159,6 @@ class Article extends CI_Controller
 		$this->load->library('upload');
 
 		if (!empty($post)) {
-			log_message('debug', 'Received POST data in articlesSave: ' . print_r($post, true));
-
 			if (!empty($id)) {
 				$article = $this->Article_model->getArticle($id);
 				$post['category_id'] = $article->category_id ?? null;
@@ -178,7 +174,6 @@ class Article extends CI_Controller
 				}
 			}
 
-			// Handle slug with language prefix
 			$lang = $post['lang'] ?? 'de';
 			if (!empty($post['menu_select'])) {
 				$parts = explode('/', trim($post['menu_select'], '/'));
@@ -194,7 +189,6 @@ class Article extends CI_Controller
 				redirect(BASE_URL . 'admin/articles_in_category/' . $post['category_id']);
 			}
 
-			// Presunuté nahrávanie hlavného obrázka do saveArticle
 			if (!empty($_FILES['image']['name'])) {
 				$post['image'] = '';
 			} else {
@@ -223,10 +217,8 @@ class Article extends CI_Controller
 				}
 			}
 
-			log_message('debug', 'Processed sections: ' . print_r($sections, true));
 			$post['sections_data'] = $sections;
 
-			// Handle is_main
 			$post['is_main'] = isset($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
 
 			if ($this->Article_model->saveArticle($post)) {
@@ -392,7 +384,6 @@ class Article extends CI_Controller
 			->set_output(json_encode($response));
 	}
 
-
 	public function getSubcategories()
 	{
 		$categoryId = $this->input->post('category_id');
@@ -411,7 +402,8 @@ class Article extends CI_Controller
 		echo json_encode(['success' => true, 'options' => $options]);
 	}
 
-	public function manageSubcategory() {
+	public function manageSubcategory()
+	{
 		$category_id = $this->input->post('category_id');
 		$id = $this->input->post('id');
 		$name = $this->input->post('name');
@@ -430,8 +422,18 @@ class Article extends CI_Controller
 			'active' => $active
 		];
 
-		// Kontrola duplicity pre nový záznam
-		if (!$id) {
+		if ($id && is_numeric($id)) {
+			$existing = $this->Article_model->getSubcategory($id, $category_id);
+			if (!$existing) {
+				echo json_encode(['success' => false, 'message' => 'Unterkategorie nicht gefunden.']);
+				return;
+			}
+			$existing_by_name = $this->Article_model->getSubcategoryByNameAndCategory($category_id, $name);
+			if ($existing_by_name && $existing_by_name->id != $id) {
+				echo json_encode(['success' => false, 'message' => 'Eine Unterkategorie mit diesem Namen existiert bereits in dieser Kategorie.']);
+				return;
+			}
+		} else {
 			$existing = $this->Article_model->getSubcategoryByNameAndCategory($category_id, $name);
 			if ($existing) {
 				echo json_encode(['success' => false, 'message' => 'Eine Unterkategorie mit diesem Namen existiert bereits in dieser Kategorie.']);
@@ -439,34 +441,37 @@ class Article extends CI_Controller
 			}
 		}
 
-		if ($id) {
-			$this->Article_model->saveSubcategory(['id' => $id] + $data);
-			$message = 'Unterkategorie wurde aktualisiert.';
+		$result = $this->Article_model->saveSubcategory($data + ($id ? ['id' => $id] : []));
+		if ($result) {
+			$subcategory = $this->Article_model->getSubcategory($id ?: $result, $category_id);
+			echo json_encode([
+				'success' => true,
+				'message' => $id ? 'Unterkategorie wurde aktualisiert.' : 'Unterkategorie wurde erstellt.',
+				'subcategory' => $subcategory
+			]);
 		} else {
-			$id = $this->Article_model->saveSubcategory($data);
-			$message = 'Unterkategorie wurde erstellt.';
+			echo json_encode(['success' => false, 'message' => 'Fehler beim Speichern der Unterkategorie.']);
 		}
-
-		$subcategory = $this->Article_model->getSubcategory($id);
-		echo json_encode(['success' => true, 'message' => $message, 'subcategory' => $subcategory]);
 	}
 
 	public function deleteSubcategory()
 	{
 		$id = $this->input->post('id');
-		if (!$id || !is_numeric($id)) {
-			echo json_encode(['success' => false, 'message' => 'Ungültige Unterkategorie-ID.']);
+		$category_id = $this->input->post('category_id');
+		if (!$id || !is_numeric($id) || !$category_id) {
+			echo json_encode(['success' => false, 'message' => 'Ungültige Unterkategorie-ID oder Kategorie-ID.']);
 			return;
 		}
 
-		if ($this->Article_model->deleteSubcategory($id)) {
+		if ($this->Article_model->deleteSubcategory($id, $category_id)) {
 			echo json_encode(['success' => true, 'message' => 'Unterkategorie erfolgreich gelöscht.']);
 		} else {
 			echo json_encode(['success' => false, 'message' => 'Fehler beim Löschen der Unterkategorie.']);
 		}
 	}
 
-	public function getSubcategoriesForManagement() {
+	public function getSubcategoriesForManagement()
+	{
 		$category_id = $this->input->post('category_id');
 		if (!$category_id) {
 			echo json_encode(['success' => false, 'message' => 'Fehlende category_id.']);
@@ -500,10 +505,5 @@ class Article extends CI_Controller
 			$html = '<tr><td colspan="5">Keine Unterkategorien.</td></tr>';
 		}
 		echo json_encode(['success' => true, 'html' => $html]);
-	}
-
-	public function getSubcategoryByNameAndCategory($category_id, $name)
-	{
-		return $this->db->get_where('article_subcategories', ['category_id' => $category_id, 'name' => $name])->row();
 	}
 }

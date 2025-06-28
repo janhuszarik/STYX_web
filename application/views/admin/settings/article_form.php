@@ -17,7 +17,6 @@ $categoryId = isset($article) ? $article->category_id : ($categoryId ?? $CI->uri
 
 $CI->load->helper('app_helper');
 
-// Načítaj zoznam všetkých článkov okrem aktuálneho
 $CI->load->model('Article_model');
 $articles = $CI->Article_model->getAllArticlesExcept($article->id ?? null);
 $articleOptions = [];
@@ -45,8 +44,10 @@ if (isset($article) && !empty($article->slug)) {
 	}
 }
 
-// Načítaj podkategórie
-$subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
+$subcategories = [];
+if (in_array($categoryId, [100, 102])) {
+	$subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
+}
 ?>
 
 <style>
@@ -128,7 +129,6 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 							<label for="category_name" class="col-form-label">Kategorie</label>
 							<input type="text" class="form-control" id="category_name" name="category_name" value="<?= htmlspecialchars($categoryName) ?>" readonly>
 						</div>
-
 						<div class="col-md-3">
 							<label for="slug_display" class="col-form-label">URL-Adresse
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-Adresse wird automatisch generiert und setzt sich aus der gewählten Sprache, dem Hauptmenüpunkt und dem letzten Menüpunkt zusammen, unter dem dieser Artikel gespeichen wird."></i>
@@ -136,25 +136,27 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 							<input type="text" class="form-control" id="slug_display" name="slug_display" value="https://www.styx.at/<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
 							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>">
 						</div>
-						<div class="col-md-3">
-							<label for="subcategory_id" class="col-form-label">Unterkategorie
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wählen Sie eine Unterkategorie für den Artikel aus oder erstellen Sie eine neue. Dies ermöglicht eine detaillierte Filterung der Artikel, z. B. nach Themen wie ‚Schokolade‘."></i>
-							</label>
-							<div class="input-group">
-								<select name="subcategory_id" id="subcategory_id" class="form-control">
-									<option value="">-- Unterkategorie auswählen --</option>
-									<option value="new">+ Neue Unterkategorie erstellen</option>
-									<?php foreach ($subcategories as $sub): ?>
-										<option value="<?= htmlspecialchars($sub->id) ?>" <?= isset($article->subcategory_id) && $article->subcategory_id == $sub->id ? 'selected' : '' ?>>
-											<?= htmlspecialchars($sub->name) ?>
-										</option>
-									<?php endforeach; ?>
-								</select>
-								<button type="button" class="btn btn-outline-primary" id="manageSubcategoriesBtn" data-bs-toggle="modal" data-bs-target="#subcategoryModal">
-									<i class="fas fa-cog"></i> Verwalten
-								</button>
+						<?php if (in_array($categoryId, [100, 102])): ?>
+							<div class="col-md-3">
+								<label for="subcategory_id" class="col-form-label">Unterkategorie (nur bei Tipps & Neuigkeiten)
+									<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wählen Sie eine Unterkategorie für den Artikel aus oder erstellen Sie eine neue. Dies ermöglicht eine detaillierte Filterung der Artikel, z. B. nach Themen wie ‚Schokolade‘."></i>
+								</label>
+								<div class="input-group">
+									<select name="subcategory_id" id="subcategory_id" class="form-control">
+										<option value="">-- Unterkategorie auswählen --</option>
+										<option value="new">+ Neue Unterkategorie erstellen</option>
+										<?php foreach ($subcategories as $sub): ?>
+											<option value="<?= htmlspecialchars($sub->id) ?>" <?= isset($article->subcategory_id) && $article->subcategory_id == $sub->id ? 'selected' : '' ?>>
+												<?= htmlspecialchars($sub->name) ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+									<button type="button" class="btn btn-outline-primary" id="manageSubcategoriesBtn" data-bs-toggle="modal" data-bs-target="#subcategoryModal">
+										<i class="fas fa-cog"></i> Verwalten
+									</button>
+								</div>
 							</div>
-						</div>
+						<?php endif; ?>
 						<div class="col-md-3">
 							<label for="is_main" class="col-form-label">Hauptartikel
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Dieser Abschnitt legt fest, ob dieser Artikel als Hauptartikel bestimmt ist oder ob er zur Artikelliste gehören soll, in der die Artikel den Benutzern als Liste angezeigt werden. Wenn „Ja“ gewählt ist, handelt es sich um einen eigenständigen / einzigen Artikel in dieser Kategorie."></i>
@@ -355,7 +357,6 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 	</div>
 </div>
 
-<!-- Modálne okno pre správu podkategórií -->
 <div class="modal fade" id="subcategoryModal" tabindex="-1" aria-labelledby="subcategoryModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -424,165 +425,203 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 		const subcategoryForm = document.getElementById('subcategoryForm');
 		const subcategoryTableBody = document.getElementById('subcategoryTableBody');
 		const categoryId = '<?= htmlspecialchars($categoryId) ?>';
+		const allowedCategoryIds = ['100', '102'];
 
-		// Funkcia pre zobrazenie alertu
 		function showAlert(message, type = 'success') {
 			const alertDiv = document.createElement('div');
 			alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
 			alertDiv.style.zIndex = '1050';
 			alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
 			document.body.appendChild(alertDiv);
-			setTimeout(() => alertDiv.remove(), 3000); // Zmizne po 3 sekundách
+			setTimeout(() => alertDiv.remove(), 3000);
 		}
 
-		// Funkcia pre načítanie podkategórií
-		function loadSubcategories() {
-			fetch('<?= base_url('admin/article/getSubcategories') ?>', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: 'category_id=' + encodeURIComponent(categoryId)
-			})
-				.then(response => response.json())
-				.then(data => {
-					if (data.success) {
-						subcategorySelect.innerHTML = data.options;
-					} else {
-						showAlert(data.message || 'Fehler beim Laden der Unterkategorien.', 'error');
-					}
+		if (allowedCategoryIds.includes(categoryId)) {
+			function loadSubcategories() {
+				fetch('<?= base_url('admin/article/getSubcategories') ?>', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: 'category_id=' + encodeURIComponent(categoryId)
 				})
-				.catch(error => {
-					console.error('Error:', error);
-					showAlert('Fehler beim Laden der Unterkategorien.', 'error');
-				});
-		}
-
-		// Funkcia pre načítanie podkategórií do tabuľky v modálnom okne
-		function loadSubcategoriesForManagement() {
-			fetch('<?= base_url('admin/article/getSubcategoriesForManagement') ?>', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: 'category_id=' + encodeURIComponent('<?= htmlspecialchars($categoryId) ?>') + '&<?= $this->security->get_csrf_token_name() ?>=' + '<?= $this->security->get_csrf_hash() ?>'
-			})
-				.then(response => response.json())
-				.then(data => {
-					if (data.success) {
-						subcategoryTableBody.innerHTML = data.html;
-						bindSubcategoryActions();
-					} else {
-						subcategoryTableBody.innerHTML = '<tr><td colspan="5">Fehler beim Laden der Unterkategorien.</td></tr>';
-					}
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					subcategoryTableBody.innerHTML = '<tr><td colspan="5">Fehler beim Laden der Unterkategorien.</td></tr>';
-				});
-		}
-
-		subcategoryForm.addEventListener('submit', function (e) {
-			e.preventDefault();
-			console.log('Form submit triggered'); // Debug log
-			if (this.dataset.submitting) return; // Zabránenie duplicitnému odoslaniu
-			this.dataset.submitting = true;
-
-			const formData = new FormData(this);
-			const data = new URLSearchParams();
-			for (let [key, value] of formData.entries()) {
-				data.append(key, value);
-			}
-			data.append('<?= $this->security->get_csrf_token_name() ?>', '<?= $this->security->get_csrf_hash() ?>');
-
-			fetch('<?= base_url('admin/article/manageSubcategory') ?>', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: data
-			})
-				.then(response => {
-					console.log('Response received:', response); // Debug log
-					return response.json();
-				})
-				.then(data => {
-					this.dataset.submitting = false; // Uvoľnenie po dokončení
-					if (data.success) {
-						showAlert(data.message);
-						loadSubcategories();
-						loadSubcategoriesForManagement();
-						bootstrap.Modal.getInstance(document.getElementById('subcategoryModal')).hide();
-						subcategorySelect.value = data.subcategory.id;
-					} else {
-						showAlert(data.message || 'Fehler beim Speichern der Unterkategorie.', 'error');
-					}
-				})
-				.catch(error => {
-					this.dataset.submitting = false; // Uvoľnenie pri chybe
-					console.error('Error:', error);
-					showAlert('Fehler beim Speichern der Unterkategorie.', 'error');
-				});
-		});
-
-		// Funkcia pre viazanie akcií tlačidiel v tabuľke podkategórií
-		function bindSubcategoryActions() {
-			document.querySelectorAll('.edit-subcategory').forEach(button => {
-				button.addEventListener('click', function () {
-					const id = this.getAttribute('data-id');
-					const name = this.getAttribute('data-name');
-					document.getElementById('subcategory_id').value = id;
-					document.getElementById('subcategory_name').value = name;
-					document.getElementById('subcategory_lang').value = this.closest('tr').querySelector('select[name^="lang_"]').value;
-					document.getElementById('subcategory_active').checked = this.closest('tr').querySelector('input[name^="active_"]').checked;
-				});
-			});
-
-			document.querySelectorAll('.delete-subcategory').forEach(button => {
-				button.addEventListener('click', function () {
-					if (!confirm('Sind Sie sicher, dass Sie diese Unterkategorie löschen möchten?')) return;
-					const id = this.getAttribute('data-id');
-					fetch('<?= base_url('admin/article/deleteSubcategory') ?>', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded',
-						},
-						body: 'id=' + encodeURIComponent(id)
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							subcategorySelect.innerHTML = data.options;
+						} else {
+							showAlert(data.message || 'Fehler beim Laden der Unterkategorien.', 'error');
+						}
 					})
-						.then(response => response.json())
-						.then(data => {
-							if (data.success) {
-								showAlert(data.message);
-								loadSubcategories();
-								loadSubcategoriesForManagement();
-							} else {
-								showAlert(data.message || 'Fehler beim Löschen der Unterkategorie.', 'error');
-							}
-						})
-						.catch(error => {
-							console.error('Error:', error);
-							showAlert('Fehler beim Löschen der Unterkategorie.', 'error');
-						});
-				});
-			});
-		}
+					.catch(error => {
+						console.error('Error:', error);
+						showAlert('Fehler beim Laden der Unterkategorien.', 'error');
+					});
+			}
 
-		// Pri zmene výberu podkategórie
-		subcategorySelect.addEventListener('change', function () {
-			if (this.value === 'new') {
-				document.getElementById('subcategory_name').value = '';
+			function loadSubcategoriesForManagement() {
+				fetch('<?= base_url('admin/article/getSubcategoriesForManagement') ?>', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: 'category_id=' + encodeURIComponent(categoryId) + '&<?= $this->security->get_csrf_token_name() ?>=' + '<?= $this->security->get_csrf_hash() ?>'
+				})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							subcategoryTableBody.innerHTML = data.html;
+							bindSubcategoryActions();
+						} else {
+							subcategoryTableBody.innerHTML = '<tr><td colspan="5">Fehler beim Laden der Unterkategorien.</td></tr>';
+							showAlert(data.message || 'Fehler beim Laden der Unterkategorien.', 'error');
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+						subcategoryTableBody.innerHTML = '<tr><td colspan="5">Fehler beim Laden der Unterkategorien.</td></tr>';
+						showAlert('Fehler beim Laden der Unterkategorien.', 'error');
+					});
+			}
+
+			function resetSubcategoryForm() {
+				subcategoryForm.reset();
 				document.getElementById('subcategory_id').value = '';
+				document.getElementById('subcategory_name').value = '';
 				document.getElementById('subcategory_lang').value = 'de';
 				document.getElementById('subcategory_active').checked = true;
-				new bootstrap.Modal(document.getElementById('subcategoryModal')).show();
-				this.value = '';
+
+				// Reset flagu, aby formulár mohol byť opäť odoslaný
+				subcategoryForm.removeAttribute('data-submitting');
 			}
-		});
 
-		// Načítanie podkategórií pri otvorení modálneho okna
-		manageSubcategoriesBtn.addEventListener('click', loadSubcategoriesForManagement);
+			const subcategoryModal = document.getElementById('subcategoryModal');
+			subcategoryModal.addEventListener('hidden.bs.modal', function () {
+				resetSubcategoryForm();
+			});
 
-		// Inicializácia Summernote
+
+
+			subcategoryForm.addEventListener('submit', function (e) {
+				e.preventDefault();
+				if (this.dataset.submitting) return;
+				this.dataset.submitting = true;
+
+				const formData = new FormData(this);
+				const data = new URLSearchParams();
+				for (let [key, value] of formData.entries()) {
+					data.append(key, value);
+				}
+				data.append('category_id', categoryId);
+				data.append('<?= $this->security->get_csrf_token_name() ?>', '<?= $this->security->get_csrf_hash() ?>');
+
+				fetch('<?= base_url('admin/article/manageSubcategory') ?>', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: data
+				})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Network response was not ok');
+						}
+						return response.json();
+					})
+					.then(data => {
+						this.dataset.submitting = false;
+						if (data.success) {
+							showAlert(data.message || 'Unterkategorie erfolgreich gespeichert.', 'success');
+							const modalEl = document.getElementById('subcategoryModal');
+							const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+							modalInstance.hide();
+							loadSubcategories();
+							loadSubcategoriesForManagement();
+							if (data.subcategory && data.subcategory.id) {
+								setTimeout(() => {
+									subcategorySelect.value = data.subcategory.id;
+								}, 150);
+							}
+							resetSubcategoryForm();
+						} else {
+							showAlert(data.message || 'Fehler beim Speichern der Unterkategorie.', 'error');
+						}
+					})
+					.catch(error => {
+						this.dataset.submitting = false;
+						console.error('Error:', error);
+						showAlert('Fehler beim Speichern der Unterkategorie: ' + error.message, 'error');
+					});
+			});
+
+			function bindSubcategoryActions() {
+				document.querySelectorAll('.edit-subcategory').forEach(button => {
+					button.addEventListener('click', function () {
+						const id = this.getAttribute('data-id');
+						const name = this.getAttribute('data-name');
+						const lang = this.closest('tr').querySelector('select[name^="lang_"]').value;
+						const active = this.closest('tr').querySelector('input[name^="active_"]').checked;
+						subcategoryForm.querySelector('input[name="id"]').value = id;
+						document.getElementById('subcategory_name').value = name;
+						document.getElementById('subcategory_lang').value = lang;
+						document.getElementById('subcategory_active').checked = active;
+					});
+				});
+
+				document.querySelectorAll('.delete-subcategory').forEach(button => {
+					button.addEventListener('click', function () {
+						if (!confirm('Sind Sie sicher, dass Sie diese Unterkategorie löschen möchten?')) return;
+						const id = this.getAttribute('data-id');
+						fetch('<?= base_url('admin/article/deleteSubcategory') ?>', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded',
+							},
+							body: 'id=' + encodeURIComponent(id) + '&category_id=' + encodeURIComponent(categoryId) + '&<?= $this->security->get_csrf_token_name() ?>=' + '<?= $this->security->get_csrf_hash() ?>'
+						})
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								return response.json();
+							})
+							.then(data => {
+								if (data.success) {
+									showAlert(data.message || 'Unterkategorie erfolgreich gelöscht.', 'success');
+									loadSubcategories();
+									loadSubcategoriesForManagement();
+									resetSubcategoryForm();
+									const modalElement = document.getElementById('subcategoryModal');
+									const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+									modalInstance.hide();
+								} else {
+									showAlert(data.message || 'Fehler beim Löschen der Unterkategorie.', 'error');
+								}
+							})
+							.catch(error => {
+								console.error('Error:', error);
+								showAlert('Fehler beim Löschen der Unterkategorie: ' + error.message, 'error');
+							});
+					});
+				});
+			}
+
+			subcategorySelect.addEventListener('change', function () {
+				if (this.value === 'new') {
+					resetSubcategoryForm();
+					new bootstrap.Modal(document.getElementById('subcategoryModal')).show();
+					this.value = '';
+				}
+			});
+
+			manageSubcategoriesBtn.addEventListener('click', loadSubcategoriesForManagement);
+		} else {
+			const subcategoryField = document.querySelector('#subcategory_id')?.closest('.col-md-3');
+			if (subcategoryField) {
+				subcategoryField.style.display = 'none';
+			}
+		}
+
 		const initSummernote = (selector) => {
 			if (typeof jQuery === 'undefined') {
 				console.error('jQuery is not loaded. Please include jQuery before this script.');
@@ -639,76 +678,70 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 			});
 		};
 
-
 		const addSection = (content = '', image = '', imageTitle = '', buttonName = '', subpage = '', externalUrl = '', index) => {
-			console.log('Adding section with index:', index); // Debug log
 			const sectionHtml = `
-        <div class="section mb-4 p-3 border rounded">
-            <input type="hidden" name="sections[${index}]" value="section-${index}">
-            <div class="row">
-                <div class="col-md-9">
-                    <label class="col-form-label">Inhalt</label>
-                    <textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
-                </div>
-                <div class="col-md-3">
-                    <label class="col-form-label">Bild hochladen</label>
-                    <input type="file" class="form-control mb-1" name="section_images[${index}]">
-                    <input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
-                    <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
-                    <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
-                        Bild aus FTP wählen
-                    </button>
-                    <div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
-                        ${image ? `
-                            <img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
-                            <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
-                                ×
+                <div class="section mb-4 p-3 border rounded">
+                    <input type="hidden" name="sections[${index}]" value="section-${index}">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <label class="col-form-label">Inhalt</label>
+                            <textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label">Bild hochladen</label>
+                            <input type="file" class="form-control mb-1" name="section_images[${index}]">
+                            <input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
+                            <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
+                            <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
+                                Bild aus FTP wählen
                             </button>
-                        ` : ''}
+                            <div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
+                                ${image ? `
+                                    <img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
+                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
+                                        ×
+                                    </button>
+                                ` : ''}
+                            </div>
+                            <label class="col-form-label">Bildtitel (SEO)</label>
+                            <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
+                        </div>
                     </div>
-                    <label class="col-form-label">Bildtitel (SEO)</label>
-                    <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <label class="col-form-label">Button-Text</label>
+                            <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-form-label">Unterseite</label>
+                            <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
+                                <option value="">-- Unterseite auswählen --</option>
+                                ${articleOptions.map(opt => `
+                                    <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
+                                        ${opt.label} (${opt.lang})
+                                    </option>
+                                `).join('')}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-form-label">Externe URL</label>
+                            <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
+                        </div>
+                    </div>
+                    <div class="section-actions mt-3">
+                        <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+                    </div>
                 </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-4">
-                    <label class="col-form-label">Button-Text</label>
-                    <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
-                </div>
-                <div class="col-md-4">
-                    <label class="col-form-label">Unterseite</label>
-                    <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
-                        <option value="">-- Unterseite auswählen --</option>
-                        ${articleOptions.map(opt => `
-                            <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
-                                ${opt.label} (${opt.lang})
-                            </option>
-                        `).join('')}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="col-form-label">Externe URL</label>
-                    <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
-                </div>
-            </div>
-            <div class="section-actions mt-3">
-                <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
-            </div>
-        </div>
-    `;
+            `;
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
 				initSummernote(`#sections-container .section:last-child .section-content`);
 				bindRemoveSection();
 				bindFtpPicker();
-				console.log('Section added successfully'); // Debug log
-			} else {
-				console.error('Sections container not found'); // Debug log
 			}
 		};
 
-		// Funkcia pre viazanie tlačidla na odstránenie sekcie
 		const bindRemoveSection = () => {
 			document.querySelectorAll('.remove-section').forEach(button => {
 				button.addEventListener('click', function () {
@@ -719,7 +752,6 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 			});
 		};
 
-		// Funkcia pre viazanie FTP pickerov
 		const bindFtpPicker = () => {
 			document.querySelectorAll('.ftp-picker').forEach(button => {
 				button.addEventListener('click', function () {
@@ -733,7 +765,6 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 			});
 		};
 
-		// Pridanie existujúcich sekcií
 		<?php if (!empty($sections)): ?>
 		<?php foreach ($sections as $index => $section): ?>
 		addSection(
@@ -748,14 +779,11 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 		<?php endforeach; ?>
 		<?php endif; ?>
 
-		// Pridanie novej sekcie
 		document.getElementById('add-section').addEventListener('click', function () {
-			console.log('Add section button clicked'); // Debug log
 			const sections = document.querySelectorAll('#sections-container .section').length;
 			addSection('', '', '', '', '', '', sections);
 		});
 
-		// Inicializácia galérií
 		document.getElementById('gallery_category_id').addEventListener('change', function () {
 			const categoryId = this.value;
 			const gallerySelect = document.getElementById('gallery_id');
@@ -770,7 +798,12 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 				},
 				body: 'category_id=' + encodeURIComponent(categoryId)
 			})
-				.then(response => response.json())
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Network response was not ok');
+					}
+					return response.json();
+				})
 				.then(data => {
 					if (data.success) {
 						gallerySelect.innerHTML = data.options;
@@ -780,11 +813,10 @@ $subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 				})
 				.catch(error => {
 					console.error('Error:', error);
-					showAlert('Fehler beim Laden der Galerien.', 'error');
+					showAlert('Fehler beim Laden der Galerien: ' + error.message, 'error');
 				});
 		});
 
-		// Inicializácia tooltips
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 		tooltipTriggerList.forEach(function (tooltipTriggerEl) {
 			new bootstrap.Tooltip(tooltipTriggerEl);

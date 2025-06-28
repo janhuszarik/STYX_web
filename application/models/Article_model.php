@@ -148,7 +148,6 @@ class Article_model extends CI_Model
 		$this->db->where('article_id', $articleId);
 		$this->db->order_by('order');
 		$sections = $this->db->get('article_sections')->result();
-		log_message('debug', 'Fetched sections for article ' . $articleId . ': ' . print_r($sections, true));
 		return $sections;
 	}
 
@@ -156,54 +155,46 @@ class Article_model extends CI_Model
 	{
 		$this->load->helper('app_helper');
 
-		log_message('debug', 'Starting saveArticle with post data: ' . print_r($post, true));
-
-		// Spracovanie hlavného obrázka
 		$image = null;
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadResult = uploadImg('image', 'uploads/articles/title_image', $post['title'], false);
+			$uploadResult = uploadImg('image', 'Uploads/articles/title_image', $post['title'], false);
 			if ($uploadResult && file_exists($uploadResult)) {
 				$image = $uploadResult;
 			} else {
-				log_message('error', 'Failed to upload main image: ' . $uploadResult . ' Files: ' . print_r($_FILES['image'], true));
 				return false;
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'uploads/articles/title_image/';
+			$localDir = FCPATH . 'Uploads/articles/title_image/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 				$localFile = $localDir . basename($ftpPath);
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
-					$image = 'uploads/articles/title_image/' . basename($ftpPath);
+					$image = 'Uploads/articles/title_image/' . basename($ftpPath);
 				} else {
-					log_message('error', 'Failed to download FTP image: ' . $ftpPath);
 					return false;
 				}
 			} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
 				$src = FCPATH . ltrim($ftpPath, '/');
 				$dst = $localDir . basename($ftpPath);
 				if (@copy($src, $dst)) {
-					$image = 'uploads/articles/title_image/' . basename($ftpPath);
+					$image = 'Uploads/articles/title_image/' . basename($ftpPath);
 				} else {
-					log_message('error', 'Failed to copy FTP image: ' . $src);
 					return false;
 				}
 			} else {
-				$image = 'uploads/articles/title_image/' . basename($ftpPath);
+				$image = 'Uploads/articles/title_image/' . basename($ftpPath);
 			}
 		} else {
 			$image = $post['old_image'] ?? null;
 		}
 
-		// Logika pre is_main a slug_title
 		$is_main = isset($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
 		$slug_title = $is_main ? null : url_title($post['title'], 'dash', true);
 
-		// Aktualizácia is_main pre iné články v kategórii
 		if ($is_main && !empty($post['category_id'])) {
 			$this->db->where('category_id', $post['category_id']);
 			$this->db->where('is_main', 1);
@@ -213,10 +204,9 @@ class Article_model extends CI_Model
 			$this->db->update('articles', ['is_main' => 0]);
 		}
 
-		// Príprava dát pre uloženie
 		$data = [
 			'category_id'     => $post['category_id'],
-			'subcategory_id'  => !empty($post['subcategory_id']) ? $post['subcategory_id'] : null,
+			'subcategory_id'  => !empty($post['subcategory_id']) && $post['subcategory_id'] !== 'new' ? $post['subcategory_id'] : null,
 			'lang'            => $post['lang'] ?? 'de',
 			'title'           => $post['title'],
 			'subtitle'        => $post['subtitle'],
@@ -235,7 +225,6 @@ class Article_model extends CI_Model
 			'orderBy'         => isset($post['orderBy']) ? (int)$post['orderBy'] : 0,
 		];
 
-		// Pridanie produktov (1-6 produktov v dvoch setoch po 3)
 		for ($set = 0; $set < 2; $set++) {
 			for ($i = 1; $i <= 3; $i++) {
 				$suffix = ($set * 3) + $i;
@@ -250,49 +239,44 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov, false);
+					$up = uploadImg("product_image{$suffix}", 'Uploads/articles/products', $nazov, false);
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
-						log_message('error', "Failed to upload product image set{$setNum}_product{$prodNum}: " . ($up ?: 'No file'));
 						return false;
 					}
 				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
 					$ftpPath = $post["ftp_product_image{$suffix}"];
-					$localDir = FCPATH . 'uploads/articles/products/';
+					$localDir = FCPATH . 'Uploads/articles/products/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
-							log_message('error', "Failed to download FTP product image set{$setNum}_product{$prodNum}: " . $ftpPath);
 							return false;
 						}
 					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
-							log_message('error', "Failed to copy FTP product image set{$setNum}_product{$prodNum}: " . $src);
 							return false;
 						}
 					} else {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 					}
 				}
 			}
 		}
 
-		// Pridanie odporúčaných položiek
 		for ($i = 1; $i <= 3; $i++) {
 			$data["empfohlen_name{$i}"] = $post["empfohlen_name{$i}"] ?? null;
 			$data["empfohlen_url{$i}"] = $post["empfohlen_url{$i}"] ?? null;
 		}
 
-		// Uloženie do databázy
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
 			$data['updated_at'] = date('Y-m-d H:i:s');
@@ -305,10 +289,9 @@ class Article_model extends CI_Model
 		}
 
 		if (!$ok) {
-			log_message('error', 'Database save failed: ' . $this->db->last_query() . ' Error: ' . $this->db->error()['message']);
+			return false;
 		}
 
-		// Spracovanie sekcií
 		if (isset($post['sections']) && is_array($post['sections'])) {
 			$this->db->delete('article_sections', ['article_id' => $articleId]);
 			foreach ($post['sections'] as $idx => $content) {
@@ -319,7 +302,6 @@ class Article_model extends CI_Model
 				$externalUrl = $post['external_urls'][$idx] ?? null;
 
 				if (!empty($_FILES['section_images']['name'][$idx])) {
-					log_message('debug', 'Processing section image upload for index ' . $idx . ': ' . print_r($_FILES['section_images']['name'][$idx], true));
 					$sectionName = url_oprava($post['title'] . '_section_' . $idx . '_' . time());
 					$_FILES['temp_section_image'] = [
 						'name' => $_FILES['section_images']['name'][$idx],
@@ -328,28 +310,26 @@ class Article_model extends CI_Model
 						'error' => $_FILES['section_images']['error'][$idx],
 						'size' => $_FILES['section_images']['size'][$idx],
 					];
-					$uploadResult = uploadImg('temp_section_image', 'uploads/articles/sections', $sectionName, false);
+					$uploadResult = uploadImg('temp_section_image', 'Uploads/articles/sections', $sectionName, false);
 					if ($uploadResult && file_exists($uploadResult)) {
 						$secImg = $uploadResult;
-						log_message('debug', 'Section image uploaded successfully for index ' . $idx . ': ' . $secImg);
 					} else {
-						log_message('error', 'Failed to upload section image for index ' . $idx . ': ' . $uploadResult . ' Temp file: ' . print_r($_FILES['temp_section_image'], true));
 						return false;
 					}
 				} elseif (!empty($post['ftp_section_image'][$idx]) && $post['ftp_section_image'][$idx] !== $post['old_section_image'][$idx]) {
 					$ftpPath = $post['ftp_section_image'][$idx];
-					$localDir = FCPATH . 'uploads/articles/sections/';
+					$localDir = FCPATH . 'Uploads/articles/sections/';
 					@mkdir($localDir, 0755, true);
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+							$secImg = 'Uploads/articles/sections/' . basename($ftpPath);
 						}
 					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+							$secImg = 'Uploads/articles/sections/' . basename($ftpPath);
 						}
 					}
 				}
@@ -365,9 +345,7 @@ class Article_model extends CI_Model
 					'order'        => $idx,
 				];
 
-				log_message('debug', "Inserting section $idx: " . print_r($sectionData, true));
 				if (!$this->db->insert('article_sections', $sectionData)) {
-					log_message('error', "Failed to insert section $idx into article_sections: " . $this->db->last_query() . ' Error: ' . $this->db->error()['message']);
 					return false;
 				}
 			}
@@ -481,48 +459,66 @@ class Article_model extends CI_Model
 		return ['success' => true, 'options' => $options];
 	}
 
-	public function getSubcategoriesByCategory($categoryId)
+	public function getSubcategoriesByCategory($category_id)
 	{
-		$this->db->select('id, name, slug, lang, active');
-		$this->db->where('category_id', $categoryId);
-		$this->db->order_by('name', 'ASC');
-		return $this->db->get('article_subcategories')->result();
+		if (!in_array($category_id, [100, 102])) {
+			return [];
+		}
+		$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+		$this->db->where('category_id', $category_id);
+		$query = $this->db->get($table);
+		return $query->result();
 	}
 
-	public function getSubcategory($id)
+	public function getSubcategory($id, $category_id)
 	{
-		return $this->db->get_where('article_subcategories', ['id' => $id])->row();
+		$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+		return $this->db->get_where($table, ['id' => $id, 'category_id' => $category_id])->row();
 	}
 
 	public function saveSubcategory($post)
 	{
+		$category_id = $post['category_id'];
+		$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+
 		$data = [
-			'category_id' => $post['category_id'],
+			'category_id' => $category_id,
 			'name' => $post['name'],
 			'slug' => url_title($post['name'], 'dash', true),
 			'lang' => $post['lang'] ?? 'de',
 			'active' => isset($post['active']) ? $post['active'] : 1,
-			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s'),
 		];
 
 		if (!empty($post['id']) && is_numeric($post['id'])) {
-			$this->db->where('id', $post['id']);
-			return $this->db->update('article_subcategories', $data);
+			$existing = $this->db->get_where($table, ['id' => $post['id'], 'category_id' => $category_id])->row();
+			if ($existing) {
+				$this->db->where('id', $post['id']);
+				$this->db->where('category_id', $category_id);
+				$this->db->update($table, $data);
+				return $post['id'];
+			} else {
+				return false;
+			}
 		} else {
-			$this->db->insert('article_subcategories', $data);
+			$data['created_at'] = date('Y-m-d H:i:s');
+			$this->db->insert($table, $data);
 			return $this->db->insert_id();
 		}
 	}
 
-	public function deleteSubcategory($id)
+
+	public function deleteSubcategory($id, $category_id)
 	{
+		$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
 		$this->db->where('subcategory_id', $id);
 		$this->db->update('articles', ['subcategory_id' => null]);
-		return $this->db->delete('article_subcategories', ['id' => $id]);
+		return $this->db->delete($table, ['id' => $id, 'category_id' => $category_id]);
 	}
+
 	public function getSubcategoryByNameAndCategory($category_id, $name)
 	{
-		return $this->db->get_where('article_subcategories', ['category_id' => $category_id, 'name' => $name])->row();
+		$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+		return $this->db->get_where($table, ['category_id' => $category_id, 'name' => $name])->row();
 	}
 }
