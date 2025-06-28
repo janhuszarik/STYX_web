@@ -94,9 +94,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/add_article/(:num)'] 							= 'article/articlesSave/$1';
 	$route['admin/article/getGalleriesByCategory'] 				= 'article/getGalleriesByCategory';
 	$route['admin/article/upload_image'] 						= 'article/upload_image';
+$route['admin/article/getSubcategories'] = 'article/getSubcategories';
+$route['admin/article/manageSubcategory'] = 'article/manageSubcategory';
+$route['admin/article/deleteSubcategory'] = 'article/deleteSubcategory';
+$route['admin/article/getSubcategoriesForManagement'] = 'article/getSubcategoriesForManagement';
+
 	$route['admin/save_calendar_note'] 							= 'admin/save_calendar_note';
 	$route['admin/update_calendar_note'] 						= 'admin/update_calendar_note';
 	$route['admin/delete_calendar_note/(:num)']					= 'admin/delete_calendar_note/$1';
+
+
+
 
 	$route['admin/ftpmanager'] 									= 'ftpmanager/index';
 	$route['admin/ftpmanager/download'] 						= 'ftpmanager/download';

@@ -44,6 +44,9 @@ if (isset($article) && !empty($article->slug)) {
 		}
 	}
 }
+
+// Načítaj podkategórie
+$subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 ?>
 
 <style>
@@ -64,6 +67,14 @@ if (isset($article) && !empty($article->slug)) {
 	.file-info .text-danger {
 		color: #d60015;
 		font-weight: 500;
+	}
+	.subcategory-modal-table th, .subcategory-modal-table td {
+		padding: 8px;
+		vertical-align: middle;
+	}
+	.subcategory-modal-table {
+		width: 100%;
+		margin-top: 10px;
 	}
 </style>
 
@@ -113,12 +124,34 @@ if (isset($article) && !empty($article->slug)) {
 							<input type="text" class="form-control" id="category_name" name="category_name" value="<?= htmlspecialchars($categoryName) ?>" readonly>
 						</div>
 						<div class="col-md-4">
+							<label for="subcategory_id" class="col-form-label">Unterkategorie
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Wählen Sie eine Unterkategorie für den Artikel aus oder erstellen Sie eine neue. Dies ermöglicht eine detaillierte Filterung der Artikel, z. B. nach Themen wie ‚Schokolade‘."></i>
+							</label>
+							<div class="input-group">
+								<select name="subcategory_id" id="subcategory_id" class="form-control">
+									<option value="">-- Unterkategorie auswählen --</option>
+									<option value="new">+ Neue Unterkategorie erstellen</option>
+									<?php foreach ($subcategories as $sub): ?>
+										<option value="<?= htmlspecialchars($sub->id) ?>" <?= isset($article->subcategory_id) && $article->subcategory_id == $sub->id ? 'selected' : '' ?>>
+											<?= htmlspecialchars($sub->name) ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+								<button type="button" class="btn btn-outline-primary" id="manageSubcategoriesBtn" data-bs-toggle="modal" data-bs-target="#subcategoryModal">
+									<i class="fas fa-cog"></i> Verwalten
+								</button>
+							</div>
+						</div>
+						<div class="col-md-4">
 							<label for="slug_display" class="col-form-label">URL-Adresse
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL-Adresse wird automatisch generiert und setzt sich aus der gewählten Sprache, dem Hauptmenüpunkt und dem letzten Menüpunkt zusammen, unter dem dieser Artikel gespeichen wird."></i>
 							</label>
 							<input type="text" class="form-control" id="slug_display" name="slug_display" value="https://www.styx.at/<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>" readonly>
 							<input type="hidden" name="slug" id="slug" value="<?= htmlspecialchars($article->slug ?? $defaultMenuUrl) ?>">
 						</div>
+					</div>
+
+					<div class="row form-group pb-3">
 						<div class="col-md-4">
 							<label for="is_main" class="col-form-label">Hauptartikel
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Dieser Abschnitt legt fest, ob dieser Artikel als Hauptartikel bestimmt ist oder ob er zur Artikelliste gehören soll, in der die Artikel den Benutzern als Liste angezeigt werden. Wenn „Ja“ gewählt ist, handelt es sich um einen eigenständigen / einzigen Artikel in dieser Kategorie."></i>
@@ -297,498 +330,440 @@ if (isset($article) && !empty($article->slug)) {
 						</div>
 						<div class="col-md-3">
 							<label for="orderBy" class="col-form-label">Reihenfolge</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Určuje poradie zobrazenia článku v zozname článkov v danej kategórii. Menšie číslo znamená vyššiu prioritu (zobrazí sa vyššie)."></i>
-							<input type="number" class="form-control" name="orderBy" id="orderBy" value="<?= htmlspecialchars($article->orderBy ?? '0') ?>" min="0">
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestimmt die Reihenfolge, in der der Artikel in der Liste der Artikel in der Kategorie angezeigt wird. Kleinere Zahlen erscheinen weiter oben."></i>
+							<input type="number" class="form-control" name="orderBy" id="orderBy" value="<?= htmlspecialchars($article->orderBy ?? '0') ?>">
 						</div>
 						<div class="col-md-3">
 							<label for="active" class="col-form-label">Status</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestimmt, ob der Artikel aktiv (sichtbar) oder inaktiv (verborgen) ist. Inaktive Artikel sind für die Öffentlichkeit nicht sichtbar, unabhängig von Start- und Enddatum."></i>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt fest, ob der Artikel sofort aktiv ist. Wenn ‚Aktiv‘, wird der Artikel gemäß Start- und Enddatum angezeigt."></i>
 							<select name="active" id="active" class="form-control">
 								<option value="1" <?= (isset($article) && $article->active == '1') ? 'selected' : '' ?>>Aktiv</option>
-								<option value="0" <?= (isset($article) && $article->active == '0') ? 'selected' : '' ?>>Inaktiv</option>
+								<option value="0" <?= (isset($article) && $article->active == '0') || !isset($article) ? 'selected' : '' ?>>Inaktiv</option>
 							</select>
 						</div>
 					</div>
 
-					<footer class="card-footer text-end">
+					<div class="form-group mt-4">
 						<button type="submit" class="btn btn-primary">Speichern</button>
-						<a href="<?= base_url('admin/articles_in_category/' . ($categoryId ?? 0)) ?>" class="btn btn-secondary">Zurück</a>
-					</footer>
+						<a href="<?= base_url('admin/articles_in_category/' . $categoryId) ?>" class="btn btn-secondary">Zurück</a>
+					</div>
 				</form>
 			</div>
 		</section>
 	</div>
 </div>
 
-<script>const BASE_URL = "<?= base_url() ?>";</script>
+<!-- Modálne okno pre správu podkategórií -->
+<div class="modal fade" id="subcategoryModal" tabindex="-1" aria-labelledby="subcategoryModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="subcategoryModalLabel">Unterkategorien verwalten</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="subcategoryForm">
+					<input type="hidden" name="category_id" value="<?= htmlspecialchars($categoryId) ?>">
+					<input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+					<input type="hidden" name="id" id="subcategory_id">
+					<div class="mb-3">
+						<label for="subcategory_name" class="form-label">Name der Unterkategorie</label>
+						<input type="text" class="form-control" id="subcategory_name" name="name" required>
+					</div>
+					<div class="mb-3">
+						<label for="subcategory_lang" class="form-label">Sprache</label>
+						<select class="form-control" id="subcategory_lang" name="lang">
+							<option value="de">Deutsch</option>
+							<option value="en">Englisch</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Status</label>
+						<div>
+							<input type="checkbox" id="subcategory_active" name="active" value="1" checked>
+							<label for="subcategory_active">Aktiv</label>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-primary">Speichern</button>
+				</form>
+				<hr>
+				<h6>Bestehende Unterkategorien</h6>
+				<table class="table subcategory-modal-table">
+					<thead>
+					<tr>
+						<th>Name</th>
+						<th>Slug</th>
+						<th>Sprache</th>
+						<th>Status</th>
+						<th>Aktionen</th>
+					</tr>
+					</thead>
+					<tbody id="subcategoryTableBody"></tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script>
-	let sectionCount = 0, maxSections = 10, sectionsData = <?= json_encode($sections ?? []) ?>;
-	const articleOptions = <?= $articleOptionsJson ?>;
+	document.addEventListener('DOMContentLoaded', function () {
+		const articleOptions = <?= $articleOptionsJson ?>;
+		const langSelect = document.getElementById('lang');
+		const titleInput = document.getElementById('title');
+		const slugInput = document.getElementById('slug');
+		const slugDisplay = document.getElementById('slug_display');
+		const menuSelect = document.getElementById('menu_select');
+		const isMainSelect = document.getElementById('is_main');
+		const subcategorySelect = document.getElementById('subcategory_id');
+		const manageSubcategoriesBtn = document.getElementById('manageSubcategoriesBtn');
+		const subcategoryForm = document.getElementById('subcategoryForm');
+		const subcategoryTableBody = document.getElementById('subcategoryTableBody');
+		const categoryId = '<?= htmlspecialchars($categoryId) ?>';
 
-	function updateSectionIndexes() {
-		const sections = document.querySelectorAll('[data-section]');
-		sections.forEach((section, index) => {
-			section.dataset.section = index;
-			section.querySelector('.summernote').name = `sections[${index}]`;
-			section.querySelector('input[type="file"]').name = `section_images[${index}]`;
-			section.querySelector('input[name*="section_image_titles"]').name = `section_image_titles[${index}]`;
-			section.querySelector('input[name*="ftp_section_image"]').name = `ftp_section_image[${index}]`;
-			section.querySelector('input[name*="old_section_image"]').name = `old_section_image[${index}]`;
-			section.querySelector('.button-name').name = `button_names[${index}]`;
-			section.querySelector('.subpage').name = `subpages[${index}]`;
-			section.querySelector('.external-url').name = `external_urls[${index}]`;
+		// Funkcia pre zobrazenie alertu
+		function showAlert(message, type = 'success') {
+			const alertDiv = document.createElement('div');
+			alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+			alertDiv.style.zIndex = '1050';
+			alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+			document.body.appendChild(alertDiv);
+			setTimeout(() => alertDiv.remove(), 3000); // Zmizne po 3 sekundách
+		}
+
+		// Funkcia pre načítanie podkategórií
+		function loadSubcategories() {
+			fetch('<?= base_url('admin/article/getSubcategories') ?>', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: 'category_id=' + encodeURIComponent(categoryId)
+			})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						subcategorySelect.innerHTML = data.options;
+					} else {
+						showAlert(data.message || 'Fehler beim Laden der Unterkategorien.', 'error');
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					showAlert('Fehler beim Laden der Unterkategorien.', 'error');
+				});
+		}
+
+		// Funkcia pre načítanie podkategórií do tabuľky v modálnom okne
+		function loadSubcategoriesForManagement() {
+			fetch('<?= base_url('admin/article/getSubcategoriesForManagement') ?>', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: 'category_id=' + encodeURIComponent('<?= htmlspecialchars($categoryId) ?>') + '&<?= $this->security->get_csrf_token_name() ?>=' + '<?= $this->security->get_csrf_hash() ?>'
+			})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						subcategoryTableBody.innerHTML = data.html;
+						bindSubcategoryActions();
+					} else {
+						subcategoryTableBody.innerHTML = '<tr><td colspan="5">Fehler beim Laden der Unterkategorien.</td></tr>';
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					subcategoryTableBody.innerHTML = '<tr><td colspan="5">Fehler beim Laden der Unterkategorien.</td></tr>';
+				});
+		}
+
+		subcategoryForm.addEventListener('submit', function (e) {
+			e.preventDefault();
+			console.log('Form submit triggered'); // Debug log
+			if (this.dataset.submitting) return; // Zabránenie duplicitnému odoslaniu
+			this.dataset.submitting = true;
+
+			const formData = new FormData(this);
+			const data = new URLSearchParams();
+			for (let [key, value] of formData.entries()) {
+				data.append(key, value);
+			}
+			data.append('<?= $this->security->get_csrf_token_name() ?>', '<?= $this->security->get_csrf_hash() ?>');
+
+			fetch('<?= base_url('admin/article/manageSubcategory') ?>', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: data
+			})
+				.then(response => {
+					console.log('Response received:', response); // Debug log
+					return response.json();
+				})
+				.then(data => {
+					this.dataset.submitting = false; // Uvoľnenie po dokončení
+					if (data.success) {
+						showAlert(data.message);
+						loadSubcategories();
+						loadSubcategoriesForManagement();
+						bootstrap.Modal.getInstance(document.getElementById('subcategoryModal')).hide();
+						subcategorySelect.value = data.subcategory.id;
+					} else {
+						showAlert(data.message || 'Fehler beim Speichern der Unterkategorie.', 'error');
+					}
+				})
+				.catch(error => {
+					this.dataset.submitting = false; // Uvoľnenie pri chybe
+					console.error('Error:', error);
+					showAlert('Fehler beim Speichern der Unterkategorie.', 'error');
+				});
 		});
-	}
 
-	function addSection(content = '', img = null, ftpImage = '', imageTitle = '', buttonName = '', subpage = '', externalUrl = '', oldImage = '', index = null) {
-		if (sectionCount >= maxSections) return;
+		// Funkcia pre viazanie akcií tlačidiel v tabuľke podkategórií
+		function bindSubcategoryActions() {
+			document.querySelectorAll('.edit-subcategory').forEach(button => {
+				button.addEventListener('click', function () {
+					const id = this.getAttribute('data-id');
+					const name = this.getAttribute('data-name');
+					document.getElementById('subcategory_id').value = id;
+					document.getElementById('subcategory_name').value = name;
+					document.getElementById('subcategory_lang').value = this.closest('tr').querySelector('select[name^="lang_"]').value;
+					document.getElementById('subcategory_active').checked = this.closest('tr').querySelector('input[name^="active_"]').checked;
+				});
+			});
 
-		const sectionIndex = index !== null ? index : sectionCount;
-		sectionCount++;
+			document.querySelectorAll('.delete-subcategory').forEach(button => {
+				button.addEventListener('click', function () {
+					if (!confirm('Sind Sie sicher, dass Sie diese Unterkategorie löschen möchten?')) return;
+					const id = this.getAttribute('data-id');
+					fetch('<?= base_url('admin/article/deleteSubcategory') ?>', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+						},
+						body: 'id=' + encodeURIComponent(id)
+					})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								showAlert(data.message);
+								loadSubcategories();
+								loadSubcategoriesForManagement();
+							} else {
+								showAlert(data.message || 'Fehler beim Löschen der Unterkategorie.', 'error');
+							}
+						})
+						.catch(error => {
+							console.error('Error:', error);
+							showAlert('Fehler beim Löschen der Unterkategorie.', 'error');
+						});
+				});
+			});
+		}
 
-		let optionsHtml = '<option value="">-- Artikel auswählen --</option>';
-		articleOptions.forEach(opt => {
-			const selected = opt.slug === subpage ? 'selected' : '';
-			optionsHtml += `<option value="${opt.slug}" data-id="${opt.id}" data-slug="${opt.slug}" data-lang="${opt.lang}" ${selected}>${opt.label}</option>`;
+		// Pri zmene výberu podkategórie
+		subcategorySelect.addEventListener('change', function () {
+			if (this.value === 'new') {
+				document.getElementById('subcategory_name').value = '';
+				document.getElementById('subcategory_id').value = '';
+				document.getElementById('subcategory_lang').value = 'de';
+				document.getElementById('subcategory_active').checked = true;
+				new bootstrap.Modal(document.getElementById('subcategoryModal')).show();
+				this.value = '';
+			}
 		});
 
-		const html = `
-        <div class="row align-items-start border p-2 mb-2" data-section="${sectionIndex}">
-            <div class="col-md-9">
-                <label for="section_content${sectionIndex}" class="col-form-label">Inhalt</label>
-                <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Hauptinhalt der Sektion. Verwenden Sie den Texteditor, um formatierten Text, Bilder oder Links hinzuzufügen. Jede Sektion wird im Artikel als separater Abschnitt angezeigt."></i>
-                <textarea name="sections[${sectionIndex}]" id="section_content${sectionIndex}" class="form-control summernote" rows="3">${content}</textarea>
-            </div>
-            <div class="col-md-3">
-                <div class="mb-2">
-                    <label for="section_image${sectionIndex}" class="col-form-label">Bild hochladen</label>
-                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Bildes für diese Sektion. Das Bild wird neben dem Inhalt der Sektion angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
-                    <input type="file" name="section_images[${sectionIndex}]" id="section_image${sectionIndex}" class="form-control">
+		// Načítanie podkategórií pri otvorení modálneho okna
+		manageSubcategoriesBtn.addEventListener('click', loadSubcategoriesForManagement);
+
+		// Inicializácia Summernote
+		const initSummernote = (selector) => {
+			$(selector).summernote({
+				height: 300,
+				lang: 'de-DE',
+				toolbar: [
+					['style', ['style']],
+					['font', ['bold', 'underline', 'clear']],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph']],
+					['table', ['table']],
+					['insert', ['link', 'picture']],
+					['view', ['fullscreen', 'codeview', 'help']]
+				],
+				callbacks: {
+					onImageUpload: function (files) {
+						const data = new FormData();
+						data.append('image', files[0]);
+						$.ajax({
+							url: '<?= base_url('admin/article/upload_image') ?>',
+							method: 'POST',
+							data: data,
+							contentType: false,
+							processData: false,
+							success: function (response) {
+								if (response.success) {
+									$(selector).summernote('insertImage', response.image_url);
+								} else {
+									showAlert(response.error || 'Fehler beim Hochladen des Bildes.', 'error');
+								}
+							},
+							error: function () {
+								showAlert('Fehler beim Hochladen des Bildes.', 'error');
+							}
+						});
+					},
+					onMediaDelete: function ($target) {
+						const imageUrl = $target.attr('src');
+						$.ajax({
+							url: '<?= base_url('admin/article/delete_image') ?>',
+							method: 'POST',
+							data: { image_url: imageUrl },
+							success: function (response) {
+								if (!response.success) {
+									showAlert(response.error || 'Fehler beim Löschen des Bildes.', 'error');
+								}
+							}
+						});
+					}
+				}
+			});
+		};
+
+		// Funkcia pre pridanie sekcie
+		const addSection = (content = '', image = '', imageTitle = '', buttonName = '', subpage = '', externalUrl = '', index) => {
+			const sectionHtml = `
+            <div class="section mb-4 p-3 border rounded">
+                <input type="hidden" name="sections[${index}]" value="section-${index}">
+                <div class="mb-3">
+                    <label class="col-form-label">Inhalt</label>
+                    <textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
                 </div>
-                <div class="mb-2">
-                    <label for="section_image_title${sectionIndex}" class="col-form-label">Titel des Bildes (SEO)</label>
-                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Sektionsbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
-                    <input type="text" name="section_image_titles[${sectionIndex}]" id="section_image_title${sectionIndex}" class="form-control" placeholder="Titel des Bildes (SEO)" value="${imageTitle}">
-                </div>
-                <input type="hidden" name="ftp_section_image[${sectionIndex}]" id="ftp_section_image${sectionIndex}" value="${ftpImage}">
-                <input type="hidden" name="old_section_image[${sectionIndex}]" id="old_section_image${sectionIndex}" value="${oldImage}">
-                <div class="mb-2">
-                    <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker" data-ftp-target="ftp_section_image${sectionIndex}" data-preview-target="sectionImagePreview${sectionIndex}">
-                        Bild aus FTP wählen
-                    </button>
-                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht die Auswahl eines Bildes aus einem FTP-Verzeichnis für diese Sektion. Das ausgewählte Bild wird in der Sektion angezeigt."></i>
-                </div>
-                <div id="sectionImagePreview${sectionIndex}" class="mb-2">
-                    ${ftpImage ? `<img src="${ftpImage}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
-                    ${img && !ftpImage ? `<img src="${img}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
-                </div>
-            </div>
-            <div class="col-md-12 mt-2">
                 <div class="row">
-                    <div class="col-md-4">
-                        <label for="button_name${sectionIndex}" class="col-form-label">Button-Name</label>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Text des Buttons in dieser Sektion. Wenn angegeben, wird ein Button angezeigt, der mit einem Artikel oder externen URL verknüpft werden kann."></i>
-                        <input type="text" name="button_names[${sectionIndex}]" class="form-control button-name" id="button_name${sectionIndex}" placeholder="Name des Buttons" value="${buttonName}">
+                    <div class="col-md-6">
+                        <label class="col-form-label">Bild hochladen</label>
+                        <input type="file" class="form-control mb-1" name="section_images[${index}]">
+                        <input type="hidden" name="old_section_image[${index}]" value="${image}">
+                        <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
+                        <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
+                            Bild aus FTP wählen
+                        </button>
+                        <div id="ftpSectionImagePreview_${index}" class="mb-2">
+                            ${image ? `<img src="${image}" style="max-width:150px;max-height:150px;object-fit:contain;">` : ''}
+                        </div>
+                        <label class="col-form-label">Bildtitel (SEO)</label>
+                        <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
                     </div>
-                    <div class="col-md-4">
-                        <label for="subpage${sectionIndex}" class="col-form-label">Artikel</label>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einem existierenden Artikel. Aktiviert, wenn ein Button-Name angegeben ist. Hat Vorrang vor einer externen URL."></i>
-                        <select name="subpages[${sectionIndex}]" class="form-control subpage" id="subpage${sectionIndex}" ${!buttonName ? 'disabled' : ''}>
-                            ${optionsHtml}
+                    <div class="col-md-6">
+                        <label class="col-form-label">Button-Text</label>
+                        <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
+                        <label class="col-form-label">Unterseite</label>
+                        <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
+                            <option value="">-- Unterseite auswählen --</option>
+                            ${articleOptions.map(opt => `
+                                <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
+                                    ${opt.label} (${opt.lang})
+                                </option>
+                            `).join('')}
                         </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="external_url${sectionIndex}" class="col-form-label">Externe URL</label>
-                        <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Verknüpft den Button mit einer externen URL. Aktiviert, keď je zadaný názov tlačidla. Ignoruje sa, ak je vybraný článok."></i>
-                        <input type="url" name="external_urls[${sectionIndex}]" class="form-control external-url" id="external_url${sectionIndex}" placeholder="Externe URL" value="${externalUrl}" ${!buttonName ? 'disabled' : ''}>
+                        <label class="col-form-label">Externe URL</label>
+                        <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
                     </div>
                 </div>
                 <div class="section-actions">
                     <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
                 </div>
             </div>
-        </div>
-    `;
-		document.querySelector('#sections-container').insertAdjacentHTML('beforeend', html);
-
-		$(`[data-section="${sectionIndex}"] .summernote`).summernote({
-			height: 200,
-			callbacks: {
-				onImageUpload: function(files) {
-					const formData = new FormData();
-					formData.append('image', files[0]);
-					fetch(BASE_URL + 'admin/article/upload_image', {
-						method: 'POST',
-						body: formData
-					})
-						.then(response => response.json())
-						.then(data => {
-							if (data.success) {
-								$(this).summernote('insertImage', BASE_URL + data.image_url);
-							} else {
-								alert('Chyba pri nahrávaní obrázku: ' + data.error);
-							}
-						})
-						.catch(error => {
-							alert('Chyba pri nahrávaní obrázku: ' + error);
-						});
-				},
-				onMediaDelete: function($target) {
-					const imageUrl = $target.attr('src');
-					if (imageUrl.startsWith(BASE_URL)) {
-						fetch(BASE_URL + 'admin/article/delete_image', {
-							method: 'POST',
-							headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-							body: new URLSearchParams({ image_url: imageUrl })
-						});
-					}
-				}
-			}
-		});
-
-		const buttonNameInput = document.getElementById(`button_name${sectionIndex}`);
-		const subpageInput = document.getElementById(`subpage${sectionIndex}`);
-		const externalUrlInput = document.getElementById(`external_url${sectionIndex}`);
-
-		buttonNameInput.addEventListener('input', function () {
-			const hasValue = this.value.trim() !== '';
-			subpageInput.disabled = !hasValue;
-			externalUrlInput.disabled = !hasValue;
-			if (!hasValue) {
-				subpageInput.value = '';
-				externalUrlInput.value = '';
-			}
-		});
-
-		subpageInput.addEventListener('change', function () {
-			if (this.value) {
-				externalUrlInput.value = '';
-			}
-		});
-
-		externalUrlInput.addEventListener('input', function () {
-			if (this.value.trim()) {
-				subpageInput.value = '';
-			}
-		});
-	}
-
-	document.addEventListener('DOMContentLoaded', () => {
-		function initSummer() {
-			$('.summernote').summernote({
-				height: 200,
-				dialogsInBody: true,
-				toolbar: [
-					['style', ['bold', 'italic', 'underline', 'clear']],
-					['fontsize', ['fontsize']],
-					['color', ['color']],
-					['para', ['ul', 'ol', 'paragraph']],
-					['insert', ['link', 'picture']],
-					['view', ['fullscreen', 'codeview', 'help']]
-				],
-				callbacks: {
-					onImageUpload: function(files) {
-						const formData = new FormData();
-						formData.append('image', files[0]);
-						fetch(BASE_URL + 'admin/article/upload_image', {
-							method: 'POST',
-							body: formData
-						})
-							.then(response => response.json())
-							.then(data => {
-								if (data.success) {
-									$(this).summernote('insertImage', BASE_URL + data.image_url);
-								} else {
-									alert('Chyba pri nahrávaní obrázku: ' + data.error);
-								}
-							})
-							.catch(error => {
-								alert('Chyba pri nahrávaní obrázku: ' + error);
-							});
-					},
-					onMediaDelete: function($target) {
-						const imageUrl = $target.attr('src');
-						if (imageUrl.startsWith(BASE_URL)) {
-							fetch(BASE_URL + 'admin/article/delete_image', {
-								method: 'POST',
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-								body: new URLSearchParams({ image_url: imageUrl })
-							});
-						}
-					},
-					onPaste: function(e) {
-						setTimeout(() => {
-							let content = $(this).summernote('code');
-							content = content.replace(/font-family:[^;"]+;?/gi, '');
-							$(this).summernote('code', content);
-						}, 10);
-					}
-				}
-			});
-		}
-
-		initSummer();
-
-		document.getElementById('add-section').onclick = () => {
-			addSection();
-			updateSectionIndexes();
+        `;
+			const sectionsContainer = document.getElementById('sections-container');
+			sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
+			initSummernote(`#sections-container .section:last-child .section-content`);
+			bindRemoveSection();
+			bindFtpPicker();
 		};
 
-		document.getElementById('sections-container').onclick = e => {
-			if (e.target.classList.contains('remove-section')) {
-				e.target.closest('[data-section]').remove();
-				sectionCount--;
-				updateSectionIndexes();
-			}
-		};
-
-		sectionsData.forEach((sec, index) => {
-			const img = sec.image ? BASE_URL + sec.image : null;
-			const ftpImage = sec.ftp_image || '';
-			const imageTitle = sec.image_title || '';
-			const buttonName = sec.button_name || '';
-			const subpage = sec.subpage || '';
-			const externalUrl = sec.external_url || '';
-			const oldImage = sec.image || null;
-			addSection(sec.content, img, ftpImage, imageTitle, buttonName, subpage, externalUrl, oldImage, index);
-		});
-
-		const categorySelect = document.getElementById('gallery_category_id');
-		const gallerySelect = document.getElementById('gallery_id');
-		if (categorySelect && gallerySelect) {
-			categorySelect.addEventListener('change', function () {
-				const categoryId = this.value;
-				if (!categoryId) {
-					gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen!</option>';
-					return;
-				}
-				fetch(BASE_URL + 'admin/article/getGalleriesByCategory', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-					body: new URLSearchParams({ category_id: categoryId })
-				})
-					.then(response => response.json())
-					.then(data => {
-						gallerySelect.innerHTML = data.success ? data.options : '<option value="">-- Keine Galerien verfügbar!</option>';
-					})
-					.catch(error => {
-						gallerySelect.innerHTML = '<option value="">-- Fehler beim Laden!</option>';
-					});
-			});
-		}
-
-		document.getElementById('articleForm').addEventListener('submit', function (e) {
-			$('.summernote').each(function () {
-				let content = $(this).summernote('code');
-				content = content.replace(/font-family:[^;"']+;?/gi, '');
-				content = content.replace(/style="([^"]*)"/gi, function(match, style) {
-					let newStyle = style
-						.replace(/font-family:[^;"']+;?/gi, '')
-						.replace(/["']?Open Sans["']?,?\s?Arial,?\s?sans-serif;?/gi, '')
-						.trim();
-
-					if (newStyle.length > 0 && !/font-family:/i.test(newStyle)) {
-						newStyle = `font-family: Poppins; ` + newStyle;
-					} else if (newStyle.length === 0) {
-						newStyle = `font-family: Poppins;`;
+		// Funkcia pre viazanie tlačidla na odstránenie sekcie
+		const bindRemoveSection = () => {
+			document.querySelectorAll('.remove-section').forEach(button => {
+				button.addEventListener('click', function () {
+					if (confirm('Sind Sie sicher, dass Sie diese Sektion entfernen möchten?')) {
+						this.closest('.section').remove();
 					}
-					return `style="${newStyle}"`;
 				});
-
-				$(this).summernote('code', content);
 			});
+		};
 
-			const subpageInputs = document.querySelectorAll('.subpage');
-			const externalUrlInputs = document.querySelectorAll('.external-url');
-
-			subpageInputs.forEach(input => {
-				if (input.value) {
-					input.disabled = false;
-				}
+		// Funkcia pre viazanie FTP pickerov
+		const bindFtpPicker = () => {
+			document.querySelectorAll('.ftp-picker').forEach(button => {
+				button.addEventListener('click', function () {
+					const target = this.getAttribute('data-ftp-target');
+					const previewTarget = this.getAttribute('data-preview-target');
+					const modal = new bootstrap.Modal(document.getElementById('ftpModal'));
+					modal.show();
+					document.getElementById('ftpModal').dataset.ftpTarget = target;
+					document.getElementById('ftpModal').dataset.previewTarget = previewTarget;
+				});
 			});
+		};
 
-			externalUrlInputs.forEach(input => {
-				if (input.value) {
-					input.disabled = false;
-				}
-			});
+		// Pridanie existujúcich sekcií
+		<?php if (!empty($sections)): ?>
+		<?php foreach ($sections as $index => $section): ?>
+		addSection(
+			'<?= addslashes($section->content) ?>',
+			'<?= htmlspecialchars($section->image ?? '') ?>',
+			'<?= htmlspecialchars($section->image_title ?? '') ?>',
+			'<?= htmlspecialchars($section->button_name ?? '') ?>',
+			'<?= htmlspecialchars($section->subpage ?? '') ?>',
+			'<?= htmlspecialchars($section->external_url ?? '') ?>',
+			<?= $index ?>
+		);
+		<?php endforeach; ?>
+		<?php endif; ?>
+
+		// Pridanie novej sekcie
+		document.getElementById('add-section').addEventListener('click', () => {
+			const sections = document.querySelectorAll('#sections-container .section').length;
+			addSection('', '', '', '', '', '', sections);
 		});
 
-		const modalEl = document.getElementById('ftpModal');
-		const modal = new bootstrap.Modal(modalEl);
-		const tableBody = document.getElementById('ftp-table-body');
-		const currentFolder = document.getElementById('current-folder');
-		const backBtn = document.getElementById('ftp-back-btn');
-		let lastTarget = '';
-		let lastPreview = '';
-		let currentPath = '';
-
-		function loadFolder(path = '') {
-			currentPath = path;
-			currentFolder.textContent = '/' + path;
-			backBtn.style.display = path ? 'inline-block' : 'none';
-			fetch(BASE_URL + 'admin/ftpmanager/load_folder', {
+		// Inicializácia galérií
+		document.getElementById('gallery_category_id').addEventListener('change', function () {
+			const categoryId = this.value;
+			const gallerySelect = document.getElementById('gallery_id');
+			if (!categoryId) {
+				gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen --</option>';
+				return;
+			}
+			fetch('<?= base_url('admin/article/getGalleriesByCategory') ?>', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: new URLSearchParams({ folder: path })
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: 'category_id=' + encodeURIComponent(categoryId)
 			})
 				.then(response => response.json())
 				.then(data => {
-					if (data.error) {
-						tableBody.innerHTML = `<tr><td colspan="5">${data.error}</td></tr>`;
-						return;
+					if (data.success) {
+						gallerySelect.innerHTML = data.options;
+					} else {
+						showAlert(data.message || 'Fehler beim Laden der Galerien.', 'error');
 					}
-					let html = '';
-					data.forEach(item => {
-						let icon = item.type === 'dir'
-							? '<i class="bi bi-folder-fill text-warning"></i>'
-							: /\.(jpe?g|png|gif|webp)$/i.test(item.name)
-								? `<img src="${item.url}" style="width:60px;height:60px;object-fit:cover;">`
-								: '<i class="bi bi-file-earmark-fill text-primary"></i>';
-						const size = item.size > 0 ? (item.size / 1024).toFixed(1) + ' KB' : '-';
-						const action = item.type === 'dir'
-							? `<a href="#" class="ftp-folder" data-path="${item.path}">Öffnen</a>`
-							: /\.(jpe?g|png|gif|webp)$/i.test(item.name)
-								? `<a href="#" class="ftp-image-choose" data-path="${item.url}">Auswählen</a>`
-								: '-';
-						html += `
-                    <tr>
-                        <td class="text-center">${icon}</td>
-                        <td>${item.name}</td>
-                        <td>${item.path}</td>
-                        <td>${size}</td>
-                        <td>${action}</td>
-                    </tr>
-                `;
-					});
-					tableBody.innerHTML = html || '<tr><td colspan="5">Ordner ist leer!</td></tr>';
-					tableBody.querySelectorAll('.ftp-folder').forEach(a => {
-						a.onclick = e => {
-							e.preventDefault();
-							loadFolder(a.dataset.path);
-						};
-					});
-					tableBody.querySelectorAll('.ftp-image-choose').forEach(a => {
-						a.onclick = e => {
-							e.preventDefault();
-							const targetInput = document.getElementById(lastTarget);
-							const previewDiv = document.getElementById(lastPreview);
-							targetInput.value = a.dataset.path;
-							previewDiv.innerHTML = `<img src="${a.dataset.path}" style="max-width:150px;max-height:150px;object-fit:contain;">`;
-							modal.hide();
-						};
-					});
 				})
-				.catch(err => {
-					tableBody.innerHTML = `<tr><td colspan="5">Fehler: ${err.message}</td></tr>`;
+				.catch(error => {
+					console.error('Error:', error);
+					showAlert('Fehler beim Laden der Galerien.', 'error');
 				});
-		}
-
-		document.body.addEventListener('click', function (e) {
-			if (!e.target.matches('.ftp-picker')) return;
-			lastTarget = e.target.dataset.ftpTarget;
-			lastPreview = e.target.dataset.previewTarget;
-			modal.show();
-			loadFolder(currentPath);
 		});
 
-		backBtn.onclick = () => {
-			const parent = currentPath.includes('/') ? currentPath.substring(0, currentPath.lastIndexOf('/')) : '';
-			loadFolder(parent);
-		};
+		// Inicializácia tooltips
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+		tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+			new bootstrap.Tooltip(tooltipTriggerEl);
+		});
 	});
-	document.addEventListener('DOMContentLoaded', () => {
-		// Empfohlene Werte
-		const MAX_FILE_SIZE_MB = 5; // Maximale Dateigröße in MB
-		const RECOMMENDED_WIDTH = 1920; // Empfohlene Breite in px
-		const RECOMMENDED_HEIGHT = 1080; // Empfohlene Höhe in px
-
-		// Funktion zur Formatierung der Dateigröße
-		function formatFileSize(bytes) {
-			if (bytes < 1024) return bytes + ' B';
-			if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-			return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-		}
-
-		// Funktion zur Verarbeitung der hochgeladenen Datei
-		function handleFileUpload(input, previewContainerId) {
-			const file = input.files[0];
-			const previewContainer = document.getElementById(previewContainerId);
-
-			// Vorherige Informationen entfernen, falls vorhanden
-			let infoDiv = input.parentElement.querySelector('.file-info');
-			if (infoDiv) infoDiv.remove();
-
-			if (!file) return;
-
-			// Neues Div für Informationen erstellen
-			infoDiv = document.createElement('div');
-			infoDiv.className = 'file-info mt-2';
-			input.parentElement.appendChild(infoDiv);
-
-			// Dateigröße ermitteln
-			const fileSize = file.size;
-			const fileSizeText = formatFileSize(fileSize);
-
-			// Überprüfen, ob die Datei ein Bild ist
-			if (!file.type.startsWith('image/')) {
-				infoDiv.innerHTML = `<p class="text-danger">Die ausgewählte Datei ist kein Bild!</p>`;
-				input.value = ''; // Input zurücksetzen
-				return;
-			}
-
-			// Bild laden, um die Abmessungen zu ermitteln
-			const img = new Image();
-			const objectUrl = URL.createObjectURL(file);
-			img.onload = function () {
-				const width = img.width;
-				const height = img.height;
-
-				// Informationen anzeigen
-				infoDiv.innerHTML = `
-                <p><strong>Dateigröße:</strong> ${fileSizeText}</p>
-                <p><strong>Abmessungen:</strong> ${width} x ${height} px</p>
-            `;
-
-				// Dateigröße überprüfen
-				const fileSizeMB = fileSize / (1024 * 1024);
-				if (fileSizeMB > MAX_FILE_SIZE_MB) {
-					infoDiv.innerHTML += `
-                    <p class="text-warning">
-                        <strong>Warnung:</strong> Die Datei ist zu groß (${fileSizeText}).
-                        Empfohlene maximale Größe: ${MAX_FILE_SIZE_MB} MB.
-                    </p>
-                `;
-				}
-
-				// Abmessungen überprüfen
-				if (width > RECOMMENDED_WIDTH || height > RECOMMENDED_HEIGHT) {
-					infoDiv.innerHTML += `
-                    <p class="text-warning">
-                        <strong>Warnung:</strong> Die Bildabmessungen (${width}x${height} px)
-                        überschreiten die empfohlenen Werte (${RECOMMENDED_WIDTH}x${RECOMMENDED_HEIGHT} px).
-                    </p>
-                `;
-				}
-
-				URL.revokeObjectURL(objectUrl);
-			};
-			img.src = objectUrl;
-		}
-
-		// Event-Listener für das Hauptbild hinzufügen
-		const mainImageInput = document.getElementById('image');
-		if (mainImageInput) {
-			mainImageInput.addEventListener('change', () => {
-				handleFileUpload(mainImageInput, 'ftpImagePreview');
-			});
-		}
-
-		// Event-Listener für Abschnittsbilder hinzufügen (dynamisch hinzugefügt)
-		document.getElementById('sections-container').addEventListener('change', (e) => {
-			if (e.target.matches('input[type="file"][id^="section_image"]')) {
-				const sectionIndex = e.target.closest('[data-section]').dataset.section;
-				handleFileUpload(e.target, `sectionImagePreview${sectionIndex}`);
-			}
-		});
-	});</script>
+</script>

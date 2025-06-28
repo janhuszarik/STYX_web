@@ -1,4 +1,5 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Article extends CI_Controller
 {
@@ -149,9 +150,9 @@ class Article extends CI_Controller
 		$galleryCategories = $this->Gallery_model->getAllCategories();
 
 		$dirs = [
-			'articles' => './uploads/articles/',
-			'products' => './uploads/articles/products/',
-			'sections' => './uploads/articles/sections/',
+			'articles' => './Uploads/articles/',
+			'products' => './Uploads/articles/products/',
+			'sections' => './Uploads/articles/sections/',
 		];
 		foreach ($dirs as $dir) {
 			if (!file_exists($dir)) mkdir($dir, 0777, true);
@@ -195,7 +196,7 @@ class Article extends CI_Controller
 
 			// Presunuté nahrávanie hlavného obrázka do saveArticle
 			if (!empty($_FILES['image']['name'])) {
-				$post['image'] = ''; // Bude nastavené v saveArticle
+				$post['image'] = '';
 			} else {
 				$post['image'] = $post['old_image'] ?? null;
 			}
@@ -206,8 +207,7 @@ class Article extends CI_Controller
 					$image = $post['old_section_image'][$i] ?? '';
 
 					if (!empty($_FILES['section_images']['name'][$i])) {
-						// Necháme spracovanie na saveArticle
-						$image = ''; // Bude nastavené v saveArticle
+						$image = '';
 					} elseif (!empty($post['ftp_section_image'][$i])) {
 						$image = $post['ftp_section_image'][$i];
 					}
@@ -217,7 +217,7 @@ class Article extends CI_Controller
 						'image' => $image,
 						'image_title' => $post['section_image_titles'][$i] ?? '',
 						'button_name' => $post['button_names'][$i] ?? '',
-						'subpage' => $post['subpages'][$i] ?? '', // Subpage obsahuje slug článku
+						'subpage' => $post['subpages'][$i] ?? '',
 						'external_url' => $post['external_urls'][$i] ?? ''
 					];
 				}
@@ -255,12 +255,13 @@ class Article extends CI_Controller
 							'image' => $image,
 							'image_title' => $post['section_image_titles'][$i] ?? '',
 							'button_name' => $post['button_names'][$i] ?? '',
-							'subpage' => $post['subpages'][$i] ?? '', // Subpage obsahuje slug článku
+							'subpage' => $post['subpages'][$i] ?? '',
 							'external_url' => $post['external_urls'][$i] ?? ''
 						];
 					}
 				}
 
+				$data['subcategories'] = $this->Article_model->getSubcategoriesByCategory($post['category_id']);
 				$data['title'] = 'Artikel verwalten';
 				$data['page'] = 'admin/settings/article_form';
 				$this->load->view('admin/layout/normal', $data);
@@ -296,6 +297,7 @@ class Article extends CI_Controller
 		$data['galleryCategories'] = $galleryCategories;
 		$data['selectedGalleries'] = $selectedGalleries;
 		$data['galleryCategoryId'] = $galleryCategoryId;
+		$data['subcategories'] = $this->Article_model->getSubcategoriesByCategory($categoryId);
 		$data['sections'] = $article ? $this->Article_model->getSections($id) : [];
 		$data['title'] = 'Artikel verwalten';
 		$data['page'] = 'admin/settings/article_form';
@@ -341,7 +343,7 @@ class Article extends CI_Controller
 		$this->load->helper('app_helper');
 		$response = ['success' => false, 'error' => ''];
 
-		$dir = './uploads/articles/summernote/';
+		$dir = './Uploads/articles/summernote/';
 		if (!file_exists($dir)) {
 			if (!mkdir($dir, 0777, true)) {
 				$response['error'] = 'Fehler beim Erstellen des Ordners.';
@@ -351,7 +353,7 @@ class Article extends CI_Controller
 		}
 
 		if (!empty($_FILES['image']['name'])) {
-			$upload_path = uploadImg('image', 'uploads/articles/summernote');
+			$upload_path = uploadImg('image', 'Uploads/articles/summernote');
 			if ($upload_path && file_exists($upload_path)) {
 				$response['success'] = true;
 				$response['image_url'] = $upload_path;
@@ -388,5 +390,120 @@ class Article extends CI_Controller
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($response));
+	}
+
+
+	public function getSubcategories()
+	{
+		$categoryId = $this->input->post('category_id');
+		if (!$categoryId) {
+			echo json_encode(['success' => false, 'message' => 'Kategorie nicht angegeben.']);
+			return;
+		}
+
+		$subcategories = $this->Article_model->getSubcategoriesByCategory($categoryId);
+		$options = '<option value="">-- Unterkategorie auswählen --</option>';
+		$options .= '<option value="new">+ Neue Unterkategorie erstellen</option>';
+		foreach ($subcategories as $sub) {
+			$options .= '<option value="' . htmlspecialchars($sub->id) . '">' . htmlspecialchars($sub->name) . '</option>';
+		}
+
+		echo json_encode(['success' => true, 'options' => $options]);
+	}
+
+	public function manageSubcategory() {
+		$category_id = $this->input->post('category_id');
+		$id = $this->input->post('id');
+		$name = $this->input->post('name');
+		$lang = $this->input->post('lang');
+		$active = $this->input->post('active') ? 1 : 0;
+
+		if (!$category_id || !$name) {
+			echo json_encode(['success' => false, 'message' => 'Kategorie und Name sind erforderlich.']);
+			return;
+		}
+
+		$data = [
+			'category_id' => $category_id,
+			'name' => $name,
+			'lang' => $lang,
+			'active' => $active
+		];
+
+		// Kontrola duplicity pre nový záznam
+		if (!$id) {
+			$existing = $this->Article_model->getSubcategoryByNameAndCategory($category_id, $name);
+			if ($existing) {
+				echo json_encode(['success' => false, 'message' => 'Eine Unterkategorie mit diesem Namen existiert bereits in dieser Kategorie.']);
+				return;
+			}
+		}
+
+		if ($id) {
+			$this->Article_model->saveSubcategory(['id' => $id] + $data);
+			$message = 'Unterkategorie wurde aktualisiert.';
+		} else {
+			$id = $this->Article_model->saveSubcategory($data);
+			$message = 'Unterkategorie wurde erstellt.';
+		}
+
+		$subcategory = $this->Article_model->getSubcategory($id);
+		echo json_encode(['success' => true, 'message' => $message, 'subcategory' => $subcategory]);
+	}
+
+	public function deleteSubcategory()
+	{
+		$id = $this->input->post('id');
+		if (!$id || !is_numeric($id)) {
+			echo json_encode(['success' => false, 'message' => 'Ungültige Unterkategorie-ID.']);
+			return;
+		}
+
+		if ($this->Article_model->deleteSubcategory($id)) {
+			echo json_encode(['success' => true, 'message' => 'Unterkategorie erfolgreich gelöscht.']);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Fehler beim Löschen der Unterkategorie.']);
+		}
+	}
+
+	public function getSubcategoriesForManagement() {
+		$category_id = $this->input->post('category_id');
+		if (!$category_id) {
+			echo json_encode(['success' => false, 'message' => 'Fehlende category_id.']);
+			return;
+		}
+
+		$subcategories = $this->Article_model->getSubcategoriesByCategory($category_id);
+
+		$html = '';
+		foreach ($subcategories as $sub) {
+			$html .= '<tr>';
+			$html .= '<td>' . htmlspecialchars($sub->name) . '</td>';
+			$html .= '<td>' . htmlspecialchars($sub->slug) . '</td>';
+			$html .= '<td>';
+			$html .= '<select name="lang_' . $sub->id . '" class="form-control">';
+			$html .= '<option value="de" ' . ($sub->lang == 'de' ? 'selected' : '') . '>Deutsch</option>';
+			$html .= '<option value="en" ' . ($sub->lang == 'en' ? 'selected' : '') . '>Englisch</option>';
+			$html .= '</select>';
+			$html .= '</td>';
+			$html .= '<td>';
+			$html .= '<input type="checkbox" name="active_' . $sub->id . '" ' . ($sub->active ? 'checked' : '') . ' value="1">';
+			$html .= '</td>';
+			$html .= '<td>';
+			$html .= '<button class="btn btn-sm btn-primary edit-subcategory" data-id="' . $sub->id . '" data-name="' . htmlspecialchars($sub->name) . '">Bearbeiten</button>';
+			$html .= '<button class="btn btn-sm btn-danger delete-subcategory" data-id="' . $sub->id . '">Löschen</button>';
+			$html .= '</td>';
+			$html .= '</tr>';
+		}
+
+		if (empty($html)) {
+			$html = '<tr><td colspan="5">Keine Unterkategorien.</td></tr>';
+		}
+		echo json_encode(['success' => true, 'html' => $html]);
+	}
+
+	public function getSubcategoryByNameAndCategory($category_id, $name)
+	{
+		return $this->db->get_where('article_subcategories', ['category_id' => $category_id, 'name' => $name])->row();
 	}
 }

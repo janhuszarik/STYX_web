@@ -23,10 +23,12 @@ class Article_model extends CI_Model
 		}
 	}
 
-	public function getArticleCategories()
+	public function getArticleCategories($id = null)
 	{
-		$query = $this->db->get('article_categories');
-		return $query->result();
+		if ($id) {
+			return $this->db->get_where('article_categories', ['id' => $id])->row();
+		}
+		return $this->db->get('article_categories')->result();
 	}
 
 	public function deleteArticleCategory($id)
@@ -36,7 +38,7 @@ class Article_model extends CI_Model
 
 	public function getArticlesByCategory($categoryId)
 	{
-		$this->db->select('id, title, slug, slug_title, is_main, category_id, lang, active');
+		$this->db->select('id, title, slug, slug_title, is_main, category_id, subcategory_id, lang, active');
 		$this->db->where('category_id', $categoryId);
 		$this->db->order_by('is_main DESC, id DESC');
 		return $this->db->get('articles')->result();
@@ -161,7 +163,7 @@ class Article_model extends CI_Model
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$uploadResult = uploadImg('image', 'uploads/articles/title_image', $post['title'], false); // Ukladanie do title_image
+			$uploadResult = uploadImg('image', 'uploads/articles/title_image', $post['title'], false);
 			if ($uploadResult && file_exists($uploadResult)) {
 				$image = $uploadResult;
 			} else {
@@ -171,7 +173,7 @@ class Article_model extends CI_Model
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
 			$localDir = FCPATH . 'uploads/articles/title_image/';
-			@mkdir($localDir, 0755, true); // Vytvorenie priečinka, ak neexistuje
+			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 				$localFile = $localDir . basename($ftpPath);
@@ -214,6 +216,7 @@ class Article_model extends CI_Model
 		// Príprava dát pre uloženie
 		$data = [
 			'category_id'     => $post['category_id'],
+			'subcategory_id'  => !empty($post['subcategory_id']) ? $post['subcategory_id'] : null,
 			'lang'            => $post['lang'] ?? 'de',
 			'title'           => $post['title'],
 			'subtitle'        => $post['subtitle'],
@@ -247,7 +250,7 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov, false); // Bez resize a thumbnail
+					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov, false);
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
@@ -325,7 +328,7 @@ class Article_model extends CI_Model
 						'error' => $_FILES['section_images']['error'][$idx],
 						'size' => $_FILES['section_images']['size'][$idx],
 					];
-					$uploadResult = uploadImg('temp_section_image', 'uploads/articles/sections', $sectionName, false); // Bez resize a thumbnail
+					$uploadResult = uploadImg('temp_section_image', 'uploads/articles/sections', $sectionName, false);
 					if ($uploadResult && file_exists($uploadResult)) {
 						$secImg = $uploadResult;
 						log_message('debug', 'Section image uploaded successfully for index ' . $idx . ': ' . $secImg);
@@ -476,5 +479,50 @@ class Article_model extends CI_Model
 		}
 
 		return ['success' => true, 'options' => $options];
+	}
+
+	public function getSubcategoriesByCategory($categoryId)
+	{
+		$this->db->select('id, name, slug, lang, active');
+		$this->db->where('category_id', $categoryId);
+		$this->db->order_by('name', 'ASC');
+		return $this->db->get('article_subcategories')->result();
+	}
+
+	public function getSubcategory($id)
+	{
+		return $this->db->get_where('article_subcategories', ['id' => $id])->row();
+	}
+
+	public function saveSubcategory($post)
+	{
+		$data = [
+			'category_id' => $post['category_id'],
+			'name' => $post['name'],
+			'slug' => url_title($post['name'], 'dash', true),
+			'lang' => $post['lang'] ?? 'de',
+			'active' => isset($post['active']) ? $post['active'] : 1,
+			'created_at' => date('Y-m-d H:i:s'),
+			'updated_at' => date('Y-m-d H:i:s'),
+		];
+
+		if (!empty($post['id']) && is_numeric($post['id'])) {
+			$this->db->where('id', $post['id']);
+			return $this->db->update('article_subcategories', $data);
+		} else {
+			$this->db->insert('article_subcategories', $data);
+			return $this->db->insert_id();
+		}
+	}
+
+	public function deleteSubcategory($id)
+	{
+		$this->db->where('subcategory_id', $id);
+		$this->db->update('articles', ['subcategory_id' => null]);
+		return $this->db->delete('article_subcategories', ['id' => $id]);
+	}
+	public function getSubcategoryByNameAndCategory($category_id, $name)
+	{
+		return $this->db->get_where('article_subcategories', ['category_id' => $category_id, 'name' => $name])->row();
 	}
 }
