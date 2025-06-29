@@ -174,8 +174,8 @@ for ($i = 1; $i <= 3; $i++) {
 				<?php foreach ($galleryImages as $image): ?>
 					<?php
 					$fullImg = base_url($image->image_path);
-					$thumbImg = preg_replace('/(\.\w+)$/', '_thumb$1', $image->image_path);
-					$thumbPath = base_url($thumbImg);
+					$webpImg = preg_replace('/(\.\w+)$/', '.webp', $image->image_path);
+					$thumbPath = base_url($webpImg);
 					?>
 					<div class="col-6 col-sm-4 col-md-3">
 						<img src="<?= $thumbPath ?>" alt="Galerie Bild" class="img-fluid rounded shadow-sm w-100 gallery-thumb" style="object-fit:cover; aspect-ratio: 4/3;" data-full="<?= $fullImg ?>">
@@ -185,6 +185,7 @@ for ($i = 1; $i <= 3; $i++) {
 		</div>
 	</section>
 <?php endif; ?>
+
 <div id="lightbox-modal" class="lightbox-modal" style="display:none;">
 	<span class="lightbox-close" onclick="closeLightbox()">×</span>
 	<img class="lightbox-content" id="lightbox-img" src="" alt="Vollbild">
