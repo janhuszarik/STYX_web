@@ -144,7 +144,7 @@
 							</div>
 							<div class="tab-pane fade" id="slider" role="tabpanel" aria-labelledby="slider-tab">
 								<div class="doc-section">
-									<h4 class="mb-3"><i class="fas fa-film text-info me-2"></i>🎞️ Slider</h4>
+									<h4 class="mb-3"><i class="text-info me-2"></i>🎞️ Slider</h4>
 
 									<p><strong>Was macht dieses Modul?</strong><br>
 										Im Modul <strong>Sliderverwaltung</strong> kannst du die Slider deiner Webseite verwalten – inklusive Textinhalten, Bildern, Farben, Position und Sprache. Slider sind visuelle Bannerbereiche, die auf der Startseite oder Unterseiten angezeigt werden.</p>
