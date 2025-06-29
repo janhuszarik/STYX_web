@@ -48,7 +48,6 @@ class App extends CI_Controller
 		$segment1 = $this->uri->segment(2);
 		$segment2 = $this->uri->segment(3);
 		$segment3 = $this->uri->segment(4);
-
 		$slug = $segment1 . '/' . $segment2;
 
 		$this->load->model('App_model');
@@ -59,9 +58,9 @@ class App extends CI_Controller
 			return;
 		}
 
+		// Detail článku podľa slug_title
 		if (!empty($segment3)) {
 			$article = $this->App_model->getExactArticle($segment3, $lang);
-
 			if (!$article || $article->category_id != $category->id) {
 				$this->error404();
 				return;
@@ -88,13 +87,27 @@ class App extends CI_Controller
 			return;
 		}
 
-		$articles = $this->App_model->getArticlesByCategory($category->id, $lang);
+		// Výpis článkov (zoznam)
+		$subcategoryId = $this->input->get('sub');
+		$subcategories = [];
+		$articles = [];
 
-		if (empty($articles)) {
-			$this->error404();
-			return;
+		if (in_array((int)$category->id, [100, 102])) {
+			$subcategories = $this->App_model->getSubcategoriesByCategory($category->id);
+
+			if ($subcategoryId) {
+				$articles = $this->App_model->getArticlesBySubcategory($category->id, $subcategoryId, $lang);
+			} else {
+				$articles = $this->App_model->getArticlesByCategory($category->id, $lang);
+			}
+		} else {
+			$articles = $this->App_model->getArticlesByCategory($category->id, $lang);
 		}
 
+		$noArticles = empty($articles);
+
+
+		// Ak existuje len jeden článok → presmeruj na detail
 		if (count($articles) === 1) {
 			$article = $articles[0];
 			$sections = $this->App_model->getSections($article->id);
@@ -104,7 +117,6 @@ class App extends CI_Controller
 				$this->load->model('Gallery_model');
 				$galleryImages = $this->Gallery_model->getImagesByGalleryId($article->gallery_id);
 			}
-
 			$data['article'] = $article;
 			$data['sections'] = $sections;
 			$data['galleryImages'] = $galleryImages;
@@ -118,8 +130,12 @@ class App extends CI_Controller
 			return;
 		}
 
+		// Výstup pre zoznam článkov
 		$data['articles'] = $articles;
 		$data['category'] = $category;
+		$data['subcategories'] = $subcategories;
+		$data['selectedSubcategory'] = $subcategoryId;
+		$data['noArticles'] = $noArticles;
 		$data['title'] = $category->name ?? 'Artikelübersicht';
 		$data['description'] = $category->description ?? 'Übersicht der Artikel in dieser Kategorie';
 		$data['keywords'] = $category->keywords ?? '';
@@ -128,6 +144,7 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+
 
 	public function error404()
 	{

@@ -1,0 +1,16 @@
+.subcategory-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: center;
+	margin-bottom: 30px;
+}
+.subcategory-buttons a.btn {
+	min-width: 140px;
+	text-align: center;
+	transition: all 0.2s ease-in-out;
+}
+.subcategory-buttons a.btn.active {
+	font-weight: bold;
+	box-shadow: 0 0 0 2px #218838;
+}

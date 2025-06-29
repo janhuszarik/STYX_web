@@ -263,6 +263,25 @@ class App_model extends CI_Model
 		return true;
 	}
 
+	public function getSubcategoriesByCategory($category_id)
+	{
+		if (!in_array($category_id, [100, 102])) return [];
+
+		$table = $category_id == 100 ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+		$this->db->where('active', 1);
+		$this->db->order_by('id', 'ASC');
+		return $this->db->get($table)->result();
+	}
+	public function getArticlesBySubcategory($categoryId, $subcategoryId, $lang)
+	{
+		$this->db->where('category_id', $categoryId);
+		$this->db->where('subcategory_id', $subcategoryId);
+		$this->db->where('lang', $lang);
+		$this->db->where('(start_date_from IS NULL OR start_date_from <= NOW())');
+		$this->db->where('(end_date_to IS NULL OR end_date_to >= NOW())');
+		$this->db->order_by('orderBy ASC, created_at DESC');
+		return $this->db->get('articles')->result();
+	}
 
 
 
