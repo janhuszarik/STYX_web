@@ -316,25 +316,33 @@ class Article_model extends CI_Model
 					} else {
 						return false;
 					}
-				} elseif (!empty($post['ftp_section_image'][$idx]) && $post['ftp_section_image'][$idx] !== $post['old_section_image'][$idx]) {
-					$ftpPath = $post['ftp_section_image'][$idx];
-					$localDir = FCPATH . 'uploads/articles/sections/';
-					@mkdir($localDir, 0755, true);
-					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
-						$dst = $localDir . basename($ftpPath);
-						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
-						}
-					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
-						$src = FCPATH . ltrim($ftpPath, '/');
-						$dst = $localDir . basename($ftpPath);
-						if (@copy($src, $dst)) {
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
-						}
-					}
-				}
+				} elseif (!empty($post['ftp_section_image'][$idx])) {
+			$ftpPath = $post['ftp_section_image'][$idx];
+			$localDir = FCPATH . 'uploads/articles/sections/';
+			@mkdir($localDir, 0755, true);
 
-				$sectionData = [
+			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+				$dst = $localDir . basename($ftpPath);
+				if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
+					$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+				} else {
+					$secImg = $ftpPath; // fallback – priamo cesta
+				}
+			} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+				$src = FCPATH . ltrim($ftpPath, '/');
+				$dst = $localDir . basename($ftpPath);
+				if (@copy($src, $dst)) {
+					$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+				} else {
+					$secImg = $ftpPath;
+				}
+			} else {
+				$secImg = $ftpPath; // aj keby neexistoval – zapíš cestu
+			}
+		}
+
+
+			$sectionData = [
 					'article_id'   => $articleId,
 					'content'      => $content,
 					'image'        => $secImg,
