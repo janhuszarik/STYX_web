@@ -148,9 +148,9 @@ class Article extends CI_Controller
 		$galleryCategories = $this->Gallery_model->getAllCategories();
 
 		$dirs = [
-			'articles' => './Uploads/articles/',
-			'products' => './Uploads/articles/products/',
-			'sections' => './Uploads/articles/sections/',
+			'articles' => './uploads/articles/',
+			'products' => './uploads/articles/products/',
+			'sections' => './uploads/articles/sections/',
 		];
 		foreach ($dirs as $dir) {
 			if (!file_exists($dir)) mkdir($dir, 0777, true);
@@ -335,7 +335,7 @@ class Article extends CI_Controller
 		$this->load->helper('app_helper');
 		$response = ['success' => false, 'error' => ''];
 
-		$dir = './Uploads/articles/summernote/';
+		$dir = './uploads/articles/summernote/';
 		if (!file_exists($dir)) {
 			if (!mkdir($dir, 0777, true)) {
 				$response['error'] = 'Fehler beim Erstellen des Ordners.';
@@ -345,7 +345,7 @@ class Article extends CI_Controller
 		}
 
 		if (!empty($_FILES['image']['name'])) {
-			$upload_path = uploadImg('image', 'Uploads/articles/summernote');
+			$upload_path = uploadImg('image', 'uploads/articles/summernote');
 			if ($upload_path && file_exists($upload_path)) {
 				$response['success'] = true;
 				$response['image_url'] = $upload_path;
