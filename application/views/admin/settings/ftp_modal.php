@@ -81,12 +81,21 @@
 	const BASE_URL = "<?= base_url() ?>";
 
 	document.addEventListener("DOMContentLoaded", () => {
-		const modalEl = document.getElementById("ftpModal"),
-			modal = new bootstrap.Modal(modalEl),
-			itemsList = document.getElementById("ftp-items-list"),
-			breadcrumb = document.getElementById("ftp-breadcrumb"),
-			backBtn = document.getElementById("ftp-back-btn"),
-			homeBtn = document.getElementById("ftp-home-btn");
+		const modalEl = document.getElementById("ftpModal");
+		const modal = new bootstrap.Modal(modalEl);
+		const itemsList = document.getElementById("ftp-items-list");
+		const breadcrumb = document.getElementById("ftp-breadcrumb");
+		const backBtn = document.getElementById("ftp-back-btn");
+		const homeBtn = document.getElementById("ftp-home-btn");
+
+		modalEl.addEventListener('hidden.bs.modal', () => {
+			setTimeout(() => {
+				document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+				document.body.classList.remove('modal-open');
+				document.body.style.overflow = '';
+				document.body.style.paddingRight = '';
+			}, 100); // malé oneskorenie kvôli animácii
+		});
 
 		let pathHistory = [''];
 		let currentPathIndex = 0;
@@ -95,7 +104,7 @@
 			const parts = path ? path.split('/') : [];
 			let html = '<a href="#" data-path="">/</a>';
 			let currentPath = '';
-			parts.forEach((part, index) => {
+			parts.forEach(part => {
 				if (part) {
 					currentPath += (currentPath ? '/' : '') + part;
 					html += ` / <a href="#" data-path="${currentPath}">${part}</a>`;
@@ -107,9 +116,7 @@
 				link.addEventListener('click', e => {
 					e.preventDefault();
 					const newPath = link.dataset.path;
-					while (pathHistory.length - 1 > currentPathIndex) {
-						pathHistory.pop();
-					}
+					while (pathHistory.length - 1 > currentPathIndex) pathHistory.pop();
 					pathHistory.push(newPath);
 					currentPathIndex = pathHistory.length - 1;
 					loadFolder(newPath);
@@ -145,11 +152,11 @@
 						const size = item.size && item.size !== -1 ? (item.size / 1024).toFixed(2) + ' KB' : '-';
 
 						html += `
-                            <div class="ftp-item ${actionClass}" data-path="${item.path}" data-url="${item.url || ''}">
-                                <div>${icon}</div>
-                                <div>${item.name}</div>
-                                <div style="margin-left: auto;">${size}</div>
-                            </div>`;
+							<div class="ftp-item ${actionClass}" data-path="${item.path}" data-url="${item.url || ''}">
+								<div>${icon}</div>
+								<div>${item.name}</div>
+								<div style="margin-left: auto;">${size}</div>
+							</div>`;
 					});
 					itemsList.innerHTML = html || '<div class="ftp-loading">Der Ordner ist leer.</div>';
 
@@ -171,14 +178,13 @@
 							const previewDiv = document.getElementById(lastPreview);
 							targetInput.value = path;
 							previewDiv.innerHTML = `<img src="${path}" class="img-fluid border mt-2">`;
-							modal.hide();
-							document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-							document.body.classList.remove('modal-open');
-							document.body.style.overflow = '';
-							document.body.style.paddingRight = '';
+
+							setTimeout(() => {
+								const modalInstance = bootstrap.Modal.getInstance(modalEl);
+								modalInstance.hide();
+							}, 50);
 						});
 					});
-
 				})
 				.catch(err => {
 					itemsList.innerHTML = `<div class="alert alert-danger">Fehler: ${err.message}</div>`;
@@ -202,16 +208,6 @@
 			loadFolder('');
 		});
 
-		modalEl.addEventListener('hidden.bs.modal', () => {
-			const backdrop = document.querySelector('.modal-backdrop');
-			if (backdrop) {
-				backdrop.remove();
-			}
-			document.body.classList.remove('modal-open');
-			document.body.style.overflow = '';
-			document.body.style.paddingRight = '';
-		});
-
 		document.body.addEventListener('click', function (e) {
 			if (!e.target.matches('.ftp-picker')) return;
 			lastTarget = e.target.dataset.ftpTarget;
@@ -221,3 +217,4 @@
 		});
 	});
 </script>
+
