@@ -145,9 +145,46 @@
 							<div class="tab-pane fade" id="slider" role="tabpanel" aria-labelledby="slider-tab">
 								<div class="doc-section">
 									<h4 class="mb-3"><i class="fas fa-film text-info me-2"></i>🎞️ Slider</h4>
-									<p>Hier kannst du Slider verwalten...</p>
+
+									<p><strong>Was macht dieses Modul?</strong><br>
+										Im Modul <strong>Sliderverwaltung</strong> kannst du die Slider deiner Webseite verwalten – inklusive Textinhalten, Bildern, Farben, Position und Sprache. Slider sind visuelle Bannerbereiche, die auf der Startseite oder Unterseiten angezeigt werden.</p>
+
+									<h5 class="mt-4">🔧 Wie funktioniert das Erstellen eines Sliders?</h5>
+									<ul>
+										<li><strong>Sprache:</strong> Wähle, in welcher Sprachversion der Slider erscheinen soll (z.&nbsp;B. Deutsch oder Englisch).</li>
+										<li><strong>Titel für Inhalt:</strong> Interner Titel für die Verwaltung – nicht im Frontend sichtbar.</li>
+										<li><strong>Hauptüberschrift:</strong> Große Hauptzeile im Sliderbild.</li>
+										<li><strong>Unterüberschrift & Kleingeschriebener Text:</strong> Zusätzliche erklärende Texte unter der Überschrift.</li>
+										<li><strong>Slider Bild:</strong> Lade ein Bild im Format JPG, PNG oder GIF hoch (empfohlen: 1600x600px).</li>
+										<li><strong>Schaltflächenlink:</strong> Optionaler Button-Link, z.&nbsp;B. zu einer Angebotsseite.</li>
+										<li><strong>Hintergrundfarbe & Textfarbe:</strong> Bestimmen das Farbschema des Sliders.</li>
+										<li><strong>Position:</strong> Bestimmt die Reihenfolge auf der Webseite (z.&nbsp;B. 0 = ganz oben).</li>
+										<li><strong>Aktiv/Inaktiv:</strong> Bestimmt, ob der Slider angezeigt wird.</li>
+									</ul>
+
+									<h5 class="mt-4">🗑 Slider löschen</h5>
+									<p>Ein Slider kann dauerhaft gelöscht werden. Dabei wird das Bild automatisch vom Server entfernt.<br>
+										Achtung: Dieser Vorgang ist unwiderruflich!</p>
+
+									<h5 class="mt-4">💡 Tipps & Hinweise</h5>
+									<ul>
+										<li>Nutze einfache, optimierte Bilder für bessere Ladezeiten.</li>
+										<li>Verwende kontrastreiche Textfarben für bessere Lesbarkeit.</li>
+										<li>Teste Slider nach dem Speichern im Frontend und auf Mobilgeräten.</li>
+										<li>Vermeide doppelte Positionen – jeder Slider sollte eine eindeutige Reihenfolge haben.</li>
+									</ul>
+
+									<h5 class="mt-4">⚙️ Technische Umsetzung</h5>
+									<ul>
+										<li><strong>Controller:</strong> <code>Admin::sliderSave()</code></li>
+										<li><strong>Model:</strong> <code>Admin_model::save_slider_full()</code>, <code>get_all_sliders()</code></li>
+										<li><strong>Formular View:</strong> <code>views/admin/settings/slider_form.php</code></li>
+										<li><strong>Listen View:</strong> <code>views/admin/settings/sliders.php</code></li>
+										<li><strong>Datenbanktabelle:</strong> <code>slider</code></li>
+									</ul>
 								</div>
 							</div>
+
 							<div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
 								<div class="doc-section">
 									<h4 class="mb-3"><i class="fas fa-newspaper text-secondary me-2"></i>📰 News</h4>
