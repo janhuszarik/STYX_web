@@ -59,16 +59,17 @@
 						<?php
 						$original_path = $image->image_path;
 						$parts = pathinfo($original_path);
-						$thumb_name = $parts['filename'] . '_thumb.' . $parts['extension'];
+						$webp_name = $parts['filename'] . '.webp';
 						$clean_dirname = ltrim($parts['dirname'], './'); // odstráni ./ alebo /
-						$thumb_url = base_url($clean_dirname . '/' . $thumb_name);
+						$webp_url = base_url($clean_dirname . '/' . $webp_name);
 						?>
 						<div class="thumbnail" data-id="<?= $image->id ?>" data-order="<?= $image->order_position ?>">
-							<img src="<?= $thumb_url ?>" alt="Thumbnail">
+							<img src="<?= $webp_url ?>" alt="Thumbnail">
 							<button class="delete-btn" onclick="deleteImage(<?= $image->id ?>)">X</button>
 						</div>
 					<?php endforeach; ?>
 				</div>
+
 			</div>
 		</section>
 	</div>
