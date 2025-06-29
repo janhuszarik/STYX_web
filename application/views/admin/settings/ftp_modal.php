@@ -172,8 +172,13 @@
 							targetInput.value = path;
 							previewDiv.innerHTML = `<img src="${path}" class="img-fluid border mt-2">`;
 							modal.hide();
+							document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+							document.body.classList.remove('modal-open');
+							document.body.style.overflow = '';
+							document.body.style.paddingRight = '';
 						});
 					});
+
 				})
 				.catch(err => {
 					itemsList.innerHTML = `<div class="alert alert-danger">Fehler: ${err.message}</div>`;
