@@ -12,6 +12,15 @@ $this->load->view('partials/article_list_assets');
 	</div>
 </section>
 <div style="margin-bottom: 50px;"></div>
+<?php if ($category->id == 100): ?>
+	<div class="container mb-3">
+		<p class="lead text-center">
+			Unter dieser Rubrik werden Sie über alle wichtigen Neuigkeiten aus unserem Hause informiert.
+			Ob Veranstaltungen, Messeberichte, Tipps und Tricks zum Thema Kosmetik oder Aktuelles aus unserer breiten Produktpalette,
+			wir halten Sie mit allem rund um STYX auf dem neuesten Stand!
+		</p>
+	</div>
+<?php endif; ?>
 
 <?php if (!empty($subcategories)): ?>
 	<div class="container">
