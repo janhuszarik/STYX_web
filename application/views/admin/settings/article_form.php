@@ -632,7 +632,7 @@ if (in_array($categoryId, [100, 102])) {
 				lang: 'de-DE',
 				toolbar: [
 					['style', ['style']],
-					['font', ['bold', 'underline', 'clear']],
+					['font', ['bold', 'underline', 'clear', 'fontsize']],
 					['color', ['color']],
 					['para', ['ul', 'ol', 'paragraph']],
 					['table', ['table']],

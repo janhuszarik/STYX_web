@@ -194,7 +194,7 @@ class Admin extends CI_Controller
 		$post = $this->input->post(NULL, TRUE);
 		$id = $post['id'] ?? $this->uri->segment(4);
 		$segment3 = $this->uri->segment(3);
-
+		ddd($post);
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
 
