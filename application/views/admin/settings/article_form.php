@@ -632,12 +632,12 @@ if (in_array($categoryId, [100, 102])) {
 				lang: 'de-DE',
 				toolbar: [
 					['style', ['style']],
-					['font', ['bold', 'underline', 'clear', 'fontsize']],
+					['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'fontsize']],
 					['color', ['color']],
-					['para', ['ul', 'ol', 'paragraph']],
+					['para', ['ul', 'ol', 'paragraph', 'height', 'blockquote']],
 					['table', ['table']],
-					['insert', ['link', 'picture']],
-					['view', ['fullscreen', 'codeview', 'help']]
+					['insert', ['link', 'picture', 'video', 'hr']],
+					['view', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
 				],
 				callbacks: {
 					onImageUpload: function (files) {
