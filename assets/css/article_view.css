@@ -1,4 +1,8 @@
 /* Lightbox */
+b {
+	font-weight: normal !important;
+}
+
 .lightbox-modal {
 	position: fixed;
 	top: 0;
