@@ -1,4 +1,7 @@
-/* Lightbox */
+b, strong {
+	font-weight: bold;
+}
+
 .lightbox-modal {
 	position: fixed;
 	top: 0;
@@ -34,7 +37,6 @@
 	height: auto;
 }
 
-/* Vynútenie fontu Poppins pre celý obsah */
 .content *,
 .section-content *,
 .card *,
@@ -44,7 +46,6 @@
 	font-family: 'Poppins', Arial, sans-serif !important;
 }
 
-/* Responsive zmeny */
 @media (max-width: 768px) {
 	h1, h2, h3 {
 		font-size: 1.5rem;
