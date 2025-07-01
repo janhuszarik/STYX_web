@@ -71,7 +71,19 @@
 	height: 60px;
 	margin-top: 40px;
 }
-
+.slider-text h1,
+.slider-text h3,
+.slider-text h4,
+.slider-text p {
+	margin-bottom: 0.5rem !important;
+	margin-top: 0 !important;
+}
+.slider-text h1:last-child,
+.slider-text h3:last-child,
+.slider-text h4:last-child,
+.slider-text p:last-child {
+	margin-bottom: 0 !important;
+}
 @media (max-width: 1024px) {
 	.slider-section {
 		height: 400px; /* tablety */

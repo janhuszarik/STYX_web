@@ -1,3 +1,5 @@
+
+
 <div role="main" class="main">
 		<?php if (!empty($sliders)): ?>
 		<section class="slider-container" role="region" aria-label="<?= lang('SLIDER_STARTSEITE') ?>">
