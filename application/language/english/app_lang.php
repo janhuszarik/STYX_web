@@ -370,6 +370,10 @@ $lang['SLIDER_STARTSEITE'] 										= 'Main slider on the homepage';
 $lang['SLIDER_PREV'] 											= 'Previous slide';
 $lang['SLIDER_NEXT'] 											= 'Next slide';
 $lang['ACCESSIBILITY_MODE'] 									= 'Accessibility';
+$lang['GARTENWELT_TEXT_HEADER'] 								= 'STYX Gartenwelt';
+$lang['GARTENWELT_TEXT'] 										= 'STYX Gartenwelt text was muss hier sein';
+$lang['BAHNHOFSBRAUE_TEXT_HEADER'] 								= 'STYX Bahnhofsbräu';
+$lang['BAHNHOFSBRAUE_TEXT'] 									= 'Your beer experience - Taste our own-brewed beer in Ober-Grafendorf Bahnhofsbräu.';
 
 
 //----------------------------------------------------------------------------------------------------------------------

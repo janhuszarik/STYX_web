@@ -179,65 +179,73 @@
 
 	<section class="container" aria-labelledby="brands-heading">
 		<h2 id="brands-heading" class="visually-hidden">Our Brands and Services</h2>
-		<div class="row justify-content-center">
-			<article class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation"
-					 data-appear-animation="fadeInUpShorter"
-					 data-appear-animation-delay="200">
-				<div class="card">
-					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/image/naturkosmetik_styx.jpg"
-						 alt="STYX Naturkosmetik logo">
+		<div class="row">
+			<!-- 1. STYX Naturkosmetik -->
+			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+				<div class="card h-100">
+					<img class="card-img-top" src="<?= BASE_URL ?>img/image/styx_card.jpg" alt="STYX Naturkosmetik logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('STYX_NATURKOSMETIK_TEXT_HEADER') ?></h3>
 						<p class="card-text mb-2 pb-1"><?= lang('STYX_NATURKOSMETIK_TEXT') ?></p>
-						<?php if (language() === 'en'): ?>
-							<a href="<?= BASE_URL . 'en/Naturkosmetik' ?>"
-							   class="read-more text-color-primary font-weight-semibold text-2"
-							   aria-label="Learn more about STYX Naturkosmetik">
-								<?= lang('READ_MORE') ?>
-								<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
-							</a>
-						<?php else: ?>
-							<a href="<?= BASE_URL . 'Naturkosmetik' ?>"
-							   class="read-more text-color-primary font-weight-semibold text-2"
-							   aria-label="Learn more about STYX Naturkosmetik">
-								<?= lang('READ_MORE') ?>
-								<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
-							</a>
-						<?php endif; ?>
+						<a href="<?php
+						if (language() === 'de') {
+							echo BASE_URL . 'de/Unternehmen/naturkosmetik';
+						} elseif (language() === 'en') {
+							echo BASE_URL . 'en/company/natural-cosmetics';
+						} else {
+							echo BASE_URL . 'Naturkosmetik';
+						}
+						?>"
+						   class="read-more text-color-primary font-weight-semibold text-2"
+						   aria-label="Learn more about STYX Naturkosmetik">
+							<?= lang('READ_MORE') ?>
+							<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
+						</a>
 					</div>
 				</div>
-			</article>
-			<article class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation"
-					 data-appear-animation="fadeInUpShorter"
-					 data-appear-animation-delay="200">
-				<div class="card">
-					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/image/massage.jpg"
-						 alt="Aroma Derm logo">
+
+			</div>
+			<!-- 2. Aroma Derm -->
+			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+				<div class="card h-100">
+					<img class="card-img-top" src="<?= BASE_URL ?>img/image/aroma_derm_card.jpg" alt="Aroma Derm logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('AROMA_DERM_TEXT_HEADER') ?></h3>
 						<p class="card-text mb-2 pb-1"><?= lang('AROMA_DERM_TEXT') ?></p>
-						<a href="<?= BASE_URL . language() . '/Aroma-Derm' ?>"
-						   class="read-more text-color-primary font-weight-semibold text-2"
+
+						<a href="<?php
+						if (language() === 'de') {
+							echo BASE_URL . 'de/Unternehmen/aroma-derm-profikosmetik';
+						} elseif (language() === 'en') {
+							echo BASE_URL . 'en/company/aroma-derm-professional-cosmetics';
+						} else {
+							echo BASE_URL;
+						}
+						?>"
+						 class="read-more text-color-primary font-weight-semibold text-2"
 						   aria-label="Learn more about Aroma Derm">
 							<?= lang('READ_MORE') ?>
 							<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
 						</a>
 					</div>
 				</div>
-			</article>
-			<article class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation"
-					 data-appear-animation="fadeInUpShorter"
-					 data-appear-animation-delay="200">
-				<div class="card">
-					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/image/schokolade_produktion.jpg"
-						 alt="STYX Schokoladenmanufaktur logo">
+			</div>
+			<!-- 3. Schokoladenmanufaktur -->
+			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+				<div class="card h-100">
+					<img class="card-img-top" src="<?= BASE_URL ?>img/image/schokoladenmanufaktur_card.jpg" alt="STYX Schokoladenmanufaktur logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('SCHOKOLADE_TEXT_HEADER') ?></h3>
 						<p class="card-text mb-2 pb-1"><?= lang('SCHOKOLADE_TEXT') ?></p>
-						<a href="<?= BASE_URL . language() . '/Schokoladen' ?>"
+						<a href="<?php
+						if (language() === 'de') {
+							echo BASE_URL . 'de/Unternehmen/schokoladenmanufaktur';
+						} elseif (language() === 'en') {
+							echo BASE_URL . 'en/company/chocolate-manufactory';
+						} else {
+							echo BASE_URL;
+						}
+						?>"
 						   class="read-more text-color-primary font-weight-semibold text-2"
 						   aria-label="Learn more about STYX Schokoladenmanufaktur">
 							<?= lang('READ_MORE') ?>
@@ -245,18 +253,23 @@
 						</a>
 					</div>
 				</div>
-			</article>
-			<article class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation"
-					 data-appear-animation="fadeInUpShorter"
-					 data-appear-animation-delay="200">
-				<div class="card">
-					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/image/welcomecenter.jpg"
-						 alt="World of STYX logo">
+			</div>
+			<!-- 4. World of STYX -->
+			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+				<div class="card h-100">
+					<img class="card-img-top" src="<?= BASE_URL ?>img/image/welcomecenter_card.jpg" alt="World of STYX logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('WORLD_OF_STYX_TEXT_HEADER') ?></h3>
 						<p class="card-text mb-2 pb-1"><?= lang('WORLD_OF_STYX_TEXT') ?></p>
-						<a href="<?= BASE_URL . language() . '/Betriebsfuehrungen' ?>"
+						<a href="<?php
+						if (language() === 'de') {
+							echo BASE_URL . 'de/besuchen/betriebsfuehrungen';
+						} elseif (language() === 'en') {
+							echo BASE_URL . 'en/visit/factory-tours';
+						} else {
+							echo BASE_URL;
+						}
+						?>"
 						   class="read-more text-color-primary font-weight-semibold text-2"
 						   aria-label="Learn more about World of STYX">
 							<?= lang('READ_MORE') ?>
@@ -264,20 +277,23 @@
 						</a>
 					</div>
 				</div>
-			</article>
-		</div>
-		<div class="row justify-content-center">
-			<article class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation"
-					 data-appear-animation="fadeInUpShorter"
-					 data-appear-animation-delay="200">
-				<div class="card">
-					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/image/privateLabeling.jpg"
-						 alt="Private Labeling logo">
+			</div>
+			<!-- 5. Private Labeling -->
+			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+				<div class="card h-100">
+					<img class="card-img-top" src="<?= BASE_URL ?>img/image/privateLabeling_card.jpg" alt="Private Labeling logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('PRIVATE_LABELING_TEXT_HEADER') ?></h3>
 						<p class="card-text mb-2 pb-1"><?= lang('PRIVATE_LABELING_TEXT') ?></p>
-						<a href="<?= BASE_URL . language() . '/Private-labeling' ?>"
+						<a href="<?php
+						if (language() === 'de') {
+							echo BASE_URL . 'de/Unternehmen/private-labeling';
+						} elseif (language() === 'en') {
+							echo BASE_URL . 'en/company/private-labeling';
+						} else {
+							echo BASE_URL;
+						}
+						?>"
 						   class="read-more text-color-primary font-weight-semibold text-2"
 						   aria-label="Learn more about Private Labeling">
 							<?= lang('READ_MORE') ?>
@@ -285,56 +301,74 @@
 						</a>
 					</div>
 				</div>
-			</article>
-			<article class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation"
-					 data-appear-animation="fadeInUpShorter"
-					 data-appear-animation-delay="200">
-				<div class="card">
-					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/image/werbegeschenke.jpg"
-						 alt="Werbegeschenke logo">
-					<div class="card-body">
-						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('WERBE_TEXT_HEADER') ?></h3>
-						<p class="card-text mb-2 pb-1"><?= lang('WERBE_TEXT') ?></p>
-						<a href="<?= BASE_URL . language() . '/Werbegeschenke' ?>"
-						   class="read-more text-color-primary font-weight-semibold text-2"
-						   aria-label="Learn more about Werbegeschenke">
-							<?= lang('READ_MORE') ?>
-							<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
-						</a>
+			</div>
+			<!-- 6. Werbegeschenke | EN-Bahnhofsbraeu -->
+			<?php if (language() === 'en'): ?>
+				<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+					<div class="card h-100">
+						<img class="card-img-top" src="<?= BASE_URL ?>img/image/bahnhofsbraeu_card.jpg" alt="Bahnhofsbaue_logo">
+						<div class="card-body">
+							<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('BAHNHOFSBRAUE_TEXT_HEADER') ?></h3>
+							<p class="card-text mb-2 pb-1"><?= lang('BAHNHOFSBRAUE_TEXT') ?></p>
+							<a href="<?= BASE_URL ?>en/visit/bahnhofsbraeu"
+							   class="read-more text-color-primary font-weight-semibold text-2"
+							   aria-label="Learn more about Private Labeling">
+								<?= lang('READ_MORE') ?>
+								<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
+							</a>
+						</div>
 					</div>
 				</div>
-			</article>
-			<article class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation"
-					 data-appear-animation="fadeInUpShorter"
-					 data-appear-animation-delay="200">
-				<div class="card">
-					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/image/remise.jpg"
-						 alt="STYX Remise logo">
+			<?php else: ?>
+				<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+					<div class="card h-100">
+						<img class="card-img-top" src="<?= BASE_URL ?>img/image/werbegeschenke_card.jpg" alt="Werbegeschenke logo">
+						<div class="card-body">
+							<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('WERBE_TEXT_HEADER') ?></h3>
+							<p class="card-text mb-2 pb-1"><?= lang('WERBE_TEXT') ?></p>
+							<a href="<?= BASE_URL ?>de/Unternehmen/werbegeschenke"
+							   class="read-more text-color-primary font-weight-semibold text-2"
+							   aria-label="Learn more about Werbegeschenke">
+								<?= lang('READ_MORE') ?>
+								<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
+
+			<!-- 7. STYX Remise -->
+			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+				<div class="card h-100">
+					<img class="card-img-top" src="<?= BASE_URL ?>img/image/remise_card.jpg" alt="STYX Remise logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('STYX_REMISE_TEXT_HEADER') ?></h3>
 						<p class="card-text mb-2 pb-1"><?= lang('STYX_REMISE_TEXT') ?></p>
 						<a href="https://www.styx-remise.at/"
 						   class="read-more text-color-primary font-weight-semibold text-2"
-						   aria-label="Learn more about STYX Remise">
+						   aria-label="Learn more about STYX Remise" target="_blank" rel="noopener">
 							<?= lang('READ_MORE') ?>
 							<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
 						</a>
 					</div>
 				</div>
-			</article>
-			<article class="col-md-6 col-lg-3 mb-5 mb-lg-0 appear-animation"
-					 data-appear-animation="fadeInUpShorter"
-					 data-appear-animation-delay="200">
-				<div class="card">
-					<img class="card-img-top"
-						 src="<?= BASE_URL ?>img/image/workshop_styx.jpg"
-						 alt="STYX Academy logo">
+			</div>
+			<!-- 8. STYX Academy -->
+			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+				<div class="card h-100">
+					<img class="card-img-top" src="<?= BASE_URL ?>img/image/workshops_card.jpg" alt="STYX Academy logo">
 					<div class="card-body">
 						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('ACADEMY_TEXT_HEADER') ?></h3>
 						<p class="card-text mb-2 pb-1"><?= lang('ACADEMY_TEXT') ?></p>
-						<a href="<?= BASE_URL . language() . '/Workshops' ?>"
+						<a href="<?php
+						if (language() === 'de') {
+							echo BASE_URL . 'de/besuchen/workshops';
+						} elseif (language() === 'en') {
+							echo BASE_URL . 'en/Workshops-Seminars';
+						} else {
+							echo BASE_URL;
+						}
+						?>"
 						   class="read-more text-color-primary font-weight-semibold text-2"
 						   aria-label="Learn more about STYX Academy">
 							<?= lang('READ_MORE') ?>
@@ -342,7 +376,22 @@
 						</a>
 					</div>
 				</div>
-			</article>
+			</div>
+			<!-- 9. EMPTY CARD -->
+			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+				<div class="card h-100">
+					<img class="card-img-top" src="<?= BASE_URL ?>img/image/gartenwelt_card.jpg" alt="STYX Gartenwelt_logo">
+					<div class="card-body">
+						<h3 class="card-title mb-1 text-4 font-weight-bold"><?= lang('GARTENWELT_TEXT_HEADER') ?></h3>
+						<p class="card-text mb-2 pb-1"><?= lang('GARTENWELT_TEXT') ?></p>
+						<a href="<?= BASE_URL . language() . '/Workshops' ?>" class="read-more text-color-primary font-weight-semibold text-2"
+						   aria-label="Learn more about STYX Gartenwelt">
+							<?= lang('READ_MORE') ?>
+							<i class="fas fa-angle-right position-relative top-1 ms-1" aria-hidden="true"></i>
+						</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</section>
 </main>

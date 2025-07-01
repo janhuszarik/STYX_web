@@ -387,7 +387,8 @@ $lang['SLIDER_STARTSEITE'] 										= 'Hauptslider auf der Startseite';
 $lang['SLIDER_PREV'] 											= 'Vorheriger Slide';
 $lang['SLIDER_NEXT'] 											= 'Nächster Slide';
 $lang['ACCESSIBILITY_MODE'] 									= 'Barrierefrei';
-
+$lang['GARTENWELT_TEXT_HEADER'] 								= 'STYX Gartenwelt';
+$lang['GARTENWELT_TEXT'] 										= 'STYX Gartenwelt text was muss hier sein';
 
 //----------------------------------------------------------------------------------------------------------------------
 //Preklad po tento riadok hotový
