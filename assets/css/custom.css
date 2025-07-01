@@ -82,7 +82,7 @@
 .slider-text h3:last-child,
 .slider-text h4:last-child,
 .slider-text p:last-child {
-	margin-bottom: 0 !important;
+	margin-bottom: 25px !important;
 }
 @media (max-width: 1024px) {
 	.slider-section {
