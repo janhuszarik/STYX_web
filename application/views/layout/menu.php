@@ -94,7 +94,6 @@
 													<?php } ?>
 												</li>
 											<?php } ?>
-											<!-- Mobile-only buttons -->
 											<li class="nav-item mobile-only">
 												<a href="https://shop.styx.at/" class="nav-link mobile-button">
 													<i style="font-weight: bold; color: white" class="fas fa-shopping-cart me-2"></i>
