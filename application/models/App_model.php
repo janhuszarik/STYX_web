@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class App_model extends CI_Model
 {
-
 	function routes($lang)
 	{
 		$segment1 = $this->uri->segment(2);
@@ -19,11 +18,10 @@ class App_model extends CI_Model
 
 	public function getSections($articleId)
 	{
-		return $this->db
-			->where('article_id', $articleId)
-			->order_by('order', 'ASC')
-			->get('article_sections')
-			->result();
+		$this->db->select('article_id, content, image, image_title, image_description, button_name, subpage, external_url, `order`');
+		$this->db->where('article_id', $articleId);
+		$this->db->order_by('order', 'ASC');
+		return $this->db->get('article_sections')->result();
 	}
 
 	public function getExactArticle($slug_title, $lang)
@@ -31,7 +29,6 @@ class App_model extends CI_Model
 		$this->db->select('*');
 		$this->db->where('slug_title', $slug_title);
 		$this->db->where('lang', $lang);
-		// $this->db->where('active', 1); // Odstrániť túto podmienku
 		return $this->db->get('articles')->row();
 	}
 
@@ -41,7 +38,6 @@ class App_model extends CI_Model
 		$this->db->from('article_categories ac');
 		$this->db->where('ac.slug', $lang . '/' . $slug);
 		$this->db->where('ac.lang', $lang);
-		// $this->db->where('ac.active', 1);
 		return $this->db->get()->row();
 	}
 
@@ -158,6 +154,7 @@ class App_model extends CI_Model
 		$this->db->order_by('name', 'ASC');
 		return $this->db->get('locations')->result();
 	}
+
 	public function sendKindergeburtstagMail($data)
 	{
 		$this->load->library('email');
@@ -192,13 +189,9 @@ class App_model extends CI_Model
 		$this->email->message($userMessage);
 		$userSent = $this->email->send();
 
-		if (!$adminSent || !$userSent) {
-			log_message('error', 'Chyba pri odosielaní e-mailu: ' . $this->email->print_debugger());
-			return false;
-		}
-
-		return true;
+		return $adminSent && $userSent;
 	}
+
 	public function sendGruppenfuhrungMail($data)
 	{
 		$this->load->library('email');
@@ -215,7 +208,6 @@ class App_model extends CI_Model
 
 		$this->email->initialize($config);
 
-		// ---------- ADMIN E-MAIL ----------
 		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
 		$this->email->to(MAIL_ADMIN);
 		$this->email->bcc(MAIL_MODERATOR);
@@ -236,7 +228,6 @@ class App_model extends CI_Model
 		$this->email->message($adminMessage);
 		$adminSent = $this->email->send();
 
-		// ---------- USER E-MAIL ----------
 		$this->email->clear(true);
 		$this->email->from('support@styxnatur.at', 'STYX Gruppenführung');
 		$this->email->to($data['email']);
@@ -256,11 +247,7 @@ class App_model extends CI_Model
 		$this->email->message($userMessage);
 		$userSent = $this->email->send();
 
-		if (!$adminSent || !$userSent) {
-			return false;
-		}
-
-		return true;
+		return $adminSent && $userSent;
 	}
 
 	public function getSubcategoriesByCategory($category_id)
@@ -272,6 +259,7 @@ class App_model extends CI_Model
 		$this->db->order_by('id', 'ASC');
 		return $this->db->get($table)->result();
 	}
+
 	public function getArticlesBySubcategory($categoryId, $subcategoryId, $lang)
 	{
 		$this->db->where('category_id', $categoryId);
@@ -282,8 +270,5 @@ class App_model extends CI_Model
 		$this->db->order_by('orderBy ASC, created_at DESC');
 		return $this->db->get('articles')->result();
 	}
-
-
-
-
 }
+?>

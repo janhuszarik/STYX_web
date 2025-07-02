@@ -46,6 +46,43 @@ b, strong {
 	font-family: 'Poppins', Arial, sans-serif !important;
 }
 
+.fas.fa-angle-right {
+	display: inline-block !important;
+	font-family: "Font Awesome 6 Free" !important;
+	font-weight: 900 !important;
+}
+
+.image-container {
+	display: inline-block;
+	width: 100%;
+	max-width: 100%;
+	text-align: left;
+}
+
+.image-container img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 100%;
+	height: auto;
+}
+
+.image-description {
+	max-width: 100%;
+	margin: 0.5rem auto 0 auto;
+	font-size: 12px;
+	text-align: left;
+	display: block;
+	width: fit-content;
+}
+
+@media (max-width: 991.98px) {
+	.image-container {
+		width: auto;
+		max-width: 100%;
+	}
+}
+
 @media (max-width: 768px) {
 	h1, h2, h3 {
 		font-size: 1.5rem;
@@ -64,9 +101,4 @@ b, strong {
 		max-height: 200px;
 		object-fit: cover;
 	}
-}
-.fas.fa-angle-right {
-	display: inline-block !important;
-	font-family: "Font Awesome 6 Free" !important;
-	font-weight: 900 !important;
 }

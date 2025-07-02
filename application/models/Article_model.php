@@ -297,6 +297,7 @@ class Article_model extends CI_Model
 			foreach ($post['sections'] as $idx => $content) {
 				$secImg = $post['old_section_image'][$idx] ?? null;
 				$secImgTitle = $post['section_image_titles'][$idx] ?? null;
+				$secImgDescription = $post['section_image_descriptions'][$idx] ?? null;
 				$buttonName = $post['button_names'][$idx] ?? null;
 				$subpage = $post['subpages'][$idx] ?? null;
 				$externalUrl = $post['external_urls'][$idx] ?? null;
@@ -317,36 +318,36 @@ class Article_model extends CI_Model
 						return false;
 					}
 				} elseif (!empty($post['ftp_section_image'][$idx])) {
-			$ftpPath = $post['ftp_section_image'][$idx];
-			$localDir = FCPATH . 'uploads/articles/sections/';
-			@mkdir($localDir, 0755, true);
+					$ftpPath = $post['ftp_section_image'][$idx];
+					$localDir = FCPATH . 'uploads/articles/sections/';
+					@mkdir($localDir, 0755, true);
 
-			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
-				$dst = $localDir . basename($ftpPath);
-				if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-					$secImg = 'uploads/articles/sections/' . basename($ftpPath);
-				} else {
-					$secImg = $ftpPath; // fallback – priamo cesta
+					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
+						$dst = $localDir . basename($ftpPath);
+						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
+							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+						} else {
+							$secImg = $ftpPath;
+						}
+					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
+						$src = FCPATH . ltrim($ftpPath, '/');
+						$dst = $localDir . basename($ftpPath);
+						if (@copy($src, $dst)) {
+							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+						} else {
+							$secImg = $ftpPath;
+						}
+					} else {
+						$secImg = $ftpPath;
+					}
 				}
-			} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
-				$src = FCPATH . ltrim($ftpPath, '/');
-				$dst = $localDir . basename($ftpPath);
-				if (@copy($src, $dst)) {
-					$secImg = 'uploads/articles/sections/' . basename($ftpPath);
-				} else {
-					$secImg = $ftpPath;
-				}
-			} else {
-				$secImg = $ftpPath; // aj keby neexistoval – zapíš cestu
-			}
-		}
 
-
-			$sectionData = [
+				$sectionData = [
 					'article_id'   => $articleId,
 					'content'      => $content,
 					'image'        => $secImg,
 					'image_title'  => $secImgTitle,
+					'image_description' => $secImgDescription,
 					'button_name'  => $buttonName,
 					'subpage'      => $subpage,
 					'external_url' => $externalUrl,

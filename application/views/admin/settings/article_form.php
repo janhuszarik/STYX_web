@@ -454,7 +454,6 @@ if (in_array($categoryId, [100, 102])) {
 						}
 					})
 					.catch(error => {
-						console.error('Error:', error);
 						showAlert('Fehler beim Laden der Unterkategorien.', 'error');
 					});
 			}
@@ -478,7 +477,6 @@ if (in_array($categoryId, [100, 102])) {
 						}
 					})
 					.catch(error => {
-						console.error('Error:', error);
 						subcategoryTableBody.innerHTML = '<tr><td colspan="5">Fehler beim Laden der Unterkategorien.</td></tr>';
 						showAlert('Fehler beim Laden der Unterkategorien.', 'error');
 					});
@@ -490,8 +488,6 @@ if (in_array($categoryId, [100, 102])) {
 				document.getElementById('subcategory_name').value = '';
 				document.getElementById('subcategory_lang').value = 'de';
 				document.getElementById('subcategory_active').checked = true;
-
-				// Reset flagu, aby formulár mohol byť opäť odoslaný
 				subcategoryForm.removeAttribute('data-submitting');
 			}
 
@@ -499,8 +495,6 @@ if (in_array($categoryId, [100, 102])) {
 			subcategoryModal.addEventListener('hidden.bs.modal', function () {
 				resetSubcategoryForm();
 			});
-
-
 
 			subcategoryForm.addEventListener('submit', function (e) {
 				e.preventDefault();
@@ -549,7 +543,6 @@ if (in_array($categoryId, [100, 102])) {
 					})
 					.catch(error => {
 						this.dataset.submitting = false;
-						console.error('Error:', error);
 						showAlert('Fehler beim Speichern der Unterkategorie: ' + error.message, 'error');
 					});
 			});
@@ -599,7 +592,6 @@ if (in_array($categoryId, [100, 102])) {
 								}
 							})
 							.catch(error => {
-								console.error('Error:', error);
 								showAlert('Fehler beim Löschen der Unterkategorie: ' + error.message, 'error');
 							});
 					});
@@ -624,7 +616,6 @@ if (in_array($categoryId, [100, 102])) {
 
 		const initSummernote = (selector) => {
 			if (typeof jQuery === 'undefined') {
-				console.error('jQuery is not loaded. Please include jQuery before this script.');
 				return;
 			}
 			$(selector).summernote({
@@ -678,61 +669,65 @@ if (in_array($categoryId, [100, 102])) {
 			});
 		};
 
-		const addSection = (content = '', image = '', imageTitle = '', buttonName = '', subpage = '', externalUrl = '', index) => {
+		const addSection = (content = '', image = '', imageTitle = '', imageDescription = '', buttonName = '', subpage = '', externalUrl = '', index) => {
 			const sectionHtml = `
-                <div class="section mb-4 p-3 border rounded">
-                    <input type="hidden" name="sections[${index}]" value="section-${index}">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <label class="col-form-label">Inhalt</label>
-                            <textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="col-form-label">Bild hochladen</label>
-                            <input type="file" class="form-control mb-1" name="section_images[${index}]">
-                            <input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
-                            <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
-                            <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
-                                Bild aus FTP wählen
-                            </button>
-                            <div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
-                                ${image ? `
-                                    <img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
-                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
-                                        ×
-                                    </button>
-                                ` : ''}
-                            </div>
-                            <label class="col-form-label">Bildtitel (SEO)</label>
-                            <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-4">
-                            <label class="col-form-label">Button-Text</label>
-                            <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="col-form-label">Unterseite</label>
-                            <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
-                                <option value="">-- Unterseite auswählen --</option>
-                                ${articleOptions.map(opt => `
-                                    <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
-                                        ${opt.label} (${opt.lang})
-                                    </option>
-                                `).join('')}
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="col-form-label">Externe URL</label>
-                            <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
-                        </div>
-                    </div>
-                    <div class="section-actions mt-3">
-                        <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
-                    </div>
-                </div>
-            `;
+			<div class="section mb-4 p-3 border rounded">
+				<input type="hidden" name="sections[${index}]" value="section-${index}">
+				<div class="row">
+					<div class="col-md-9">
+						<label class="col-form-label">Inhalt</label>
+						<textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
+					</div>
+					<div class="col-md-3">
+						<label class="col-form-label">Bild hochladen</label>
+						<input type="file" class="form-control mb-1" name="section_images[${index}]">
+						<input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
+						<input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
+						<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
+							Bild aus FTP wählen
+						</button>
+						<div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
+							${image ? `
+								<img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
+								<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
+									×
+								</button>
+							` : ''}
+						</div>
+						<label class="col-form-label">Bildtitel (SEO)</label>
+						<input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
+						<label class="col-form-label">Bildbeschreibung in der Sektion
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i>
+						</label>
+						<input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}">
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-4">
+						<label class="col-form-label">Button-Text</label>
+						<input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
+					</div>
+					<div class="col-md-4">
+						<label class="col-form-label">Unterseite</label>
+						<select class="form-control mb-1 subpage-select" name="subpages[${index}]">
+							<option value="">-- Unterseite auswählen --</option>
+							${articleOptions.map(opt => `
+								<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
+									${opt.label} (${opt.lang})
+								</option>
+							`).join('')}
+						</select>
+					</div>
+					<div class="col-md-4">
+						<label class="col-form-label">Externe URL</label>
+						<input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
+					</div>
+				</div>
+				<div class="section-actions mt-3">
+					<button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+				</div>
+			</div>
+		`;
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
@@ -771,6 +766,7 @@ if (in_array($categoryId, [100, 102])) {
 			'<?= addslashes($section->content) ?>',
 			'<?= htmlspecialchars($section->image ?? '') ?>',
 			'<?= htmlspecialchars($section->image_title ?? '') ?>',
+			'<?= htmlspecialchars($section->image_description ?? '') ?>',
 			'<?= htmlspecialchars($section->button_name ?? '') ?>',
 			'<?= htmlspecialchars($section->subpage ?? '') ?>',
 			'<?= htmlspecialchars($section->external_url ?? '') ?>',
@@ -781,7 +777,7 @@ if (in_array($categoryId, [100, 102])) {
 
 		document.getElementById('add-section').addEventListener('click', function () {
 			const sections = document.querySelectorAll('#sections-container .section').length;
-			addSection('', '', '', '', '', '', sections);
+			addSection('', '', '', '', '', '', '', sections);
 		});
 
 		document.getElementById('gallery_category_id').addEventListener('change', function () {
@@ -812,7 +808,6 @@ if (in_array($categoryId, [100, 102])) {
 					}
 				})
 				.catch(error => {
-					console.error('Error:', error);
 					showAlert('Fehler beim Laden der Galerien: ' + error.message, 'error');
 				});
 		});

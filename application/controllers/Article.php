@@ -210,6 +210,7 @@ class Article extends CI_Controller
 						'content' => $content,
 						'image' => $image,
 						'image_title' => $post['section_image_titles'][$i] ?? '',
+						'image_description' => $post['section_image_descriptions'][$i] ?? '',
 						'button_name' => $post['button_names'][$i] ?? '',
 						'subpage' => $post['subpages'][$i] ?? '',
 						'external_url' => $post['external_urls'][$i] ?? ''
@@ -246,6 +247,7 @@ class Article extends CI_Controller
 							'content' => $content,
 							'image' => $image,
 							'image_title' => $post['section_image_titles'][$i] ?? '',
+							'image_description' => $post['section_image_descriptions'][$i] ?? '',
 							'button_name' => $post['button_names'][$i] ?? '',
 							'subpage' => $post['subpages'][$i] ?? '',
 							'external_url' => $post['external_urls'][$i] ?? ''

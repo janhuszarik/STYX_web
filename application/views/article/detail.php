@@ -1,10 +1,9 @@
-<!-- Add Font Awesome CDN in the head or article_assets.php -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <?php if (empty($article)): ?>
 	<div class="container py-5 text-center" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 		<h2 class="text-danger fw-bold mb-3">Diese Unterseite wird gerade überarbeitet</h2>
-		<p>Na tejto podstránke sa aktuálne pracuje, alebo je v procese aktualizácie.<br>
-			Prejdite späť a vráťte sa neskôr. Ospravedlňujeme sa za zdržanie.</p>
+		<p>Diese Unterseite wird derzeit bearbeitet oder aktualisiert.<br>
+			Bitte gehen Sie zurück und versuchen Sie es später erneut. Wir entschuldigen uns für die Unannehmlichkeiten.</p>
 	</div>
 	<?php return; ?>
 <?php endif; ?>
@@ -41,7 +40,6 @@ $this->load->view('partials/article_assets');
 					<div class="section-content">
 						<?= $section->content ?>
 					</div>
-
 					<?php if (!empty($section->button_name)): ?>
 						<?php
 						$btnLink = !empty($section->subpage)
@@ -53,15 +51,22 @@ $this->load->view('partials/article_assets');
 						</a>
 					<?php endif; ?>
 				</div>
-
 				<?php if (!empty($section->image)): ?>
 					<div class="col-lg-4 text-center mb-3 mb-lg-0">
-						<img src="<?= base_url($section->image) ?>" alt="<?= htmlspecialchars($section->image_title ?? 'STYX Webimage section') ?>" class="img-fluid rounded section-img">
+						<div class="image-container">
+							<img src="<?= base_url($section->image) ?>" alt="<?= htmlspecialchars($section->image_title ?? 'STYX Webimage section') ?>" class="img-fluid rounded section-img">
+							<?php if (!empty($section->image_description)): ?>
+								<div class="image-description">
+									<?= htmlspecialchars($section->image_description) ?>
+								</div>
+							<?php endif; ?>
+						</div>
 					</div>
 				<?php endif; ?>
 			</div>
 		<?php endforeach; ?>
 	<?php endif; ?>
+
 </div>
 
 <?php
@@ -144,7 +149,7 @@ for ($i = 1; $i <= 3; $i++) {
 		<div class="container">
 			<div class="text-center mb-4">
 				<h3 class="fw-bold mb-2">DAS KÖNNTE SIE INTERESSIEREN</h3>
-				<p class="text-muted mb-4">Entdecken Sie weitere Inhalte, die für Sie von Interesse sein könnten <br>– spannende Themen, verwandte Angebote und mehr.</p>
+				<p class="text-muted mb-4">Entdecken Sie weitere Inhalte, die für Sie von Interesse sein könnten<br>– spannende Themen, verwandte Angebote und mehr.</p>
 			</div>
 			<div class="row justify-content-center">
 				<div class="col-md-8">

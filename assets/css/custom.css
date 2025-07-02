@@ -105,9 +105,9 @@
 
 @media (max-width: 768px) {
 	.slider-section {
-		height: auto; /* Namiesto pevnej výšky */
-		aspect-ratio: 16 / 9; /* Zachová proporcie */
-		background-size: contain; /* Dôležité: nezreže obrázok */
+		height: auto;
+		aspect-ratio: 16 / 9;
+		background-size: contain;
 		background-repeat: no-repeat;
 		background-position: center;
 	}
@@ -118,14 +118,14 @@
 	}
 
 	.slider-navigation {
-		display: none; /* Skryje celé šípky na mobiloch */
+		display: none;
 	}
 }
 
 
 @media (max-width: 480px) {
 	.slider-section {
-		height: auto; /* nenechaj fixnú výšku */
+		height: auto;
 		aspect-ratio: 16 / 9;
 		background-size: contain;
 		background-repeat: no-repeat;
