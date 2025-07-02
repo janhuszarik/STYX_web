@@ -1,9 +1,9 @@
-<style>.search-results {
+<style>
+	.search-results {
 		max-width: 900px;
 		margin: 40px auto 0 auto;
 		padding: 0 10px;
 	}
-
 	.search-results h2 {
 		font-size: 2.2rem;
 		font-weight: 700;
@@ -11,46 +11,67 @@
 		margin-bottom: 32px;
 		letter-spacing: -1px;
 	}
-
 	.search-result-list {
 		display: flex;
 		flex-direction: column;
 		gap: 24px;
 	}
-
 	.search-result-item {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: stretch;
 		background: #fff;
 		border: 1px solid #e9ecef;
 		border-radius: 16px;
 		box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-		padding: 28px 28px 16px 28px;
+		padding: 24px 28px 18px 28px;
 		transition: box-shadow 0.22s cubic-bezier(.4,0,.2,1), border-color 0.22s cubic-bezier(.4,0,.2,1);
 		position: relative;
+		gap: 26px;
+		min-height: 110px;
 	}
-
-	.search-result-item:hover {
-		box-shadow: 0 4px 28px rgba(44, 170, 89, 0.11);
-		border-color: #aadbb9;
+	.search-result-main {
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 0%;
+		min-width: 0;
 	}
-
-	.search-result-item h3 {
+	.search-result-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 16px;
+	}
+	.search-result-title {
 		font-size: 1.65rem;
 		font-weight: 600;
+		color: #2baa59;
+		line-height: 1.23;
+		word-break: break-word;
 		margin-bottom: 10px;
-		color: #2baa59;
-		line-height: 1.2;
+		display: block;
+		flex: 1 1 0%;
 	}
-
-	.search-result-item h3 a {
-		color: #2baa59;
-		text-decoration: none;
-		transition: color 0.16s;
+	.badge-found {
+		background: #e6fae8;
+		color: #39b54a;
+		font-size: 1rem;
+		font-weight: 500;
+		padding: 2px 10px 2px 8px;
+		border-radius: 8px;
+		display: inline-block;
+		vertical-align: middle;
+		line-height: 1.1;
+		box-shadow: 0 1px 4px rgba(34,139,84,.08);
+		white-space: nowrap;
+		margin-top: 2px;
 	}
-	.search-result-item h3 a:hover {
-		color: #24704f;
-		text-decoration: underline;
+	.badge-found i {
+		font-size: 1em;
+		margin-right: 2px;
+		vertical-align: -1px;
 	}
-
 	.search-result-item small {
 		font-size: 0.97rem;
 		color: #8e9aad;
@@ -59,20 +80,17 @@
 		letter-spacing: 0.02em;
 		word-break: break-all;
 	}
-
 	.search-result-item .fa-globe,
 	.search-result-item .fa-folder-open {
 		color: #2baa59;
 		margin-right: 4px;
 		opacity: 0.84;
 	}
-
 	.search-result-item p {
 		margin-bottom: 0;
 		font-size: 1.03rem;
 		color: #6b747e;
 	}
-
 	.search-result-item strong {
 		color: #24704f;
 		font-weight: 600;
@@ -80,19 +98,23 @@
 		padding: 1px 4px;
 		border-radius: 4px;
 	}
-
-	@media (max-width: 600px) {
-		.search-result-item {
-			padding: 18px 9px 12px 9px;
-		}
-		.search-results h2 {
-			font-size: 1.45rem;
-		}
-		.search-result-item h3 {
-			font-size: 1.15rem;
-		}
+	.search-result-image {
+		flex: 0 0 110px;
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-end;
+		max-width: 140px;
+		margin-left: 18px;
+		margin-top: 0;
 	}
-	.search-results input[type="search"]::placeholder { color: #a2b6ae; opacity:.92; }
+	.search-result-image img {
+		max-height: 90px;
+		max-width: 120px;
+		border-radius: 7px;
+		object-fit: cover;
+		box-shadow: 0 2px 7px rgba(0,0,0,.09);
+		display: block;
+	}
 	.search-mark {
 		background: #e9ffe9;
 		color: #19754f;
@@ -101,36 +123,32 @@
 		font-weight: 600;
 		font-size: 1.02em;
 	}
-	.search-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 3px;
-		border-radius: 8px;
-		padding: 2px 10px 2px 7px;
-		box-shadow: 0 1px 3px rgba(34, 139, 84, 0.09);
-		font-weight: 500;
-
+	@media (max-width: 900px) {
+		.search-result-item {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 10px;
+			padding: 18px 10px 14px 10px;
+		}
+		.search-result-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 2px;
+		}
+		.search-result-image {
+			margin-left: 0;
+			justify-content: flex-start;
+			max-width: 100%;
+			margin-top: 10px;
+		}
+		.search-result-image img {
+			max-width: 90vw;
+			max-height: 110px;
+		}
 	}
-	.badge-found {
-		background: #e6fae8;
-		color: #39b54a;
-		font-size: 1rem;
-		font-weight: 500;
-		padding: 1.5px 10px 1.5px 8px;
-		border-radius: 8px;
-		display: inline-block;
-		margin-left: 2px;
-		vertical-align: middle;
-		line-height: 1.1;
-		box-shadow: 0 1px 4px rgba(34,139,84,.08);
-	}
-	.badge-found i {
-		font-size: 1em;
-		margin-right: 2px;
-		vertical-align: -1px;
-	}
-
+	.search-results input[type="search"]::placeholder { color: #a2b6ae; opacity:.92; }
 </style>
+
 <?php
 if (!function_exists('get_article_url')) {
 	function get_article_url($result) {
@@ -197,59 +215,62 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 						$found = true;
 						$start = max(0, $pos - 40);
 						$subtext = '...' . mb_substr($content, $start, 160, 'UTF-8') . '...';
-						$subtext = str_ireplace($query, '<mark>'.$query.'</mark>', $subtext);
+						$subtext = str_ireplace($query, '<mark class="search-mark">'.$query.'</mark>', $subtext);
 					}
 				}
 				if (empty($subtext)) {
-					foreach (['description', 'keywords', 'subtitle', 'text', 'content'] as $field) {
+					foreach (['keywords', 'subtitle', 'text', 'content'] as $field) {
 						if (!empty($result[$field])) {
 							$subtext = htmlspecialchars(strip_tags($result[$field]));
 							if (stripos($subtext, $query) !== false) {
 								$found = true;
-								$subtext = str_ireplace($query, '<mark>'.$query.'</mark>', $subtext);
+								$subtext = str_ireplace($query, '<mark class="search-mark">'.$query.'</mark>', $subtext);
 							}
 							break;
 						}
 					}
 				}
 				?>
-				<div class="search-result-item mb-3 p-3 border rounded">
-					<?php if ($image): ?>
-						<img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($main_title) ?>" style="max-width:100px;margin-top:10px;border-radius:4px;">
-					<?php endif; ?>
+				<div class="search-result-item mb-3 border rounded">
+					<div class="search-result-main">
+						<div class="search-result-header">
+							<span class="search-result-title">
+								<a href="<?= htmlspecialchars($url) ?>"
+								   class="text-decoration-none text-primary"
+								   target="_blank">
+									<?= htmlspecialchars($main_title) ?>
+								</a>
+							</span>
+							<?php if ($found): ?>
+								<span class="badge-found">
+									<i class="fas fa-check-circle"></i>
+									Gefunden!
+								</span>
+							<?php endif; ?>
+						</div>
 
-					<h3 class="mb-1" style="display:flex;align-items:center;gap:8px;">
-						<a href="<?= htmlspecialchars($url) ?>"
-						   class="text-decoration-none text-primary"
-						   target="_blank">
-							<?= htmlspecialchars($main_title) ?>
-						</a>
-						<?php if ($found): ?>
-							<span class="badge-found">
-        						<i class="fas fa-check-circle"></i>
-        						Gefunden!
-    						</span>
+						<?php if ($subtitle): ?>
+							<div style="margin-bottom:4px;font-size:1.04rem;color:#bc3a3a;">
+								<i class="fas fa-folder-open me-1"></i>
+								Sekcia: <?= htmlspecialchars($subtitle) ?>
+							</div>
 						<?php endif; ?>
 
+						<small class="text-secondary">
+							<i class="fas fa-globe me-1"></i>
+							<a href="<?= htmlspecialchars($url) ?>" target="_blank"><?= htmlspecialchars($url) ?></a>
+						</small>
 
-					</h3>
-
-					<?php if ($subtitle): ?>
-						<div style="margin-bottom:4px;font-size:1.04rem;color:#bc3a3a;">
-							<i class="fas fa-folder-open me-1"></i>
-							Sekcia: <?= htmlspecialchars($subtitle) ?>
+						<?php if ($subtext): ?>
+							<p class="mb-1 text-muted small"><?= $subtext ?></p>
+						<?php else: ?>
+							<p class="mb-1 text-muted small">Keine relevante Beschreibung verfügbar</p>
+						<?php endif; ?>
+					</div>
+					<?php if ($image): ?>
+						<div class="search-result-image">
+							<img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($main_title) ?>">
 						</div>
-					<?php endif; ?>
-
-					<small class="text-secondary">
-						<i class="fas fa-globe me-1"></i>
-						<a href="<?= htmlspecialchars($url) ?>" target="_blank"><?= htmlspecialchars($url) ?></a>
-					</small>
-
-					<?php if ($subtext): ?>
-						<p class="mb-1 text-muted small"><?= $subtext ?></p>
-					<?php else: ?>
-						<p class="mb-1 text-muted small">Keine relevante Beschreibung verfügbar</p>
 					<?php endif; ?>
 				</div>
 			<?php endforeach; ?>
