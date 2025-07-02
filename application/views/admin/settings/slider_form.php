@@ -17,7 +17,7 @@
 					<?php endif; ?>
 
 					<div class="row form-group pb-3">
-						<div class="col-lg-4">
+						<div class="col-lg-2">
 							<label class="col-form-label">Sprache</label>
 							<select class="form-control" name="lang">
 								<option value="de" <?= ($slider->lang ?? '') == 'de' ? 'selected' : '' ?>>Deutsch</option>
@@ -28,27 +28,27 @@
 							<label class="col-form-label">Titel für Inhalt</label>
 							<input type="text" name="title" class="form-control" value="<?= htmlspecialchars($slider->title ?? '') ?>">
 						</div>
-						<div class="col-lg-4">
+						<div class="col-lg-6">
 							<label class="col-form-label">Unterüberschrift</label>
 							<input type="text" name="name2" class="form-control" value="<?= htmlspecialchars($slider->name2 ?? '') ?>">
 						</div>
 					</div>
 
-					<div class="form-group pb-3">
-						<label class="col-form-label">Slider Bild</label>
-						<input type="file" name="image" class="form-control">
-						<?php if (!empty($slider->image)): ?>
-							<small class="text-muted d-block mt-2">Aktuelles Bild:</small>
-							<img src="<?= base_url('Uploads/sliders/' . $slider->image) ?>" style="max-width: 200px;" class="img-fluid rounded shadow-sm">
-						<?php endif; ?>
+					<div class="row form-group pb-3">
+						<div class="col-lg-6">
+							<label class="col-form-label">Slider Bild</label>
+							<input type="file" name="image" class="form-control">
+							<?php if (!empty($slider->image)): ?>
+								<small class="text-muted d-block mt-2">Aktuelles Bild:</small>
+								<img src="<?= base_url('Uploads/sliders/' . $slider->image) ?>" style="max-width: 200px;" class="img-fluid rounded shadow-sm">
+							<?php endif; ?>
+						</div>
+						<div class="col-lg-6">
+							<label class="col-form-label">Schaltflächenlink (optional)</label>
+							<input type="text" name="button_link" class="form-control" value="<?= htmlspecialchars($slider->button_link ?? '') ?>">
+							<small class="text-muted">Für externe Links das gesamte https:// angeben</small>
+						</div>
 					</div>
-
-					<div class="form-group pb-3">
-						<label class="col-form-label">Schaltflächenlink (optional)</label>
-						<input type="text" name="button_link" class="form-control" value="<?= htmlspecialchars($slider->button_link ?? '') ?>">
-						<small class="text-muted">Für externe Links das gesamte https:// angeben</small>
-					</div>
-
 					<div class="row form-group pb-3">
 						<div class="col-lg-3">
 							<label class="col-form-label">Hintergrundfarbe</label>
