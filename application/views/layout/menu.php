@@ -52,7 +52,7 @@
 									<div class="header-nav-features-dropdown" id="headerTopSearchDropdown">
 										<form role="search" action="<?php echo base_url('search'); ?>" method="get">
 											<div class="simple-search input-group">
-												<input class="form-control text-1" id="headerSearch" name="q" type="search" value="" placeholder="Search...">
+												<input class="form-control text-1" id="headerSearch" name="q" type="search" value="" placeholder="Suchen...">
 												<button class="btn" type="submit" aria-label="Search">
 													<i class="fas fa-search header-nav-top-icon"></i>
 												</button>
