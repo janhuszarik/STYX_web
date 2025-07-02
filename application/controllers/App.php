@@ -23,7 +23,6 @@ class App extends CI_Controller
 		$this->home();
 	}
 
-
 	public function home()
 	{
 		// Laden und Senden von Daten
@@ -144,7 +143,6 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
-
 
 	public function error404()
 	{
@@ -400,6 +398,7 @@ class App extends CI_Controller
 
 		$this->load->view('layout/normal', $data);
 	}
+
     public function gruppenfuhrungen()
     {
         $data['title'] = 'Anfrage | Gruppenführung';
@@ -409,6 +408,7 @@ class App extends CI_Controller
 
         $this->load->view('layout/normal', $data);
     }
+
     public function send_gruppenfuhrung()
     {
 

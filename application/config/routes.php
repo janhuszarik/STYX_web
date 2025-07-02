@@ -94,10 +94,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['admin/add_article/(:num)'] 							= 'article/articlesSave/$1';
 	$route['admin/article/getGalleriesByCategory'] 				= 'article/getGalleriesByCategory';
 	$route['admin/article/upload_image'] 						= 'article/upload_image';
-$route['admin/article/getSubcategories'] = 'article/getSubcategories';
-$route['admin/article/manageSubcategory'] = 'article/manageSubcategory';
-$route['admin/article/deleteSubcategory'] = 'article/deleteSubcategory';
-$route['admin/article/getSubcategoriesForManagement'] = 'article/getSubcategoriesForManagement';
+	$route['admin/article/getSubcategories'] 					= 'article/getSubcategories';
+	$route['admin/article/manageSubcategory'] 					= 'article/manageSubcategory';
+	$route['admin/article/deleteSubcategory'] 					= 'article/deleteSubcategory';
+	$route['admin/article/getSubcategoriesForManagement'] 		= 'article/getSubcategoriesForManagement';
 
 	$route['admin/save_calendar_note'] 							= 'admin/save_calendar_note';
 	$route['admin/update_calendar_note'] 						= 'admin/update_calendar_note';
@@ -130,11 +130,11 @@ $route['admin/article/getSubcategoriesForManagement'] = 'article/getSubcategorie
 	$route['admin/news/edit/:num'] 								= 'admin/newsSave';
 	$route['admin/news/del/:num']								= 'admin/newsSave';
 
-	$route['admin/bestProduct']              = 'admin/bestProductSave';
-	$route['admin/bestProduct/create']       = 'admin/bestProductSave/create';
-	$route['admin/bestProduct/edit/(:num)']  = 'admin/bestProductSave/edit/$1';
-	$route['admin/bestProduct/del/(:num)']   = 'admin/bestProductSave/del/$1';
-	$route['admin/bestProduct/save']         = 'admin/bestProductSave';
+	$route['admin/bestProduct']              					= 'admin/bestProductSave';
+	$route['admin/bestProduct/create']       					= 'admin/bestProductSave/create';
+	$route['admin/bestProduct/edit/(:num)']  					= 'admin/bestProductSave/edit/$1';
+	$route['admin/bestProduct/del/(:num)']   					= 'admin/bestProductSave/del/$1';
+	$route['admin/bestProduct/save']         					= 'admin/bestProductSave';
 
 
 
