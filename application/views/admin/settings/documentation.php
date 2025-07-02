@@ -152,9 +152,10 @@
 									<h5 class="mt-4">🔧 Wie funktioniert das Erstellen eines Sliders?</h5>
 									<ul>
 										<li><strong>Sprache:</strong> Wähle, in welcher Sprachversion der Slider erscheinen soll (z.&nbsp;B. Deutsch oder Englisch).</li>
-										<li><strong>Titel für Inhalt:</strong> Interner Titel für die Verwaltung – nicht im Frontend sichtbar.</li>
+										<li><strong>Titel für Inhalt:</strong> Überschrift, die als erste unter dem Slider angezeigt wird. Sie ist am größten und wird auch als Title für die Google-Suche verwendet. Daher sollte dieser Title auch im View verwendet werden.</li>
 										<li><strong>Hauptüberschrift:</strong> Große Hauptzeile im Sliderbild.</li>
-										<li><strong>Unterüberschrift & Kleingeschriebener Text:</strong> Zusätzliche erklärende Texte unter der Überschrift.</li>
+										<li><strong>Unterüberschrift</strong> Zusätzliche erklärende Texte unter der Überschrift.</li>
+										<li><strong>Kleingeschriebener Text:</strong> Zusätzliche erklärende Texte unter der Überschrift.</li>
 										<li><strong>Slider Bild:</strong> Lade ein Bild im Format JPG, PNG oder GIF hoch (empfohlen: 1600x600px).</li>
 										<li><strong>Schaltflächenlink:</strong> Optionaler Button-Link, z.&nbsp;B. zu einer Angebotsseite.</li>
 										<li><strong>Hintergrundfarbe & Textfarbe:</strong> Bestimmen das Farbschema des Sliders.</li>

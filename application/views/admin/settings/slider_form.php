@@ -29,19 +29,8 @@
 							<input type="text" name="title" class="form-control" value="<?= htmlspecialchars($slider->title ?? '') ?>">
 						</div>
 						<div class="col-lg-4">
-							<label class="col-form-label">Hauptüberschrift</label>
-							<input type="text" name="name1" class="form-control" value="<?= htmlspecialchars($slider->name1 ?? '') ?>">
-						</div>
-					</div>
-
-					<div class="row form-group pb-3">
-						<div class="col-lg-6">
 							<label class="col-form-label">Unterüberschrift</label>
 							<input type="text" name="name2" class="form-control" value="<?= htmlspecialchars($slider->name2 ?? '') ?>">
-						</div>
-						<div class="col-lg-6">
-							<label class="col-form-label">Kleingeschriebener Text</label>
-							<input type="text" name="name3" class="form-control" value="<?= htmlspecialchars($slider->name3 ?? '') ?>">
 						</div>
 					</div>
 

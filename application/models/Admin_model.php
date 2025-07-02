@@ -222,9 +222,7 @@ class Admin_model extends CI_Model {
 		$data = array(
 			'lang' => $this->db->escape_str($post['lang'] ?? 'de'),
 			'title' => $this->db->escape_str($post['title'] ?? ''),
-			'name1' => $this->db->escape_str($post['name1'] ?? ''),
 			'name2' => $this->db->escape_str($post['name2'] ?? ''),
-			'name3' => $this->db->escape_str($post['name3'] ?? ''),
 			'button_link' => $this->db->escape_str($post['button_link'] ?? ''),
 			'bg_color' => $this->db->escape_str($post['bg_color'] ?? '#ffffff'),
 			'text_color' => $this->db->escape_str($post['text_color'] ?? '#000000'),
