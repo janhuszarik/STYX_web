@@ -206,22 +206,31 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 					$main_title = !empty($result['title']) ? $result['title'] : '(Ohne Titel)';
 				}
 
+				// -------- Výpis ukážky textu (max 100 znakov okolo zhody) --------
 				$subtext = '';
 				$found = false;
+				$limit = 100; // počet znakov výpisu
+
 				if (!empty($result['content'])) {
 					$content = strip_tags($result['content']);
-					$pos = stripos($content, $query);
+					$content_lc = mb_strtolower($content, 'UTF-8');
+					$query_lc = mb_strtolower($query, 'UTF-8');
+					$pos = mb_stripos($content_lc, $query_lc, 0, 'UTF-8');
 					if ($pos !== false) {
 						$found = true;
-						$start = max(0, $pos - 40);
-						$subtext = '...' . mb_substr($content, $start, 160, 'UTF-8') . '...';
-						$subtext = str_ireplace($query, '<mark class="search-mark">'.$query.'</mark>', $subtext);
+						$start = max(0, $pos - intval($limit/2));
+						$sub = mb_substr($content, $start, $limit, 'UTF-8');
+						if ($start > 0) $sub = '...' . ltrim($sub);
+						if (($start + $limit) < mb_strlen($content, 'UTF-8')) $sub .= '...';
+						$subtext = str_ireplace($query, '<mark class="search-mark">'.$query.'</mark>', $sub);
 					}
 				}
 				if (empty($subtext)) {
 					foreach (['keywords', 'subtitle', 'text', 'content'] as $field) {
 						if (!empty($result[$field])) {
-							$subtext = htmlspecialchars(strip_tags($result[$field]));
+							$tmp = htmlspecialchars(strip_tags($result[$field]));
+							$subtext = mb_substr($tmp, 0, $limit, 'UTF-8');
+							if (mb_strlen($tmp, 'UTF-8') > $limit) $subtext .= '...';
 							if (stripos($subtext, $query) !== false) {
 								$found = true;
 								$subtext = str_ireplace($query, '<mark class="search-mark">'.$query.'</mark>', $subtext);
@@ -230,6 +239,7 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 						}
 					}
 				}
+				// -------------------------------------------------------------
 				?>
 				<div class="search-result-item mb-3 border rounded">
 					<div class="search-result-main">
