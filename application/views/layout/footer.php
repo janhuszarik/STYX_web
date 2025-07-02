@@ -146,7 +146,7 @@
 		return true;
 	}
 </script>
-
+<script src="<?= base_url('assets/js/search_autofocus.js') ?>"></script>
 <script src="<?=BASE_URL?>assets/vendor/plugins/js/plugins.min.js"></script>
 <script src="<?=BASE_URL?>assets/js/theme.js"></script>
 <script src="<?=BASE_URL?>assets/js/custom.js"></script>

@@ -67,6 +67,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['sitemap.xml'] 										= 'xml/sitemap';
 	$route['sitemap'] 											= 'xml/sitemap';
 	$route['translate_uri_dashes'] 								= FALSE;
+// Nové špecifické routy
+$route['article/view/(:num)'] = 'app/routes'; // Prevedie na App->routes s ID
+$route['article/section/(:num)'] = 'app/routes'; // Prevedie na App->routes s ID
+$route['news/category/(:num)'] = 'app/routes'; // Prevedie na App->routes s ID
+$route['de/(:any)'] = 'app/routes/$1'; // Zachytí jazykové segmenty
+
+// Dynamické routy
+$route['(:any)/view/(:num)'] = '$1/view/$2'; // Dynamická routa pre view
+$route['view/(:any)/(:num)'] = '$1/view/$2'; // Fallback pre prípad, ak typ nie je na začiatku
 // administrator
 
 
@@ -179,6 +188,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$route['aktuelles/download-presse-login'] 					= 'app/download_presse_login';
 	$route['kontakt/kontakt-anfahrt'] 							= 'app/kontakt';
 	$route['contact/contact-journey'] 							= 'app/kontakt';
+
+
 	$route['(:any)/(:any)/(:any)/(:any)'] = 'app/routes';
 	$route['(:any)/(:any)/(:any)'] = 'app/routes';
 	$route['(:any)/(:any)'] = 'app/routes';
