@@ -262,7 +262,7 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 						<?php if ($subtitle): ?>
 							<div style="margin-bottom:4px;font-size:1.04rem;color:#bc3a3a;">
 								<i class="fas fa-folder-open me-1"></i>
-								Sekcia: <?= htmlspecialchars($subtitle) ?>
+								Sektion: <?= htmlspecialchars($subtitle) ?>
 							</div>
 						<?php endif; ?>
 
