@@ -156,8 +156,10 @@
 										<li><strong>Unterüberschrift</strong> Zusätzliche erklärende Texte unter der Überschrift.</li>
 										<li><strong>Slider Bild:</strong> Lade ein Bild im Format JPG, PNG hoch (empfohlen: 1600x600px).</li>
 										<li><strong>Schaltflächenlink:</strong> Optionaler Button-Link, z.&nbsp;B. zu einer Angebotsseite.</li>
-										<li><strong>Hintergrundfarbe & Textfarbe:</strong> Bestimmen das Farbschema des Sliders.</li>
-										<li><strong>Position:</strong> Bestimmt die Reihenfolge auf der Webseite (z.&nbsp;B. 0 = ganz oben).</li>
+										<li><strong>Hintergrundfarbe & Textfarbe:</strong> Farbauswahl für den Hintergrundbereich unter dem Slider, wo der Text angezeigt wird. Es kann notwendig sein, den Hintergrund anzupassen, um ein einheitliches Design zwischen dem Slider und dem unteren Textbereich zu gewährleisten. Der Text sollte unter jedem Slider ungefähr gleich groß sein, um zu vermeiden, dass sich die Slider nach oben oder unten verschieben und sich die Größe des Bereichs verändert. Das ist aus optischen Gründen ungünstig, da ein „Springen“ oder eine Größenänderung der Sektion störend wirken kann.
+											Die Hintergrundfarbe kann entweder über die Farbauswahl (durch Anklicken und Verschieben im Farbfeld) oder durch die direkte Eingabe eines Farbwertes ausgewählt werden, wobei drei Formate unterstützt werden: RGB, HSL oder HEX. Am gebräuchlichsten ist vermutlich das HEX-Format, das immer mit # beginnt und durch den entsprechenden Farbcode fortgesetzt wird. Der Hintergrund kann z.B. weiß bleiben, wobei der Text dann beispielsweise schwarz sein kann.
+											Die Farbauswahl für den Text funktioniert genauso wie die Auswahl der Hintergrundfarbe. Hier empfiehlt es sich jedoch, nur weiße oder schwarze Farben zu verwenden, um die Einhaltung der Kontrastanforderungen der Website sicherzustellen.</li>
+										<li><strong>Position:</strong> Bestimmt die Reihenfolge auf der Webseite (z. B. 0 = ganz oben). Das bedeutet, dass – wie beim Menü – auch hier die Reihenfolge bei null beginnt und nach oben fortgesetzt wird. Dementsprechend werden die Slider auf der Webseite in der Reihenfolge angezeigt, wobei der Slider mit der Nummer 0 ganz oben steht und die weiteren darunter folgen.</li>
 										<li><strong>Aktiv/Inaktiv:</strong> Bestimmt, ob der Slider angezeigt wird.</li>
 									</ul>
 
