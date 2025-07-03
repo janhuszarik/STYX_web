@@ -151,11 +151,11 @@
 
 									<h5 class="mt-4">🔧 Wie funktioniert das Erstellen eines Sliders?</h5>
 									<ul>
-										<li><strong>Sprache:</strong> Wähle, in welcher Sprachversion der Slider erscheinen soll (z.&nbsp;B. Deutsch oder Englisch).</li>
+										<li><strong>Sprache:</strong> Wähle, in welcher Sprachversion der Slider erscheinen soll (z. B. Deutsch oder Englisch).</li>
 										<li><strong>Titel für Inhalt:</strong> Überschrift, die als erste unter dem Slider angezeigt wird. Sie ist am größten und wird auch als Title für die Google-Suche verwendet. Daher sollte dieser Title auch im View verwendet werden.</li>
 										<li><strong>Unterüberschrift</strong> Zusätzliche erklärende Texte unter der Überschrift.</li>
 										<li><strong>Slider Bild:</strong> Lade ein Bild im Format JPG, PNG hoch (empfohlen: 1600x600px).</li>
-										<li><strong>Schaltflächenlink:</strong> Optionaler Button-Link, z.&nbsp;B. zu einer Angebotsseite.</li>
+										<li><strong>Schaltflächenlink:</strong> Optionaler Button-Link, z. B. zu einer Angebotsseite.</li>
 										<li><strong>Hintergrundfarbe & Textfarbe:</strong> Farbauswahl für den Hintergrundbereich unter dem Slider, wo der Text angezeigt wird. Es kann notwendig sein, den Hintergrund anzupassen, um ein einheitliches Design zwischen dem Slider und dem unteren Textbereich zu gewährleisten. Der Text sollte unter jedem Slider ungefähr gleich groß sein, um zu vermeiden, dass sich die Slider nach oben oder unten verschieben und sich die Größe des Bereichs verändert. Das ist aus optischen Gründen ungünstig, da ein „Springen“ oder eine Größenänderung der Sektion störend wirken kann.
 											Die Hintergrundfarbe kann entweder über die Farbauswahl (durch Anklicken und Verschieben im Farbfeld) oder durch die direkte Eingabe eines Farbwertes ausgewählt werden, wobei drei Formate unterstützt werden: RGB, HSL oder HEX. Am gebräuchlichsten ist vermutlich das HEX-Format, das immer mit # beginnt und durch den entsprechenden Farbcode fortgesetzt wird. Der Hintergrund kann z.B. weiß bleiben, wobei der Text dann beispielsweise schwarz sein kann.
 											Die Farbauswahl für den Text funktioniert genauso wie die Auswahl der Hintergrundfarbe. Hier empfiehlt es sich jedoch, nur weiße oder schwarze Farben zu verwenden, um die Einhaltung der Kontrastanforderungen der Website sicherzustellen.</li>
@@ -189,7 +189,98 @@
 							<div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
 								<div class="doc-section">
 									<h4 class="mb-3"><i class="fas fa-newspaper text-secondary me-2"></i>📰 News</h4>
-									<p>Hier kannst du News verwalten...</p>
+
+									<section class="mb-4">
+										<h5 class="text-success"><i class="fas fa-user me-1"></i>Was macht dieses Modul?</h5>
+										<p>
+											Das Modul <strong>News</strong> ermöglicht die Verwaltung von Nachrichten, die auf der Webseite angezeigt werden. Diese Nachrichten erscheinen in Form von Karten, die eine Hauptüberschrift, einen kurzen Text, ein Bild und einen optionalen Link enthalten. <br>
+											<b>Das Modul ist darauf ausgelegt, Besucher durch ansprechende Karten zu Artikeln, Produkten oder Kampagnen weiterzuleiten.</b> <br>
+											Du kannst die Sprache, Sichtbarkeit, Anzeigedauer (Start- und Enddatum) sowie das Erscheinungsbild der News-Karten anpassen.
+										</p>
+									</section>
+
+									<section class="mb-4">
+										<h5 class="text-primary"><i class="fas fa-list-ol me-1"></i>Wie funktioniert das Erstellen einer News-Karte?</h5>
+										<ul>
+											<li>
+												<strong>Sprache:</strong><br>
+												Wähle die Sprache, in der die News-Karte angezeigt werden soll (z. B. Deutsch oder Englisch). Die gewählte Sprache bestimmt, in welcher Sprachversion der Webseite die Nachricht sichtbar ist.<br>
+												<strong>Hinweis:</strong> Stelle sicher, dass die Sprache korrekt eingestellt ist, da die News nur in der ausgewählten Sprachversion erscheint.
+											</li>
+											<li>
+												<strong>Hauptüberschrift:</strong><br>
+												Die Hauptüberschrift ist der große, auffällige Text, der auf der News-Karte angezeigt wird. Sie sollte kurz, prägnant und ansprechend sein, um die Aufmerksamkeit der Besucher zu erregen.<br>
+												<strong>Empfehlung:</strong> Verwende keine Sonderzeichen oder Umlaute, um Darstellungsprobleme zu vermeiden.
+											</li>
+											<li>
+												<strong>Kurztext:</strong><br>
+												Der Kurztext erscheint unter der Hauptüberschrift und dient als kurze Beschreibung oder Teaser. Er sollte die Hauptüberschrift ergänzen und die Besucher neugierig machen, auf den Link zu klicken.<br>
+												<strong>Tipp:</strong> Halte den Text knapp (max. 1–2 Sätze), um die Lesbarkeit zu gewährleisten.
+											</li>
+											<li>
+												<strong>URL (Button-Link):</strong><br>
+												Die URL ist optional, aber dringend empfohlen, da News-Karten darauf ausgelegt sind, Besucher zu einer bestimmten Seite (z. B. Artikel, Produkt oder Kampagne) weiterzuleiten. Die URL muss mit <code>https://</code> beginnen, um gültig zu sein.<br>
+												<strong>Beispiel:</strong> <code>https://www.styx.at/produkte/neues-produkt</code><br>
+												<strong>Hinweis:</strong> Stelle sicher, dass die URL korrekt ist, da fehlerhafte Links zu einer schlechten Nutzererfahrung führen.
+											</li>
+											<li>
+												<strong>Bild hochladen:</strong><br>
+												Lade ein Bild für die News-Karte hoch (Formate: JPG, PNG). Die empfohlenen Maße sind <strong>300x300 px</strong>. Größere Bilder (z. B. 600x600 px) werden automatisch zugeschnitten, bleiben aber erkennbar. Die maximale Dateigröße beträgt <strong>3 MB</strong>, ideal sind ca. <strong>900 KB</strong> für schnelle Ladezeiten.<br>
+												<strong>Tipp:</strong> Verwende optimierte Bilder, um die Ladezeit der Webseite nicht zu beeinträchtigen.
+											</li>
+											<li>
+												<strong>Startdatum (optional):</strong><br>
+												Lege ein Startdatum fest, ab dem die News-Karte automatisch sichtbar wird. Wird kein Datum angegeben, ist die Karte sofort nach dem Speichern aktiv.<br>
+												<strong>Beispiel:</strong> Wenn du den 28.01.2025 eingibst, erscheint die Karte am 28.01.2025 um 00:00 Uhr.<br>
+												<strong>Hinweis:</strong> Das Startdatum ist ideal für zeitlich geplante Kampagnen.
+											</li>
+											<li>
+												<strong>Enddatum (optional):</strong><br>
+												Definiere ein Enddatum, an dem die News-Karte automatisch deaktiviert wird. Ohne Enddatum bleibt die Karte dauerhaft aktiv (sofern sie als „Aktiv“ markiert ist).<br>
+												<strong>Beispiel:</strong> Bei einem Enddatum vom 30.01.2025 wird die Karte am 30.01.2025 um 23:59 Uhr ausgeblendet.<br>
+												<strong>Wichtig:</strong> Die News-Karte muss als „Aktiv“ markiert sein, damit Start- und Enddatum wirksam sind.
+											</li>
+											<li>
+												<strong>Aktiv/Inaktiv:</strong><br>
+												Bestimme, ob die News-Karte sofort sichtbar (Aktiv) oder ausgeblendet (Inaktiv) sein soll. Inaktive Karten sind für die Öffentlichkeit unsichtbar, können aber weiterhin bearbeitet werden.<br>
+												<strong>Tipp:</strong> Nutze „Inaktiv“ für Entwürfe oder Karten, die erst später veröffentlicht werden sollen.
+											</li>
+										</ul>
+									</section>
+
+									<section class="mb-4">
+										<h5 class="text-danger"><i class="fas fa-trash-alt me-1"></i>News-Karte löschen</h5>
+										<p>
+											Eine News-Karte kann dauerhaft gelöscht werden. Dabei wird das zugehörige Bild automatisch vom Server entfernt.<br>
+											<strong>Achtung:</strong> Das Löschen ist unwiderruflich! Stelle sicher, dass die Karte nicht mehr benötigt wird, bevor du sie löschst.
+										</p>
+									</section>
+
+									<section class="mb-4">
+										<h5 class="text-warning"><i class="fas fa-info-circle me-1"></i>Zusätzliche Hinweise & Tipps</h5>
+										<ul>
+											<li>Verwende ansprechende, hochauflösende Bilder, die zur Botschaft der News passen.</li>
+											<li>Teste die News-Karte nach dem Speichern im Frontend, insbesondere auf Mobilgeräten, um sicherzustellen, dass Bild und Text korrekt angezeigt werden.</li>
+											<li>Überprüfe die URL vor dem Speichern, um sicherzustellen, dass sie funktioniert und zur gewünschten Seite führt.</li>
+											<li>Nutze Start- und Enddaten, um zeitlich begrenzte Kampagnen oder Aktionen zu steuern.</li>
+											<li>Vermeide zu lange Hauptüberschriften oder Kurztexte, da diese auf kleineren Bildschirmen abgeschnitten werden können.</li>
+										</ul>
+									</section>
+
+									<section class="mb-4">
+										<h5 class="text-primary"><i class="fas fa-code me-1"></i>Technische Umsetzung</h5>
+										<ul>
+											<li><strong>Controller:</strong> <code>Admin::newsSave()</code></li>
+											<li><strong>Model:</strong> <code>Admin_model::newsSave()</code>, <code>getNews()</code>, <code>newsDelete()</code></li>
+											<li><strong>Formular View:</strong> <code>views/admin/settings/news_form.php</code></li>
+											<li><strong>Listen View:</strong> <code>views/admin/settings/news.php</code></li>
+											<li>
+												<strong>Datenbank:</strong> Tabelle <code>news</code> mit: <br>
+												<code>id</code>, <code>lang</code>, <code>name</code>, <code>name1</code>, <code>buttonUrl</code>, <code>image</code>, <code>active</code>, <code>start_date</code>, <code>end_date</code>, <code>created_at</code>, <code>updated_at</code>
+											</li>
+											<li><strong>Validierung:</strong> <code>name</code> und <code>name1</code> sind Pflichtfelder. <code>buttonUrl</code> und <code>image</code> sind optional, sollten aber für optimale Nutzung ausgefüllt werden.</li>
+										</ul>
+									</section>
 								</div>
 							</div>
 							<div class="tab-pane fade" id="galerie" role="tabpanel" aria-labelledby="galerie-tab">
@@ -223,4 +314,3 @@
 		</section>
 	</div>
 </div>
-
