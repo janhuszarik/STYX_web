@@ -1,6 +1,7 @@
 <?php
 $this->load->view('partials/article_list_assets');
 ?>
+
 <section class="home-intro light border border-bottom-0 mb-0 newsletter-section" aria-labelledby="newsletter-heading" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 	<div class="container py-5">
 		<div class="row justify-content-center">
@@ -12,6 +13,7 @@ $this->load->view('partials/article_list_assets');
 	</div>
 </section>
 <div style="margin-bottom: 50px;"></div>
+
 <?php if ($category->id == 100): ?>
 	<div class="container mb-3">
 		<p class="text-left">
@@ -37,8 +39,6 @@ $this->load->view('partials/article_list_assets');
 	</div>
 <?php endif; ?>
 
-
-
 <section class="container py-5">
 	<?php if ($noArticles): ?>
 		<div class="alert alert-info text-center">
@@ -47,20 +47,20 @@ $this->load->view('partials/article_list_assets');
 		</div>
 	<?php else: ?>
 		<?php foreach ($articles as $a): ?>
-			<div class="row align-items-center mb-5">
-				<div class="col-md-8">
+			<div class="article-list-row">
+				<?php if (!empty($a->image)): ?>
+					<div class="article-list-img">
+						<img src="<?= base_url($a->image) ?>"
+							 class="img-fluid rounded shadow-sm"
+							 alt="<?= htmlspecialchars($a->image_title ?? $a->title) ?>">
+					</div>
+				<?php endif; ?>
+				<div class="article-list-text">
 					<h4 class="fw-bold"><?= htmlspecialchars($a->title) ?></h4>
 					<p><?= strip_tags($a->subtitle) ?></p>
 					<a href="<?= base_url($a->slug . '/' . remove_diacritics($a->slug_title)) ?>" class="btn btn-success">Mehr lesen >></a>
 				</div>
-
-				<?php if (!empty($a->image)): ?>
-					<div class="col-md-4 text-end">
-						<img src="<?= base_url($a->image) ?>" class="img-fluid rounded shadow-sm" alt="<?= htmlspecialchars($a->image_title ?? $a->title) ?>" style="max-width: 200px;">
-					</div>
-				<?php endif; ?>
 			</div>
 		<?php endforeach; ?>
 	<?php endif; ?>
 </section>
-

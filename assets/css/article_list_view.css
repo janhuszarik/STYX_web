@@ -14,3 +14,57 @@
 	font-weight: bold;
 	box-shadow: 0 0 0 2px #218838;
 }
+
+/* --- ČLÁNKY LIST --- */
+.article-list-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	margin-bottom: 2.5rem;
+}
+.article-list-img {
+	flex: 1 1 40%;
+	text-align: end;
+}
+.article-list-img img {
+	max-width: 200px;
+}
+.article-list-text {
+	flex: 1 1 60%;
+}
+
+/* RESPONSIVE: obrázok hore, text pod ním */
+@media (max-width: 991.98px) {
+	.article-list-img img {
+		max-width: 150px;
+	}
+}
+@media (max-width: 767.98px) {
+	.article-list-row {
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		margin-bottom: 2rem;
+	}
+	.article-list-img,
+	.article-list-text {
+		width: 100% !important;
+		max-width: 100%;
+		flex: unset;
+	}
+	.article-list-img {
+		margin: 0 0 18px 0;
+		text-align: center !important;
+		order: 1;
+	}
+	.article-list-text {
+		text-align: left;
+		order: 2;
+	}
+	.article-list-img img {
+		max-width: 90vw;
+		width: 100%;
+		height: auto;
+		margin: 0 auto;
+		display: block;
+	}
+}
