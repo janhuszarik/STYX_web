@@ -68,6 +68,7 @@
 	height: 60px;
 	margin-top: 40px;
 }
+
 .slider-text h1,
 .slider-text h3,
 .slider-text h4,
@@ -75,12 +76,14 @@
 	margin-bottom: 0.5rem !important;
 	margin-top: 0 !important;
 }
+
 .slider-text h1:last-child,
 .slider-text h3:last-child,
 .slider-text h4:last-child,
 .slider-text p:last-child {
 	margin-bottom: 25px !important;
 }
+
 @media (max-width: 1024px) {
 	.slider-section {
 		height: 400px;
@@ -97,7 +100,6 @@
 		line-height: 1.3;
 		margin-bottom: 4px;
 	}
-
 }
 
 @media (max-width: 768px) {
@@ -118,7 +120,6 @@
 		display: none;
 	}
 }
-
 
 @media (max-width: 480px) {
 	.slider-section {
@@ -142,9 +143,6 @@
 	}
 }
 
-
-
-
 .translucent-background {
 	background-color: rgba(255, 255, 255, 0.36);
 	backdrop-filter: blur(5px);
@@ -153,10 +151,7 @@
 	border-radius: 10px;
 }
 
-
-/*---------------------------------------------------------------------------------------------------------------*/
-
-
+/* Dropdown Menu */
 .dropdown-menu {
 	z-index: 1050;
 	position: absolute;
@@ -252,7 +247,6 @@
 	}
 }
 
-
 @media (max-width: 768px) {
 	.mobile-lang-flags {
 		display: flex;
@@ -264,9 +258,7 @@
 	}
 }
 
-/*---------------------------------------------------------------------------------------------------------------*/
-
-
+/* Buttons */
 .pulse-button {
 	background-color: #61a83e;
 	color: white;
@@ -281,7 +273,6 @@
 	position: relative;
 	overflow: hidden;
 }
-
 
 .aroma-button {
 	background-color: #61a83e;
@@ -298,7 +289,6 @@
 	overflow: hidden;
 }
 
-
 .lang img {
 	vertical-align: middle;
 }
@@ -311,9 +301,7 @@
 	text-decoration: none;
 }
 
-/*---------------------------------------------------------------------------------------------------------------*/
-
-
+/* Carousel Card Custom */
 .home-carousel-card-custom {
 	line-height: 18px;
 	font-size: 14px;
@@ -327,9 +315,11 @@
 	margin: 10px 0;
 }
 
-/*---------------------------------------------------------------------------------------------------------------*/
-
+/* Product Carousel */
 .carousel-container {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 20px 0;
 	position: relative;
 }
 
@@ -347,13 +337,175 @@
 	background-color: rgb(126, 179, 80);
 	color: white;
 	border: none;
-	padding: 10px;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	font-size: 1.6rem;
 	cursor: pointer;
-	font-size: 24px;
-	z-index: 1001;
+	transition: background 0.3s ease;
 }
 
+.custom-prev:hover, .custom-next:hover {
+	background-color: rgb(100, 150, 60);
+}
 
+.product-carousel article {
+	position: relative;
+	overflow: hidden;
+	border-radius: 12px;
+	background: #ffffff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	width: 260px; /* Zväčšená šírka karty */
+	height: 340px; /* Zväčšená výška karty */
+	margin: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.product-carousel article:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-carousel .thumb-info {
+	height: 240px; /* Zväčšená výška obrázka */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.product-carousel .thumb-info-wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.product-carousel .img-fluid {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain; /* Zachová celý obrázok */
+	transition: transform 0.3s ease;
+}
+
+.product-carousel article:hover .img-fluid {
+	transform: scale(1.05);
+}
+
+.product-carousel .ribbon {
+	position: absolute;
+	top: 20px; /* Posunuté vyššie */
+	right: -45px; /* Úprava pre plnú viditeľnosť */
+	width: 160px; /* Menšia šírka pre lepšie umiestnenie */
+	background: linear-gradient(45deg, #61a83e, #7eb350); /* Zelený gradient */
+	color: white;
+	text-align: center;
+	transform: rotate(45deg);
+	padding: 8px 0;
+	font-size: 0.95rem;
+	font-weight: 700;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+	z-index: 10;
+}
+
+.product-carousel .product-info {
+	padding: 15px;
+	text-align: center;
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #333;
+	background: #f9f9f9;
+	border-top: 1px solid #eee;
+	transition: background 0.3s ease;
+	flex-grow: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: normal;
+	word-wrap: break-word;
+	overflow: hidden;
+}
+
+.product-carousel article:hover .product-info {
+	background: #e6f3ff;
+}
+
+.product-carousel .owl-stage {
+	display: flex;
+	align-items: stretch;
+}
+
+.product-carousel .owl-item {
+	flex: 0 0 auto;
+	margin-right: 20px;
+}
+
+/* Responzivita */
+@media (max-width: 1200px) {
+	.product-carousel .owl-item {
+		width: 20%;
+	}
+}
+
+@media (max-width: 992px) {
+	.product-carousel article {
+		width: 220px;
+		height: 300px;
+	}
+
+	.product-carousel .thumb-info {
+		height: 200px;
+	}
+
+	.product-carousel .product-info {
+		font-size: 0.9rem;
+		padding: 10px;
+	}
+
+	.custom-prev, .custom-next {
+		width: 35px;
+		height: 35px;
+		font-size: 1rem;
+	}
+
+	.product-carousel .owl-item {
+		margin-right: 15px;
+		width: 25%;
+	}
+
+	.product-carousel .ribbon {
+		top: 15px;
+		right: -40px;
+		width: 140px;
+		font-size: 0.85rem;
+		padding: 6px 0;
+	}
+}
+
+@media (max-width: 768px) {
+	.product-carousel .owl-item {
+		width: 33.3333%;
+	}
+}
+
+@media (max-width: 576px) {
+	.product-carousel .owl-item {
+		width: 50%;
+	}
+}
+
+@media (max-width: 400px) {
+	.product-carousel .owl-item {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+	}
+}
+
+/* Ostatné štýly */
 .outer-card {
 	padding: 5px;
 	border-radius: 8px;
@@ -384,108 +536,7 @@
 	margin-right: 0;
 }
 
-.product-carousel .owl-stage {
-	display: flex;
-}
-
-@keyframes scroll {
-	from {
-		transform: translateX(0);
-	}
-	to {
-		transform: translateX(-100%);
-	}
-}
-
-.product-carousel .owl-item {
-	flex: 0 0 auto;
-	width: 16.6667%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.owl-carousel .thumb-info-wrapper {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 350px;
-	overflow: hidden;
-}
-
-.owl-carousel .thumb-info-wrapper img {
-	max-width: 100%;
-	max-height: 100%;
-	object-fit: cover;
-}
-
-.product-card {
-	border-radius: 5px;
-	overflow: hidden;
-	text-align: center;
-}
-
-.product-info {
-	padding: 10px;
-	background-color: #ffffff;
-}
-
-.product-card {
-	position: relative;
-}
-
-.ribbon {
-	position: absolute;
-	top: 35px;
-	right: -52px;
-	width: 203px;
-	background-color: green;
-	color: white;
-	text-align: center;
-	transform: rotate(45deg);
-	z-index: 10;
-	font-weight: bold;
-	font-size: 13px;
-	padding: 5px 0;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-
-@media (max-width: 1200px) {
-	.product-carousel .owl-item {
-		width: 20%;
-	}
-}
-
-@media (max-width: 992px) {
-	.product-carousel .owl-item {
-		width: 25%;
-	}
-}
-
-@media (max-width: 768px) {
-	.product-carousel .owl-item {
-		width: 33.3333%;
-	}
-}
-
-@media (max-width: 576px) {
-	.product-carousel .owl-item {
-		width: 50%;
-	}
-}
-
-@media (max-width: 400px) {
-	.product-carousel .owl-item {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-	}
-}
-
-/*---------------------------------------------------------------------------------------------------------------*/
-
-
+/* Modal a ostatné */
 .wordOfStyx-modal {
 	display: none;
 	position: fixed;
@@ -495,11 +546,9 @@
 	width: 100%;
 	height: 100%;
 	overflow: auto;
-	background-color: rgb(0,0,0);
 	background-color: rgba(0,0,0,0.4);
 	padding-top: 60px;
 }
-
 
 .wordOfStyx-modal-content {
 	background-color: #d3dfe1;
@@ -508,7 +557,6 @@
 	border: 1px solid #888;
 	width: 40%;
 }
-
 
 .wordOfStyx-close {
 	color: #aaa;
@@ -523,6 +571,7 @@
 	text-decoration: none;
 	cursor: pointer;
 }
+
 .video-container {
 	display: block;
 	margin-left: auto;
@@ -532,7 +581,6 @@
 	background: #000;
 	overflow: hidden;
 }
-
 
 @media (max-width: 600px) {
 	.video-container {
@@ -574,6 +622,7 @@
 	transition: background-color 0.3s ease, box-shadow 0.3s ease;
 	border: none;
 }
+
 .btn-accessibility:hover,
 .btn-accessibility:focus {
 	background-color: #218838;
@@ -596,10 +645,10 @@
 	object-position: center;
 }
 
-
 .news-carousel .thumb-info-bottom-info-custom {
 	text-align: center;
 }
+
 .lightbox-modal {
 	position: fixed;
 	z-index: 1050;
@@ -612,12 +661,14 @@
 	align-items: center;
 	justify-content: center;
 }
+
 .lightbox-content {
 	max-width: 90%;
 	max-height: 90%;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
 	border-radius: 8px;
 }
+
 .lightbox-close {
 	position: absolute;
 	top: 20px;
@@ -633,7 +684,6 @@
 		display: none !important;
 	}
 }
-
 
 @media (max-width: 767px) {
 	.header-nav-main .nav-pills .mobile-only {
