@@ -10,7 +10,10 @@ $(document).ready(function(){
 		autoplayTimeout: 5000, // 5 sekúnd
 		autoplayHoverPause: true
 	});
+});
 
+// POZOR: produktový karusel daj pod window.onload!
+$(window).on('load', function(){
 	var productCarousel = $('.product-carousel').owlCarousel({
 		items: 6,
 		loop: true,
@@ -31,6 +34,7 @@ $(document).ready(function(){
 		productCarousel.trigger('prev.owl.carousel');
 	});
 });
+
 
 // Koniec nastavenia karuselu
 // -----------------------------------------------------------------------------------------------------------------------
