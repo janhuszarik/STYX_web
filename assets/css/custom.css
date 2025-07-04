@@ -430,7 +430,8 @@
 }
 
 .product-carousel article:hover .product-info {
-	background: #90fa90;
+	background: #70ae47;
+	color: white;
 }
 .product-carousel a {
 	text-decoration: none !important;

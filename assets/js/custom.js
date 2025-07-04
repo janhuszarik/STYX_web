@@ -4,29 +4,27 @@ $(document).ready(function(){
 		items: 4,
 		margin: 10,
 		loop: true,
-		nav: false, // Nepoužívame vstavané navigačné šípky
+		nav: false,
 		dots: false,
 		autoplay: true,
-		autoplayTimeout: 5000, // 5 sekúnd
+		autoplayTimeout: 5000,
 		autoplayHoverPause: true
 	});
 });
 
-// POZOR: produktový karusel daj pod window.onload!
 $(window).on('load', function(){
 	var productCarousel = $('.product-carousel').owlCarousel({
 		items: 6,
 		loop: true,
-		nav: false, // Nepoužívame vstavané navigačné šípky
+		nav: false,
 		dots: false,
 		autoplay: true,
-		autoplayTimeout: 5000, // 5 sekúnd
+		autoplayTimeout: 5000,
 		autoplayHoverPause: true,
-		smartSpeed: 1000, // Rýchlosť animácie
-		fluidSpeed: true // Plynulý prechod
+		smartSpeed: 1000,
+		fluidSpeed: true
 	});
 
-	// Priradenie funkcie na vlastné šípky
 	$('.custom-next').click(function() {
 		productCarousel.trigger('next.owl.carousel');
 	});
