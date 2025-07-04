@@ -387,7 +387,7 @@
 .product-carousel .img-fluid {
 	max-width: 100%;
 	max-height: 100%;
-	object-fit: contain; /* Zachová celý obrázok */
+	object-fit: contain;
 	transition: transform 0.3s ease;
 }
 
@@ -397,10 +397,10 @@
 
 .product-carousel .ribbon {
 	position: absolute;
-	top: 20px; /* Posunuté vyššie */
-	right: -45px; /* Úprava pre plnú viditeľnosť */
-	width: 160px; /* Menšia šírka pre lepšie umiestnenie */
-	background: linear-gradient(45deg, #61a83e, #7eb350); /* Zelený gradient */
+	top: 31px;
+	right: -42px;
+	width: 184px;
+	background: linear-gradient(45deg, #61a83e, #7eb350);
 	color: white;
 	text-align: center;
 	transform: rotate(45deg);
