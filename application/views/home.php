@@ -77,7 +77,7 @@
                     <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
                         <span class="thumb-info-wrapper">
                             <img loading="lazy"
-								 src="<?= BASE_URL ?>Uploads/product/<?= $product_item->image ?>"
+								 src="<?= BASE_URL ?>uploads/product/<?= $product_item->image ?>"
 								 class="img-fluid"
 								 alt="<?= htmlspecialchars($product_item->name) ?>">
                         </span>
