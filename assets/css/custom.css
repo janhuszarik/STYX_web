@@ -430,17 +430,8 @@
 }
 
 .product-carousel article:hover .product-info {
-	background: #d5ffca;
-
+	background: #e6f3ff;
 }
-.product-carousel a {
-	text-decoration: none !important;
-}
-.product-carousel a:hover,
-.product-carousel a:focus {
-	text-decoration: none !important;
-}
-
 
 .product-carousel .owl-stage {
 	display: flex;
