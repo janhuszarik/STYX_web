@@ -183,7 +183,7 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 	$CI->load->library('image_lib');
 
 	if ($dir === false) {
-		$dir = 'Uploads/';
+		$dir = 'uploads/';
 	} else {
 		$dir = rtrim($dir, '/') . '/';
 	}
