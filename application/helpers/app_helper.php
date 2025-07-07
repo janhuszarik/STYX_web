@@ -168,7 +168,7 @@ function user($user_id = false) {
 		if (!empty($user)) {
 			echo $user[0]->first_name . ' ' . $user[0]->last_name;
 		} else {
-			echo 'Neexistuje!';
+			echo 'Nicht vorhanden!';
 		}
 	} else {
 		$user = $CI->ion_auth->user()->row();
@@ -190,13 +190,11 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 
 	if (!is_dir($dir)) {
 		if (!mkdir($dir, 0755, true)) {
-			log_message('error', "Nepodarilo sa vytvoriť priečinok: $dir");
 			return false;
 		}
 	}
 
 	if (!is_writable($dir)) {
-		log_message('error', "Priečinok nie je zapisovateľný: $dir");
 		return false;
 	}
 
@@ -216,7 +214,6 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 		$originalPath = $dir . $baseName . '.' . $extension;
 
 		if (in_array(strtolower($extension), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
-			// Correct image orientation based on EXIF data
 			if (strtolower($extension) === 'jpg' || strtolower($extension) === 'jpeg') {
 				$exif = @exif_read_data($tmpName);
 				if ($exif !== false && !empty($exif['Orientation'])) {
@@ -232,7 +229,6 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 							$image = imagerotate($image, 90, 0);
 							break;
 					}
-					// Save the corrected image temporarily
 					imagejpeg($image, $tmpName, 100);
 					imagedestroy($image);
 				}
@@ -251,9 +247,7 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 					$configi['width'] = 1600;
 					$configi['height'] = 1600;
 					$CI->image_lib->initialize($configi);
-					if (!$CI->image_lib->resize()) {
-						log_message('error', "Chyba pri zmene veľkosti obrázka: " . $CI->image_lib->display_errors());
-					}
+					$CI->image_lib->resize();
 					if ($watermark == true) {
 						$configw['wm_type'] = 'overlay';
 						$configw['wm_overlay_path'] = APP_PATH . '/' . LOGO_PNG;
@@ -262,18 +256,14 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 						$configw['wm_hor_alignment'] = 'right';
 						$configw['wm_padding'] = '-20';
 						$CI->image_lib->initialize($configw);
-						if (!$CI->image_lib->watermark()) {
-							log_message('error', "Chyba pri pridávaní vodoznaku: " . $CI->image_lib->display_errors());
-						}
+						$CI->image_lib->watermark();
 					}
 				}
 				return $result;
 			} else {
-				log_message('error', "Nepodarilo sa presunúť súbor: $tmpName do $originalPath");
 				return '';
 			}
 		} else {
-			log_message('error', "Nepodporovaný formát súboru alebo súbor nie je nahratý: " . $_FILES[$file]['name']);
 			return '';
 		}
 	}
@@ -287,7 +277,6 @@ function obrazokfinal($originalPath, $offLogo = true, $thumbPath = null, $defaul
 	$CI->load->library('image_lib');
 
 	if ($originalPath && file_exists($originalPath)) {
-		// Resize original image
 		$configi['image_library'] = 'gd2';
 		$configi['source_image'] = $originalPath;
 		$configi['create_thumb'] = FALSE;
@@ -299,11 +288,8 @@ function obrazokfinal($originalPath, $offLogo = true, $thumbPath = null, $defaul
 		$configi['height'] = $defaultWidthImage;
 
 		$CI->image_lib->initialize($configi);
-		if (!$CI->image_lib->resize()) {
-			log_message('error', "Chyba pri zmene veľkosti obrázka: " . $CI->image_lib->display_errors());
-		}
+		$CI->image_lib->resize();
 
-		// Watermark
 		if ($offLogo == true) {
 			$configw['wm_type'] = 'overlay';
 			$configw['wm_overlay_path'] = APP_PATH . '/' . LOGO_PNG;
@@ -312,12 +298,9 @@ function obrazokfinal($originalPath, $offLogo = true, $thumbPath = null, $defaul
 			$configw['wm_hor_alignment'] = 'right';
 			$configw['wm_padding'] = '-20';
 			$CI->image_lib->initialize($configw);
-			if (!$CI->image_lib->watermark()) {
-				log_message('error', "Chyba pri pridávaní vodoznaku: " . $CI->image_lib->display_errors());
-			}
+			$CI->image_lib->watermark();
 		}
 
-		// Create thumbnail
 		if ($thumbPath) {
 			$config['image_library'] = 'gd2';
 			$config['source_image'] = $originalPath;
@@ -327,15 +310,12 @@ function obrazokfinal($originalPath, $offLogo = true, $thumbPath = null, $defaul
 			$config['height'] = 400;
 
 			$CI->image_lib->initialize($config);
-			if (!$CI->image_lib->resize()) {
-				log_message('error', "Chyba pri vytváraní náhľadu: " . $CI->image_lib->display_errors());
-			}
+			$CI->image_lib->resize();
 		}
 	}
 
 	return ['original' => $originalPath, 'thumb' => $thumbPath];
 }
-
 
 function url_oprava($str, $separator = '-', $lowercase = TRUE) {
 	if ($separator === 'dash') {
@@ -385,7 +365,6 @@ if (!function_exists('remove_diacritics')) {
 	}
 }
 
-
 function obrpridajthumb($vstup = false) {
 	if ($vstup) {
 		$urlimgthumb = explode('.', $vstup);
@@ -405,6 +384,7 @@ if (!function_exists('checkTextIcon')) {
 		}
 	}
 }
+
 if (!function_exists('checkDateOrIcon')) {
 	function checkDateOrIcon($value = '') {
 		$value = trim($value);
