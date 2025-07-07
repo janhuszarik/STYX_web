@@ -47,22 +47,25 @@ $this->load->view('partials/article_list_assets');
 		</div>
 	<?php else: ?>
 		<?php foreach ($articles as $a): ?>
-			<div class="article-list-row">
-				<?php if (!empty($a->image)): ?>
-					<div class="article-list-img">
+			<div class="row align-items-center mb-5 article-list-row">
+				<div class="col-md-8">
+					<h3 class="fw-bold"><?= htmlspecialchars($a->title) ?></h3>
+					<?php if (!empty($a->subtitle)): ?>
+						<p><?= strip_tags($a->subtitle) ?></p>
+					<?php endif; ?>
+					<a href="<?= base_url($a->slug . '/' . remove_diacritics($a->slug_title)) ?>" class="btn btn-success mt-3">Mehr Infos &gt;&gt;</a>
+				</div>
+				<div class="col-md-4 text-end">
+					<?php if (!empty($a->image)): ?>
 						<img src="<?= base_url($a->image) ?>"
-							 class="img-fluid rounded shadow-sm"
+							 class="img-fluid rounded shadow-sm article-list-img"
 							 alt="<?= htmlspecialchars($a->image_title ?? $a->title) ?>">
-					</div>
-				<?php endif; ?>
-				<div class="article-list-text">
-					<h4 class="fw-bold"><?= htmlspecialchars($a->title) ?></h4>
-					<p><?= strip_tags($a->subtitle) ?></p>
-					<a href="<?= base_url($a->slug . '/' . remove_diacritics($a->slug_title)) ?>" class="btn btn-success">Mehr lesen >></a>
+					<?php endif; ?>
 				</div>
 			</div>
 		<?php endforeach; ?>
 	<?php endif; ?>
 </section>
+
 
 

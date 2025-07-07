@@ -1,3 +1,4 @@
+/* --- SUBKATEGÓRIE BUTTONY --- */
 .subcategory-buttons {
 	display: flex;
 	flex-wrap: wrap;
@@ -9,38 +10,101 @@
 	min-width: 140px;
 	text-align: center;
 	transition: all 0.2s ease-in-out;
+	border-radius: 6px;
+	padding: 9px 24px;
+	font-weight: 500;
+	box-shadow: none;
+	font-size: 1.08rem;
+	background: #42ad29;
+	border: none;
+	color: #fff;
+	letter-spacing: 0.01em;
 }
-.subcategory-buttons a.btn.active {
+.subcategory-buttons a.btn.active,
+.subcategory-buttons a.btn:hover,
+.subcategory-buttons a.btn:focus {
 	font-weight: bold;
 	box-shadow: 0 0 0 2px #218838;
+	background: #218838;
+	color: #fff;
 }
 
+/* --- ČLÁNKY LIST - FLEX RAD --- */
 .article-list-row {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	justify-content: space-between;
 	margin-bottom: 2.5rem;
 	background: #fff;
 	border-radius: 1.1rem;
 	box-shadow: 0 2px 12px rgba(39,79,77,.09);
 	padding: 1.5rem 1.5rem;
 	gap: 32px;
+	min-height: 180px;
 }
+
 .article-list-img {
 	flex: 1 1 200px;
 	text-align: end;
 	max-width: 220px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 }
+
 .article-list-img img {
 	max-width: 180px;
 	width: 100%;
+	height: auto;
 	border-radius: 1rem;
 	box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+	background: #f9f9f9;
+	object-fit: cover;
 }
+
 .article-list-text {
 	flex: 2 1 350px;
 	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
+
+.article-list-text h3,
+.article-list-text h4 {
+	font-weight: 700;
+	font-size: 1.28rem;
+	margin-bottom: .5rem;
+	color: #1b241e;
+}
+
+.article-list-text p {
+	color: #222;
+	font-size: 1.06rem;
+	line-height: 1.5;
+	margin-bottom: 16px;
+}
+
+.article-list-text .btn {
+	margin-top: 6px;
+	min-width: 180px;
+	border-radius: 6px;
+	padding: 10px 28px;
+	font-size: 1.05rem;
+	background: #6fb726;
+	border: none;
+	font-weight: 600;
+	transition: background 0.18s;
+}
+
+.article-list-text .btn:hover,
+.article-list-text .btn:focus {
+	background: #42ad29;
+	color: #fff;
+}
+
+/* --- RESPONSIVE --- */
 @media (max-width: 991.98px) {
 	.article-list-row {
 		gap: 18px;
@@ -49,7 +113,13 @@
 	.article-list-img img {
 		max-width: 120px;
 	}
+	.article-list-text .btn {
+		min-width: 140px;
+		padding: 8px 20px;
+		font-size: 0.99rem;
+	}
 }
+
 @media (max-width: 767.98px) {
 	.article-list-row {
 		flex-direction: column !important;
@@ -68,10 +138,12 @@
 		margin: 0 0 18px 0;
 		text-align: center !important;
 		order: 1;
+		justify-content: center;
 	}
 	.article-list-text {
 		text-align: left;
 		order: 2;
+		padding: 0;
 	}
 	.article-list-img img {
 		max-width: 90vw;
@@ -82,3 +154,10 @@
 	}
 }
 
+/* --- ODDIELENIE MEDZI ČLÁNKAMI (jemná čiara pod posledným nie) --- */
+.article-list-row {
+	border-bottom: 1px solid #ecf1ec;
+}
+.article-list-row:last-child {
+	border-bottom: none;
+}
