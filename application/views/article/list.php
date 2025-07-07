@@ -64,3 +64,5 @@ $this->load->view('partials/article_list_assets');
 		<?php endforeach; ?>
 	<?php endif; ?>
 </section>
+
+
