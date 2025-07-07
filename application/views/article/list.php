@@ -48,21 +48,22 @@ $this->load->view('partials/article_list_assets');
 	<?php else: ?>
 		<?php foreach ($articles as $a): ?>
 			<div class="row align-items-center mb-5 article-row">
-				<div class="col-md-8">
-					<h3 class="fw-bold"><?= htmlspecialchars($a->title) ?></h3>
-					<?php if (!empty($a->subtitle)): ?>
-						<p><?= strip_tags($a->subtitle) ?></p>
-					<?php endif; ?>
-					<a href="<?= base_url($a->slug . '/' . remove_diacritics($a->slug_title)) ?>" class="btn btn-success mt-3">Mehr Infos &gt;&gt;</a>
-				</div>
-				<div class="col-md-4 text-end">
+				<div class="col-md-4 text-end order-1 order-md-2">
 					<?php if (!empty($a->image)): ?>
 						<img src="<?= base_url($a->image) ?>"
 							 class="img-fluid rounded shadow-sm article-img"
 							 alt="<?= htmlspecialchars($a->image_title ?? $a->title) ?>">
 					<?php endif; ?>
 				</div>
+				<div class="col-md-8 order-2 order-md-1">
+					<h3 class="fw-bold"><?= htmlspecialchars($a->title) ?></h3>
+					<?php if (!empty($a->subtitle)): ?>
+						<p><?= strip_tags($a->subtitle) ?></p>
+					<?php endif; ?>
+					<a href="<?= base_url($a->slug . '/' . remove_diacritics($a->slug_title)) ?>" class="btn btn-success mt-3">Mehr Infos &gt;&gt;</a>
+				</div>
 			</div>
+
 		<?php endforeach; ?>
 	<?php endif; ?>
 </section>
