@@ -220,7 +220,7 @@ class Gallery extends CI_Controller
 
 		$category_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($category->name));
 		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
-		$base_path = './Uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
+		$base_path = './uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
 
 		if (!is_dir($base_path)) {
 			mkdir($base_path, 0755, TRUE);
