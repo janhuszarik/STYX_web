@@ -114,8 +114,11 @@
 		justify-content: flex-start;
 	}
 	.article-img {
-		max-width: 90vw;
+		max-width: 95vw;
 		width: 100%;
+		height: auto;
+		max-height: unset;
+		object-fit: contain;
 		margin: 0;
 	}
 }
