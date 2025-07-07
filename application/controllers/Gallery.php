@@ -218,10 +218,9 @@ class Gallery extends CI_Controller
 			return;
 		}
 
-		// Nová štruktúra priečinkov: uploads/gallery/[category_name]/[gallery_name]/
 		$category_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($category->name));
 		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
-		$base_path = './uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
+		$base_path = './Uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
 
 		if (!is_dir($base_path)) {
 			mkdir($base_path, 0755, TRUE);
@@ -236,7 +235,6 @@ class Gallery extends CI_Controller
 				$image_number = $this->Gallery_model->getMaxImageNumber($gallery_id);
 				$save_as_name = $gallery_name . '_' . $image_number;
 
-				// Nahrávanie pomocou helpera uploadImg
 				$_FILES['image'] = [
 					'name' => $files['name'][$i],
 					'type' => $files['type'][$i],
@@ -247,13 +245,28 @@ class Gallery extends CI_Controller
 
 				$image_path = uploadImg('image', $base_path, $save_as_name, TRUE, FALSE);
 				if ($image_path) {
-					// Vytvorenie WebP formátu pre originál a thumbnail
+					// Create thumbnail with proper orientation
 					$extension = pathinfo($image_path, PATHINFO_EXTENSION);
 					$basename = str_replace('.' . $extension, '', $image_path);
-					$thumb_path = obrpridajthumb($image_path);
+					$thumb_path = $basename . '_thumb.' . $extension;
+
+					// Create thumbnail using image_lib
+					$this->load->library('image_lib');
+					$config['image_library'] = 'gd2';
+					$config['source_image'] = $image_path;
+					$config['new_image'] = $thumb_path;
+					$config['maintain_ratio'] = TRUE;
+					$config['width'] = 500;
+					$config['height'] = 400;
+					$this->image_lib->initialize($config);
+					if (!$this->image_lib->resize()) {
+						log_message('error', "Chyba pri vytváraní náhľadu: " . $this->image_lib->display_errors());
+					}
+					$this->image_lib->clear();
+
+					// Convert to WebP
 					$webp_path = $basename . '.webp';
 					$thumb_webp_path = $basename . '_thumb.webp';
-
 					$this->convertToWebp($image_path, $webp_path);
 					$this->convertToWebp($thumb_path, $thumb_webp_path);
 

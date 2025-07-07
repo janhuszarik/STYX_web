@@ -183,7 +183,7 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 	$CI->load->library('image_lib');
 
 	if ($dir === false) {
-		$dir = 'uploads/';
+		$dir = 'Uploads/';
 	} else {
 		$dir = rtrim($dir, '/') . '/';
 	}
@@ -216,6 +216,28 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 		$originalPath = $dir . $baseName . '.' . $extension;
 
 		if (in_array(strtolower($extension), array('jpg', 'jpeg', 'png', 'gif', 'webp')) && is_uploaded_file($tmpName)) {
+			// Correct image orientation based on EXIF data
+			if (strtolower($extension) === 'jpg' || strtolower($extension) === 'jpeg') {
+				$exif = @exif_read_data($tmpName);
+				if ($exif !== false && !empty($exif['Orientation'])) {
+					$image = imagecreatefromjpeg($tmpName);
+					switch ($exif['Orientation']) {
+						case 3:
+							$image = imagerotate($image, 180, 0);
+							break;
+						case 6:
+							$image = imagerotate($image, -90, 0);
+							break;
+						case 8:
+							$image = imagerotate($image, 90, 0);
+							break;
+					}
+					// Save the corrected image temporarily
+					imagejpeg($image, $tmpName, 100);
+					imagedestroy($image);
+				}
+			}
+
 			if (move_uploaded_file($tmpName, $originalPath)) {
 				$result = $originalPath;
 				if ($resizeImage) {
