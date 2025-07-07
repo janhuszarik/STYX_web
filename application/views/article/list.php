@@ -47,7 +47,7 @@ $this->load->view('partials/article_list_assets');
 		</div>
 	<?php else: ?>
 		<?php foreach ($articles as $a): ?>
-			<div class="row align-items-center mb-5 article-list-row">
+			<div class="row align-items-center mb-5 article-row">
 				<div class="col-md-8">
 					<h3 class="fw-bold"><?= htmlspecialchars($a->title) ?></h3>
 					<?php if (!empty($a->subtitle)): ?>
@@ -58,7 +58,7 @@ $this->load->view('partials/article_list_assets');
 				<div class="col-md-4 text-end">
 					<?php if (!empty($a->image)): ?>
 						<img src="<?= base_url($a->image) ?>"
-							 class="img-fluid rounded shadow-sm article-list-img"
+							 class="img-fluid rounded shadow-sm article-img"
 							 alt="<?= htmlspecialchars($a->image_title ?? $a->title) ?>">
 					<?php endif; ?>
 				</div>
@@ -66,6 +66,7 @@ $this->load->view('partials/article_list_assets');
 		<?php endforeach; ?>
 	<?php endif; ?>
 </section>
+
 
 
 

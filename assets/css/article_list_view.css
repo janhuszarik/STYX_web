@@ -29,65 +29,33 @@
 	color: #fff;
 }
 
-/* --- ČLÁNKY LIST - FLEX RAD --- */
-.article-list-row {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 2.5rem;
-	background: #fff;
-	border-radius: 1.1rem;
-	box-shadow: 0 2px 12px rgba(39,79,77,.09);
-	padding: 1.5rem 1.5rem;
-	gap: 32px;
-	min-height: 180px;
+/* --- ČLÁNKY LIST --- */
+.article-row {
+	min-height: 170px;
+	padding-bottom: 36px;
+	border-bottom: 1px solid #e5e5e5;
+}
+.article-row:last-child {
+	border-bottom: none;
 }
 
-.article-list-img {
-	flex: 1 1 200px;
-	text-align: end;
-	max-width: 220px;
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-}
-
-.article-list-img img {
-	max-width: 180px;
-	width: 100%;
-	height: auto;
-	border-radius: 1rem;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-	background: #f9f9f9;
-	object-fit: cover;
-}
-
-.article-list-text {
-	flex: 2 1 350px;
-	min-width: 0;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-.article-list-text h3,
-.article-list-text h4 {
+.article-row h3,
+.article-row .fw-bold {
 	font-weight: 700;
-	font-size: 1.28rem;
-	margin-bottom: .5rem;
-	color: #1b241e;
-}
-
-.article-list-text p {
+	font-size: 1.37rem;
+	margin-bottom: .6rem;
 	color: #222;
-	font-size: 1.06rem;
-	line-height: 1.5;
-	margin-bottom: 16px;
 }
 
-.article-list-text .btn {
-	margin-top: 6px;
+.article-row p {
+	color: #222;
+	font-size: 1.07rem;
+	line-height: 1.5;
+	margin-bottom: 18px;
+}
+
+.article-row .btn {
+	margin-top: 8px;
 	min-width: 180px;
 	border-radius: 6px;
 	padding: 10px 28px;
@@ -98,22 +66,29 @@
 	transition: background 0.18s;
 }
 
-.article-list-text .btn:hover,
-.article-list-text .btn:focus {
+.article-row .btn:hover,
+.article-row .btn:focus {
 	background: #42ad29;
 	color: #fff;
 }
 
+/* --- OBRÁZOK VPRAVO --- */
+.article-img {
+	max-width: 220px;
+	max-height: 180px;
+	object-fit: cover;
+	border-radius: 12px;
+	background: #fafafa;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
 /* --- RESPONSIVE --- */
 @media (max-width: 991.98px) {
-	.article-list-row {
-		gap: 18px;
-		padding: 1rem;
+	.article-img {
+		max-width: 150px;
+		max-height: 110px;
 	}
-	.article-list-img img {
-		max-width: 120px;
-	}
-	.article-list-text .btn {
+	.article-row .btn {
 		min-width: 140px;
 		padding: 8px 20px;
 		font-size: 0.99rem;
@@ -121,43 +96,26 @@
 }
 
 @media (max-width: 767.98px) {
-	.article-list-row {
+	.article-row {
 		flex-direction: column !important;
-		align-items: flex-start !important;
-		margin-bottom: 2rem;
-		padding: 1rem .7rem;
-		gap: 0;
+		text-align: left !important;
+		padding-bottom: 26px;
 	}
-	.article-list-img,
-	.article-list-text {
+	.col-md-8, .col-md-4 {
+		flex: unset !important;
+		max-width: 100% !important;
 		width: 100% !important;
-		max-width: 100%;
-		flex: unset;
 	}
-	.article-list-img {
-		margin: 0 0 18px 0;
-		text-align: center !important;
-		order: 1;
-		justify-content: center;
+	.col-md-4 {
+		text-align: left !important;
+		margin-top: 18px;
+		margin-bottom: 0;
+		display: flex;
+		justify-content: flex-start;
 	}
-	.article-list-text {
-		text-align: left;
-		order: 2;
-		padding: 0;
-	}
-	.article-list-img img {
+	.article-img {
 		max-width: 90vw;
 		width: 100%;
-		height: auto;
-		margin: 0 auto;
-		display: block;
+		margin: 0;
 	}
-}
-
-/* --- ODDIELENIE MEDZI ČLÁNKAMI (jemná čiara pod posledným nie) --- */
-.article-list-row {
-	border-bottom: 1px solid #ecf1ec;
-}
-.article-list-row:last-child {
-	border-bottom: none;
 }
