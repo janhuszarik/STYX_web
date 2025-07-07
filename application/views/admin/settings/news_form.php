@@ -63,30 +63,26 @@
 							</div>
 						</div>
 					</div>
-
 					<div class="row form-group pb-3">
-						<div class="col-lg-4">
-							<label class="col-form-label">Reihenfolge
-								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Nummer, die die Reihenfolge der Anzeige der News bestimmt. Niedrigere Nummern erscheinen zuerst."></i>
-							</label>
-							<input type="number" name="order_by" class="form-control" value="<?= htmlspecialchars($news->order_by ?? '') ?>">
-						</div>
-					</div>
-
-					<div class="row form-group pb-3">
-						<div class="col-lg-4">
+						<div class="col-lg-3">
 							<label class="col-form-label">Startdatum (optional)
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Startdatum der Karte. Nach Eingabe des Datums wird die Karte am angegebenen Datum automatisch aktiviert.Das bedeutet: Wenn z. B. der 28.01.2025 eingegeben wird, erscheint die Karte am 28.01.2025 um 00:00 Uhr. Wenn kein Datum eingegeben wird, läuft der Beitrag ohne zeitliche Begrenzung** und wird sofort nach dem Speichern** angezeigt."></i>
 							</label>
 							<input type="date" name="start_date" class="form-control" value="<?= htmlspecialchars($news->start_date ?? '') ?>">
 						</div>
-						<div class="col-lg-4">
+						<div class="col-lg-3">
 							<label class="col-form-label">Enddatum (optional)
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Enddatum der Karte. Nach Eingabe des Datums wird die Karte am angegebenen Datum automatisch deaktiviert.Das bedeutet: Wenn z. B. der 30.01.2025 eingegeben wird, wird die Karte am 30.01.2025 um 23:59 Uhr automatisch abgeschaltet. Wichtig: Der Beitrag muss als „Aktiv“ markiert sein, selbst wenn ein Start- und Enddatum definiert ist."></i>
 							</label>
 							<input type="date" name="end_date" class="form-control" value="<?= htmlspecialchars($news->end_date ?? '') ?>">
 						</div>
-						<div class="col-lg-4">
+						<div class="col-lg-3">
+							<label class="col-form-label">Reihenfolge
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Nummer, die die Reihenfolge der Anzeige der News bestimmt. Niedrigere Nummern erscheinen zuerst."></i>
+							</label>
+							<input type="number" name="order_by" class="form-control" value="<?= htmlspecialchars($news->order_by ?? '') ?>">
+						</div>
+						<div class="col-lg-3">
 							<label class="col-form-label">Aktiv?
 								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Auswahl, ob der News karte aktiv sein soll oder verborgen bleibt und für die Öffentlichkeit nicht sichtbar ist."></i>
 							</label>
