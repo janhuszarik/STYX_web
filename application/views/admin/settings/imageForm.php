@@ -99,6 +99,17 @@
 	const thumbnails = document.getElementById('thumbnails');
 	let filesToUpload = [];
 
+	// Prevent duplicate event listeners by removing existing ones
+	const clearEventListeners = (element, event) => {
+		const clone = element.cloneNode(true);
+		element.parentNode.replaceChild(clone, element);
+		return clone;
+	};
+
+	// Reassign elements after clearing listeners
+	const refreshedUploadBtn = clearEventListeners(uploadBtn, 'click');
+
+	// Drag and Drop handling
 	dropzone.addEventListener('dragover', (e) => {
 		e.preventDefault();
 		dropzone.classList.add('dragover');
@@ -120,20 +131,21 @@
 
 	fileInput.addEventListener('change', () => {
 		handleFiles(fileInput.files);
+		fileInput.value = ''; // Clear file input to prevent re-adding same files
 	});
 
 	function handleFiles(files) {
 		for (let file of files) {
-			if (file.type.startsWith('image/')) {
+			if (file.type.startsWith('image/') && !filesToUpload.some(f => f.name === file.name && f.size === file.size)) {
 				filesToUpload.push(file);
 				const reader = new FileReader();
 				reader.onload = (e) => {
 					const thumbnail = document.createElement('div');
 					thumbnail.classList.add('thumbnail');
 					thumbnail.innerHTML = `
-                        <img src="${e.target.result}" alt="Thumbnail">
-                        <button class="delete-btn" onclick="removeThumbnail(this)">X</button>
-                    `;
+                    <img src="${e.target.result}" alt="Thumbnail">
+                    <button class="delete-btn" onclick="removeThumbnail(this)">X</button>
+                `;
 					thumbnails.appendChild(thumbnail);
 				};
 				reader.readAsDataURL(file);
@@ -148,7 +160,7 @@
 		thumbnail.remove();
 	}
 
-	uploadBtn.addEventListener('click', () => {
+	refreshedUploadBtn.addEventListener('click', () => {
 		if (filesToUpload.length === 0) {
 			alert('Bitte wählen Sie Bilder zum Hochladen aus.');
 			return;
@@ -158,41 +170,71 @@
 		filesToUpload.forEach(file => formData.append('images[]', file));
 		formData.append('gallery_id', <?= $gallery->id ?>);
 
-		fetch('<?= base_url('admin/image/save') ?>', {
-			method: 'POST',
-			body: formData
-		})
-			.then(res => res.json())
-			.then(data => {
-				if (data.success) {
-					filesToUpload = [];
-					data.files.forEach(file => {
-						const parts = file.path.split('/');
-						const fullName = parts.pop();
-						const dir = parts.join('/');
-						const nameParts = fullName.split('.');
-						const thumbName = nameParts[0] + '_thumb.' + nameParts[1];
-						const fullThumb = `https://styx.styxnatur.at/${dir}/${thumbName}`;
+		const xhr = new XMLHttpRequest();
+		const progressBar = document.getElementById('progressBar');
+		const progressContainer = document.getElementById('uploadProgress');
 
-						const thumbEl = document.createElement('div');
-						thumbEl.classList.add('thumbnail');
-						thumbEl.setAttribute('data-id', 'new');
-						thumbEl.setAttribute('data-order', '0');
-						thumbEl.innerHTML = `
-							<img src="${fullThumb}" alt="Thumbnail">
-							<button class="delete-btn" onclick="deleteImage('new')">X</button>
-						`;
-						thumbnails.appendChild(thumbEl);
-					});
-					location.reload();
-				} else {
-					alert('Fehler beim Hochladen: ' + data.message);
-				}
-			})
-			.catch(err => {
-				console.error(err);
-				alert('Fehler beim Hochladen der Bilder.');
-			});
+		// Show progress bar
+		progressContainer.style.display = 'block';
+		progressBar.style.width = '0%';
+		progressBar.textContent = '0%';
+
+		// Disable upload button to prevent multiple clicks
+		refreshedUploadBtn.disabled = true;
+
+		// Track upload progress
+		xhr.upload.addEventListener('progress', (e) => {
+			if (e.lengthComputable) {
+				const percentComplete = Math.round((e.loaded / e.total) * 100);
+				progressBar.style.width = percentComplete + '%';
+				progressBar.textContent = percentComplete + '%';
+			}
+		});
+
+		xhr.open('POST', '<?= base_url('admin/image/save') ?>', true);
+
+		xhr.onload = () => {
+			const data = JSON.parse(xhr.responseText);
+			if (data.success) {
+				// Clear files and thumbnails
+				filesToUpload = [];
+				thumbnails.innerHTML = ''; // Clear displayed thumbnails
+				data.files.forEach(file => {
+					const parts = file.path.split('/');
+					const fullName = parts.pop();
+					const dir = parts.join('/');
+					const nameParts = fullName.split('.');
+					const thumbName = nameParts[0] + '_thumb.' + nameParts[1];
+					const fullThumb = `https://styx.styxnatur.at/${dir}/${thumbName}`;
+
+					const thumbEl = document.createElement('div');
+					thumbEl.classList.add('thumbnail');
+					thumbEl.setAttribute('data-id', 'new');
+					thumbEl.setAttribute('data-order', '0');
+					thumbEl.innerHTML = `
+                    <img src="${fullThumb}" alt="Thumbnail">
+                    <button class="delete-btn" onclick="deleteImage('new')">X</button>
+                `;
+					thumbnails.appendChild(thumbEl);
+				});
+				// Hide progress bar and reload
+				progressContainer.style.display = 'none';
+				location.reload();
+			} else {
+				alert('Fehler beim Hochladen: ' + data.message);
+				progressContainer.style.display = 'none';
+			}
+			// Re-enable upload button
+			refreshedUploadBtn.disabled = false;
+		};
+
+		xhr.onerror = () => {
+			alert('Fehler beim Hochladen der Bilder.');
+			progressContainer.style.display = 'none';
+			refreshedUploadBtn.disabled = false;
+		};
+
+		xhr.send(formData);
 	});
 
 	function deleteImage(imageId) {
@@ -228,73 +270,5 @@
 				}
 			});
 		}
-	});
-	uploadBtn.addEventListener('click', () => {
-		if (filesToUpload.length === 0) {
-			alert('Bitte wählen Sie Bilder zum Hochladen aus.');
-			return;
-		}
-
-		const formData = new FormData();
-		filesToUpload.forEach(file => formData.append('images[]', file));
-		formData.append('gallery_id', <?= $gallery->id ?>);
-
-		const xhr = new XMLHttpRequest();
-		const progressBar = document.getElementById('progressBar');
-		const progressContainer = document.getElementById('uploadProgress');
-
-		// Show progress bar
-		progressContainer.style.display = 'block';
-		progressBar.style.width = '0%';
-		progressBar.textContent = '0%';
-
-		// Track upload progress
-		xhr.upload.addEventListener('progress', (e) => {
-			if (e.lengthComputable) {
-				const percentComplete = Math.round((e.loaded / e.total) * 100);
-				progressBar.style.width = percentComplete + '%';
-				progressBar.textContent = percentComplete + '%';
-			}
-		});
-
-		xhr.open('POST', '<?= base_url('admin/image/save') ?>', true);
-
-		xhr.onload = () => {
-			const data = JSON.parse(xhr.responseText);
-			if (data.success) {
-				filesToUpload = [];
-				data.files.forEach(file => {
-					const parts = file.path.split('/');
-					const fullName = parts.pop();
-					const dir = parts.join('/');
-					const nameParts = fullName.split('.');
-					const thumbName = nameParts[0] + '_thumb.' + nameParts[1];
-					const fullThumb = `https://styx.styxnatur.at/${dir}/${thumbName}`;
-
-					const thumbEl = document.createElement('div');
-					thumbEl.classList.add('thumbnail');
-					thumbEl.setAttribute('data-id', 'new');
-					thumbEl.setAttribute('data-order', '0');
-					thumbEl.innerHTML = `
-                    <img src="${fullThumb}" alt="Thumbnail">
-                    <button class="delete-btn" onclick="deleteImage('new')">X</button>
-                `;
-					thumbnails.appendChild(thumbEl);
-				});
-				// Hide progress bar and reload
-				progressContainer.style.display = 'none';
-				location.reload();
-			} else {
-				alert('Fehler beim Hochladen: ' + data.message);
-				progressContainer.style.display = 'none';
-			}
-		};
-
-		xhr.onerror = () => {
-			alert('Fehler beim Hochladen der Bilder.');
-			progressContainer.style.display = 'none';
-		};
-
-		xhr.send(formData);
 	});
 </script>
