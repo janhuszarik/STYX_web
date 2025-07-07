@@ -178,7 +178,7 @@
 	</section>
 
 	<section class="container" aria-labelledby="brands-heading">
-		<h2 id="brands-heading" class="visually-hidden">Our Brands and Services</h2>
+		<h2 id="brands-heading" class="visually-hidden"></h2>
 		<div class="row">
 			<!-- 1. STYX Naturkosmetik -->
 			<div class="col-md-6 col-lg-4 mb-5 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
