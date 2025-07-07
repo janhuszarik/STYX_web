@@ -20,6 +20,7 @@
 							<th>Sprache</th>
 							<th>Aktiv</th>
 							<th>Bild</th>
+							<th>Reihenfolge</th>
 							<th class="text-center">Aktionen</th>
 						</tr>
 						</thead>
@@ -44,6 +45,7 @@
 											–
 										<?php endif; ?>
 									</td>
+									<td class="text-center"><?= htmlspecialchars($news->order_by ?? '-') ?></td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/news/edit/' . $news->id) ?>" class="btn btn-success btn-sm" title="Bearbeiten"><i class="fa fa-edit"></i></a>
 										<a href="<?= base_url('admin/news/del/' . $news->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Wirklich löschen?')" title="Löschen"><i class="fa fa-trash"></i></a>
@@ -51,7 +53,7 @@
 								</tr>
 							<?php endforeach; ?>
 						<?php else: ?>
-							<tr><td colspan="10" class="text-center">Keine News gefunden.</td></tr>
+							<tr><td colspan="11" class="text-center">Keine News gefunden.</td></tr>
 						<?php endif; ?>
 						</tbody>
 					</table>

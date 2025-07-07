@@ -1,5 +1,3 @@
-
-
 <div class="row">
 	<div class="col-lg-12">
 		<section class="card">
@@ -57,7 +55,7 @@
 							<label class="col-form-label">Aktueller Bildvorschau</label>
 							<div>
 								<?php if (!empty($news->image)): ?>
-									<img src="<?= base_url('Uploads/news/' . $news->image) ?>" style="width: 100px; margin-top: 5px; border: 1px solid #ddd; padding: 2px;">
+									<img src="<?= base_url('uploads/news/' . $news->image) ?>" style="width: 100px; margin-top: 5px; border: 1px solid #ddd; padding: 2px;">
 									<small class="text-muted d-block">Aktuelles Bild</small>
 								<?php else: ?>
 									<small class="text-muted">Kein Bild hochgeladen</small>
@@ -66,8 +64,13 @@
 						</div>
 					</div>
 
-					<div class="form-group pb-3">
-
+					<div class="row form-group pb-3">
+						<div class="col-lg-4">
+							<label class="col-form-label">Reihenfolge
+								<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Nummer, die die Reihenfolge der Anzeige der News bestimmt. Niedrigere Nummern erscheinen zuerst."></i>
+							</label>
+							<input type="number" name="order_by" class="form-control" value="<?= htmlspecialchars($news->order_by ?? '') ?>">
+						</div>
 					</div>
 
 					<div class="row form-group pb-3">

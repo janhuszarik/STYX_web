@@ -286,7 +286,8 @@ class Admin_model extends CI_Model {
 			'buttonUrl' => $this->input->post('buttonUrl'),
 			'active' => $this->input->post('active'),
 			'start_date' => $this->input->post('start_date') ?: date('Y-m-d'),
-			'end_date' => $this->input->post('end_date') ?: NULL
+			'end_date' => $this->input->post('end_date') ?: NULL,
+			'order_by' => $this->input->post('order_by')
 		);
 
 		if ($image && !isset($image['error'])) {
@@ -305,10 +306,10 @@ class Admin_model extends CI_Model {
 		}
 	}
 
-	function getNews($id = false)
-	{
+	function getNews($id = false) {
 		if ($id == false) {
 			$this->db->select('*');
+			$this->db->order_by('order_by', 'ASC');
 			return $this->db->get('news')->result();
 		} else {
 			$this->db->select('*');
@@ -317,8 +318,7 @@ class Admin_model extends CI_Model {
 		}
 	}
 
-	function newsDelete($id)
-	{
+	function newsDelete($id) {
 		$this->db->where('id', $id);
 		return $this->db->delete('news');
 	}

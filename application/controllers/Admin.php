@@ -382,7 +382,7 @@ class Admin extends CI_Controller
 			if (!empty($id)) {
 				if ($this->Admin_model->newsSave($post, $image, $old_image)) {
 					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/news/' . $old_image)) {
-						unlink(FCPATH . 'uploads/news/' . $old_image);
+						unlink(FCPATH . 'Uploads/news/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect(BASE_URL . 'admin/news');
