@@ -121,4 +121,8 @@
 		object-fit: contain;
 		margin: 0;
 	}
+	.article-row .col-md-8 {
+		margin-top: 10px;
+	}
 }
+
