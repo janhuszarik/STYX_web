@@ -86,18 +86,18 @@ class App_model extends CI_Model
 		return $this->db->get('slider')->result();
 	}
 
-	function getAllActiveNews()
-	{
+	function getAllActiveNews() {
 		$this->db->select('*');
 		$this->db->from('news');
 		$this->db->where('active', '1');
 		$this->db->where('lang', language());
-		$this->db->where('order_by', 'ASC');
 		$this->db->where('start_date IS NULL OR start_date <=', date('Y-m-d'));
 		$this->db->where('end_date IS NULL OR end_date >=', date('Y-m-d'));
+		$this->db->order_by('order_by', 'ASC');
 		$this->db->order_by('start_date', 'DESC');
 		return $this->db->get()->result();
 	}
+
 
 	function getAllActiveProduct()
 	{
