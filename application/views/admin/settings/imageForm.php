@@ -37,6 +37,16 @@
 		height: 20px;
 		cursor: pointer;
 	}
+	.upload-controls {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 20px;
+	}
+	.progress-container {
+		position: relative;
+		width: 900px;
+	}
 	.progress {
 		height: 20px;
 		background-color: #f5f5f5;
@@ -44,11 +54,51 @@
 		overflow: hidden;
 	}
 	.progress-bar {
-		background-color: #007bff;
-		color: white;
-		text-align: center;
-		line-height: 20px;
-		transition: width 0.3s ease;
+		background: linear-gradient(90deg, #28a745, #34d058);
+		width: 0;
+		height: 100%;
+		transition: width 0.5s ease-in-out, background 0.3s ease;
+	}
+	.progress-bar.pulse {
+		animation: pulse 1.5s infinite;
+	}
+	@keyframes pulse {
+		0% { opacity: 1; }
+		50% { opacity: 0.7; }
+		100% { opacity: 1; }
+	}
+	.progress-text {
+		position: absolute;
+		top: -20px;
+		right: 0;
+		font-weight: bold;
+		display: flex;
+		align-items: center;
+	}
+	.progress-text .dots {
+		margin-left: 5px;
+		display: inline-block;
+	}
+	.progress-text .dots::after {
+		content: '...';
+		display: inline-block;
+		width: 20px;
+		text-align: left;
+		animation: dot-elastic 1.5s infinite;
+	}
+	@keyframes dot-elastic {
+		0% { content: '...'; }
+		33% { content: '..'; }
+		66% { content: '.'; }
+		100% { content: '...'; }
+	}
+	.progress-ok {
+		position: absolute;
+		top: -20px;
+		right: 0;
+		color: green;
+		font-weight: bold;
+		display: none;
 	}
 </style>
 
@@ -63,13 +113,18 @@
 			</header>
 			<div class="card-body">
 				<div class="dropzone" id="dropzone">
-					Drag & Drop Bilder hier oder klicken Sie zum Auswählen
+					Bilder hierher ziehen oder klicken zum Auswählen
 					<input type="file" id="fileInput" name="images[]" multiple accept="image/*" style="display: none;">
 				</div>
-				<button class="btn btn-primary mb-3" id="uploadBtn">Bilder hochladen</button>
-				<!-- Add Progress Bar -->
-				<div class="progress mb-3" id="uploadProgress" style="display: none;">
-					<div class="progress-bar" role="progressbar" style="width: 0%;" id="progressBar">0%</div>
+				<div class="upload-controls">
+					<button class="btn btn-primary" id="uploadBtn">Bilder hochladen</button>
+					<div class="progress-container" id="uploadProgress" style="display: none;">
+						<span class="progress-text" id="progressText">0%<span class="dots"></span></span>
+						<span class="progress-ok" id="progressOk">OK</span>
+						<div class="progress">
+							<div class="progress-bar" id="progressBar"></div>
+						</div>
+					</div>
 				</div>
 				<div class="thumbnails" id="thumbnails">
 					<?php foreach ($images as $image): ?>
@@ -77,11 +132,11 @@
 						$original_path = $image->image_path;
 						$parts = pathinfo($original_path);
 						$webp_name = $parts['filename'] . '.webp';
-						$clean_dirname = ltrim($parts['dirname'], './'); // odstráni ./ alebo /
+						$clean_dirname = ltrim($parts['dirname'], './');
 						$webp_url = base_url($clean_dirname . '/' . $webp_name);
 						?>
 						<div class="thumbnail" data-id="<?= $image->id ?>" data-order="<?= $image->order_position ?>">
-							<img src="<?= $webp_url ?>" alt="Thumbnail">
+							<img src="<?= $webp_url ?>" alt="Vorschau">
 							<button class="delete-btn" onclick="deleteImage(<?= $image->id ?>)">X</button>
 						</div>
 					<?php endforeach; ?>
@@ -97,19 +152,20 @@
 	const fileInput = document.getElementById('fileInput');
 	const uploadBtn = document.getElementById('uploadBtn');
 	const thumbnails = document.getElementById('thumbnails');
+	const progressBar = document.getElementById('progressBar');
+	const progressText = document.getElementById('progressText');
+	const progressOk = document.getElementById('progressOk');
+	const progressContainer = document.getElementById('uploadProgress');
 	let filesToUpload = [];
 
-	// Prevent duplicate event listeners by removing existing ones
 	const clearEventListeners = (element, event) => {
 		const clone = element.cloneNode(true);
 		element.parentNode.replaceChild(clone, element);
 		return clone;
 	};
 
-	// Reassign elements after clearing listeners
 	const refreshedUploadBtn = clearEventListeners(uploadBtn, 'click');
 
-	// Drag and Drop handling
 	dropzone.addEventListener('dragover', (e) => {
 		e.preventDefault();
 		dropzone.classList.add('dragover');
@@ -131,7 +187,7 @@
 
 	fileInput.addEventListener('change', () => {
 		handleFiles(fileInput.files);
-		fileInput.value = ''; // Clear file input to prevent re-adding same files
+		fileInput.value = '';
 	});
 
 	function handleFiles(files) {
@@ -143,9 +199,9 @@
 					const thumbnail = document.createElement('div');
 					thumbnail.classList.add('thumbnail');
 					thumbnail.innerHTML = `
-                    <img src="${e.target.result}" alt="Thumbnail">
-                    <button class="delete-btn" onclick="removeThumbnail(this)">X</button>
-                `;
+						<img src="${e.target.result}" alt="Vorschau">
+						<button class="delete-btn" onclick="removeThumbnail(this)">X</button>
+					`;
 					thumbnails.appendChild(thumbnail);
 				};
 				reader.readAsDataURL(file);
@@ -171,23 +227,20 @@
 		formData.append('gallery_id', <?= $gallery->id ?>);
 
 		const xhr = new XMLHttpRequest();
-		const progressBar = document.getElementById('progressBar');
-		const progressContainer = document.getElementById('uploadProgress');
 
-		// Show progress bar
 		progressContainer.style.display = 'block';
 		progressBar.style.width = '0%';
-		progressBar.textContent = '0%';
+		progressText.innerHTML = '0%<span class="dots"></span>';
+		progressOk.style.display = 'none';
+		progressBar.classList.add('pulse');
 
-		// Disable upload button to prevent multiple clicks
 		refreshedUploadBtn.disabled = true;
 
-		// Track upload progress
 		xhr.upload.addEventListener('progress', (e) => {
 			if (e.lengthComputable) {
-				const percentComplete = Math.round((e.loaded / e.total) * 100);
+				const percentComplete = Math.min(Math.round((e.loaded / e.total) * 100), 99);
 				progressBar.style.width = percentComplete + '%';
-				progressBar.textContent = percentComplete + '%';
+				progressText.innerHTML = percentComplete + '%<span class="dots"></span>';
 			}
 		});
 
@@ -196,9 +249,13 @@
 		xhr.onload = () => {
 			const data = JSON.parse(xhr.responseText);
 			if (data.success) {
-				// Clear files and thumbnails
+				progressBar.style.width = '100%';
+				progressText.innerHTML = '100%';
+				progressBar.classList.remove('pulse');
+				progressText.style.display = 'none';
+				progressOk.style.display = 'block';
 				filesToUpload = [];
-				thumbnails.innerHTML = ''; // Clear displayed thumbnails
+				thumbnails.innerHTML = '';
 				data.files.forEach(file => {
 					const parts = file.path.split('/');
 					const fullName = parts.pop();
@@ -212,25 +269,29 @@
 					thumbEl.setAttribute('data-id', 'new');
 					thumbEl.setAttribute('data-order', '0');
 					thumbEl.innerHTML = `
-                    <img src="${fullThumb}" alt="Thumbnail">
-                    <button class="delete-btn" onclick="deleteImage('new')">X</button>
-                `;
+						<img src="${fullThumb}" alt="Vorschau">
+						<button class="delete-btn" onclick="deleteImage('new')">X</button>
+					`;
 					thumbnails.appendChild(thumbEl);
 				});
-				// Hide progress bar and reload
-				progressContainer.style.display = 'none';
-				location.reload();
+				setTimeout(() => {
+					progressContainer.style.display = 'none';
+					progressText.style.display = 'block';
+					progressOk.style.display = 'none';
+					location.reload();
+				}, 2000);
 			} else {
 				alert('Fehler beim Hochladen: ' + data.message);
 				progressContainer.style.display = 'none';
+				progressBar.classList.remove('pulse');
 			}
-			// Re-enable upload button
 			refreshedUploadBtn.disabled = false;
 		};
 
 		xhr.onerror = () => {
 			alert('Fehler beim Hochladen der Bilder.');
 			progressContainer.style.display = 'none';
+			progressBar.classList.remove('pulse');
 			refreshedUploadBtn.disabled = false;
 		};
 
@@ -248,8 +309,7 @@
 					alert('Fehler beim Löschen: ' + data.message);
 				}
 			})
-			.catch(err => {
-				console.error(err);
+			.catch(() => {
 				alert('Fehler beim Löschen des Bildes.');
 			});
 	}
