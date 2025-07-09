@@ -53,7 +53,7 @@ class App_model extends CI_Model
 		$this->db->where('a.active', 1);
 		$this->db->where('(a.start_date_from IS NULL OR a.start_date_from <= NOW())');
 		$this->db->where('(a.end_date_to IS NULL OR a.end_date_to >= NOW())');
-		$this->db->order_by('a.orderBy', 'ASC');
+		$this->db->order_by('a.orderBy', 'DESC');
 		$this->db->order_by('a.created_at', 'DESC');
 		return $this->db->get()->result();
 	}
