@@ -66,7 +66,7 @@ foreach ($articleCategories as $category) {
 									<td class="text-center"><?= checkTextIcon($article->gallery_id) ?></td>
 									<td class="text-center"><?= checkDateOrIcon($article->start_date_from)?></td>
 									<td class="text-center"><?= checkDateOrIcon($article->end_date_to)?></td>
-									<td class="text-center"><?= checkDateOrIcon($article->orderBy)?></td>
+									<td class="text-center"><?= htmlspecialchars($article->orderBy)?></td>
 									<td class="text-center"><?= active($article->active)?></td>
 									<td class="text-center"><?= date('d.m.Y', strtotime($article->updated_at)) ?></td>
 									<td class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
