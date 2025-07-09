@@ -35,8 +35,8 @@ $this->load->view('partials/article_assets');
 
 	<?php if (!empty($sections)): ?>
 		<?php foreach ($sections as $section): ?>
-			<div class="row align-items-center mb-5 flex-column-reverse flex-lg-row text-center text-lg-start">
-				<div class="col-lg-8">
+			<div class="row align-items-start mb-5 flex-column-reverse flex-lg-row text-center text-lg-start">
+			<div class="col-lg-8">
 					<div class="section-content">
 						<?= $section->content ?>
 					</div>
