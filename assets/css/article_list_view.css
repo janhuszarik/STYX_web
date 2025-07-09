@@ -3,7 +3,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
-	justify-content: center;
+	justify-content: flex-start;
 	margin-bottom: 30px;
 }
 .subcategory-buttons a.btn {
