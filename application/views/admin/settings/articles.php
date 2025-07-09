@@ -38,6 +38,7 @@ foreach ($articleCategories as $category) {
 
 							<th class="text-center">Start datum</th>
 							<th class="text-center">Ende datum</th>
+							<th class="text-center">Reihenfolge </th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Update</th>
 							<th class="text-center">Erstellt</th>
@@ -65,6 +66,7 @@ foreach ($articleCategories as $category) {
 									<td class="text-center"><?= checkTextIcon($article->gallery_id) ?></td>
 									<td class="text-center"><?= checkDateOrIcon($article->start_date_from)?></td>
 									<td class="text-center"><?= checkDateOrIcon($article->end_date_to)?></td>
+									<td class="text-center"><?= checkDateOrIcon($article->orderBy)?></td>
 									<td class="text-center"><?= active($article->active)?></td>
 									<td class="text-center"><?= date('d.m.Y', strtotime($article->updated_at)) ?></td>
 									<td class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
