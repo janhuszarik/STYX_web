@@ -33,8 +33,9 @@ b, strong {
 }
 
 .section-img {
-	max-width: 80%;
+	max-width: 100%;
 	height: auto;
+	object-fit: cover;
 }
 
 .content *,
@@ -53,7 +54,7 @@ b, strong {
 }
 
 .image-container {
-	display: inline-block;
+	display: block;
 	width: 100%;
 	max-width: 100%;
 	text-align: left;
@@ -61,19 +62,88 @@ b, strong {
 
 .image-container img {
 	display: block;
-	margin-left: auto;
-	margin-right: auto;
 	max-width: 100%;
 	height: auto;
 }
 
 .image-description {
 	max-width: 100%;
-	margin: 0.5rem auto 0 auto;
+	margin: 0.5rem 0;
 	font-size: 12px;
 	text-align: left;
 	display: block;
-	width: fit-content;
+}
+
+/* Ensure left alignment for specific elements across all screen sizes */
+.content,
+.section-content,
+.related-articles ul,
+.card-body,
+.image-description {
+	text-align: left !important;
+}
+
+/* Improve image responsiveness */
+.card-img-top {
+	max-width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
+/* Adjust related articles list for better mobile display */
+.related-articles ul {
+	padding-left: 0;
+	list-style: none;
+}
+
+.related-articles li {
+	text-align: left;
+}
+
+/* Ensure buttons are left-aligned in sections */
+.section-content .btn {
+	display: inline-block;
+	text-align: left;
+}
+
+/* Override text-center for mobile and ensure left alignment */
+@media (max-width: 991.98px) {
+	.text-center,
+	.text-lg-start {
+		text-align: left !important;
+	}
+
+	/* Ensure content and section content are left-aligned */
+	.content,
+	.section-content,
+	.card-body,
+	.related-articles,
+	.article-gallery p,
+	.recommended-products .card-text,
+	.recommended-products .card-title {
+		text-align: left !important;
+	}
+
+	/* Adjust image containers for mobile */
+	.image-container {
+		text-align: left !important;
+		max-width: 100%;
+	}
+
+	.image-description {
+		text-align: left !important;
+		margin: 0.5rem 0;
+	}
+
+	/* Ensure product cards are left-aligned */
+	.card {
+		text-align: left !important;
+	}
+
+	/* Adjust gallery text */
+	.article-gallery .text-muted {
+		text-align: left !important;
+	}
 }
 
 @media (max-width: 991.98px) {
@@ -90,15 +160,20 @@ b, strong {
 	.lead {
 		font-size: 1rem;
 	}
-	.section-img {
-		max-width: 200px;
-	}
 }
 
 @media (max-width: 576px) {
 	.article-gallery img,
 	.card-img-top {
-		max-height: 200px;
+		max-height: 150px;
 		object-fit: cover;
+	}
+
+	h1, h2, h3 {
+		font-size: 1.25rem;
+	}
+
+	.lead {
+		font-size: 0.9rem;
 	}
 }
