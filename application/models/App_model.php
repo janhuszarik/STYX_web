@@ -29,6 +29,9 @@ class App_model extends CI_Model
 		$this->db->select('*');
 		$this->db->where('slug_title', $slug_title);
 		$this->db->where('lang', $lang);
+		$this->db->where('active', 1);
+		$this->db->where('(start_date_from IS NULL OR start_date_from <= NOW())');
+		$this->db->where('(end_date_to IS NULL OR end_date_to >= NOW())');
 		return $this->db->get('articles')->row();
 	}
 
@@ -47,8 +50,9 @@ class App_model extends CI_Model
 		$this->db->from('articles a');
 		$this->db->where('a.category_id', $categoryId);
 		$this->db->where('a.lang', $lang);
-		$this->db->where('a.start_date_from IS NULL OR a.start_date_from <=', date('Y-m-d H:i:s'));
-		$this->db->where('a.end_date_to IS NULL OR a.end_date_to >=', date('Y-m-d H:i:s'));
+		$this->db->where('a.active', 1);
+		$this->db->where('(a.start_date_from IS NULL OR a.start_date_from <= NOW())');
+		$this->db->where('(a.end_date_to IS NULL OR a.end_date_to >= NOW())');
 		$this->db->order_by('a.orderBy', 'ASC');
 		$this->db->order_by('a.created_at', 'DESC');
 		return $this->db->get()->result();
@@ -61,8 +65,9 @@ class App_model extends CI_Model
 		$this->db->join('article_categories ac', 'a.category_id = ac.id');
 		$this->db->where('ac.slug', $lang . '/' . $slug);
 		$this->db->where('a.lang', $lang);
-		$this->db->where('a.start_date_from IS NULL OR a.start_date_from <=', date('Y-m-d H:i:s'));
-		$this->db->where('a.end_date_to IS NULL OR a.end_date_to >=', date('Y-m-d H:i:s'));
+		$this->db->where('a.active', 1);
+		$this->db->where('(a.start_date_from IS NULL OR a.start_date_from <= NOW())');
+		$this->db->where('(a.end_date_to IS NULL OR a.end_date_to >= NOW())');
 		$this->db->order_by('a.orderBy', 'ASC');
 		$this->db->order_by('a.created_at', 'DESC');
 		return $this->db->get()->result();
@@ -282,6 +287,7 @@ class App_model extends CI_Model
 		$this->db->where('category_id', $categoryId);
 		$this->db->where('subcategory_id', $subcategoryId);
 		$this->db->where('lang', $lang);
+		$this->db->where('active', 1);
 		$this->db->where('(start_date_from IS NULL OR start_date_from <= NOW())');
 		$this->db->where('(end_date_to IS NULL OR end_date_to >= NOW())');
 		$this->db->order_by('orderBy ASC, created_at DESC');

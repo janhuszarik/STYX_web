@@ -48,6 +48,19 @@ $subcategories = [];
 if (in_array($categoryId, [100, 102])) {
 	$subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 }
+
+// Rozdelenie start_date_from a end_date_to na dátum a čas
+$startDate = $endDate = $startTime = $endTime = '';
+if (isset($article->start_date_from) && !empty($article->start_date_from)) {
+	$startDateTime = new DateTime($article->start_date_from);
+	$startDate = $startDateTime->format('Y-m-d');
+	$startTime = $startDateTime->format('H:i');
+}
+if (isset($article->end_date_to) && !empty($article->end_date_to)) {
+	$endDateTime = new DateTime($article->end_date_to);
+	$endDate = $endDateTime->format('Y-m-d');
+	$endTime = $endDateTime->format('H:i');
+}
 ?>
 
 <style>
@@ -81,6 +94,10 @@ if (in_array($categoryId, [100, 102])) {
 		height: 38px;
 		padding: 6px 12px;
 		margin-left: -1px;
+	}
+	.time-select {
+		display: flex;
+		gap: 10px;
 	}
 </style>
 
@@ -319,18 +336,41 @@ if (in_array($categoryId, [100, 102])) {
 						<h3 class="fw-bold mb-1" style="border-left:4px solid #28a745; padding-left:10px;">
 							Veröffentlichungseinstellungen
 						</h3>
-						<small class="text-muted ms-3">Legen Sie Start- und Enddatum fest. Aktiv/Inaktiv erfolgt automatisch.</small>
+						<small class="text-muted ms-3">Legen Sie Start- und Enddatum sowie Uhrzeit fest. Aktiv/Inaktiv erfolgt automatisch.</small>
 					</div>
 					<div class="row form-group pb-3">
 						<div class="col-md-3">
 							<label for="start_date_from" class="col-form-label">Startdatum</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt das Startdatum des Artikels fest. Der Artikel wird ab diesem Datum um 00:00 Uhr automatisch aktiviert. Ohne Datum wird der Artikel sofort nach dem Speichern angezeigt."></i>
-							<input type="date" class="form-control" name="start_date_from" id="start_date_from" value="<?= htmlspecialchars($article->start_date_from ?? '') ?>">
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt das Startdatum und die Uhrzeit des Artikels fest. Der Artikel wird ab diesem Zeitpunkt angezeigt, wenn er aktiv ist."></i>
+							<input type="date" class="form-control mb-1" name="start_date_from_date" id="start_date_from_date" value="<?= htmlspecialchars($startDate) ?>">
+							<div class="time-select">
+								<select name="start_date_from_time" id="start_date_from_time" class="form-control">
+									<option value="">-- Uhrzeit auswählen --</option>
+									<?php
+									$times = ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+									foreach ($times as $time) {
+										$selected = ($startTime === $time) ? 'selected' : '';
+										echo "<option value=\"$time\" $selected>$time</option>";
+									}
+									?>
+								</select>
+							</div>
 						</div>
 						<div class="col-md-3">
 							<label for="end_date_to" class="col-form-label">Enddatum</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt das Enddatum des Artikels fest. Der Artikel wird am angegebenen Datum um 23:59 Uhr automatisch deaktiviert. Der Status muss ‚Aktiv‘ sein, damit das Datum wirksam ist."></i>
-							<input type="date" class="form-control" name="end_date_to" id="end_date_to" value="<?= htmlspecialchars($article->end_date_to ?? '') ?>">
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt das Enddatum und die Uhrzeit des Artikels fest. Der Artikel wird nach diesem Zeitpunkt nicht mehr angezeigt, wenn er aktiv ist. Ohne Enddatum bleibt der Artikel dauerhaft aktiv."></i>
+							<input type="date" class="form-control mb-1" name="end_date_to_date" id="end_date_to_date" value="<?= htmlspecialchars($endDate) ?>">
+							<div class="time-select">
+								<select name="end_date_to_time" id="end_date_to_time" class="form-control">
+									<option value="">-- Uhrzeit auswählen --</option>
+									<?php
+									foreach ($times as $time) {
+										$selected = ($endTime === $time) ? 'selected' : '';
+										echo "<option value=\"$time\" $selected>$time</option>";
+									}
+									?>
+								</select>
+							</div>
 						</div>
 						<div class="col-md-3">
 							<label for="orderBy" class="col-form-label">Reihenfolge</label>
@@ -339,7 +379,7 @@ if (in_array($categoryId, [100, 102])) {
 						</div>
 						<div class="col-md-3">
 							<label for="active" class="col-form-label">Status</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt fest, ob der Artikel sofort aktiv ist. Wenn ‚Aktiv‘, wird der Artikel gemäß Start- und Enddatum angezeigt."></i>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Legt fest, ob der Artikel aktiv ist. Wenn ‚Inaktiv‘, wird der Artikel nicht angezeigt, unabhängig von Datum und Uhrzeit."></i>
 							<select name="active" id="active" class="form-control">
 								<option value="1" <?= (isset($article) && $article->active == '1') ? 'selected' : '' ?>>Aktiv</option>
 								<option value="0" <?= (isset($article) && $article->active == '0') || !isset($article) ? 'selected' : '' ?>>Inaktiv</option>
@@ -435,6 +475,34 @@ if (in_array($categoryId, [100, 102])) {
 			document.body.appendChild(alertDiv);
 			setTimeout(() => alertDiv.remove(), 3000);
 		}
+
+		// Validácia dátumu a času pred odoslaním formulára
+		document.getElementById('articleForm').addEventListener('submit', function (e) {
+			const startDate = document.getElementById('start_date_from_date').value;
+			const startTime = document.getElementById('start_date_from_time').value;
+			const endDate = document.getElementById('end_date_to_date').value;
+			const endTime = document.getElementById('end_date_to_time').value;
+
+			if (startDate && !startTime) {
+				e.preventDefault();
+				showAlert('Bitte wählen Sie eine Startzeit aus, wenn ein Startdatum angegeben ist.', 'error');
+				return;
+			}
+			if (endDate && !endTime) {
+				e.preventDefault();
+				showAlert('Bitte wählen Sie eine Endzeit aus, wenn ein Enddatum angegeben ist.', 'error');
+				return;
+			}
+			if (startDate && endDate) {
+				const startDateTime = new Date(startDate + 'T' + (startTime || '00:00'));
+				const endDateTime = new Date(endDate + 'T' + (endTime || '00:00'));
+				if (endDateTime <= startDateTime) {
+					e.preventDefault();
+					showAlert('Das Enddatum und die Endzeit müssen nach dem Startdatum und der Startzeit liegen.', 'error');
+					return;
+				}
+			}
+		});
 
 		if (allowedCategoryIds.includes(categoryId)) {
 			function loadSubcategories() {

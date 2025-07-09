@@ -155,11 +155,28 @@ class Article_model extends CI_Model
 	{
 		$this->load->helper('app_helper');
 
+		// Kombinácia dátumu a času pre start_date_from
+		$start_date_from = null;
+		if (!empty($post['start_date_from_date']) && !empty($post['start_date_from_time'])) {
+			$start_date_from = $post['start_date_from_date'] . ' ' . $post['start_date_from_time'] . ':00';
+		} elseif (!empty($post['start_date_from_date'])) {
+			$start_date_from = $post['start_date_from_date'] . ' 00:00:00';
+		}
+
+		// Kombinácia dátumu a času pre end_date_to
+		$end_date_to = null;
+		if (!empty($post['end_date_to_date']) && !empty($post['end_date_to_time'])) {
+			$end_date_to = $post['end_date_to_date'] . ' ' . $post['end_date_to_time'] . ':00';
+		} elseif (!empty($post['end_date_to_date'])) {
+			$end_date_to = $post['end_date_to_date'] . ' 00:00:00';
+		}
+
 		$image = null;
 		$image_title = $post['image_title'] ?? null;
 
+		// Spracovanie hlavného obrázka
 		if (!empty($_FILES['image']['name'])) {
-			$uploadResult = uploadImg('image', 'uploads/articles/title_image', $post['title'], false);
+			$uploadResult = uploadImg('image', 'Uploads/articles/title_image', $post['title'], false);
 			if ($uploadResult && file_exists($uploadResult)) {
 				$image = $uploadResult;
 			} else {
@@ -167,13 +184,13 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$localDir = FCPATH . 'uploads/articles/title_image/';
+			$localDir = FCPATH . 'Uploads/articles/title_image/';
 			@mkdir($localDir, 0755, true);
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 				$localFile = $localDir . basename($ftpPath);
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
-					$image = 'uploads/articles/title_image/' . basename($ftpPath);
+					$image = 'Uploads/articles/title_image/' . basename($ftpPath);
 				} else {
 					return false;
 				}
@@ -181,12 +198,12 @@ class Article_model extends CI_Model
 				$src = FCPATH . ltrim($ftpPath, '/');
 				$dst = $localDir . basename($ftpPath);
 				if (@copy($src, $dst)) {
-					$image = 'uploads/articles/title_image/' . basename($ftpPath);
+					$image = 'Uploads/articles/title_image/' . basename($ftpPath);
 				} else {
 					return false;
 				}
 			} else {
-				$image = 'uploads/articles/title_image/' . basename($ftpPath);
+				$image = 'Uploads/articles/title_image/' . basename($ftpPath);
 			}
 		} else {
 			$image = $post['old_image'] ?? null;
@@ -195,6 +212,7 @@ class Article_model extends CI_Model
 		$is_main = isset($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
 		$slug_title = $is_main ? null : url_title($post['title'], 'dash', true);
 
+		// Ak je článok hlavný, deaktivuj iné hlavné články v rovnakej kategórii
 		if ($is_main && !empty($post['category_id'])) {
 			$this->db->where('category_id', $post['category_id']);
 			$this->db->where('is_main', 1);
@@ -204,6 +222,7 @@ class Article_model extends CI_Model
 			$this->db->update('articles', ['is_main' => 0]);
 		}
 
+		// Základné údaje článku
 		$data = [
 			'category_id'     => $post['category_id'],
 			'subcategory_id'  => !empty($post['subcategory_id']) && $post['subcategory_id'] !== 'new' ? $post['subcategory_id'] : null,
@@ -217,14 +236,15 @@ class Article_model extends CI_Model
 			'meta'            => $post['meta'] ?? null,
 			'gallery_id'      => !empty($post['gallery_id']) ? $post['gallery_id'] : null,
 			'active'          => !empty($post['active']) ? 1 : 0,
-			'start_date_from' => $post['start_date_from'] ?: null,
-			'end_date_to'     => $post['end_date_to'] ?: null,
+			'start_date_from' => $start_date_from,
+			'end_date_to'     => $end_date_to,
 			'updated_at'      => date('Y-m-d H:i:s'),
 			'is_main'         => $is_main,
 			'slug_title'      => $slug_title,
 			'orderBy'         => isset($post['orderBy']) ? (int)$post['orderBy'] : 0,
 		];
 
+		// Spracovanie odporúčaných produktov
 		for ($set = 0; $set < 2; $set++) {
 			for ($i = 1; $i <= 3; $i++) {
 				$suffix = ($set * 3) + $i;
@@ -239,7 +259,7 @@ class Article_model extends CI_Model
 
 				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
 					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}_" . time();
-					$up = uploadImg("product_image{$suffix}", 'uploads/articles/products', $nazov, false);
+					$up = uploadImg("product_image{$suffix}", 'Uploads/articles/products', $nazov, false);
 					if ($up && file_exists($up)) {
 						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
 					} else {
@@ -247,13 +267,13 @@ class Article_model extends CI_Model
 					}
 				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
 					$ftpPath = $post["ftp_product_image{$suffix}"];
-					$localDir = FCPATH . 'uploads/articles/products/';
+					$localDir = FCPATH . 'Uploads/articles/products/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							return false;
 						}
@@ -261,22 +281,24 @@ class Article_model extends CI_Model
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+							$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 						} else {
 							return false;
 						}
 					} else {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/articles/products/' . basename($ftpPath);
+						$data["product_set{$setNum}_product{$prodNum}_image"] = 'Uploads/articles/products/' . basename($ftpPath);
 					}
 				}
 			}
 		}
 
+		// Spracovanie odporúčaných odkazov
 		for ($i = 1; $i <= 3; $i++) {
 			$data["empfohlen_name{$i}"] = $post["empfohlen_name{$i}"] ?? null;
 			$data["empfohlen_url{$i}"] = $post["empfohlen_url{$i}"] ?? null;
 		}
 
+		// Uloženie alebo aktualizácia článku
 		if (!empty($post['id']) && is_numeric($post['id'])) {
 			$this->db->where('id', $post['id']);
 			$data['updated_at'] = date('Y-m-d H:i:s');
@@ -292,6 +314,7 @@ class Article_model extends CI_Model
 			return false;
 		}
 
+		// Spracovanie sekcií
 		if (isset($post['sections']) && is_array($post['sections'])) {
 			$this->db->delete('article_sections', ['article_id' => $articleId]);
 			foreach ($post['sections'] as $idx => $content) {
@@ -311,7 +334,7 @@ class Article_model extends CI_Model
 						'error' => $_FILES['section_images']['error'][$idx],
 						'size' => $_FILES['section_images']['size'][$idx],
 					];
-					$uploadResult = uploadImg('temp_section_image', 'uploads/articles/sections', $sectionName, false);
+					$uploadResult = uploadImg('temp_section_image', 'Uploads/articles/sections', $sectionName, false);
 					if ($uploadResult && file_exists($uploadResult)) {
 						$secImg = $uploadResult;
 					} else {
@@ -319,13 +342,13 @@ class Article_model extends CI_Model
 					}
 				} elseif (!empty($post['ftp_section_image'][$idx])) {
 					$ftpPath = $post['ftp_section_image'][$idx];
-					$localDir = FCPATH . 'uploads/articles/sections/';
+					$localDir = FCPATH . 'Uploads/articles/sections/';
 					@mkdir($localDir, 0755, true);
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
 						$dst = $localDir . basename($ftpPath);
 						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+							$secImg = 'Uploads/articles/sections/' . basename($ftpPath);
 						} else {
 							$secImg = $ftpPath;
 						}
@@ -333,7 +356,7 @@ class Article_model extends CI_Model
 						$src = FCPATH . ltrim($ftpPath, '/');
 						$dst = $localDir . basename($ftpPath);
 						if (@copy($src, $dst)) {
-							$secImg = 'uploads/articles/sections/' . basename($ftpPath);
+							$secImg = 'Uploads/articles/sections/' . basename($ftpPath);
 						} else {
 							$secImg = $ftpPath;
 						}
