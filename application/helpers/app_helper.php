@@ -407,5 +407,14 @@ if (!function_exists('purify_html')) {
 		return $purifier->purify($dirty_html);
 	}
 }
+if (!function_exists('remove_empty_tags')) {
+	function remove_empty_tags($html) {
+		// Odstráni prázdne <b>, <i>, <u>, <p> tagy (aj tie s whitespacom alebo &nbsp;)
+		return preg_replace([
+			'/<([biup])>(\s|&nbsp;)*<\/\1>/i',    // <b></b>, <i></i>, <u></u>, <p></p>
+			'/<p>(\s|&nbsp;)*<\/p>/i',            // prázdne <p>
+		], '', $html);
+	}
+}
 
 ?>
