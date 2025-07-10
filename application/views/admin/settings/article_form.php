@@ -699,6 +699,13 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					['view', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
 				],
 				callbacks: {
+					// Bezpečné vloženie obsahu - povolí len čistý text!
+					onPaste: function (e) {
+						e.preventDefault();
+						let clipboardData = (e.originalEvent || e).clipboardData;
+						let text = clipboardData.getData('text/plain');
+						$(this).summernote('insertText', text);
+					},
 					onImageUpload: function (files) {
 						const data = new FormData();
 						data.append('image', files[0]);
@@ -736,6 +743,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				}
 			});
 		};
+
 
 		const addSection = (content = '', image = '', imageTitle = '', imageDescription = '', buttonName = '', subpage = '', externalUrl = '', index) => {
 			const sectionHtml = `
