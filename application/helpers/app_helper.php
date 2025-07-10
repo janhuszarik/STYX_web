@@ -397,5 +397,15 @@ if (!function_exists('checkDateOrIcon')) {
 		}
 	}
 }
+if (!function_exists('purify_html')) {
+	function purify_html($dirty_html) {
+		require_once FCPATH . 'vendor/autoload.php';
+		$config = HTMLPurifier_Config::createDefault();
+		// Povolené základné značky a obrázky:
+		$config->set('HTML.Allowed', 'p,b,strong,i,u,ul,ol,li,br,a[href],img[src|alt|width|height]');
+		$purifier = new HTMLPurifier($config);
+		return $purifier->purify($dirty_html);
+	}
+}
 
 ?>

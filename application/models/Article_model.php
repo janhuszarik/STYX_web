@@ -367,7 +367,7 @@ class Article_model extends CI_Model
 
 				$sectionData = [
 					'article_id'   => $articleId,
-					'content'      => $content,
+					'content'      => purify_html($content),
 					'image'        => $secImg,
 					'image_title'  => $secImgTitle,
 					'image_description' => $secImgDescription,

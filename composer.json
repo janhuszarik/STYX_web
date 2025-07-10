@@ -14,7 +14,8 @@
 		"php": ">=5.4",
 		"bulkgate/sms": "^2.0",
 		"mpdf/mpdf": "^8.0",
-		"heureka/overeno-zakazniky": "^2.0.6"
+		"heureka/overeno-zakazniky": "^2.0.6",
+		"ezyang/htmlpurifier": "^4.18"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
