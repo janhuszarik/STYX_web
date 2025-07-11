@@ -35,7 +35,6 @@ foreach ($articleCategories as $category) {
 							<th class="text-center">Keywords</th>
 							<th class="text-center">Meta</th>
 							<th class="text-center">Galerie</th>
-
 							<th class="text-center">Start datum</th>
 							<th class="text-center">Ende datum</th>
 							<th class="text-center">Reihenfolge </th>
@@ -60,7 +59,23 @@ foreach ($articleCategories as $category) {
 									</td>
 
 									<td><?= $article->title ?></td>
-									<td><?= BASE_URL.$article->slug ?></td>
+									<?php
+									// Ak v DB sú náhodou v slug_title diakritické znaky, odstránime ich pre výpis linku
+									$slug_title_clean = !empty($article->slug_title) ? remove_diacritics($article->slug_title) : '';
+									$url = rtrim(BASE_URL, '/') . '/' . ltrim($article->slug, '/');
+									if ($slug_title_clean) {
+										$url .= '/' . ltrim($slug_title_clean, '/');
+									}
+									?>
+									<td>
+										<a href="<?= htmlspecialchars($url) ?>"
+										   target="_blank"
+										   rel="noopener"
+										   style="word-break: break-all;">
+											<?= htmlspecialchars($url) ?>
+										</a>
+									</td>
+
 									<td class="text-center"><?= checkTextIcon($article->keywords) ?></td>
 									<td class="text-center"><?= checkTextIcon($article->meta) ?></td>
 									<td class="text-center"><?= checkTextIcon($article->gallery_id) ?></td>

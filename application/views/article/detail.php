@@ -19,10 +19,16 @@ $this->load->view('partials/article_assets');
 				<?php if (!empty($article->subtitle)): ?>
 					<p class="text-muted lead mb-0"><?= htmlspecialchars($article->subtitle) ?></p>
 				<?php endif; ?>
+				<?php if (!empty($isAdmin) && $article->active != 1): ?>
+					<div class="alert alert-warning mt-4">
+						<b>Pozor:</b> Tento článok je <b>neaktívny</b> a vidíte ho len vy ako admin.
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
 </section>
+
 
 <div class="container py-5" style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px;">
 	<?php if (!empty(trim($article->title))): ?>

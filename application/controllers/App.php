@@ -57,10 +57,15 @@ class App extends CI_Controller
 			return;
 		}
 
-		// Detail článku podľa slug_title
+		$isAdmin = $this->ion_auth->logged_in() && $this->ion_auth->is_admin();
+
 		if (!empty($segment3)) {
 			$article = $this->App_model->getExactArticle($segment3, $lang);
 			if (!$article || $article->category_id != $category->id) {
+				$this->error404();
+				return;
+			}
+			if ($article->active != 1 && !$isAdmin) {
 				$this->error404();
 				return;
 			}
@@ -81,10 +86,12 @@ class App extends CI_Controller
 			$data['keywords'] = $article->keywords ?? '';
 			$data['image'] = !empty($article->image) ? base_url($article->image) : BASE_URL . LOGO;
 			$data['page'] = 'article/detail';
+			$data['isAdmin'] = $isAdmin;
 
 			$this->load->view('layout/normal', $data);
 			return;
 		}
+
 
 		// Výpis článkov (zoznam)
 		$subcategoryId = $this->input->get('sub');

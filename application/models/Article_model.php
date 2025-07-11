@@ -124,7 +124,8 @@ class Article_model extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('category_id', $categoryId);
-		$this->db->order_by('is_main DESC, id DESC');
+		$this->db->order_by('orderBy', 'DESC');
+		$this->db->order_by('id', 'DESC');
 		return $this->db->get('articles', $limit, $offset)->result();
 	}
 
