@@ -682,6 +682,35 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			}
 		}
 
+		// Funkcia na detekciu "zlého" textu (Word/Excel artefakty)
+		function isBadText(text) {
+			// Detekuj typické problémy: MSO tagy, nadmerné  , neplatný HTML
+			const badPatterns = [
+				/<o:p>/i, /<v:shape>/i, /<w:>/i, /mso-/i, // Word tagy
+				/( ){5,}/i, // Nadmerné medzery
+				/<font/i, /<span style="font-family:/i // Staré štýly
+			];
+			return badPatterns.some(pattern => pattern.test(text));
+		}
+
+		// Funkcia na zobrazenie/skrytie varovania pod elementom
+		function showWarning(element, message) {
+			let warning = element.nextElementSibling;
+			if (!warning || !warning.classList.contains('text-danger')) {
+				warning = document.createElement('small');
+				warning.className = 'text-danger';
+				element.parentNode.insertBefore(warning, element.nextSibling);
+			}
+			warning.textContent = message || 'POZOR: Tento text nespĺňa požiadavky pre správne uloženie! Odstráňte špeciálne formátovanie z Wordu/Excelu.';
+		}
+
+		function hideWarning(element) {
+			const warning = element.nextElementSibling;
+			if (warning && warning.classList.contains('text-danger')) {
+				warning.remove();
+			}
+		}
+
 		const initSummernote = (selector) => {
 			if (typeof jQuery === 'undefined') {
 				return;
@@ -699,6 +728,29 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					['view', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
 				],
 				callbacks: {
+					onPaste: function (e) {
+						const bufferText = (e.originalEvent || e).clipboardData.getData('Text');
+						e.preventDefault();
+						// Čistenie vloženého textu (odstráň Word artefakty)
+						let cleanedText = bufferText.replace(/<o:p>.*?<\/o:p>/gi, '') // Príklad čistenia
+							.replace(/mso-[\w-]+/gi, '')
+							.replace(/( ){3,}/gi, ' ');
+						// Vlož čistený text
+						document.execCommand('insertText', false, cleanedText);
+						// Validuj
+						if (isBadText(cleanedText)) {
+							showWarning(this);
+						} else {
+							hideWarning(this);
+						}
+					},
+					onChange: function(contents) {
+						if (isBadText(contents)) {
+							showWarning(this);
+						} else {
+							hideWarning(this);
+						}
+					},
 					onImageUpload: function (files) {
 						const data = new FormData();
 						data.append('image', files[0]);
@@ -738,6 +790,8 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		};
 
 		const addSection = (content = '', image = '', imageTitle = '', imageDescription = '', buttonName = '', subpage = '', externalUrl = '', index) => {
+			// Normalizuj content pre JS (odstráň newline problémy)
+			content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
 			const sectionHtml = `
 			<div class="section mb-4 p-3 border rounded">
 				<input type="hidden" name="sections[${index}]" value="section-${index}">
@@ -799,9 +853,42 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
-				initSummernote(`#sections-container .section:last-child .section-content`);
+				// Inicializuj Summernote s fallbackom pre zlý content
+				const textarea = sectionsContainer.querySelector('.section:last-child .section-content');
+				if (textarea) {
+					try {
+						initSummernote(textarea);
+					} catch (err) {
+						console.error('Summernote init failed for section ' + index + ': ' + err.message);
+						// Fallback: Nastav čistý text
+						textarea.value = textarea.value.replace(/<[^>]*>/g, ''); // Strip HTML if broken
+						initSummernote(textarea); // Skús znova
+					}
+				}
 				bindRemoveSection();
 				bindFtpPicker();
+				// Aplikuj validátory na nové inputy v sekcii
+				const newSection = document.querySelector('#sections-container .section:last-child');
+				newSection.querySelectorAll('input[type="text"], textarea').forEach(el => {
+					el.dispatchEvent(new Event('input')); // Spusť validáciu
+				});
+				newSection.querySelectorAll('input[type="file"]').forEach(el => {
+					el.addEventListener('change', function() {
+						const file = this.files[0];
+						if (file) {
+							const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+							if (!allowedTypes.includes(file.type)) {
+								showWarning(this, 'POZOR: Neplatný typ súboru! Podporované: JPG, PNG, GIF, WEBP.');
+								this.value = '';
+							} else if (file.size > 5 * 1024 * 1024) {
+								showWarning(this, 'POZOR: Súbor je príliš veľký (max 5MB)!');
+								this.value = '';
+							} else {
+								hideWarning(this);
+							}
+						}
+					});
+				});
 			}
 		};
 
@@ -828,10 +915,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			});
 		};
 
+		// Načítanie existujúcich sekcií pri edite s lepším escapingom
 		<?php if (!empty($sections)): ?>
 		<?php foreach ($sections as $index => $section): ?>
 		addSection(
-			'<?= addslashes($section->content) ?>',
+			<?= json_encode($section->content, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>,
 			'<?= htmlspecialchars($section->image ?? '') ?>',
 			'<?= htmlspecialchars($section->image_title ?? '') ?>',
 			'<?= htmlspecialchars($section->image_description ?? '') ?>',
@@ -884,5 +972,61 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		tooltipTriggerList.forEach(function (tooltipTriggerEl) {
 			new bootstrap.Tooltip(tooltipTriggerEl);
 		});
+
+		// Validácia bežných inputov/textarea (title, subtitle, keywords, meta, atď.)
+		document.querySelectorAll('input[type="text"], textarea:not(.section-content)').forEach(input => {
+			input.addEventListener('input', function() {
+				if (isBadText(this.value)) {
+					showWarning(this);
+				} else {
+					hideWarning(this);
+				}
+			});
+			input.addEventListener('paste', function(e) {
+				const pasted = e.clipboardData.getData('Text');
+				if (isBadText(pasted)) {
+					showWarning(this);
+					e.preventDefault(); // Zabrán vloženiu zlého textu
+				}
+			});
+		});
+
+		// Validácia obrázkov (pre hlavný obrázok, sekcie, produkty)
+		document.querySelectorAll('input[type="file"]').forEach(fileInput => {
+			fileInput.addEventListener('change', function() {
+				const file = this.files[0];
+				if (file) {
+					const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+					if (!allowedTypes.includes(file.type)) {
+						showWarning(this, 'POZOR: Neplatný typ súboru! Podporované: JPG, PNG, GIF, WEBP.');
+						this.value = ''; // Vymaž súbor
+					} else if (file.size > 5 * 1024 * 1024) { // Max 5MB
+						showWarning(this, 'POZOR: Súbor je príliš veľký (max 5MB)!');
+						this.value = '';
+					} else {
+						hideWarning(this);
+					}
+				}
+			});
+		});
+
+		// Blokuj submit formulára, ak sú varovania
+		document.getElementById('articleForm').addEventListener('submit', function(e) {
+			const warnings = document.querySelectorAll('.text-danger');
+			if (warnings.length > 0) {
+				e.preventDefault();
+				showAlert('Formulár obsahuje neplatný text alebo súbory! Opravte ich pred uložením.', 'error');
+			}
+		});
+
+		// Force re-init sekcií po načítaní stránky (ošetrenie pri edite)
+		setTimeout(() => {
+			document.querySelectorAll('.section-content').forEach(textarea => {
+				if (!$(textarea).hasClass('note-editor')) { // Ak nie je inicializovaný
+					initSummernote(textarea);
+				}
+			});
+			console.log('Sekcie re-inicializované'); // Debug log, môžeš odstrániť
+		}, 500); // Čakaj 500ms na DOM ready
 	});
 </script>

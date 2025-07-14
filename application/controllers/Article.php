@@ -142,6 +142,22 @@ class Article extends CI_Controller
 			redirect(BASE_URL . 'admin/articles_in_category/' . $categoryId);
 		}
 
+		$this->load->helper('app_helper');
+		foreach ($post as $key => $value) {
+			if (is_string($value) && !in_array($key, ['slug', 'image', 'start_date_from_date', 'start_date_from_time', 'end_date_to_date', 'end_date_to_time'])) {
+				$post[$key] = clean_input_text($value);
+				if (preg_match('/<o:p>/i', $post[$key])) {
+					$this->session->set_flashdata('error', 'Neplatný text v poli ' . $key . '!');
+				}
+			}
+		}
+
+		if (isset($post['sections']) && is_array($post['sections'])) {
+			foreach ($post['sections'] as $i => $content) {
+				$post['sections'][$i] = clean_input_text($content);
+			}
+		}
+
 		$this->load->model('Article_model');
 		$articleCategories = $this->Article_model->getArticleCategories();
 		$this->load->model('Gallery_model');

@@ -156,6 +156,26 @@ class Article_model extends CI_Model
 	{
 		$this->load->helper('app_helper');
 
+		$post['title'] = clean_input_text($post['title']);
+		$post['subtitle'] = clean_input_text($post['subtitle']);
+		$post['keywords'] = clean_input_text($post['keywords'] ?? '');
+		$post['meta'] = clean_input_text($post['meta'] ?? '');
+
+		for ($set = 0; $set < 2; $set++) {
+			for ($i = 1; $i <= 3; $i++) {
+				$suffix = ($set * 3) + $i;
+				$setNum = $set + 1;
+				$prodNum = $i;
+				$post["product_name{$suffix}"] = clean_input_text($post["product_name{$suffix}"] ?? '');
+				$post["product_description{$suffix}"] = clean_input_text($post["product_description{$suffix}"] ?? '');
+			}
+		}
+
+		for ($i = 1; $i <= 3; $i++) {
+			$post["empfohlen_name{$i}"] = clean_input_text($post["empfohlen_name{$i}"] ?? '');
+			$post["empfohlen_url{$i}"] = clean_input_text($post["empfohlen_url{$i}"] ?? '');
+		}
+
 		// Kombinácia dátumu a času pre start_date_from
 		$start_date_from = null;
 		if (!empty($post['start_date_from_date']) && !empty($post['start_date_from_time'])) {

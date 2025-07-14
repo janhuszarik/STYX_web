@@ -416,5 +416,29 @@ if (!function_exists('remove_empty_tags')) {
 		], '', $html);
 	}
 }
-
+if (!function_exists('clean_input_text')) {
+	function clean_input_text($text) {
+		$text = purify_html($text); // Existujúce čistenie
+		$text = remove_empty_tags($text);
+		// Pridaj extra čistenie pre Word artefakty
+		$text = preg_replace('/<o:p>.*?<\/o:p>/i', '', $text);
+		$text = preg_replace('/mso-[\w-]+/i', '', $text);
+		$text = preg_replace('/(&nbsp;){3,}/i', ' ', $text);
+		return trim($text);
+	}
+}
+if (!function_exists('remove_empty_tags')) {
+	function remove_empty_tags($html) {
+		// Odstráni prázdne <b>, <i>, <u>, <p> tagy (aj tie s whitespacom alebo  )
+		$html = preg_replace([
+			'/<([biup])>(\s| )*<\/\1>/i',    // <b></b>, <i></i>, <u></u>, <p></p>
+			'/<p>(\s| )*<\/p>/i',            // prázdne <p>
+		], '', $html);
+		// Nové: Normalizuj whitespace, odstráň \r a nadmerné medzery
+		$html = str_replace("\r", '', $html);
+		$html = preg_replace('/\s+/', ' ', $html);
+		$html = trim($html);
+		return $html;
+	}
+}
 ?>
