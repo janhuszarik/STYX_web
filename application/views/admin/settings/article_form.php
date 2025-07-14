@@ -101,6 +101,27 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 	}
 </style>
 
+<div id="global-status"
+	 style="
+        position: fixed;
+        top: 15px;
+        right: 18px;
+        z-index: 2100;
+        min-width: 800px;
+        max-width: 1200px;
+        font-size: 15px;
+        padding: 12px 18px 10px 18px;
+        color: #fff;
+        border: none;
+        display: block;
+        pointer-events: none;
+        background: #28a745; /* predvolene zelený (success) */
+     ">
+	<span id="global-status-text"></span>
+</div>
+
+
+
 <div class="row">
 	<div class="col-lg-12">
 		<section class="card">
@@ -133,11 +154,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 						</div>
 						<div class="col-md-5">
 							<label for="title" class="col-form-label">Titel</label>
-							<input type="text" class="form-control" name="title" id="title" value="<?= htmlspecialchars($article->title ?? '') ?>" required>
+							<input type="text" class="form-control" name="title" id="title" value="<?= htmlspecialchars($article->title ?? '') ?>" required data-label="Titel">
 						</div>
 						<div class="col-md-5">
 							<label for="subtitle" class="col-form-label">Untertitel</label>
-							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>">
+							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>" data-label="Untertitel">
 						</div>
 					</div>
 
@@ -191,7 +212,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							<input type="file" class="form-control mb-1" name="image" id="image">
 							<label for="image_title" class="col-form-label">Titel des Bildes (SEO)</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Hauptbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
-							<input type="text" class="form-control mb-1" name="image_title" id="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>">
+							<input type="text" class="form-control mb-1" name="image_title" id="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>" data-label="Bildtitel (SEO)">
 							<input type="hidden" name="old_image" value="<?= htmlspecialchars($article->image ?? '') ?>">
 							<input type="hidden" name="ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
 							<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_image" data-preview-target="ftpImagePreview">
@@ -257,12 +278,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 						<div class="col-md-6">
 							<label for="keywords" class="col-form-label">Schlüsselwörter</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Durch Kommas getrennte Schlüsselwörter für die SEO des Artikels. Diese verbessern die Auffindbarkeit in Suchmaschinen."></i>
-							<input type="text" class="form-control" name="keywords" id="keywords" value="<?= htmlspecialchars($article->keywords ?? '') ?>">
+							<input type="text" class="form-control" name="keywords" id="keywords" value="<?= htmlspecialchars($article->keywords ?? '') ?>" data-label="Schlüsselwörter">
 						</div>
 						<div class="col-md-6">
 							<label for="meta" class="col-form-label">Meta-Beschreibung</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Eine kurze Beschreibung des Artikels für Suchmaschinen. Wird in den Suchergebnissen angezeigt und sollte 50-160 Zeichen lang sein."></i>
-							<textarea class="form-control" name="meta" id="meta" rows="3"><?= htmlspecialchars($article->meta ?? '') ?></textarea>
+							<textarea class="form-control" name="meta" id="meta" rows="3" data-label="Meta-Beschreibung"><?= htmlspecialchars($article->meta ?? '') ?></textarea>
 						</div>
 					</div>
 					<hr class="my-4 border-dark">
@@ -283,12 +304,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 									<div class="mb-2">
 										<label for="empfohlen_name<?= $i ?>" class="col-form-label">Titel</label>
 										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der Titel des empfohlenen Artikels oder der Unterseite in der Sektion ‚Das könnte Sie interessieren‘. Kann leer bleiben, wenn nicht benötigt."></i>
-										<input type="text" class="form-control" id="empfohlen_name<?= $i ?>" name="empfohlen_name<?= $i ?>" placeholder="Titel" value="<?= htmlspecialchars($article->{'empfohlen_name' . $i} ?? '') ?>">
+										<input type="text" class="form-control" id="empfohlen_name<?= $i ?>" name="empfohlen_name<?= $i ?>" placeholder="Titel" value="<?= htmlspecialchars($article->{'empfohlen_name' . $i} ?? '') ?>" data-label="Das könnte Sie interessieren - Titel <?= $i ?>">
 									</div>
 									<div class="mb-2">
 										<label for="empfohlen_url<?= $i ?>" class="col-form-label">URL</label>
 										<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Die URL des empfohlenen Artikels oder der Unterseite. Kann eine interne oder externe Seite sein. Kann leer bleiben, wenn nicht benötigt."></i>
-										<input type="text" class="form-control" id="empfohlen_url<?= $i ?>" name="empfohlen_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'empfohlen_url' . $i} ?? '') ?>">
+										<input type="text" class="form-control" id="empfohlen_url<?= $i ?>" name="empfohlen_url<?= $i ?>" placeholder="URL" value="<?= htmlspecialchars($article->{'empfohlen_url' . $i} ?? '') ?>" data-label="Das könnte Sie interessieren - URL <?= $i ?>">
 									</div>
 								</div>
 							<?php endfor; ?>
@@ -476,7 +497,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			setTimeout(() => alertDiv.remove(), 3000);
 		}
 
-		// Validácia dátumu a času pred odoslaním formulára
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
 			const startDate = document.getElementById('start_date_from_date').value;
 			const startTime = document.getElementById('start_date_from_time').value;
@@ -682,36 +702,93 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			}
 		}
 
-		// Funkcia na detekciu "zlého" textu (Word/Excel artefakty)
 		function isBadText(text) {
-			// Detekuj typické problémy: MSO tagy, nadmerné  , neplatný HTML
 			const badPatterns = [
-				/<o:p>/i, /<v:shape>/i, /<w:>/i, /mso-/i, // Word tagy
-				/( ){5,}/i, // Nadmerné medzery
-				/<font/i, /<span style="font-family:/i // Staré štýly
+				/<o:p>/i, /<v:shape>/i, /<w:>/i, /mso-/i,
+				/( ){5,}/i,
+				/<font/i, /<span style="font-family:/i
 			];
 			return badPatterns.some(pattern => pattern.test(text));
 		}
 
-		// Funkcia na zobrazenie/skrytie varovania pod elementom
-		function showWarning(element, message) {
-			let warning = element.nextElementSibling;
-			if (!warning || !warning.classList.contains('text-danger')) {
-				warning = document.createElement('small');
-				warning.className = 'text-danger';
-				element.parentNode.insertBefore(warning, element.nextSibling);
-			}
-			warning.textContent = message || 'POZOR: Tento text nespĺňa požiadavky pre správne uloženie! Odstráňte špeciálne formátovanie z Wordu/Excelu.';
+		function cleanText(text) {
+			let cleaned = text.replace(/<o:p>.*?<\/o:p>/gi, '')
+				.replace(/mso-[\w-]+/gi, '')
+				.replace(/( ){3,}/gi, ' ');
+			return cleaned;
 		}
 
-		function hideWarning(element) {
-			const warning = element.nextElementSibling;
-			if (warning && warning.classList.contains('text-danger')) {
-				warning.remove();
+		let inputStates = {};
+		
+
+		function updateGlobalStatus() {
+			const globalStatus = document.getElementById('global-status');
+			const statusText = document.getElementById('global-status-text');
+			let errors = [];
+			let fixes = [];
+			Object.entries(inputStates).forEach(([id, state]) => {
+				if (state.status === 'error') {
+					errors.push(state.label);
+				}
+				if (state.status === 'fixed') {
+					fixes.push(state.label);
+				}
+			});
+
+			let message = '';
+
+			if (errors.length > 0) {
+				globalStatus.style.background = '#d60015'; // ČERVENÁ
+				message = `
+<b>Achtung!</b> In folgenden Feldern wurden fehlerhafte Formatierungen erkannt:<br>
+<b>${errors.join(', ')}</b>.<br>
+Bitte überprüfen und korrigieren Sie die markierten Texte, bevor Sie den Artikel speichern.
+		`;
+			} else if (fixes.length > 0) {
+				globalStatus.style.background = '#ffc107'; // ŽLTÁ
+				message = `
+<b>Hinweis:</b> In folgenden Feldern wurden fehlerhafte Formatierungen <b>automatisch korrigiert</b>:<br>
+<b>${fixes.join(', ')}</b>.<br>
+Bitte überprüfen Sie, ob der Text wie gewünscht übernommen wurde.
+		`;
+			} else {
+				globalStatus.style.background = '#28a745'; // ZELENÁ
+				message = `
+Alle Texte sind in Ordnung, es wurden keine Fehler in der Formatierung gefunden.<br>
+Sie können den Artikel bedenkenlos speichern.
+		`;
 			}
+
+			statusText.innerHTML = message.trim();
+			globalStatus.style.display = 'block';
 		}
 
-		const initSummernote = (selector) => {
+
+
+
+		function validateInput(element, text) {
+			const label = element.dataset.label || 'Unbekannt';
+			const id = element.id || label;
+			if (text.trim() === '') {
+				delete inputStates[id];
+				updateGlobalStatus();
+				return;
+			}
+			let cleaned = cleanText(text);
+			if (isBadText(text)) {
+				if (isBadText(cleaned)) {
+					inputStates[id] = {status: 'error', label};
+				} else {
+					element.value = cleaned;
+					inputStates[id] = {status: 'fixed', label};
+				}
+			} else {
+				inputStates[id] = {status: 'ok', label};
+			}
+			updateGlobalStatus();
+		}
+
+		function initSummernote(selector) {
 			if (typeof jQuery === 'undefined') {
 				return;
 			}
@@ -731,25 +808,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					onPaste: function (e) {
 						const bufferText = (e.originalEvent || e).clipboardData.getData('Text');
 						e.preventDefault();
-						// Čistenie vloženého textu (odstráň Word artefakty)
-						let cleanedText = bufferText.replace(/<o:p>.*?<\/o:p>/gi, '') // Príklad čistenia
-							.replace(/mso-[\w-]+/gi, '')
-							.replace(/( ){3,}/gi, ' ');
-						// Vlož čistený text
+						let cleanedText = cleanText(bufferText);
 						document.execCommand('insertText', false, cleanedText);
-						// Validuj
-						if (isBadText(cleanedText)) {
-							showWarning(this);
-						} else {
-							hideWarning(this);
-						}
+						validateInput(this, cleanedText);
 					},
 					onChange: function(contents) {
-						if (isBadText(contents)) {
-							showWarning(this);
-						} else {
-							hideWarning(this);
-						}
+						validateInput(this, contents);
 					},
 					onImageUpload: function (files) {
 						const data = new FormData();
@@ -787,90 +851,95 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					}
 				}
 			});
-		};
+		}
 
 		const addSection = (content = '', image = '', imageTitle = '', imageDescription = '', buttonName = '', subpage = '', externalUrl = '', index) => {
-			// Normalizuj content pre JS (odstráň newline problémy)
 			content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
 			const sectionHtml = `
-			<div class="section mb-4 p-3 border rounded">
-				<input type="hidden" name="sections[${index}]" value="section-${index}">
-				<div class="row">
-					<div class="col-md-9">
-						<label class="col-form-label">Inhalt</label>
-						<textarea class="form-control section-content" name="sections[${index}]" rows="5">${content}</textarea>
-					</div>
-					<div class="col-md-3">
-						<label class="col-form-label">Bild hochladen</label>
-						<input type="file" class="form-control mb-1" name="section_images[${index}]">
-						<input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
-						<input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
-						<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
-							Bild aus FTP wählen
-						</button>
-						<div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
-							${image ? `
-								<img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
-								<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
-									×
-								</button>
-							` : ''}
-						</div>
-						<label class="col-form-label">Bildtitel (SEO)</label>
-						<input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}">
-						<label class="col-form-label">Bildbeschreibung in der Sektion
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i>
-						</label>
-						<input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}">
-					</div>
+		<div class="section mb-4 p-3 border rounded">
+			<input type="hidden" name="sections[${index}]" value="section-${index}">
+			<div class="row">
+				<div class="col-md-9">
+					<label class="col-form-label">Inhalt</label>
+					<textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea>
 				</div>
-				<div class="row mt-3">
-					<div class="col-md-4">
-						<label class="col-form-label">Button-Text</label>
-						<input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}">
+				<div class="col-md-3">
+					<label class="col-form-label">Bild hochladen</label>
+					<input type="file" class="form-control mb-1" name="section_images[${index}]">
+					<input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
+					<input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
+					<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
+						Bild aus FTP wählen
+					</button>
+					<div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
+						${image ? `
+							<img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
+							<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
+								×
+							</button>
+						` : ''}
 					</div>
-					<div class="col-md-4">
-						<label class="col-form-label">Unterseite</label>
-						<select class="form-control mb-1 subpage-select" name="subpages[${index}]">
-							<option value="">-- Unterseite auswählen --</option>
-							${articleOptions.map(opt => `
-								<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
-									${opt.label} (${opt.lang})
-								</option>
-							`).join('')}
-						</select>
-					</div>
-					<div class="col-md-4">
-						<label class="col-form-label">Externe URL</label>
-						<input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}">
-					</div>
-				</div>
-				<div class="section-actions mt-3">
-					<button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+					<label class="col-form-label">Bildtitel (SEO)</label>
+					<input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)">
+					<label class="col-form-label">Bildbeschreibung in der Sektion
+						<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i>
+					</label>
+					<input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung">
 				</div>
 			</div>
+			<div class="row mt-3">
+				<div class="col-md-4">
+					<label class="col-form-label">Button-Text</label>
+					<input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text">
+				</div>
+				<div class="col-md-4">
+					<label class="col-form-label">Unterseite</label>
+					<select class="form-control mb-1 subpage-select" name="subpages[${index}]">
+						<option value="">-- Unterseite auswählen --</option>
+						${articleOptions.map(opt => `
+							<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
+								${opt.label} (${opt.lang})
+							</option>
+						`).join('')}
+					</select>
+				</div>
+				<div class="col-md-4">
+					<label class="col-form-label">Externe URL</label>
+					<input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL">
+				</div>
+			</div>
+			<div class="section-actions mt-3">
+				<button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+			</div>
+		</div>
 		`;
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
-				// Inicializuj Summernote s fallbackom pre zlý content
 				const textarea = sectionsContainer.querySelector('.section:last-child .section-content');
 				if (textarea) {
 					try {
 						initSummernote(textarea);
 					} catch (err) {
-						console.error('Summernote init failed for section ' + index + ': ' + err.message);
-						// Fallback: Nastav čistý text
-						textarea.value = textarea.value.replace(/<[^>]*>/g, ''); // Strip HTML if broken
-						initSummernote(textarea); // Skús znova
+						textarea.value = textarea.value.replace(/<[^>]*>/g, '');
+						initSummernote(textarea);
 					}
 				}
 				bindRemoveSection();
 				bindFtpPicker();
-				// Aplikuj validátory na nové inputy v sekcii
 				const newSection = document.querySelector('#sections-container .section:last-child');
 				newSection.querySelectorAll('input[type="text"], textarea').forEach(el => {
-					el.dispatchEvent(new Event('input')); // Spusť validáciu
+					el.addEventListener('input', function() {
+						validateInput(this, this.value);
+					});
+					el.addEventListener('paste', function(e) {
+						const pasted = e.clipboardData.getData('Text');
+						e.preventDefault();
+						let cleaned = cleanText(pasted);
+						this.value = (this.value || '') + cleaned;
+						validateInput(this, this.value);
+					});
+					validateInput(el, el.value);
 				});
 				newSection.querySelectorAll('input[type="file"]').forEach(el => {
 					el.addEventListener('change', function() {
@@ -896,7 +965,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			document.querySelectorAll('.remove-section').forEach(button => {
 				button.addEventListener('click', function () {
 					if (confirm('Sind Sie sicher, dass Sie diese Sektion entfernen möchten?')) {
-						this.closest('.section').remove();
+						const section = this.closest('.section');
+						section.querySelectorAll('input[type="text"], textarea').forEach(el => {
+							delete inputStates[el.id || el.dataset.label];
+						});
+						section.remove();
+						updateGlobalStatus();
 					}
 				});
 			});
@@ -915,7 +989,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			});
 		};
 
-		// Načítanie existujúcich sekcií pri edite s lepším escapingom
 		<?php if (!empty($sections)): ?>
 		<?php foreach ($sections as $index => $section): ?>
 		addSection(
@@ -973,25 +1046,20 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			new bootstrap.Tooltip(tooltipTriggerEl);
 		});
 
-		// Validácia bežných inputov/textarea (title, subtitle, keywords, meta, atď.)
 		document.querySelectorAll('input[type="text"], textarea:not(.section-content)').forEach(input => {
 			input.addEventListener('input', function() {
-				if (isBadText(this.value)) {
-					showWarning(this);
-				} else {
-					hideWarning(this);
-				}
+				validateInput(this, this.value);
 			});
 			input.addEventListener('paste', function(e) {
 				const pasted = e.clipboardData.getData('Text');
-				if (isBadText(pasted)) {
-					showWarning(this);
-					e.preventDefault(); // Zabrán vloženiu zlého textu
-				}
+				e.preventDefault();
+				let cleaned = cleanText(pasted);
+				this.value = (this.value || '') + cleaned;
+				validateInput(this, this.value);
 			});
+			validateInput(input, input.value);
 		});
 
-		// Validácia obrázkov (pre hlavný obrázok, sekcie, produkty)
 		document.querySelectorAll('input[type="file"]').forEach(fileInput => {
 			fileInput.addEventListener('change', function() {
 				const file = this.files[0];
@@ -999,8 +1067,8 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 					if (!allowedTypes.includes(file.type)) {
 						showWarning(this, 'POZOR: Neplatný typ súboru! Podporované: JPG, PNG, GIF, WEBP.');
-						this.value = ''; // Vymaž súbor
-					} else if (file.size > 5 * 1024 * 1024) { // Max 5MB
+						this.value = '';
+					} else if (file.size > 5 * 1024 * 1024) {
 						showWarning(this, 'POZOR: Súbor je príliš veľký (max 5MB)!');
 						this.value = '';
 					} else {
@@ -1010,7 +1078,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			});
 		});
 
-		// Blokuj submit formulára, ak sú varovania
 		document.getElementById('articleForm').addEventListener('submit', function(e) {
 			const warnings = document.querySelectorAll('.text-danger');
 			if (warnings.length > 0) {
@@ -1019,14 +1086,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			}
 		});
 
-		// Force re-init sekcií po načítaní stránky (ošetrenie pri edite)
 		setTimeout(() => {
 			document.querySelectorAll('.section-content').forEach(textarea => {
-				if (!$(textarea).hasClass('note-editor')) { // Ak nie je inicializovaný
+				if (!$(textarea).hasClass('note-editor')) {
 					initSummernote(textarea);
 				}
 			});
-			console.log('Sekcie re-inicializované'); // Debug log, môžeš odstrániť
-		}, 500); // Čakaj 500ms na DOM ready
+		}, 500);
 	});
 </script>
