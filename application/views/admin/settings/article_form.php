@@ -719,7 +719,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		}
 
 		let inputStates = {};
-		
+
 
 		function updateGlobalStatus() {
 			const globalStatus = document.getElementById('global-status');

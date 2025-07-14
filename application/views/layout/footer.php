@@ -146,10 +146,10 @@
 		return true;
 	}
 </script>
-<script src="<?= base_url('assets/js/search_autofocus.js') ?>"></script>
-<script src="<?=BASE_URL?>assets/vendor/plugins/js/plugins.min.js"></script>
-<script src="<?=BASE_URL?>assets/js/theme.js"></script>
-<script src="<?=BASE_URL?>assets/js/custom.js"></script>
-<script src="<?=BASE_URL?>assets/js/theme.init.js"></script>
+<script src="<?= base_url('assets/js/search_autofocus.js') ?><?=VERSION?>"></script>
+<script src="<?=BASE_URL?>assets/vendor/plugins/js/plugins.min.js<?=VERSION?>"></script>
+<script src="<?=BASE_URL?>assets/js/theme.js<?=VERSION?>"></script>
+<script src="<?=BASE_URL?>assets/js/custom.js<?=VERSION?>"></script>
+<script src="<?=BASE_URL?>assets/js/theme.init.js<?=VERSION?>"></script>
 </body>
 </html>
