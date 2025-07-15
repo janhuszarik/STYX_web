@@ -406,92 +406,91 @@ class App extends CI_Controller
 		$this->load->view('layout/normal', $data);
 	}
 
-    public function gruppenfuhrungen()
-    {
-        $data['title'] = 'Anfrage | Gruppenführung';
-        $data['description'] = 'Besuchen Sie uns in Ober-Grafendorf NÖ – Naturkosmetik, BIO Schokolade & vieles mehr';
-        $data['keywords'] = 'Gruppenführung STYX, Betriebsführung Naturkosmetik, BIO Schokolade Führung, STYX Erlebniswelt, Ausflugsziel Gruppen Niederösterreich, Firmenausflug STYX, Gruppenreise Mostviertel, Naturkosmetik Manufaktur Tour, Schokoladenverkostung Gruppe, STYX Gruppenanfrage, Bahnerlebnis Führung, STYX Kräutergarten Führung, NÖ Card Gruppenführung';
-        $data['page'] = 'app/gruppenfuhrungen';
+	public function gruppenfuhrungen()
+	{
+		$data['title'] = 'Anfrage | Gruppenführung';
+		$data['description'] = 'Besuchen Sie uns in Ober-Grafendorf NÖ – Naturkosmetik, BIO Schokolade & vieles mehr';
+		$data['keywords'] = 'Gruppenführung STYX, Betriebsführung Naturkosmetik, BIO Schokolade Führung, STYX Erlebniswelt, Ausflugsziel Gruppen Niederösterreich, Firmenausflug STYX, Gruppenreise Mostviertel, Naturkosmetik Manufaktur Tour, Schokoladenverkostung Gruppe, STYX Gruppenanfrage, Bahnerlebnis Führung, STYX Kräutergarten Führung, NÖ Card Gruppenführung';
+		$data['page'] = 'app/gruppenfuhrungen';
 
-        $this->load->view('layout/normal', $data);
-    }
+		$this->load->view('layout/normal', $data);
+	}
 
-    public function send_gruppenfuhrung()
-    {
+	public function send_gruppenfuhrung()
+	{
 
-        $this->load->library('form_validation');
-        $this->load->library('email');
+		$this->load->library('form_validation');
+		$this->load->library('email');
 
-        $this->load->library('form_validation');
-        $this->load->library('email');
+		$this->load->library('form_validation');
+		$this->load->library('email');
 
-        $this->form_validation->set_rules('group_type', 'Gruppe', 'required');
-        $this->form_validation->set_rules('event_date', 'Wunschtermin', 'required');
-        $this->form_validation->set_rules('organization', 'Organisation', 'required|trim|max_length[100]');
-        $this->form_validation->set_rules('name', 'Name', 'required|trim|max_length[100]');
-        $this->form_validation->set_rules('email', 'E-Mail', 'required|valid_email|max_length[100]');
-        $this->form_validation->set_rules('phone', 'Telefon', 'required|trim|max_length[30]');
-        $this->form_validation->set_rules('street', 'Straße', 'required|trim|max_length[150]');
-        $this->form_validation->set_rules('zip_city', 'PLZ / Ort', 'required|trim|max_length[100]');
-        $this->form_validation->set_rules('num_persons', 'Personenanzahl', 'required');
-        $this->form_validation->set_rules('tour_type', 'Tour', 'required');
-        $this->form_validation->set_rules('zahlung', 'Zahlung', 'required');
+		$this->form_validation->set_rules('group_type', 'Gruppe', 'required');
+		$this->form_validation->set_rules('event_date', 'Wunschtermin', 'required');
+		$this->form_validation->set_rules('organization', 'Organisation', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('name', 'Name', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('email', 'E-Mail', 'required|valid_email|max_length[100]');
+		$this->form_validation->set_rules('phone', 'Telefon', 'required|trim|max_length[30]');
+		$this->form_validation->set_rules('street', 'Straße', 'required|trim|max_length[150]');
+		$this->form_validation->set_rules('zip_city', 'PLZ / Ort', 'required|trim|max_length[100]');
+		$this->form_validation->set_rules('num_persons', 'Personenanzahl', 'required');
+		$this->form_validation->set_rules('tour_type', 'Tour', 'required');
+		$this->form_validation->set_rules('zahlung', 'Zahlung', 'required');
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->session->set_flashdata('error', validation_errors());
-            redirect('besuchen/gruppenfuhrungen');
-            return;
-        }
-
-
-        $recaptcha_response = $this->input->post('g-recaptcha-response');
-        if (empty($recaptcha_response)) {
-            $this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
-            redirect('besuchen/gruppenfuhrungen');
-            return;
-        }
-
-        $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response . "&remoteip=" . $this->input->ip_address());
-        $response = json_decode($verify);
-
-        if (!$response->success) {
-            $this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
-            redirect('besuchen/gruppenfuhrungen');
-            return;
-        }
-
-        $data = [
-            'group_type' => $this->input->post('group_type', true),
-            'event_date' => $this->input->post('event_date', true),
-            'organization' => $this->input->post('organization', true),
-            'name' => $this->input->post('name', true),
-            'email' => $this->input->post('email', true),
-            'phone' => $this->input->post('phone', true),
-            'street' => $this->input->post('street', true),
-            'zip_city' => $this->input->post('zip_city', true),
-            'num_persons' => $this->input->post('num_persons', true),
-            'tour_type' => $this->input->post('tour_type', true),
-            'zahlung' => $this->input->post('zahlung', true),
-            'rechnung_adresse' => $this->input->post('rechnung_adresse', true),
-            'andere_adresse' => $this->input->post('andere_adresse', true),
-            'extras_silber' => $this->input->post('extras_silber', true),
-            'gold_option' => $this->input->post('gold_option', true),
-            'extras_gold' => $this->input->post('extras_gold', true),
-            'paket' => $this->input->post('paket', true)
-        ];
+		if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', validation_errors());
+			redirect('besuchen/gruppenfuhrungen');
+			return;
+		}
 
 
-        $this->load->model('App_model');
-        $sent = $this->App_model->sendGruppenfuhrungMail($data);
+		$recaptcha_response = $this->input->post('g-recaptcha-response');
+		if (empty($recaptcha_response)) {
+			$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
+			redirect('besuchen/gruppenfuhrungen');
+			return;
+		}
 
-        if ($sent) {
-            $this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
-        } else {
-            $this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
-        }
+		$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . SECRETKEY . "&response=" . $recaptcha_response . "&remoteip=" . $this->input->ip_address());
+		$response = json_decode($verify);
 
-        redirect('besuchen/gruppenfuhrungen');
-    }
+		if (!$response->success) {
+			$this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
+			redirect('besuchen/gruppenfuhrungen');
+			return;
+		}
+
+		$data = [
+			'group_type' => $this->input->post('group_type', true),
+			'event_date' => $this->input->post('event_date', true),
+			'organization' => $this->input->post('organization', true),
+			'name' => $this->input->post('name', true),
+			'email' => $this->input->post('email', true),
+			'phone' => $this->input->post('phone', true),
+			'street' => $this->input->post('street', true),
+			'zip_city' => $this->input->post('zip_city', true),
+			'num_persons' => $this->input->post('num_persons', true),
+			'tour_type' => $this->input->post('tour_type', true),
+			'zahlung' => $this->input->post('zahlung', true),
+			'rechnung_adresse' => $this->input->post('rechnung_adresse', true),
+			'andere_adresse' => $this->input->post('andere_adresse', true),
+			'extras_silber' => $this->input->post('extras_silber', true),
+			'gold_option' => $this->input->post('gold_option', true),
+			'extras_gold' => $this->input->post('extras_gold', true),
+			'paket' => $this->input->post('paket', true)
+		];
+
+
+		$this->load->model('App_model');
+		$sent = $this->App_model->sendGruppenfuhrungMail($data);
+
+		if ($sent) {
+			$this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
+		} else {
+			$this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
+		}
+
+		redirect('besuchen/gruppenfuhrungen');
+	}
 
 }
-

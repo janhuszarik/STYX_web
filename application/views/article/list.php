@@ -60,14 +60,10 @@ $this->load->view('partials/article_list_assets');
 					<?php if (!empty($a->subtitle)): ?>
 						<p><?= strip_tags($a->subtitle) ?></p>
 					<?php endif; ?>
-					<a href="<?= base_url($a->slug . '/' . remove_diacritics($a->slug_title)) ?>" class="btn btn-success mt-3">Mehr Infos &gt;&gt;</a>
+					<a href="<?= base_url($a->slug . '/' . remove_diacritics($a->slug_title)) ?>" class="btn btn-success mt-3">Mehr Infos >></a>
 				</div>
 			</div>
 
 		<?php endforeach; ?>
 	<?php endif; ?>
 </section>
-
-
-
-
