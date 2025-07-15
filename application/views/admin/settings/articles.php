@@ -29,7 +29,7 @@ foreach ($articleCategories as $category) {
 						<thead>
 						<tr>
 							<th class="text-center">#</th>
-							<th class="text-center">Sprache</th> <!-- New column for language flag -->
+							<th class="text-center">Sprache</th>
 							<th>Titel</th>
 							<th>URL-Adresse</th>
 							<th class="text-center">Keywords</th>
@@ -37,7 +37,6 @@ foreach ($articleCategories as $category) {
 							<th class="text-center">Galerie</th>
 							<th class="text-center">Start datum</th>
 							<th class="text-center">Ende datum</th>
-							<th class="text-center">Reihenfolge </th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Update</th>
 							<th class="text-center">Erstellt</th>
@@ -52,7 +51,6 @@ foreach ($articleCategories as $category) {
 									<td class="text-center"><?= $index + 1 ?></td>
 									<td class="text-center">
 										<?php
-										// Get language info using the langInfo helper
 										$langInfo = langInfo($article->lang);
 										?>
 										<img src="<?= htmlspecialchars($langInfo['flag']) ?>" alt="<?= htmlspecialchars($langInfo['text']) ?>" title="<?= htmlspecialchars($langInfo['text']) ?>" style="width: 24px; height: 16px;">
@@ -60,7 +58,6 @@ foreach ($articleCategories as $category) {
 
 									<td><?= $article->title ?></td>
 									<?php
-									// Ak v DB sú náhodou v slug_title diakritické znaky, odstránime ich pre výpis linku
 									$slug_title_clean = !empty($article->slug_title) ? remove_diacritics($article->slug_title) : '';
 									$url = rtrim(BASE_URL, '/') . '/' . ltrim($article->slug, '/');
 									if ($slug_title_clean) {
@@ -81,10 +78,9 @@ foreach ($articleCategories as $category) {
 									<td class="text-center"><?= checkTextIcon($article->gallery_id) ?></td>
 									<td class="text-center"><?= checkDateOrIcon($article->start_date_from)?></td>
 									<td class="text-center"><?= checkDateOrIcon($article->end_date_to)?></td>
-									<td class="text-center"><?= htmlspecialchars($article->orderBy)?></td>
 									<td class="text-center"><?= active($article->active)?></td>
 									<td class="text-center"><?= date('d.m.Y', strtotime($article->updated_at)) ?></td>
-									<td class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
+									<td style="font-weight: bold; color: red" class="text-center"><?= date('d.m.Y', strtotime($article->created_at)) ?></td>
 									<td class="text-center">
 										<a href="<?= base_url('admin/article_save/edit/' . $article->id) ?>" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>
 										<a href="<?= base_url('admin/article_save/del/' . $article->id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Wirklich löschen?')"><i class="fa fa-trash"></i></a>

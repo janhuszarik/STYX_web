@@ -144,7 +144,7 @@ class Article extends CI_Controller
 
 		$this->load->helper('app_helper');
 		foreach ($post as $key => $value) {
-			if (is_string($value) && !in_array($key, ['slug', 'image', 'start_date_from_date', 'start_date_from_time', 'end_date_to_date', 'end_date_to_time'])) {
+			if (is_string($value) && !in_array($key, ['slug', 'image', 'start_date_from_date', 'start_date_from_time', 'end_date_to_date', 'end_date_to_time', 'created_at'])) {
 				$post[$key] = clean_input_text($value);
 				if (preg_match('/<o:p>/i', $post[$key])) {
 					$this->session->set_flashdata('error', 'Neplatný text v poli ' . $key . '!');

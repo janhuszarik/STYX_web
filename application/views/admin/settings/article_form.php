@@ -394,9 +394,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							</div>
 						</div>
 						<div class="col-md-3">
-							<label for="orderBy" class="col-form-label">Reihenfolge</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestimmt die Reihenfolge, in der der Artikel in der Liste der Artikel in der Kategorie angezeigt wird. Kleinere Zahlen erscheinen weiter oben."></i>
-							<input type="number" class="form-control" name="orderBy" id="orderBy" value="<?= htmlspecialchars($article->orderBy ?? '0') ?>">
+							<label for="created_at" class="col-form-label">Erstellungsdatum</label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Bestimmt die Reihenfolge, in der der Artikel in der Liste der Artikel in der Kategorie angezeigt wird. Neuere Daten erscheinen weiter oben. Wenn nicht angegeben, wird das heutige Datum verwendet."></i>
+							<input type="date" class="form-control" name="created_at" id="created_at" value="<?= htmlspecialchars(isset($article->created_at) ? date('Y-m-d', strtotime($article->created_at)) : '') ?>">
 						</div>
 						<div class="col-md-3">
 							<label for="active" class="col-form-label">Status</label>
@@ -705,8 +705,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		function isBadText(text) {
 			const badPatterns = [
 				/<o:p>/i, /<v:shape>/i, /<w:>/i, /mso-/i,
-				/( ){5,}/i,
-				/<font/i, /<span style="font-family:/i
+				/( ){5,}/i
 			];
 			return badPatterns.some(pattern => pattern.test(text));
 		}
@@ -743,20 +742,20 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 <b>Achtung!</b> In folgenden Feldern wurden fehlerhafte Formatierungen erkannt:<br>
 <b>${errors.join(', ')}</b>.<br>
 Bitte überprüfen und korrigieren Sie die markierten Texte, bevor Sie den Artikel speichern.
-		`;
+                `;
 			} else if (fixes.length > 0) {
 				globalStatus.style.background = '#ffc107'; // ŽLTÁ
 				message = `
 <b>Hinweis:</b> In folgenden Feldern wurden fehlerhafte Formatierungen <b>automatisch korrigiert</b>:<br>
 <b>${fixes.join(', ')}</b>.<br>
 Bitte überprüfen Sie, ob der Text wie gewünscht übernommen wurde.
-		`;
+                `;
 			} else {
 				globalStatus.style.background = '#28a745'; // ZELENÁ
 				message = `
 Alle Texte sind in Ordnung, es wurden keine Fehler in der Formatierung gefunden.<br>
 Sie können den Artikel bedenkenlos speichern.
-		`;
+                `;
 			}
 
 			statusText.innerHTML = message.trim();
@@ -856,63 +855,63 @@ Sie können den Artikel bedenkenlos speichern.
 		const addSection = (content = '', image = '', imageTitle = '', imageDescription = '', buttonName = '', subpage = '', externalUrl = '', index) => {
 			content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
 			const sectionHtml = `
-		<div class="section mb-4 p-3 border rounded">
-			<input type="hidden" name="sections[${index}]" value="section-${index}">
-			<div class="row">
-				<div class="col-md-9">
-					<label class="col-form-label">Inhalt</label>
-					<textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea>
-				</div>
-				<div class="col-md-3">
-					<label class="col-form-label">Bild hochladen</label>
-					<input type="file" class="form-control mb-1" name="section_images[${index}]">
-					<input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
-					<input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
-					<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
-						Bild aus FTP wählen
-					</button>
-					<div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
-						${image ? `
-							<img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
-							<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
-								×
-							</button>
-						` : ''}
-					</div>
-					<label class="col-form-label">Bildtitel (SEO)</label>
-					<input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)">
-					<label class="col-form-label">Bildbeschreibung in der Sektion
-						<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i>
-					</label>
-					<input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung">
-				</div>
-			</div>
-			<div class="row mt-3">
-				<div class="col-md-4">
-					<label class="col-form-label">Button-Text</label>
-					<input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text">
-				</div>
-				<div class="col-md-4">
-					<label class="col-form-label">Unterseite</label>
-					<select class="form-control mb-1 subpage-select" name="subpages[${index}]">
-						<option value="">-- Unterseite auswählen --</option>
-						${articleOptions.map(opt => `
-							<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
-								${opt.label} (${opt.lang})
-							</option>
-						`).join('')}
-					</select>
-				</div>
-				<div class="col-md-4">
-					<label class="col-form-label">Externe URL</label>
-					<input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL">
-				</div>
-			</div>
-			<div class="section-actions mt-3">
-				<button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
-			</div>
-		</div>
-		`;
+            <div class="section mb-4 p-3 border rounded">
+                <input type="hidden" name="sections[${index}]" value="section-${index}">
+                <div class="row">
+                    <div class="col-md-9">
+                        <label class="col-form-label">Inhalt</label>
+                        <textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="col-form-label">Bild hochladen</label>
+                        <input type="file" class="form-control mb-1" name="section_images[${index}]">
+                        <input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
+                        <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
+                        <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
+                            Bild aus FTP wählen
+                        </button>
+                        <div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
+                            ${image ? `
+                                <img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
+                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
+                                    ×
+                                </button>
+                            ` : ''}
+                        </div>
+                        <label class="col-form-label">Bildtitel (SEO)</label>
+                        <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)">
+                        <label class="col-form-label">Bildbeschreibung in der Sektion
+                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i>
+                        </label>
+                        <input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <label class="col-form-label">Button-Text</label>
+                        <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="col-form-label">Unterseite</label>
+                        <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
+                            <option value="">-- Unterseite auswählen --</option>
+                            ${articleOptions.map(opt => `
+                                <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
+                                    ${opt.label} (${opt.lang})
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="col-form-label">Externe URL</label>
+                        <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL">
+                    </div>
+                </div>
+                <div class="section-actions mt-3">
+                    <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
+                </div>
+            </div>
+            `;
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
@@ -947,10 +946,10 @@ Sie können den Artikel bedenkenlos speichern.
 						if (file) {
 							const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 							if (!allowedTypes.includes(file.type)) {
-								showWarning(this, 'POZOR: Neplatný typ súboru! Podporované: JPG, PNG, GIF, WEBP.');
+								showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.');
 								this.value = '';
 							} else if (file.size > 5 * 1024 * 1024) {
-								showWarning(this, 'POZOR: Súbor je príliš veľký (max 5MB)!');
+								showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!');
 								this.value = '';
 							} else {
 								hideWarning(this);
@@ -1066,10 +1065,10 @@ Sie können den Artikel bedenkenlos speichern.
 				if (file) {
 					const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 					if (!allowedTypes.includes(file.type)) {
-						showWarning(this, 'POZOR: Neplatný typ súboru! Podporované: JPG, PNG, GIF, WEBP.');
+						showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.');
 						this.value = '';
 					} else if (file.size > 5 * 1024 * 1024) {
-						showWarning(this, 'POZOR: Súbor je príliš veľký (max 5MB)!');
+						showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!');
 						this.value = '';
 					} else {
 						hideWarning(this);
@@ -1082,7 +1081,7 @@ Sie können den Artikel bedenkenlos speichern.
 			const warnings = document.querySelectorAll('.text-danger');
 			if (warnings.length > 0) {
 				e.preventDefault();
-				showAlert('Formulár obsahuje neplatný text alebo súbory! Opravte ich pred uložením.', 'error');
+				showAlert('Das Formular enthält ungültigen Text oder Dateien! Korrigieren Sie sie vor dem Speichern.', 'error');
 			}
 		});
 

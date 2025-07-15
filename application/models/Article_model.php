@@ -40,7 +40,7 @@ class Article_model extends CI_Model
 	{
 		$this->db->select('id, title, slug, slug_title, is_main, category_id, subcategory_id, lang, active');
 		$this->db->where('category_id', $categoryId);
-		$this->db->order_by('is_main DESC, id DESC');
+		$this->db->order_by('is_main DESC, created_at DESC');
 		return $this->db->get('articles')->result();
 	}
 
@@ -124,8 +124,7 @@ class Article_model extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('category_id', $categoryId);
-		$this->db->order_by('orderBy', 'DESC');
-		$this->db->order_by('id', 'DESC');
+		$this->db->order_by('created_at', 'DESC');
 		return $this->db->get('articles', $limit, $offset)->result();
 	}
 
@@ -262,8 +261,18 @@ class Article_model extends CI_Model
 			'updated_at'      => date('Y-m-d H:i:s'),
 			'is_main'         => $is_main,
 			'slug_title'      => $slug_title,
-			'orderBy'         => isset($post['orderBy']) ? (int)$post['orderBy'] : 0,
 		];
+
+		// Spracovanie created_at
+		if (!empty($post['id'])) {
+			// Aktualizácia: aktualizuj len ak je zadaný
+			if (!empty($post['created_at'])) {
+				$data['created_at'] = $post['created_at'] . ' 00:00:00';
+			}
+		} else {
+			// Nový článok: použij zadaný alebo dnešný dátum
+			$data['created_at'] = (!empty($post['created_at']) ? $post['created_at'] : date('Y-m-d')) . ' 00:00:00';
+		}
 
 		// Spracovanie odporúčaných produktov
 		for ($set = 0; $set < 2; $set++) {
@@ -326,7 +335,6 @@ class Article_model extends CI_Model
 			$ok = $this->db->update('articles', $data);
 			$articleId = $post['id'];
 		} else {
-			$data['created_at'] = date('Y-m-d H:i:s');
 			$ok = $this->db->insert('articles', $data);
 			$articleId = $this->db->insert_id();
 		}
