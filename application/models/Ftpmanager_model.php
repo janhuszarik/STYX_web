@@ -5,9 +5,10 @@ class Ftpmanager_model extends CI_Model
 {
 	public function connect_to_ftp($path = '')
 	{
-		$this->load->driver('cache', ['adapter' => 'file']);
+		$this->load->driver('cache', ['adapter' => 'file']); // Použijeme súborovú cache
 		$cache_key = 'ftp_list_' . md5($path);
 
+		// Skontrolujeme, či je zoznam v cache
 		if ($cached = $this->cache->get($cache_key)) {
 			return $cached;
 		}
@@ -27,53 +28,36 @@ class Ftpmanager_model extends CI_Model
 
 		ftp_pasv($conn, true);
 		$path = trim($path ?? '', '/');
+		$raw_list = @ftp_rawlist($conn, $path === '' ? '.' : $path);
+		if ($raw_list === false) {
+			ftp_close($conn);
+			return ['__error' => 'Dateiliste des Verzeichnisses konnte nicht abgerufen werden: ' . $path];
+		}
 
-		if (function_exists('ftp_mlsd')) {
-			$raw_list = @ftp_mlsd($conn, $path === '' ? '.' : $path);
-			if ($raw_list === false) {
-				ftp_close($conn);
-				return ['__error' => 'Dateiliste (MLSD) des Verzeichnisses konnte nicht abgerufen werden: ' . $path];
-			}
+		$list = [];
+		foreach ($raw_list as $item) {
+			$info = preg_split("/\s+/", $item, 9);
+			if (count($info) < 9) continue;
 
-			$list = [];
-			foreach ($raw_list as $item) {
-				if ($item['name'] === '.' || $item['name'] === '..') continue;
-				$type = $item['type'] === 'directory' ? 'dir' : 'file';
-				$full_path = $path === '' ? $item['name'] : $path . '/' . $item['name'];
-				$size = $type === 'file' ? (int)$item['size'] : null;
-				$list[] = [
-					'name' => $item['name'],
-					'type' => $type,
-					'path' => $full_path,
-					'size' => $size
-				];
-			}
-		} else {
-			$names = @ftp_nlist($conn, $path === '' ? '.' : $path);
-			if ($names === false) {
-				ftp_close($conn);
-				return ['__error' => 'Dateiliste (NLST) des Verzeichnisses konnte nicht abgerufen werden: ' . $path];
-			}
+			$type = $info[0][0] === 'd' ? 'dir' : 'file';
+			$name = $info[8];
+			if ($name === '.' || $name === '..') continue;
 
-			$list = [];
-			foreach ($names as $name) {
-				if ($name === '.' || $name === '..') continue;
-				$full_path = $path === '' ? $name : $path . '/' . $name;
-				$is_dir = ftp_size($conn, $full_path) === -1;
-				$type = $is_dir ? 'dir' : 'file';
-				$size = $is_dir ? null : ftp_size($conn, $full_path);
-				$list[] = [
-					'name' => basename($name),
-					'type' => $type,
-					'path' => $full_path,
-					'size' => $size
-				];
-			}
+			$full_path = $path === '' ? $name : $path . '/' . $name;
+			$size = $type === 'file' ? (int)$info[4] : null;
+
+			$list[] = [
+				'name' => $name,
+				'type' => $type,
+				'path' => $full_path,
+				'size' => $size
+			];
 		}
 
 		ftp_close($conn);
 
-		$this->cache->save($cache_key, $list, 600);
+		// Uložíme do cache na 5 minút
+		$this->cache->save($cache_key, $list, 300);
 
 		return $list;
 	}
@@ -85,13 +69,11 @@ class Ftpmanager_model extends CI_Model
 
 		if (@ftp_delete($conn, $path)) {
 			ftp_close($conn);
-			$this->invalidate_cache(dirname($path));
 			return true;
 		}
 
 		if (@ftp_rmdir($conn, $path)) {
 			ftp_close($conn);
-			$this->invalidate_cache(dirname($path));
 			return true;
 		}
 
@@ -117,8 +99,6 @@ class Ftpmanager_model extends CI_Model
 
 		if (ftp_rename($conn, $from, $to)) {
 			ftp_close($conn);
-			$this->invalidate_cache(dirname($from));
-			$this->invalidate_cache(dirname($to));
 			return true;
 		}
 		ftp_close($conn);
@@ -132,7 +112,6 @@ class Ftpmanager_model extends CI_Model
 
 		if (@ftp_mkdir($conn, $path)) {
 			ftp_close($conn);
-			$this->invalidate_cache(dirname($path));
 			return true;
 		}
 
@@ -149,12 +128,11 @@ class Ftpmanager_model extends CI_Model
 		ftp_close($conn);
 
 		if ($upload) {
-			$this->invalidate_cache(dirname($remote_path));
+			$this->invalidate_cache(dirname($remote_path)); // Invalidovať cache pre rodičovskú zložku
 			return true;
 		}
 		return ['__error' => 'Datei konnte nicht auf den FTP-Server hochgeladen werden.'];
 	}
-
 	public function invalidate_cache($path)
 	{
 		$this->load->driver('cache', ['adapter' => 'file']);
