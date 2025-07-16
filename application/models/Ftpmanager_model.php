@@ -5,8 +5,8 @@ class Ftpmanager_model extends CI_Model
 {
 	public function connect_to_ftp($path = '')
 	{
-		$this->load->driver('cache', ['adapter' => 'file']); // Použijeme súborovú cache
-		$cache_key = 'ftp_list_' . md5($path);
+		$this->load->driver('cache', ['adapter' => 'file']);
+		$cache_key = 'ftp_list_' . md5(trim($path, '/'));
 
 		// Skontrolujeme, či je zoznam v cache
 		if ($cached = $this->cache->get($cache_key)) {
@@ -56,9 +56,7 @@ class Ftpmanager_model extends CI_Model
 
 		ftp_close($conn);
 
-		// Uložíme do cache na 5 minút
-		$this->cache->save($cache_key, $list, 300);
-
+		$this->cache->save($cache_key, $list, 3600);
 		return $list;
 	}
 
@@ -67,13 +65,19 @@ class Ftpmanager_model extends CI_Model
 		$conn = $this->connect_raw();
 		if (!$conn) return ['__error' => 'Verbindungsfehler zum FTP.'];
 
+		$parent_path = dirname($path);
+
+		// Najprv skúsime zmazať ako súbor
 		if (@ftp_delete($conn, $path)) {
 			ftp_close($conn);
+			$this->invalidate_cache($parent_path); // ✅ Invalidácia keše
 			return true;
 		}
 
+		// Ak sa nepodarilo, skúsime zmazať ako priečinok
 		if (@ftp_rmdir($conn, $path)) {
 			ftp_close($conn);
+			$this->invalidate_cache($parent_path); // ✅ Invalidácia keše
 			return true;
 		}
 
@@ -99,6 +103,8 @@ class Ftpmanager_model extends CI_Model
 
 		if (ftp_rename($conn, $from, $to)) {
 			ftp_close($conn);
+			$this->invalidate_cache(dirname($from)); // ✅ Invalidácia zdrojového priečinka
+			$this->invalidate_cache(dirname($to));   // ✅ Invalidácia cieľového priečinka
 			return true;
 		}
 		ftp_close($conn);
@@ -112,6 +118,7 @@ class Ftpmanager_model extends CI_Model
 
 		if (@ftp_mkdir($conn, $path)) {
 			ftp_close($conn);
+			$this->invalidate_cache(dirname($path)); // ✅ Invalidácia nadradeného priečinka
 			return true;
 		}
 
@@ -128,15 +135,26 @@ class Ftpmanager_model extends CI_Model
 		ftp_close($conn);
 
 		if ($upload) {
-			$this->invalidate_cache(dirname($remote_path)); // Invalidovať cache pre rodičovskú zložku
+			// Táto funkcia už správne invalidovala cache
+			$this->invalidate_cache(dirname($remote_path));
 			return true;
 		}
 		return ['__error' => 'Datei konnte nicht auf den FTP-Server hochgeladen werden.'];
 	}
+
+	/**
+	 * Zmaže cache pre zadanú cestu.
+	 * @param string $path Cesta k priečinku, ktorého cache sa má zmazať.
+	 */
 	public function invalidate_cache($path)
 	{
 		$this->load->driver('cache', ['adapter' => 'file']);
-		$cache_key = 'ftp_list_' . md5(trim($path, '/'));
+		// Normalizujeme cestu, aby bola konzistentná (napr. '.' sa stane prázdnym stringom)
+		$normalized_path = trim($path, '/');
+		if ($normalized_path === '.') {
+			$normalized_path = '';
+		}
+		$cache_key = 'ftp_list_' . md5($normalized_path);
 		$this->cache->delete($cache_key);
 	}
 }
