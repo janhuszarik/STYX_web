@@ -12,11 +12,12 @@ class Ftpmanager extends CI_Controller
 	public function index()
 	{
 		$path = $this->input->get('path') ?? '';
+		$search_query = $this->input->get('q') ?? '';
 
 		$data['title'] = 'FTP-Manager';
 		$data['page'] = 'admin/settings/ftpmanager_view';
 		$data['current_path'] = $path;
-		$data['files'] = $this->Ftpmanager_model->connect_to_ftp($path);
+		$data['files'] = $this->Ftpmanager_model->connect_to_ftp($path, $search_query);
 
 		$this->load->view('admin/layout/normal', $data);
 	}
@@ -201,10 +202,11 @@ class Ftpmanager extends CI_Controller
 	public function load_folder()
 	{
 		$folder = $this->input->post('folder') ?? '';
+		$search_query = $this->input->post('q') ?? ''; // ✅ Získame dopyt z POST požiadavky
 		$folder = trim($folder, '/');
 
-		// Získame zoznam súborov a priečinkov z FTP
-		$files = $this->Ftpmanager_model->connect_to_ftp($folder);
+		// ✅ Pošleme dopyt do modelu
+		$files = $this->Ftpmanager_model->connect_to_ftp($folder, $search_query);
 
 		if (isset($files['__error'])) {
 			header('Content-Type: application/json');
@@ -213,19 +215,21 @@ class Ftpmanager extends CI_Controller
 		}
 
 		$list = [];
-		foreach ($files as $file) {
-			$full_path = $file['path'];
-			$url = null;
-			if ($file['type'] === 'file') {
-				$url = 'https://styx.styxnatur.at/' . $full_path;
+		if (is_array($files)) { // Uistíme sa, že $files je pole
+			foreach ($files as $file) {
+				$full_path = $file['path'];
+				$url = null;
+				if ($file['type'] === 'file') {
+					$url = 'https://styx.styxnatur.at/' . $full_path;
+				}
+				$list[] = [
+					'name' => $file['name'],
+					'type' => $file['type'],
+					'url' => $url,
+					'path' => $full_path,
+					'size' => $file['size']
+				];
 			}
-			$list[] = [
-				'name' => $file['name'],
-				'type' => $file['type'],
-				'url' => $url,
-				'path' => $full_path,
-				'size' => $file['size'] // Veľkosť je už zahrnutá z modelu
-			];
 		}
 
 		header('Content-Type: application/json');

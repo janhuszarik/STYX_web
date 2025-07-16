@@ -1,4 +1,3 @@
-
 <?php if ($this->session->flashdata('error')): ?>
 	<div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
 <?php elseif ($this->session->flashdata('success')): ?>
@@ -23,14 +22,12 @@ $http_url_base = 'https://styx.styxnatur.at/';
 					</div>
 
 					<div class="d-flex flex-column flex-md-row align-items-start gap-3 text-end">
-						<!-- Upload-Formular -->
 						<form action="<?= base_url('admin/ftpmanager/upload') ?>" method="post" enctype="multipart/form-data" class="d-flex flex-column gap-2">
 							<input type="hidden" name="path" value="<?= htmlspecialchars($current_path) ?>">
 							<input type="file" name="image" class="form-control form-control-sm" id="imageUpload" accept="image/*,.pdf" required>
 							<button type="submit" class="btn btn-sm btn-primary">Datei hochladen</button>
 						</form>
 
-						<!-- Ordner-Erstellung -->
 						<form action="<?= base_url('admin/ftpmanager/create_folder') ?>" method="post" class="d-flex flex-column gap-2">
 							<input type="hidden" name="current_path" value="<?= htmlspecialchars($current_path) ?>">
 							<input type="text" name="folder_name" class="form-control form-control-sm" placeholder="Neuer Ordner name" required>
@@ -39,12 +36,31 @@ $http_url_base = 'https://styx.styxnatur.at/';
 					</div>
 				</header>
 
+				<div class="card-body border-bottom">
+					<form action="<?= base_url('admin/ftpmanager') ?>" method="get" class="mb-0">
+						<input type="hidden" name="path" value="<?= htmlspecialchars($current_path) ?>">
+						<div class="input-group">
+							<input type="text" name="q" class="form-control" placeholder="Suchen im aktuellen Verzeichnis..." value="<?= htmlspecialchars($this->input->get('q') ?? '') ?>">
+							<button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Suchen</button>
+							<?php if (!empty($this->input->get('q'))): ?>
+								<a href="<?= base_url('admin/ftpmanager?path=' . urlencode($current_path)) ?>" class="btn btn-secondary">Filter löschen</a>
+							<?php endif; ?>
+						</div>
+					</form>
+				</div>
+
 
 				<div class="card-body">
 					<?php if (isset($files['__error'])): ?>
 						<div class="alert alert-danger">❌ <?= $files['__error'] ?></div>
 					<?php elseif (empty($files)): ?>
-						<div class="alert alert-warning">⚠️ Leer | Keine Data.</div>
+						<div class="alert alert-warning">
+							<?php if (!empty($this->input->get('q'))): ?>
+								⚠️ Für "<?= htmlspecialchars($this->input->get('q')) ?>" wurden keine Ergebnisse gefunden.
+							<?php else: ?>
+								⚠️ Leer | Keine Data.
+							<?php endif; ?>
+						</div>
 					<?php else: ?>
 						<div class="table-responsive">
 							<table class="table table-responsive-md table-hover table-bordered mb-0">
@@ -58,7 +74,7 @@ $http_url_base = 'https://styx.styxnatur.at/';
 								</tr>
 								</thead>
 								<tbody>
-								<?php if ($current_path !== ''): ?>
+								<?php if ($current_path !== '' && empty($this->input->get('q'))): // Zobrazíme tlačidlo späť, len ak sa nevyhľadáva ?>
 									<tr>
 										<td>
 											<a href="<?= base_url('admin/ftpmanager?path=' . urlencode($parent_path)) ?>">
@@ -104,8 +120,8 @@ $http_url_base = 'https://styx.styxnatur.at/';
 											<?php endif; ?>
 										</td>
 										<td data-title="Path">
-											<a href="<?= htmlspecialchars(BASE_URL . $full_path) ?>" target="_blank">
-												<?= htmlspecialchars(BASE_URL . $full_path) ?>
+											<a href="<?= htmlspecialchars($http_url_base . $full_path) ?>" target="_blank">
+												<?= htmlspecialchars($http_url_base . $full_path) ?>
 											</a>
 										</td>
 										<td data-title="Size"><?= $size !== null ? round($size / 1024, 2) . ' KB' : '-' ?></td>

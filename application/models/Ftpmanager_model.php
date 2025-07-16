@@ -3,60 +3,76 @@ defined('BASEPATH') OR exit('Kein direkter Skriptzugriff erlaubt');
 
 class Ftpmanager_model extends CI_Model
 {
-	public function connect_to_ftp($path = '')
+	// Pridáme nový parameter $search_query
+	public function connect_to_ftp($path = '', $search_query = '')
 	{
 		$this->load->driver('cache', ['adapter' => 'file']);
 		$cache_key = 'ftp_list_' . md5(trim($path, '/'));
 
 		// Skontrolujeme, či je zoznam v cache
-		if ($cached = $this->cache->get($cache_key)) {
-			return $cached;
-		}
+		if ($list = $this->cache->get($cache_key)) {
+			// Dáta sú z keše
+		} else {
+			// Dáta nie sú v keši, ideme na FTP
+			$ftp_server = "ftp.styxnatur.at";
+			$ftp_user = "testujem@styxnatur.at";
+			$ftp_pass = "tQS!2g-x6Oy3S_7.";
+			$ftp_port = 21;
 
-		$ftp_server = "ftp.styxnatur.at";
-		$ftp_user = "testujem@styxnatur.at";
-		$ftp_pass = "tQS!2g-x6Oy3S_7.";
-		$ftp_port = 21;
+			$conn = ftp_connect($ftp_server, $ftp_port, 10);
+			if (!$conn) return ['__error' => 'Verbindung zum FTP-Server konnte nicht hergestellt werden.'];
 
-		$conn = ftp_connect($ftp_server, $ftp_port, 10);
-		if (!$conn) return ['__error' => 'Verbindung zum FTP-Server konnte nicht hergestellt werden.'];
+			if (!ftp_login($conn, $ftp_user, $ftp_pass)) {
+				ftp_close($conn);
+				return ['__error' => 'Fehler beim Anmelden.'];
+			}
 
-		if (!ftp_login($conn, $ftp_user, $ftp_pass)) {
+			ftp_pasv($conn, true);
+			$path_normalized = trim($path ?? '', '/');
+			$raw_list = @ftp_rawlist($conn, $path_normalized === '' ? '.' : $path_normalized);
+			if ($raw_list === false) {
+				ftp_close($conn);
+				return ['__error' => 'Dateiliste des Verzeichnisses konnte nicht abgerufen werden: ' . $path_normalized];
+			}
+
+			$list = [];
+			foreach ($raw_list as $item) {
+				$info = preg_split("/\s+/", $item, 9);
+				if (count($info) < 9) continue;
+
+				$type = $info[0][0] === 'd' ? 'dir' : 'file';
+				$name = $info[8];
+				if ($name === '.' || $name === '..') continue;
+
+				$full_path = $path_normalized === '' ? $name : $path_normalized . '/' . $name;
+				$size = $type === 'file' ? (int)$info[4] : null;
+
+				$list[] = [
+					'name' => $name,
+					'type' => $type,
+					'path' => $full_path,
+					'size' => $size
+				];
+			}
+
 			ftp_close($conn);
-			return ['__error' => 'Fehler beim Anmelden.'];
+
+			// Uložíme KOMPLETNÝ zoznam do keše na 1 hodinu
+			$this->cache->save($cache_key, $list, 3600);
 		}
 
-		ftp_pasv($conn, true);
-		$path = trim($path ?? '', '/');
-		$raw_list = @ftp_rawlist($conn, $path === '' ? '.' : $path);
-		if ($raw_list === false) {
-			ftp_close($conn);
-			return ['__error' => 'Dateiliste des Verzeichnisses konnte nicht abgerufen werden: ' . $path];
+		// --- ✅ NOVÁ ČASŤ: Filtrovanie výsledkov ---
+		if (!empty($search_query) && is_array($list)) {
+			$filtered_list = [];
+			foreach ($list as $file) {
+				// Hľadáme reťazec v názve súboru (case-insensitive)
+				if (stripos($file['name'], $search_query) !== false) {
+					$filtered_list[] = $file;
+				}
+			}
+			return $filtered_list; // Vrátime len prefiltrované výsledky
 		}
 
-		$list = [];
-		foreach ($raw_list as $item) {
-			$info = preg_split("/\s+/", $item, 9);
-			if (count($info) < 9) continue;
-
-			$type = $info[0][0] === 'd' ? 'dir' : 'file';
-			$name = $info[8];
-			if ($name === '.' || $name === '..') continue;
-
-			$full_path = $path === '' ? $name : $path . '/' . $name;
-			$size = $type === 'file' ? (int)$info[4] : null;
-
-			$list[] = [
-				'name' => $name,
-				'type' => $type,
-				'path' => $full_path,
-				'size' => $size
-			];
-		}
-
-		ftp_close($conn);
-
-		$this->cache->save($cache_key, $list, 3600);
 		return $list;
 	}
 

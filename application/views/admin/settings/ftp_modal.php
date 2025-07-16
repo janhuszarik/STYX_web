@@ -1,19 +1,19 @@
 <style>
 	#ftpImagePreview img {
-		max-width: 200px; /* Zväčšený náhľad pre náhľadové okno */
+		max-width: 200px;
 		max-height: 200px;
 		object-fit: contain;
 	}
 	#ftp-browser-container {
-		max-height: 600px; /* Väčší kontajner pre obsah */
+		max-height: 600px;
 		overflow-y: auto;
 	}
 	.modal-dialog {
-		max-width: 90vw; /* Väčší width, 90% šírky obrazovky */
+		max-width: 90vw;
 	}
 	#ftp-items-list {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr); /* Dva stĺpce */
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responzívny grid */
 		gap: 10px;
 	}
 	.ftp-item {
@@ -25,15 +25,16 @@
 		align-items: center;
 		gap: 10px;
 		background-color: #fff;
+		word-break: break-all;
 	}
 	.ftp-item:hover {
 		background-color: #f8f9fa;
 	}
 	.ftp-item i {
-		font-size: 24px; /* Väčšie ikony */
+		font-size: 24px;
 	}
 	.ftp-item img {
-		width: 60px; /* Väčší náhľad */
+		width: 60px;
 		height: 60px;
 		object-fit: cover;
 		border: 1px solid #ddd;
@@ -41,6 +42,7 @@
 	.ftp-breadcrumb {
 		font-size: 14px;
 		margin-bottom: 10px;
+		word-break: break-all;
 	}
 	.ftp-breadcrumb a {
 		color: #007bff;
@@ -57,21 +59,27 @@
 		text-align: center;
 		padding: 20px;
 		color: #666;
-		grid-column: span 2; /* Zaberá oba stĺpce */
+		grid-column: 1 / -1; /* Zaberá všetky stĺpce */
 	}
 </style>
 
 <div id="ftp-browser-container">
-	<div class="mb-2 d-flex align-items-center">
+	<div class="mb-2 d-flex align-items-center flex-wrap">
 		<button type="button" id="ftp-back-btn" class="btn btn-sm btn-secondary me-2">
-			<i class="bi bi-arrow-left"></i> Zurück
+			<i class="fa fa-arrow-left"></i> Zurück
 		</button>
 		<button type="button" id="ftp-home-btn" class="btn btn-sm btn-secondary me-2">
-			<i class="bi bi-house"></i> Start
+			<i class="fa fa-home"></i> Start
 		</button>
-		<strong>Aktueller Pfad:</strong>
-		<span id="ftp-breadcrumb" class="ms-2"></span>
+		<strong class="me-2">Aktueller Pfad:</strong>
+		<span id="ftp-breadcrumb"></span>
 	</div>
+
+	<div class="input-group my-2">
+		<input type="text" id="ftp-search-input" class="form-control form-control-sm" placeholder="Suchen im aktuellen Verzeichnis...">
+		<button type="button" id="ftp-search-btn" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
+	</div>
+
 	<div id="ftp-folder-contents">
 		<div id="ftp-items-list"></div>
 	</div>
@@ -82,19 +90,25 @@
 
 	document.addEventListener("DOMContentLoaded", () => {
 		const modalEl = document.getElementById("ftpModal");
-		const modal = new bootstrap.Modal(modalEl);
+		const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
 		const itemsList = document.getElementById("ftp-items-list");
 		const breadcrumb = document.getElementById("ftp-breadcrumb");
 		const backBtn = document.getElementById("ftp-back-btn");
 		const homeBtn = document.getElementById("ftp-home-btn");
+		const searchInput = document.getElementById("ftp-search-input");
+		// Search button už nepotrebujeme na vyhľadávanie, ale môžeme ho nechať v HTML
+		// const searchBtn = document.getElementById("ftp-search-btn");
+
+		let lastTarget = null;
+		let lastPreview = null;
+		let debounceTimer; // ✅ Premenná pre náš debouncing časovač
 
 		modalEl.addEventListener('hidden.bs.modal', () => {
-			setTimeout(() => {
-				document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-				document.body.classList.remove('modal-open');
-				document.body.style.overflow = '';
-				document.body.style.paddingRight = '';
-			}, 100); // malé oneskorenie kvôli animácii
+			document.body.classList.remove('modal-open');
+			document.body.style.overflow = '';
+			document.body.style.paddingRight = '';
+			const backdrops = document.querySelectorAll('.modal-backdrop');
+			backdrops.forEach(backdrop => backdrop.remove());
 		});
 
 		let pathHistory = [''];
@@ -102,7 +116,7 @@
 
 		function updateBreadcrumb(path) {
 			const parts = path ? path.split('/') : [];
-			let html = '<a href="#" data-path="">/</a>';
+			let html = `<a href="#" data-path="">/</a>`;
 			let currentPath = '';
 			parts.forEach(part => {
 				if (part) {
@@ -116,22 +130,28 @@
 				link.addEventListener('click', e => {
 					e.preventDefault();
 					const newPath = link.dataset.path;
-					while (pathHistory.length - 1 > currentPathIndex) pathHistory.pop();
-					pathHistory.push(newPath);
-					currentPathIndex = pathHistory.length - 1;
+					const existingIndex = pathHistory.indexOf(newPath);
+					if (existingIndex > -1) {
+						pathHistory.splice(existingIndex + 1);
+						currentPathIndex = existingIndex;
+					} else {
+						pathHistory.push(newPath);
+						currentPathIndex = pathHistory.length - 1;
+					}
+					searchInput.value = '';
 					loadFolder(newPath);
 				});
 			});
 		}
 
-		function loadFolder(path) {
+		function loadFolder(path, searchQuery = '') {
 			itemsList.innerHTML = '<div class="ftp-loading">Lade...</div>';
 			backBtn.disabled = currentPathIndex === 0;
 
 			fetch(BASE_URL + "admin/ftpmanager/load_folder", {
 				method: "POST",
 				headers: { "Content-Type": "application/x-www-form-urlencoded" },
-				body: new URLSearchParams({ folder: path })
+				body: new URLSearchParams({ folder: path, q: searchQuery })
 			})
 				.then(res => res.json())
 				.then(data => {
@@ -141,24 +161,27 @@
 					}
 
 					let html = '';
-					data.forEach(item => {
-						const isImage = item.type === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(item.name);
-						const icon = item.type === 'dir'
-							? '<i class="bi bi-folder-fill text-warning"></i>'
-							: (isImage
-								? `<img src="${item.url}" alt="${item.name}" loading="lazy">`
-								: '<i class="bi bi-file-earmark-fill text-primary"></i>');
-						const actionClass = item.type === 'dir' ? 'ftp-folder' : (isImage ? 'ftp-image-choose' : '');
-						const size = item.size && item.size !== -1 ? (item.size / 1024).toFixed(2) + ' KB' : '-';
+					if (Array.isArray(data)) {
+						data.forEach(item => {
+							const isImage = item.type === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(item.name);
+							const icon = item.type === 'dir'
+								? '<i class="fa fa-folder" style="color: #f0ad4e;"></i>'
+								: (isImage
+									? `<img src="${item.url}" alt="${item.name}" loading="lazy">`
+									: '<i class="fa fa-file" style="color: #999;"></i>');
+							const actionClass = item.type === 'dir' ? 'ftp-folder' : (isImage ? 'ftp-image-choose' : '');
+							const size = item.size && item.size !== -1 ? (item.size / 1024).toFixed(2) + ' KB' : '-';
 
-						html += `
+							html += `
 							<div class="ftp-item ${actionClass}" data-path="${item.path}" data-url="${item.url || ''}">
 								<div>${icon}</div>
 								<div>${item.name}</div>
 								<div style="margin-left: auto;">${size}</div>
 							</div>`;
-					});
-					itemsList.innerHTML = html || '<div class="ftp-loading">Der Ordner ist leer.</div>';
+						});
+					}
+
+					itemsList.innerHTML = html || '<div class="ftp-loading">Der Ordner ist leer oder es wurden keine Ergebnisse gefunden.</div>';
 
 					itemsList.querySelectorAll('.ftp-folder').forEach(item => {
 						item.addEventListener('click', e => {
@@ -166,6 +189,7 @@
 							const newPath = item.dataset.path;
 							pathHistory.push(newPath);
 							currentPathIndex++;
+							searchInput.value = '';
 							loadFolder(newPath);
 						});
 					});
@@ -176,13 +200,15 @@
 							const path = img.dataset.url;
 							const targetInput = document.getElementById(lastTarget);
 							const previewDiv = document.getElementById(lastPreview);
-							targetInput.value = path;
-							previewDiv.innerHTML = `<img src="${path}" class="img-fluid border mt-2">`;
 
-							setTimeout(() => {
-								const modalInstance = bootstrap.Modal.getInstance(modalEl);
-								modalInstance.hide();
-							}, 50);
+							if (targetInput) {
+								targetInput.value = path;
+							}
+							if (previewDiv) {
+								previewDiv.innerHTML = `<img src="${path}" class="img-fluid border mt-2" style="max-width:150px;max-height:150px;object-fit:contain;">`;
+							}
+
+							modal.hide();
 						});
 					});
 				})
@@ -197,6 +223,7 @@
 			e.preventDefault();
 			if (currentPathIndex > 0) {
 				currentPathIndex--;
+				searchInput.value = '';
 				loadFolder(pathHistory[currentPathIndex]);
 			}
 		});
@@ -205,16 +232,30 @@
 			e.preventDefault();
 			pathHistory = [''];
 			currentPathIndex = 0;
+			searchInput.value = '';
 			loadFolder('');
 		});
+
+		// ✅ --- NOVÁ LOGIKA PRE DYNAMICKÉ VYHĽADÁVANIE --- ✅
+		searchInput.addEventListener('input', () => {
+			// Zrušíme predchádzajúci časovač, ak existuje
+			clearTimeout(debounceTimer);
+
+			// Nastavíme nový časovač
+			debounceTimer = setTimeout(() => {
+				const query = searchInput.value;
+				const currentPath = pathHistory[currentPathIndex];
+				loadFolder(currentPath, query);
+			}, 300); // Počkáme 300ms po poslednom zadanom znaku
+		});
+
 
 		document.body.addEventListener('click', function (e) {
 			if (!e.target.matches('.ftp-picker')) return;
 			lastTarget = e.target.dataset.ftpTarget;
 			lastPreview = e.target.dataset.previewTarget;
 			modal.show();
-			loadFolder(pathHistory[currentPathIndex]);
+			loadFolder(pathHistory[currentPathIndex], searchInput.value);
 		});
 	});
 </script>
-
