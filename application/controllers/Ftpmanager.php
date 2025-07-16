@@ -9,8 +9,6 @@ class Ftpmanager extends CI_Controller
 		$this->load->model('Ftpmanager_model');
 	}
 
-	// Ftpmanager.php
-
 	public function index()
 	{
 		$path = $this->input->get('path') ?? '';
@@ -18,7 +16,7 @@ class Ftpmanager extends CI_Controller
 		$data['title'] = 'FTP-Manager';
 		$data['page'] = 'admin/settings/ftpmanager_view';
 		$data['current_path'] = $path;
-		$data['files'] = [];
+		$data['files'] = $this->Ftpmanager_model->connect_to_ftp($path);
 
 		$this->load->view('admin/layout/normal', $data);
 	}
