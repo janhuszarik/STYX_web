@@ -67,17 +67,16 @@ class Ftpmanager_model extends CI_Model
 		$conn = $this->connect_raw();
 		if (!$conn) return ['__error' => 'Verbindungsfehler zum FTP.'];
 
-		if (@ftp_delete($conn, $path)) {
-			ftp_close($conn);
-			return true;
-		}
-
-		if (@ftp_rmdir($conn, $path)) {
-			ftp_close($conn);
-			return true;
-		}
+		$is_dir = @ftp_rmdir($conn, $path);
+		$is_file = !$is_dir && @ftp_delete($conn, $path);
 
 		ftp_close($conn);
+
+		if ($is_dir || $is_file) {
+			$this->invalidate_cache(dirname($path));
+			return true;
+		}
+
 		return ['__error' => 'Löschen fehlgeschlagen: ' . $path];
 	}
 
@@ -99,6 +98,8 @@ class Ftpmanager_model extends CI_Model
 
 		if (ftp_rename($conn, $from, $to)) {
 			ftp_close($conn);
+			$this->invalidate_cache(dirname($from));
+			$this->invalidate_cache(dirname($to));
 			return true;
 		}
 		ftp_close($conn);
@@ -112,6 +113,7 @@ class Ftpmanager_model extends CI_Model
 
 		if (@ftp_mkdir($conn, $path)) {
 			ftp_close($conn);
+			$this->invalidate_cache(dirname($path)); // <-- PRIDAŤ TOTO
 			return true;
 		}
 
