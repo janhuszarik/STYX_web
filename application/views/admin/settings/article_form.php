@@ -113,9 +113,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
         padding: 12px 18px 10px 18px;
         color: #fff;
         border: none;
-        display: block;
+        display: none;
         pointer-events: none;
-        background: #28a745; /* predvolene zelený (success) */
+        background: #28a745;
      ">
 	<span id="global-status-text"></span>
 </div>
@@ -488,6 +488,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		const categoryId = '<?= htmlspecialchars($categoryId) ?>';
 		const allowedCategoryIds = ['100', '102'];
 
+		// --- Globálne premenné pre stavový panel ---
+		let inputStates = {};
+		let wasProblematic = false;
+		let successTimer;
+
 		function showAlert(message, type = 'success') {
 			const alertDiv = document.createElement('div');
 			alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
@@ -528,30 +533,21 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			function loadSubcategories() {
 				fetch('<?= base_url('admin/article/getSubcategories') ?>', {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-					},
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
 					body: 'category_id=' + encodeURIComponent(categoryId)
 				})
 					.then(response => response.json())
 					.then(data => {
-						if (data.success) {
-							subcategorySelect.innerHTML = data.options;
-						} else {
-							showAlert(data.message || 'Fehler beim Laden der Unterkategorien.', 'error');
-						}
+						if (data.success) { subcategorySelect.innerHTML = data.options; }
+						else { showAlert(data.message || 'Fehler beim Laden der Unterkategorien.', 'error'); }
 					})
-					.catch(error => {
-						showAlert('Fehler beim Laden der Unterkategorien.', 'error');
-					});
+					.catch(error => showAlert('Fehler beim Laden der Unterkategorien.', 'error'));
 			}
 
 			function loadSubcategoriesForManagement() {
 				fetch('<?= base_url('admin/article/getSubcategoriesForManagement') ?>', {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-					},
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
 					body: 'category_id=' + encodeURIComponent(categoryId) + '&<?= $this->security->get_csrf_token_name() ?>=' + '<?= $this->security->get_csrf_hash() ?>'
 				})
 					.then(response => response.json())
@@ -580,36 +576,23 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			}
 
 			const subcategoryModal = document.getElementById('subcategoryModal');
-			subcategoryModal.addEventListener('hidden.bs.modal', function () {
-				resetSubcategoryForm();
-			});
+			subcategoryModal.addEventListener('hidden.bs.modal', function () { resetSubcategoryForm(); });
 
 			subcategoryForm.addEventListener('submit', function (e) {
 				e.preventDefault();
 				if (this.dataset.submitting) return;
 				this.dataset.submitting = true;
-
 				const formData = new FormData(this);
 				const data = new URLSearchParams();
-				for (let [key, value] of formData.entries()) {
-					data.append(key, value);
-				}
+				for (let [key, value] of formData.entries()) { data.append(key, value); }
 				data.append('category_id', categoryId);
 				data.append('<?= $this->security->get_csrf_token_name() ?>', '<?= $this->security->get_csrf_hash() ?>');
-
 				fetch('<?= base_url('admin/article/manageSubcategory') ?>', {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-					},
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
 					body: data
 				})
-					.then(response => {
-						if (!response.ok) {
-							throw new Error('Network response was not ok');
-						}
-						return response.json();
-					})
+					.then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
 					.then(data => {
 						this.dataset.submitting = false;
 						if (data.success) {
@@ -620,19 +603,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							loadSubcategories();
 							loadSubcategoriesForManagement();
 							if (data.subcategory && data.subcategory.id) {
-								setTimeout(() => {
-									subcategorySelect.value = data.subcategory.id;
-								}, 150);
+								setTimeout(() => { subcategorySelect.value = data.subcategory.id; }, 150);
 							}
 							resetSubcategoryForm();
-						} else {
-							showAlert(data.message || 'Fehler beim Speichern der Unterkategorie.', 'error');
-						}
+						} else { showAlert(data.message || 'Fehler beim Speichern der Unterkategorie.', 'error'); }
 					})
-					.catch(error => {
-						this.dataset.submitting = false;
-						showAlert('Fehler beim Speichern der Unterkategorie: ' + error.message, 'error');
-					});
+					.catch(error => { this.dataset.submitting = false; showAlert('Fehler beim Speichern der Unterkategorie: ' + error.message, 'error'); });
 			});
 
 			function bindSubcategoryActions() {
@@ -648,24 +624,16 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 						document.getElementById('subcategory_active').checked = active;
 					});
 				});
-
 				document.querySelectorAll('.delete-subcategory').forEach(button => {
 					button.addEventListener('click', function () {
 						if (!confirm('Sind Sie sicher, dass Sie diese Unterkategorie löschen möchten?')) return;
 						const id = this.getAttribute('data-id');
 						fetch('<?= base_url('admin/article/deleteSubcategory') ?>', {
 							method: 'POST',
-							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded',
-							},
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
 							body: 'id=' + encodeURIComponent(id) + '&category_id=' + encodeURIComponent(categoryId) + '&<?= $this->security->get_csrf_token_name() ?>=' + '<?= $this->security->get_csrf_hash() ?>'
 						})
-							.then(response => {
-								if (!response.ok) {
-									throw new Error('Network response was not ok');
-								}
-								return response.json();
-							})
+							.then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
 							.then(data => {
 								if (data.success) {
 									showAlert(data.message || 'Unterkategorie erfolgreich gelöscht.', 'success');
@@ -675,17 +643,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 									const modalElement = document.getElementById('subcategoryModal');
 									const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
 									modalInstance.hide();
-								} else {
-									showAlert(data.message || 'Fehler beim Löschen der Unterkategorie.', 'error');
-								}
+								} else { showAlert(data.message || 'Fehler beim Löschen der Unterkategorie.', 'error'); }
 							})
-							.catch(error => {
-								showAlert('Fehler beim Löschen der Unterkategorie: ' + error.message, 'error');
-							});
+							.catch(error => showAlert('Fehler beim Löschen der Unterkategorie: ' + error.message, 'error'));
 					});
 				});
 			}
-
 			subcategorySelect.addEventListener('change', function () {
 				if (this.value === 'new') {
 					resetSubcategoryForm();
@@ -693,77 +656,60 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					this.value = '';
 				}
 			});
-
 			manageSubcategoriesBtn.addEventListener('click', loadSubcategoriesForManagement);
 		} else {
 			const subcategoryField = document.querySelector('#subcategory_id')?.closest('.col-md-3');
-			if (subcategoryField) {
-				subcategoryField.style.display = 'none';
-			}
+			if (subcategoryField) { subcategoryField.style.display = 'none'; }
 		}
 
 		function isBadText(text) {
-			const badPatterns = [
-				/<o:p>/i, /<v:shape>/i, /<w:>/i, /mso-/i,
-				/( ){5,}/i
-			];
+			const badPatterns = [ /<o:p>/i, /<v:shape>/i, /<w:>/i, /mso-/i, /( ){5,}/i ];
 			return badPatterns.some(pattern => pattern.test(text));
 		}
 
 		function cleanText(text) {
-			let cleaned = text.replace(/<o:p>.*?<\/o:p>/gi, '')
-				.replace(/mso-[\w-]+/gi, '')
-				.replace(/( ){3,}/gi, ' ');
+			let cleaned = text.replace(/<o:p>.*?<\/o:p>/gi, '').replace(/mso-[\w-]+/gi, '').replace(/( ){3,}/gi, ' ');
 			return cleaned;
 		}
-
-		let inputStates = {};
-
 
 		function updateGlobalStatus() {
 			const globalStatus = document.getElementById('global-status');
 			const statusText = document.getElementById('global-status-text');
+			clearTimeout(successTimer);
+
 			let errors = [];
 			let fixes = [];
 			Object.entries(inputStates).forEach(([id, state]) => {
-				if (state.status === 'error') {
-					errors.push(state.label);
-				}
-				if (state.status === 'fixed') {
-					fixes.push(state.label);
-				}
+				if (state.status === 'error') { errors.push(state.label); }
+				if (state.status === 'fixed') { fixes.push(state.label); }
 			});
 
 			let message = '';
-
 			if (errors.length > 0) {
-				globalStatus.style.background = '#d60015'; // ČERVENÁ
-				message = `
-<b>Achtung!</b> In folgenden Feldern wurden fehlerhafte Formatierungen erkannt:<br>
-<b>${errors.join(', ')}</b>.<br>
-Bitte überprüfen und korrigieren Sie die markierten Texte, bevor Sie den Artikel speichern.
-                `;
+				globalStatus.style.background = '#d60015';
+				message = `<b>Achtung!</b> In folgenden Feldern wurden fehlerhafte Formatierungen erkannt:<br><b>${errors.join(', ')}</b>.<br>Bitte überprüfen und korrigieren Sie die markierten Texte, bevor Sie den Artikel speichern.`;
+				statusText.innerHTML = message.trim();
+				globalStatus.style.display = 'block';
+				wasProblematic = true;
 			} else if (fixes.length > 0) {
-				globalStatus.style.background = '#ffc107'; // ŽLTÁ
-				message = `
-<b>Hinweis:</b> In folgenden Feldern wurden fehlerhafte Formatierungen <b>automatisch korrigiert</b>:<br>
-<b>${fixes.join(', ')}</b>.<br>
-Bitte überprüfen Sie, ob der Text wie gewünscht übernommen wurde.
-                `;
+				globalStatus.style.background = '#ffc107';
+				message = `<b>Hinweis:</b> In folgenden Feldern wurden fehlerhafte Formatierungen <b>automatisch korrigiert</b>:<br><b>${fixes.join(', ')}</b>.<br>Bitte überprüfen Sie, ob der Text wie gewünscht übernommen wurde.`;
+				statusText.innerHTML = message.trim();
+				globalStatus.style.display = 'block';
+				wasProblematic = true;
 			} else {
-				globalStatus.style.background = '#28a745'; // ZELENÁ
-				message = `
-Alle Texte sind in Ordnung, es wurden keine Fehler in der Formatierung gefunden.<br>
-Sie können den Artikel bedenkenlos speichern.
-                `;
+				if (wasProblematic) {
+					globalStatus.style.background = '#28a745';
+					message = `Alle Texte sind in Ordnung und wurden erfolgreich korrigiert.`;
+					statusText.innerHTML = message.trim();
+					globalStatus.style.display = 'block';
+					successTimer = setTimeout(() => { globalStatus.style.display = 'none'; }, 8000);
+				} else {
+					globalStatus.style.display = 'none';
+				}
+				wasProblematic = false;
 			}
-
-			statusText.innerHTML = message.trim();
-			globalStatus.style.display = 'block';
 		}
-
-
-
 
 		function validateInput(element, text) {
 			const label = element.dataset.label || 'Unbekannt';
@@ -788,20 +734,13 @@ Sie können den Artikel bedenkenlos speichern.
 		}
 
 		function initSummernote(selector) {
-			if (typeof jQuery === 'undefined') {
-				return;
-			}
+			if (typeof jQuery === 'undefined') { return; }
 			$(selector).summernote({
-				height: 300,
-				lang: 'de-DE',
+				height: 300, lang: 'de-DE',
 				toolbar: [
-					['style', ['style']],
-					['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'fontsize']],
-					['color', ['color']],
-					['para', ['ul', 'ol', 'paragraph', 'height', 'blockquote']],
-					['table', ['table']],
-					['insert', ['link', 'picture', 'video', 'hr']],
-					['view', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
+					['style', ['style']], ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'fontsize']],
+					['color', ['color']], ['para', ['ul', 'ol', 'paragraph', 'height', 'blockquote']], ['table', ['table']],
+					['insert', ['link', 'picture', 'video', 'hr']], ['view', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
 				],
 				callbacks: {
 					onPaste: function (e) {
@@ -811,40 +750,25 @@ Sie können den Artikel bedenkenlos speichern.
 						document.execCommand('insertText', false, cleanedText);
 						validateInput(this, cleanedText);
 					},
-					onChange: function(contents) {
-						validateInput(this, contents);
-					},
+					onChange: function(contents) { validateInput(this, contents); },
 					onImageUpload: function (files) {
 						const data = new FormData();
 						data.append('image', files[0]);
 						$.ajax({
-							url: '<?= base_url('admin/article/upload_image') ?>',
-							method: 'POST',
-							data: data,
-							contentType: false,
-							processData: false,
+							url: '<?= base_url('admin/article/upload_image') ?>', method: 'POST', data: data, contentType: false, processData: false,
 							success: function (response) {
-								if (response.success) {
-									$(selector).summernote('insertImage', response.image_url);
-								} else {
-									showAlert(response.error || 'Fehler beim Hochladen des Bildes.', 'error');
-								}
+								if (response.success) { $(selector).summernote('insertImage', response.image_url); }
+								else { showAlert(response.error || 'Fehler beim Hochladen des Bildes.', 'error'); }
 							},
-							error: function () {
-								showAlert('Fehler beim Hochladen des Bildes.', 'error');
-							}
+							error: function () { showAlert('Fehler beim Hochladen des Bildes.', 'error'); }
 						});
 					},
 					onMediaDelete: function ($target) {
 						const imageUrl = $target.attr('src');
 						$.ajax({
-							url: '<?= base_url('admin/article/delete_image') ?>',
-							method: 'POST',
-							data: { image_url: imageUrl },
+							url: '<?= base_url('admin/article/delete_image') ?>', method: 'POST', data: { image_url: imageUrl },
 							success: function (response) {
-								if (!response.success) {
-									showAlert(response.error || 'Fehler beim Löschen des Bildes.', 'error');
-								}
+								if (!response.success) { showAlert(response.error || 'Fehler beim Löschen des Bildes.', 'error'); }
 							}
 						});
 					}
@@ -854,90 +778,18 @@ Sie können den Artikel bedenkenlos speichern.
 
 		const addSection = (content = '', image = '', imageTitle = '', imageDescription = '', buttonName = '', subpage = '', externalUrl = '', index) => {
 			content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
-			const sectionHtml = `
-            <div class="section mb-4 p-3 border rounded">
-                <input type="hidden" name="sections[${index}]" value="section-${index}">
-                <div class="row">
-                    <div class="col-md-9">
-                        <label class="col-form-label">Inhalt</label>
-                        <textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="col-form-label">Bild hochladen</label>
-                        <input type="file" class="form-control mb-1" name="section_images[${index}]">
-                        <input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}">
-                        <input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}">
-                        <button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">
-                            Bild aus FTP wählen
-                        </button>
-                        <div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">
-                            ${image ? `
-                                <img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;">
-                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">
-                                    ×
-                                </button>
-                            ` : ''}
-                        </div>
-                        <label class="col-form-label">Bildtitel (SEO)</label>
-                        <input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)">
-                        <label class="col-form-label">Bildbeschreibung in der Sektion
-                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i>
-                        </label>
-                        <input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung">
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <label class="col-form-label">Button-Text</label>
-                        <input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="col-form-label">Unterseite</label>
-                        <select class="form-control mb-1 subpage-select" name="subpages[${index}]">
-                            <option value="">-- Unterseite auswählen --</option>
-                            ${articleOptions.map(opt => `
-                                <option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>
-                                    ${opt.label} (${opt.lang})
-                                </option>
-                            `).join('')}
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="col-form-label">Externe URL</label>
-                        <input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL">
-                    </div>
-                </div>
-                <div class="section-actions mt-3">
-                    <button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button>
-                </div>
-            </div>
-            `;
+			const sectionHtml = `<div class="section mb-4 p-3 border rounded"><input type="hidden" name="sections[${index}]" value="section-${index}"><div class="row"><div class="col-md-9"><label class="col-form-label">Inhalt</label><textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea></div><div class="col-md-3"><label class="col-form-label">Bild hochladen</label><input type="file" class="form-control mb-1" name="section_images[${index}]"><input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}"><input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}"><button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">Bild aus FTP wählen</button><div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">${image ? `<img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;"><button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">×</button>` : ''}</div><label class="col-form-label">Bildtitel (SEO)</label><input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)"><label class="col-form-label">Bildbeschreibung in der Sektion <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i></label><input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung"></div></div><div class="row mt-3"><div class="col-md-4"><label class="col-form-label">Button-Text</label><input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text"></div><div class="col-md-4"><label class="col-form-label">Unterseite</label><select class="form-control mb-1 subpage-select" name="subpages[${index}]"><option value="">-- Unterseite auswählen --</option>${articleOptions.map(opt => `<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>${opt.label} (${opt.lang})</option>`).join('')}</select></div><div class="col-md-4"><label class="col-form-label">Externe URL</label><input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL"></div></div><div class="section-actions mt-3"><button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button></div></div>`;
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
 				const textarea = sectionsContainer.querySelector('.section:last-child .section-content');
-				if (textarea) {
-					try {
-						initSummernote(textarea);
-					} catch (err) {
-						textarea.value = textarea.value.replace(/<[^>]*>/g, '');
-						initSummernote(textarea);
-					}
-				}
+				if (textarea) { try { initSummernote(textarea); } catch (err) { textarea.value = textarea.value.replace(/<[^>]*>/g, ''); initSummernote(textarea); } }
 				bindRemoveSection();
 				bindFtpPicker();
 				const newSection = document.querySelector('#sections-container .section:last-child');
 				newSection.querySelectorAll('input[type="text"], textarea').forEach(el => {
-					el.addEventListener('input', function() {
-						validateInput(this, this.value);
-					});
-					el.addEventListener('paste', function(e) {
-						const pasted = e.clipboardData.getData('Text');
-						e.preventDefault();
-						let cleaned = cleanText(pasted);
-						this.value = (this.value || '') + cleaned;
-						validateInput(this, this.value);
-					});
+					el.addEventListener('input', function() { validateInput(this, this.value); });
+					el.addEventListener('paste', function(e) { const pasted = e.clipboardData.getData('Text'); e.preventDefault(); let cleaned = cleanText(pasted); this.value = (this.value || '') + cleaned; validateInput(this, this.value); });
 					validateInput(el, el.value);
 				});
 				newSection.querySelectorAll('input[type="file"]').forEach(el => {
@@ -945,15 +797,9 @@ Sie können den Artikel bedenkenlos speichern.
 						const file = this.files[0];
 						if (file) {
 							const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-							if (!allowedTypes.includes(file.type)) {
-								showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.');
-								this.value = '';
-							} else if (file.size > 5 * 1024 * 1024) {
-								showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!');
-								this.value = '';
-							} else {
-								hideWarning(this);
-							}
+							if (!allowedTypes.includes(file.type)) { showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.'); this.value = ''; }
+							else if (file.size > 5 * 1024 * 1024) { showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!'); this.value = ''; }
+							else { hideWarning(this); }
 						}
 					});
 				});
@@ -965,9 +811,7 @@ Sie können den Artikel bedenkenlos speichern.
 				button.addEventListener('click', function () {
 					if (confirm('Sind Sie sicher, dass Sie diese Sektion entfernen möchten?')) {
 						const section = this.closest('.section');
-						section.querySelectorAll('input[type="text"], textarea').forEach(el => {
-							delete inputStates[el.id || el.dataset.label];
-						});
+						section.querySelectorAll('input[type="text"], textarea').forEach(el => { delete inputStates[el.id || el.dataset.label]; });
 						section.remove();
 						updateGlobalStatus();
 					}
@@ -992,12 +836,9 @@ Sie können den Artikel bedenkenlos speichern.
 		<?php foreach ($sections as $index => $section): ?>
 		addSection(
 			<?= json_encode($section->content, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>,
-			'<?= htmlspecialchars($section->image ?? '') ?>',
-			'<?= htmlspecialchars($section->image_title ?? '') ?>',
-			'<?= htmlspecialchars($section->image_description ?? '') ?>',
-			'<?= htmlspecialchars($section->button_name ?? '') ?>',
-			'<?= htmlspecialchars($section->subpage ?? '') ?>',
-			'<?= htmlspecialchars($section->external_url ?? '') ?>',
+			'<?= htmlspecialchars($section->image ?? '') ?>', '<?= htmlspecialchars($section->image_title ?? '') ?>',
+			'<?= htmlspecialchars($section->image_description ?? '') ?>', '<?= htmlspecialchars($section->button_name ?? '') ?>',
+			'<?= htmlspecialchars($section->subpage ?? '') ?>', '<?= htmlspecialchars($section->external_url ?? '') ?>',
 			<?= $index ?>
 		);
 		<?php endforeach; ?>
@@ -1011,44 +852,24 @@ Sie können den Artikel bedenkenlos speichern.
 		document.getElementById('gallery_category_id').addEventListener('change', function () {
 			const categoryId = this.value;
 			const gallerySelect = document.getElementById('gallery_id');
-			if (!categoryId) {
-				gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen --</option>';
-				return;
-			}
+			if (!categoryId) { gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen --</option>'; return; }
 			fetch('<?= base_url('admin/article/getGalleriesByCategory') ?>', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
+				method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
 				body: 'category_id=' + encodeURIComponent(categoryId)
 			})
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('Network response was not ok');
-					}
-					return response.json();
-				})
+				.then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
 				.then(data => {
-					if (data.success) {
-						gallerySelect.innerHTML = data.options;
-					} else {
-						showAlert(data.message || 'Fehler beim Laden der Galerien.', 'error');
-					}
+					if (data.success) { gallerySelect.innerHTML = data.options; }
+					else { showAlert(data.message || 'Fehler beim Laden der Galerien.', 'error'); }
 				})
-				.catch(error => {
-					showAlert('Fehler beim Laden der Galerien: ' + error.message, 'error');
-				});
+				.catch(error => { showAlert('Fehler beim Laden der Galerien: ' + error.message, 'error'); });
 		});
 
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-		tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-			new bootstrap.Tooltip(tooltipTriggerEl);
-		});
+		tooltipTriggerList.forEach(function (tooltipTriggerEl) { new bootstrap.Tooltip(tooltipTriggerEl); });
 
 		document.querySelectorAll('input[type="text"], textarea:not(.section-content)').forEach(input => {
-			input.addEventListener('input', function() {
-				validateInput(this, this.value);
-			});
+			input.addEventListener('input', function() { validateInput(this, this.value); });
 			input.addEventListener('paste', function(e) {
 				const pasted = e.clipboardData.getData('Text');
 				e.preventDefault();
@@ -1064,15 +885,11 @@ Sie können den Artikel bedenkenlos speichern.
 				const file = this.files[0];
 				if (file) {
 					const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-					if (!allowedTypes.includes(file.type)) {
-						showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.');
-						this.value = '';
-					} else if (file.size > 5 * 1024 * 1024) {
-						showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!');
-						this.value = '';
-					} else {
-						hideWarning(this);
-					}
+					function showWarning(el, msg) { /* definícia chýba */ }
+					function hideWarning(el) { /* definícia chýba */ }
+					if (!allowedTypes.includes(file.type)) { showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.'); this.value = ''; }
+					else if (file.size > 5 * 1024 * 1024) { showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!'); this.value = ''; }
+					else { hideWarning(this); }
 				}
 			});
 		});
@@ -1087,9 +904,7 @@ Sie können den Artikel bedenkenlos speichern.
 
 		setTimeout(() => {
 			document.querySelectorAll('.section-content').forEach(textarea => {
-				if (!$(textarea).hasClass('note-editor')) {
-					initSummernote(textarea);
-				}
+				if (!$(textarea).hasClass('note-editor')) { initSummernote(textarea); }
 			});
 		}, 500);
 	});
