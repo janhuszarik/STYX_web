@@ -110,31 +110,11 @@ class App_model extends CI_Model
 		$this->db->where('lang', language());
 
 		$now = date('Y-m-d H:i:s');
-		// Jednoduché podmínky bez zanořování
 		$this->db->where('(start_date IS NULL OR start_date = "" OR start_date = "0000-00-00 00:00:00" OR start_date <= "'.$now.'")');
 		$this->db->where('(end_date IS NULL OR end_date = "" OR end_date = "0000-00-00 00:00:00" OR end_date >= "'.$now.'")');
 
 		$this->db->order_by('orderBy', 'ASC');
 		$products = $this->db->get('bestProduct')->result();
-
-		log_message('debug', 'Jazyk: ' . language());
-		log_message('debug', 'Podmienky WHERE: ' . $this->db->last_query());
-		if (empty($products)) {
-			log_message('error', 'Žiadne aktívne produkty v getAllActiveProduct(). Skontroluj databázu bestProduct.');
-		} else {
-			log_message('debug', 'Načítané produkty: ' . print_r($products, true));
-		}
-
-		return $products;
-	}
-	function getAllProductsForDebug()
-	{
-		$this->db->select('*');
-		$this->db->from('bestProduct');
-		$products = $this->db->get()->result();
-
-		log_message('debug', 'Všetky produkty pre debug: ' . $this->db->last_query());
-		log_message('debug', 'Načítané produkty pre debug: ' . print_r($products, true));
 
 		return $products;
 	}

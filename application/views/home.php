@@ -67,48 +67,44 @@
 	<section class="carousel-container d-none d-lg-block" aria-labelledby="product-heading">
 		<div class="owl-carousel owl-theme full-width product-carousel"
 			 role="region"
-			 aria-roledescription="carousel"
-			 aria-label="Product carousel"
+			 aria-roledescription="Karussell"
+			 aria-label="Produktkarussell"
 			 data-plugin-options="{'items': 5, 'loop': true, 'dots': false, 'autoplay': true, 'autoplayTimeout': 5000, 'autoplayHoverPause': true}">
-			<?php if (!empty($products)): ?>
-				<?php foreach ($products as $product_item): ?>
-					<article>
-						<a href="<?= $product_item->url ?>"
-						   aria-label="View product: <?= htmlspecialchars($product_item->name) ?>">
-                        <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-                            <span class="thumb-info-wrapper">
-                                <img loading="lazy"
-									 src="<?= BASE_URL ?>uploads/Produkte/<?= $product_item->image ?>"
-									 class="img-fluid"
-									 alt="<?= htmlspecialchars($product_item->name) ?>">
-                            </span>
+			<?php foreach ($products as $product_item): ?>
+				<article>
+					<a href="<?= $product_item->url ?>"
+					   aria-label="Produkt ansehen: <?= htmlspecialchars($product_item->name) ?>">
+                    <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                        <span class="thumb-info-wrapper">
+                            <img loading="lazy"
+								 src="<?= BASE_URL ?><?= $product_item->image ?>"
+								 class="img-fluid"
+								 alt="<?= htmlspecialchars($product_item->name) ?>">
                         </span>
-							<?php if ($product_item->action == 1): ?>
-								<div class="ribbon" aria-label="Promotion details">
-									<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
-										<?= htmlspecialchars($product_item->aktion_name) ?> / <?= htmlspecialchars($product_item->price) ?>
-									<?php elseif (!empty($product_item->aktion_name)): ?>
-										<?= htmlspecialchars($product_item->aktion_name) ?>
-									<?php elseif (!empty($product_item->price)): ?>
-										<?= htmlspecialchars($product_item->price) ?>
-									<?php endif; ?>
-								</div>
-							<?php endif; ?>
-							<div class="product-info"><?= htmlspecialchars($product_item->name) ?></div>
-						</a>
-					</article>
-				<?php endforeach; ?>
-			<?php else: ?>
-				<p>Žádné produkty nebyly načteny.</p> <!-- Dočasná zpráva pro debug -->
-			<?php endif; ?>
+                    </span>
+						<?php if ($product_item->action == 1): ?>
+							<div class="ribbon" aria-label="Aktiondetails">
+								<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
+									<?= htmlspecialchars($product_item->aktion_name) ?> / <?= htmlspecialchars($product_item->price) ?>
+								<?php elseif (!empty($product_item->aktion_name)): ?>
+									<?= htmlspecialchars($product_item->aktion_name) ?>
+								<?php elseif (!empty($product_item->price)): ?>
+									<?= htmlspecialchars($product_item->price) ?>
+								<?php endif; ?>
+							</div>
+						<?php endif; ?>
+						<div class="product-info"><?= htmlspecialchars($product_item->name) ?></div>
+					</a>
+				</article>
+			<?php endforeach; ?>
 		</div>
 
-		<nav class="custom-nav" aria-label="Carousel navigation">
+		<nav class="custom-nav" aria-label="Karussell-Navigation">
 			<button class="custom-prev"
-					aria-label="Previous product"
+					aria-label="Vorheriges Produkt"
 					aria-controls="product-carousel">‹</button>
 			<button class="custom-next"
-					aria-label="Next product"
+					aria-label="Nächstes Produkt"
 					aria-controls="product-carousel">›</button>
 		</nav>
 	</section>
