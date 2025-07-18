@@ -447,7 +447,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getProduct($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/product/');
+			$image = $this->upload_image('image', 'uploads/Produkte/');
 
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
@@ -457,8 +457,8 @@ class Admin extends CI_Controller
 
 			if (!empty($id)) {
 				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/product/' . $old_image)) {
-						unlink(FCPATH . 'uploads/product/' . $old_image);
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/Produkte/' . $old_image)) {
+						unlink(FCPATH . 'uploads/Produkte/' . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect('admin/bestProduct');
@@ -478,7 +478,11 @@ class Admin extends CI_Controller
 		}
 
 		if ($segment2 == 'del' && is_numeric($id)) {
+			$product = $this->Admin_model->getProduct($id);
 			if ($this->Admin_model->bestProductDelete($id)) {
+				if ($product->image && file_exists(FCPATH . 'uploads/Produkte/' . $product->image)) {
+					unlink(FCPATH . 'uploads/Produkte/' . $product->image);
+				}
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
 			} else {
 				$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');

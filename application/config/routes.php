@@ -182,6 +182,7 @@ $route['admin/shopfind']                                = 'shopfind/shopfindSave
 $route['admin/shopfind/(:any)']                         = 'shopfind/shopfindSave/$1';
 $route['admin/shopfind/(:any)/(:num)']                  = 'shopfind/shopfindSave/$1/$2';
 $route['admin/migrate_images']                  		= 'Migrate_images/index';
+$route['admin/Migrate_best_products']                  	= 'Migrate_best_products/index';
 
 // Dynamische Routen
 $route['(:any)/view/(:num)']                            = '$1/view/$2';

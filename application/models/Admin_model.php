@@ -323,7 +323,8 @@ class Admin_model extends CI_Model {
 		return $this->db->delete('news');
 	}
 
-	function bestProductSave($post = false, $image = false, $old_image = false) {
+	function bestProductSave($post = false, $image = false, $old_image = false)
+	{
 		$data = array(
 			'lang' => $this->input->post('lang'),
 			'name' => $this->input->post('name'),
@@ -355,7 +356,7 @@ class Admin_model extends CI_Model {
 
 	function getProduct($id = false)
 	{
-		if ($id == false) {
+		if ($id === false) {
 			$this->db->select('*');
 			return $this->db->get('bestProduct')->result();
 		} else {
@@ -367,8 +368,10 @@ class Admin_model extends CI_Model {
 
 	function bestProductDelete($id)
 	{
+		$product = $this->getProduct($id);
 		$this->db->where('id', $id);
-		return $this->db->delete('bestProduct');
+		$result = $this->db->delete('bestProduct');
+		return $result;
 	}
 
 	public function saveArticleCategory($post = false)
