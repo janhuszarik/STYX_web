@@ -29,7 +29,14 @@ class App extends CI_Controller
 		$data['user'] = $this->ion_auth->user()->row();
 		$data['sliders'] = $this->App_model->getSliders(true);
 		$data['news'] = $this->App_model->getAllActiveNews(); // angepasst
-		$data['product'] = $this->App_model->getAllActiveProduct(); // angepasst
+		$data['products'] = $this->App_model->getAllActiveProduct(); // angepasst
+
+		// Prispôsobenie cesty k obrázkom produktov
+		foreach ($data['products'] as $product) {
+			if (!empty($product->image)) {
+				$product->image = str_replace('uploads/product/', 'uploads/Produkte/', $product->image);
+			}
+		}
 
 		// Laden der Controller-Daten
 		$data['page'] = 'home';
@@ -92,7 +99,6 @@ class App extends CI_Controller
 			return;
 		}
 
-
 		// Výpis článkov (zoznam)
 		$subcategoryId = $this->input->get('sub');
 		$subcategories = [];
@@ -111,7 +117,6 @@ class App extends CI_Controller
 		}
 
 		$noArticles = empty($articles);
-
 
 		// Ak existuje len jeden článok → presmeruj na detail
 		if (count($articles) === 1) {
@@ -175,8 +180,6 @@ class App extends CI_Controller
 
 	public function send_contact()
 	{
-
-
 		$this->load->library('form_validation');
 		$this->load->library('email');
 
@@ -187,10 +190,7 @@ class App extends CI_Controller
 		$this->form_validation->set_rules('typ', 'Typ', 'required');
 		$this->form_validation->set_rules('nachricht', 'Nachricht', 'required|trim|max_length[5000]');
 
-
 		if ($this->form_validation->run() == FALSE) {
-			ddd(validation_errors());
-
 			$this->session->set_flashdata('error', 'Bitte füllen Sie alle Felder korrekt aus.');
 			redirect($_SERVER['HTTP_REFERER']);
 			return;
@@ -418,10 +418,6 @@ class App extends CI_Controller
 
 	public function send_gruppenfuhrung()
 	{
-
-		$this->load->library('form_validation');
-		$this->load->library('email');
-
 		$this->load->library('form_validation');
 		$this->load->library('email');
 
@@ -442,7 +438,6 @@ class App extends CI_Controller
 			redirect('besuchen/gruppenfuhrungen');
 			return;
 		}
-
 
 		$recaptcha_response = $this->input->post('g-recaptcha-response');
 		if (empty($recaptcha_response)) {
@@ -480,7 +475,6 @@ class App extends CI_Controller
 			'paket' => $this->input->post('paket', true)
 		];
 
-
 		$this->load->model('App_model');
 		$sent = $this->App_model->sendGruppenfuhrungMail($data);
 
@@ -492,5 +486,5 @@ class App extends CI_Controller
 
 		redirect('besuchen/gruppenfuhrungen');
 	}
-
 }
+?>

@@ -90,7 +90,8 @@ class App_model extends CI_Model
 		return $this->db->get('slider')->result();
 	}
 
-	function getAllActiveNews() {
+	function getAllActiveNews()
+	{
 		$this->db->select('*');
 		$this->db->from('news');
 		$this->db->where('active', '1');
@@ -101,7 +102,6 @@ class App_model extends CI_Model
 		$this->db->order_by('start_date', 'DESC');
 		return $this->db->get()->result();
 	}
-
 
 	function getAllActiveProduct()
 	{
@@ -128,7 +128,6 @@ class App_model extends CI_Model
 		$this->db->order_by('orderBy', 'ASC');
 		return $this->db->get('bestProduct')->result();
 	}
-
 
 	public function sendContactMail($data)
 	{
