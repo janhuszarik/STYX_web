@@ -38,7 +38,7 @@
 							<input type="file" name="image" class="form-control">
 							<?php if (!empty($slider->image)): ?>
 								<small class="text-muted d-block mt-2">Aktuelles Bild:</small>
-								<img src="<?= base_url('Uploads/Sliders/' . $slider->image) ?>" style="max-width: 200px;" class="img-fluid rounded shadow-sm">
+								<img src="<?= base_url('uploads/Sliders/' . $slider->image) ?>" style="max-width: 200px;" class="img-fluid rounded shadow-sm">
 							<?php endif; ?>
 						</div>
 						<div class="col-lg-6">
