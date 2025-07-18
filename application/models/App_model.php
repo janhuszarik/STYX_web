@@ -106,29 +106,38 @@ class App_model extends CI_Model
 	function getAllActiveProduct()
 	{
 		$this->db->select('*');
-		$this->db->where('active', 1);
+		$this->db->where('active', '1');
 		$this->db->where('lang', language());
 
 		$now = date('Y-m-d H:i:s');
-		$this->db->group_start();
-		$this->db->group_start();
-		$this->db->where('start_date <=', $now);
-		$this->db->where('end_date >=', $now);
-		$this->db->group_end();
-		$this->db->or_group_start();
-		$this->db->where('start_date', NULL);
-		$this->db->or_where('start_date', '');
-		$this->db->or_where('start_date', '0000-00-00 00:00:00');
-		$this->db->or_where('end_date', NULL);
-		$this->db->or_where('end_date', '');
-		$this->db->or_where('end_date', '0000-00-00 00:00:00');
-		$this->db->group_end();
-		$this->db->group_end();
+		// Jednoduché podmínky bez zanořování
+		$this->db->where('(start_date IS NULL OR start_date = "" OR start_date = "0000-00-00 00:00:00" OR start_date <= "'.$now.'")');
+		$this->db->where('(end_date IS NULL OR end_date = "" OR end_date = "0000-00-00 00:00:00" OR end_date >= "'.$now.'")');
 
 		$this->db->order_by('orderBy', 'ASC');
-		return $this->db->get('bestProduct')->result();
-	}
+		$products = $this->db->get('bestProduct')->result();
 
+		log_message('debug', 'Jazyk: ' . language());
+		log_message('debug', 'Podmienky WHERE: ' . $this->db->last_query());
+		if (empty($products)) {
+			log_message('error', 'Žiadne aktívne produkty v getAllActiveProduct(). Skontroluj databázu bestProduct.');
+		} else {
+			log_message('debug', 'Načítané produkty: ' . print_r($products, true));
+		}
+
+		return $products;
+	}
+	function getAllProductsForDebug()
+	{
+		$this->db->select('*');
+		$this->db->from('bestProduct');
+		$products = $this->db->get()->result();
+
+		log_message('debug', 'Všetky produkty pre debug: ' . $this->db->last_query());
+		log_message('debug', 'Načítané produkty pre debug: ' . print_r($products, true));
+
+		return $products;
+	}
 	public function sendContactMail($data)
 	{
 		$this->load->library('email');

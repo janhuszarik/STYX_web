@@ -70,33 +70,37 @@
 			 aria-roledescription="carousel"
 			 aria-label="Product carousel"
 			 data-plugin-options="{'items': 5, 'loop': true, 'dots': false, 'autoplay': true, 'autoplayTimeout': 5000, 'autoplayHoverPause': true}">
-			<?php foreach ($product as $product_item): ?>
-				<article>
-					<a href="<?= $product_item->url ?>"
-					   aria-label="View product: <?= htmlspecialchars($product_item->name) ?>">
-                    <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
-                        <span class="thumb-info-wrapper">
-                            <img loading="lazy"
-								 src="<?= BASE_URL ?>uploads/Produkte/<?= $product_item->image ?>"
-								 class="img-fluid"
-								 alt="<?= htmlspecialchars($product_item->name) ?>">
+			<?php if (!empty($products)): ?>
+				<?php foreach ($products as $product_item): ?>
+					<article>
+						<a href="<?= $product_item->url ?>"
+						   aria-label="View product: <?= htmlspecialchars($product_item->name) ?>">
+                        <span class="thumb-info thumb-info-centered-info thumb-info-no-borders">
+                            <span class="thumb-info-wrapper">
+                                <img loading="lazy"
+									 src="<?= BASE_URL ?>uploads/Produkte/<?= $product_item->image ?>"
+									 class="img-fluid"
+									 alt="<?= htmlspecialchars($product_item->name) ?>">
+                            </span>
                         </span>
-                    </span>
-						<?php if ($product_item->action == 1): ?>
-							<div class="ribbon" aria-label="Promotion details">
-								<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
-									<?= htmlspecialchars($product_item->aktion_name) ?> / <?= htmlspecialchars($product_item->price) ?>
-								<?php elseif (!empty($product_item->aktion_name)): ?>
-									<?= htmlspecialchars($product_item->aktion_name) ?>
-								<?php elseif (!empty($product_item->price)): ?>
-									<?= htmlspecialchars($product_item->price) ?>
-								<?php endif; ?>
-							</div>
-						<?php endif; ?>
-						<div class="product-info"><?= htmlspecialchars($product_item->name) ?></div>
-					</a>
-				</article>
-			<?php endforeach; ?>
+							<?php if ($product_item->action == 1): ?>
+								<div class="ribbon" aria-label="Promotion details">
+									<?php if (!empty($product_item->aktion_name) && !empty($product_item->price)): ?>
+										<?= htmlspecialchars($product_item->aktion_name) ?> / <?= htmlspecialchars($product_item->price) ?>
+									<?php elseif (!empty($product_item->aktion_name)): ?>
+										<?= htmlspecialchars($product_item->aktion_name) ?>
+									<?php elseif (!empty($product_item->price)): ?>
+										<?= htmlspecialchars($product_item->price) ?>
+									<?php endif; ?>
+								</div>
+							<?php endif; ?>
+							<div class="product-info"><?= htmlspecialchars($product_item->name) ?></div>
+						</a>
+					</article>
+				<?php endforeach; ?>
+			<?php else: ?>
+				<p>Žádné produkty nebyly načteny.</p> <!-- Dočasná zpráva pro debug -->
+			<?php endif; ?>
 		</div>
 
 		<nav class="custom-nav" aria-label="Carousel navigation">

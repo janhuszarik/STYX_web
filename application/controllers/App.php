@@ -28,8 +28,17 @@ class App extends CI_Controller
 		// Laden und Senden von Daten
 		$data['user'] = $this->ion_auth->user()->row();
 		$data['sliders'] = $this->App_model->getSliders(true);
-		$data['news'] = $this->App_model->getAllActiveNews(); // angepasst
-		$data['products'] = $this->App_model->getAllActiveProduct(); // angepasst
+		$data['news'] = $this->App_model->getAllActiveNews();
+		$data['products'] = $this->App_model->getAllActiveProduct();
+
+		// Debugovanie - overenie, či sú produkty načítané
+		if (empty($data['products'])) {
+			log_message('error', 'Žiadne aktívne produkty načítané v home(). Skontroluj getAllActiveProduct().');
+			// Dočasné zobrazenie všetkých produktov bez filtra dátumu pre testovanie
+			$data['products'] = $this->App_model->getAllProductsForDebug();
+		} else {
+			log_message('debug', 'Načítané produkty: ' . print_r($data['products'], true));
+		}
 
 		// Prispôsobenie cesty k obrázkom produktov
 		foreach ($data['products'] as $product) {
@@ -38,7 +47,6 @@ class App extends CI_Controller
 			}
 		}
 
-		// Laden der Controller-Daten
 		$data['page'] = 'home';
 		$data['title'] = lang('HOME_TITLE');
 		$data['description'] = lang('HOME_DESCRIPTION');
