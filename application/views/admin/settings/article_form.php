@@ -49,7 +49,6 @@ if (in_array($categoryId, [100, 102])) {
 	$subcategories = $CI->Article_model->getSubcategoriesByCategory($categoryId);
 }
 
-// Rozdelenie start_date_from a end_date_to na dátum a čas
 $startDate = $endDate = $startTime = $endTime = '';
 if (isset($article->start_date_from) && !empty($article->start_date_from)) {
 	$startDateTime = new DateTime($article->start_date_from);
@@ -119,8 +118,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
      ">
 	<span id="global-status-text"></span>
 </div>
-
-
 
 <div class="row">
 	<div class="col-lg-12">
@@ -210,9 +207,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							<label for="image" class="col-form-label">Hauptbild hochladen</label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Ermöglicht das Hochladen eines Hauptbildes für den Artikel. Das Bild wird in der Artikelansicht angezeigt. Unterstützte Formate: JPG, PNG, GIF, WEBP."></i>
 							<input type="file" class="form-control mb-1" name="image" id="image">
-							<label for="image_title" class="col-form-label">Titel des Bildes (SEO)</label>
-							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Hauptbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern."></i>
-							<input type="text" class="form-control mb-1" name="image_title" id="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>" data-label="Bildtitel (SEO)">
+							<label for="image_title" class="col-form-label">Titel des Bildes (SEO) <span class="text-danger">*</span></label>
+							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Hauptbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern. Pflichtfeld für neue Bilder."></i>
+							<input type="text" class="form-control mb-1" name="image_title" id="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>" data-label="Bildtitel (SEO)" required>
 							<input type="hidden" name="old_image" value="<?= htmlspecialchars($article->image ?? '') ?>">
 							<input type="hidden" name="ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
 							<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_image" data-preview-target="ftpImagePreview">
@@ -488,7 +485,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		const categoryId = '<?= htmlspecialchars($categoryId) ?>';
 		const allowedCategoryIds = ['100', '102'];
 
-		// --- Globálne premenné pre stavový panel ---
 		let inputStates = {};
 		let wasProblematic = false;
 		let successTimer;
@@ -502,11 +498,44 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			setTimeout(() => alertDiv.remove(), 3000);
 		}
 
+		function showWarning(element, message) {
+			let warning = element.parentElement.querySelector('.text-danger');
+			if (!warning) {
+				warning = document.createElement('p');
+				warning.className = 'text-danger file-info';
+				element.parentElement.appendChild(warning);
+			}
+			warning.textContent = message;
+		}
+
+		function hideWarning(element) {
+			const warning = element.parentElement.querySelector('.text-danger');
+			if (warning) warning.remove();
+		}
+
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
 			const startDate = document.getElementById('start_date_from_date').value;
 			const startTime = document.getElementById('start_date_from_time').value;
 			const endDate = document.getElementById('end_date_to_date').value;
 			const endTime = document.getElementById('end_date_to_time').value;
+			const imageInput = document.getElementById('image');
+			const imageTitle = document.getElementById('image_title').value.trim();
+			const sectionImageInputs = document.querySelectorAll('input[name^="section_images"]');
+			const sectionImageTitles = document.querySelectorAll('input[name^="section_image_titles"]');
+
+			if (imageInput.files.length > 0 && !imageTitle) {
+				e.preventDefault();
+				showAlert('Bitte geben Sie einen Bildtitel (SEO) für das Hauptbild ein.', 'error');
+				return;
+			}
+
+			for (let i = 0; i < sectionImageInputs.length; i++) {
+				if (sectionImageInputs[i].files.length > 0 && !sectionImageTitles[i].value.trim()) {
+					e.preventDefault();
+					showAlert(`Bitte geben Sie einen Bildtitel (SEO) für die Sektion ${i + 1} ein.`, 'error');
+					return;
+				}
+			}
 
 			if (startDate && !startTime) {
 				e.preventDefault();
@@ -526,6 +555,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					showAlert('Das Enddatum und die Endzeit müssen nach dem Startdatum und der Startzeit liegen.', 'error');
 					return;
 				}
+			}
+			const warnings = document.querySelectorAll('.text-danger');
+			if (warnings.length > 0) {
+				e.preventDefault();
+				showAlert('Das Formular enthält ungültigen Text oder Dateien! Korrigieren Sie sie vor dem Speichern.', 'error');
 			}
 		});
 
@@ -778,7 +812,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 
 		const addSection = (content = '', image = '', imageTitle = '', imageDescription = '', buttonName = '', subpage = '', externalUrl = '', index) => {
 			content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
-			const sectionHtml = `<div class="section mb-4 p-3 border rounded"><input type="hidden" name="sections[${index}]" value="section-${index}"><div class="row"><div class="col-md-9"><label class="col-form-label">Inhalt</label><textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea></div><div class="col-md-3"><label class="col-form-label">Bild hochladen</label><input type="file" class="form-control mb-1" name="section_images[${index}]"><input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}"><input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}"><button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">Bild aus FTP wählen</button><div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">${image ? `<img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;"><button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">×</button>` : ''}</div><label class="col-form-label">Bildtitel (SEO)</label><input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)"><label class="col-form-label">Bildbeschreibung in der Sektion <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i></label><input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung"></div></div><div class="row mt-3"><div class="col-md-4"><label class="col-form-label">Button-Text</label><input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text"></div><div class="col-md-4"><label class="col-form-label">Unterseite</label><select class="form-control mb-1 subpage-select" name="subpages[${index}]"><option value="">-- Unterseite auswählen --</option>${articleOptions.map(opt => `<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>${opt.label} (${opt.lang})</option>`).join('')}</select></div><div class="col-md-4"><label class="col-form-label">Externe URL</label><input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL"></div></div><div class="section-actions mt-3"><button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button></div></div>`;
+			const sectionHtml = `<div class="section mb-4 p-3 border rounded"><input type="hidden" name="sections[${index}]" value="section-${index}"><div class="row"><div class="col-md-9"><label class="col-form-label">Inhalt</label><textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea></div><div class="col-md-3"><label class="col-form-label">Bild hochladen</label><input type="file" class="form-control mb-1" name="section_images[${index}]"><input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}"><input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}"><button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">Bild aus FTP wählen</button><div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">${image ? `<img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;"><button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">×</button>` : ''}</div><label class="col-form-label">Bildtitel (SEO) <span class="text-danger">*</span></label><input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)" required><label class="col-form-label">Bildbeschreibung in der Sektion <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i></label><input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung"></div></div><div class="row mt-3"><div class="col-md-4"><label class="col-form-label">Button-Text</label><input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text"></div><div class="col-md-4"><label class="col-form-label">Unterseite</label><select class="form-control mb-1 subpage-select" name="subpages[${index}]"><option value="">-- Unterseite auswählen --</option>${articleOptions.map(opt => `<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>${opt.label} (${opt.lang})</option>`).join('')}</select></div><div class="col-md-4"><label class="col-form-label">Externe URL</label><input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL"></div></div><div class="section-actions mt-3"><button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button></div></div>`;
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
@@ -800,6 +834,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							if (!allowedTypes.includes(file.type)) { showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.'); this.value = ''; }
 							else if (file.size > 5 * 1024 * 1024) { showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!'); this.value = ''; }
 							else { hideWarning(this); }
+							const imageTitleInput = newSection.querySelector(`input[name="section_image_titles[${index}]"]`);
+							if (file && !imageTitleInput.value.trim()) {
+								showWarning(imageTitleInput, 'Bitte geben Sie einen Bildtitel (SEO) ein.');
+								imageTitleInput.focus();
+							}
 						}
 					});
 				});
@@ -885,21 +924,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				const file = this.files[0];
 				if (file) {
 					const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-					function showWarning(el, msg) { /* definícia chýba */ }
-					function hideWarning(el) { /* definícia chýba */ }
 					if (!allowedTypes.includes(file.type)) { showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.'); this.value = ''; }
 					else if (file.size > 5 * 1024 * 1024) { showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!'); this.value = ''; }
 					else { hideWarning(this); }
 				}
 			});
-		});
-
-		document.getElementById('articleForm').addEventListener('submit', function(e) {
-			const warnings = document.querySelectorAll('.text-danger');
-			if (warnings.length > 0) {
-				e.preventDefault();
-				showAlert('Das Formular enthält ungültigen Text oder Dateien! Korrigieren Sie sie vor dem Speichern.', 'error');
-			}
 		});
 
 		setTimeout(() => {

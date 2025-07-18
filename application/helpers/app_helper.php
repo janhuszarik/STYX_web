@@ -176,7 +176,7 @@ function user($user_id = false) {
 	}
 }
 
-function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false)
+function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resizeImage = false, $watermark = false, $isArticle = false)
 {
 	unset($_FILES['files']);
 	$CI =& get_instance();
@@ -207,9 +207,14 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 		$originalName = pathinfo($_FILES[$file]['name'], PATHINFO_FILENAME);
 		$extension = pathinfo($_FILES[$file]['name'], PATHINFO_EXTENSION);
 
-		$baseName = $saveAsNameFile
-			? trim(url_oprava($saveAsNameFile))
-			: trim(url_oprava($originalName)) . '_' . time();
+		// Logika názvu súboru: pre články nepoužívame časový údaj, ak je zadaný $saveAsNameFile
+		if ($isArticle && $saveAsNameFile) {
+			$baseName = trim(url_oprava($saveAsNameFile));
+		} else {
+			$baseName = $saveAsNameFile
+				? trim(url_oprava($saveAsNameFile))
+				: trim(url_oprava($originalName)) . '_' . time();
+		}
 
 		$originalPath = $dir . $baseName . '.' . $extension;
 
@@ -270,7 +275,6 @@ function uploadImg($file = false, $dir = false, $saveAsNameFile = false, $resize
 
 	return '';
 }
-
 function obrazokfinal($originalPath, $offLogo = true, $thumbPath = null, $defaultWidthImage = 1600)
 {
 	$CI =& get_instance();
