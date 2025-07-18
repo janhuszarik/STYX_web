@@ -15,6 +15,7 @@ class Migrate_images extends CI_Controller
 		$logFile = FCPATH . 'migration_log.txt';
 		file_put_contents($logFile, "Migrácia začala: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
 
+		$basePath = FCPATH; // Základná cesta na serveri, napr. /var/www9/p42096/styxnatur.at/sub/styx/release_20250718095321/
 		$articles = $this->db->get('articles')->result();
 		$oldDirs = [
 			'uploads/articles/sections/',
@@ -39,20 +40,20 @@ class Migrate_images extends CI_Controller
 			}
 
 			$baseDir = "uploads/articles/{$categoryBaseDir}/" . ($subcategoryDir ? "{$subcategoryDir}/" : '');
-			if (!file_exists(FCPATH . $baseDir)) {
-				mkdir(FCPATH . $baseDir, 0755, true);
-				file_put_contents($logFile, "Vytvorený priečinok: $baseDir\n", FILE_APPEND);
+			if (!file_exists($basePath . $baseDir)) {
+				mkdir($basePath . $baseDir, 0755, true);
+				file_put_contents($logFile, "Vytvorený priečinok: $basePath$baseDir\n", FILE_APPEND);
 			}
 
 			// Hlavný obrázok
 			if (!empty($article->image) && $article->image !== 'null') {
 				$found = false;
 				foreach ($oldDirs as $oldDir) {
-					$oldPath = FCPATH . $oldDir . basename($article->image);
+					$oldPath = $basePath . $oldDir . basename($article->image);
 					if (file_exists($oldPath)) {
 						$imageName = $article->image_title ? url_oprava($article->image_title) : url_oprava($article->title);
 						$imageName = $imageName . $suffix . '.' . pathinfo($oldPath, PATHINFO_EXTENSION);
-						$newPath = FCPATH . $baseDir . $imageName;
+						$newPath = $basePath . $baseDir . $imageName;
 
 						file_put_contents($logFile, "Kopírujem hlavný obrázok (článok ID {$article->id}): $oldPath -> $newPath\n", FILE_APPEND);
 						if (@copy($oldPath, $newPath)) {
@@ -82,11 +83,11 @@ class Migrate_images extends CI_Controller
 				if (!empty($section->image) && $section->image !== 'null') {
 					$found = false;
 					foreach ($oldDirs as $oldDir) {
-						$oldPath = FCPATH . $oldDir . basename($section->image);
+						$oldPath = $basePath . $oldDir . basename($section->image);
 						if (file_exists($oldPath)) {
 							$imageName = $section->image_title ? url_oprava($section->image_title) : url_oprava($article->title . '_section_' . $section->order);
 							$imageName = $imageName . $suffix . '.' . pathinfo($oldPath, PATHINFO_EXTENSION);
-							$newPath = FCPATH . $baseDir . $imageName;
+							$newPath = $basePath . $baseDir . $imageName;
 
 							file_put_contents($logFile, "Kopírujem obrázok sekcie (článok ID {$article->id}, sekcia ID {$section->id}): $oldPath -> $newPath\n", FILE_APPEND);
 							if (@copy($oldPath, $newPath)) {
@@ -112,24 +113,21 @@ class Migrate_images extends CI_Controller
 			}
 		}
 
-		// Vymazanie starých priečinkov aj s obsahom, ak boli súbory migrované
+		// Vymazanie starých priečinkov aj s obsahom
 		foreach ($oldDirs as $oldDir) {
-			$fullPath = FCPATH . $oldDir;
+			$fullPath = $basePath . $oldDir;
 			if (is_dir($fullPath)) {
 				$files = glob($fullPath . '*', GLOB_MARK);
-				$allMigrated = true;
-				foreach ($files as $file) {
-					if (is_file($file) && !in_array($file, $migratedFiles)) {
-						$allMigrated = false;
-						break;
+				if (!empty($files)) {
+					foreach ($files as $file) {
+						if (is_file($file) && !in_array($file, $migratedFiles)) {
+							@unlink($file); // Vymazanie nemigrovaných súborov
+							file_put_contents($logFile, "Vymazaný nemigrovaný súbor: $file\n", FILE_APPEND);
+						}
 					}
 				}
-				if ($allMigrated || empty($files)) {
-					$this->deleteDirectory($fullPath);
-					file_put_contents($logFile, "Starý priečinok vymazaný: $oldDir\n", FILE_APPEND);
-				} else {
-					file_put_contents($logFile, "Priečinok nie je prázdny alebo obsahuje nemigrované súbory, ponechaný: $oldDir\n", FILE_APPEND);
-				}
+				$this->deleteDirectory($fullPath);
+				file_put_contents($logFile, "Starý priečinok vymazaný: $oldDir\n", FILE_APPEND);
 			}
 		}
 
