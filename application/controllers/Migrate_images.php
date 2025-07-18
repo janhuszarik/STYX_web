@@ -16,6 +16,13 @@ class Migrate_images extends CI_Controller
 		file_put_contents($logFile, "Migrácia začala: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
 
 		$articles = $this->db->get('articles')->result();
+		$oldDirs = [
+			'uploads/articles/sections/',
+			'uploads/articles/summernote/',
+			'uploads/articles/title_image/',
+			'uploads/articles/other/'
+		];
+
 		foreach ($articles as $article) {
 			$categoryId = $article->category_id;
 			$categoryBaseDir = ($categoryId == 100) ? 'neuigkeiten' : (($categoryId == 102) ? 'tipps' : 'neuigkeiten');
@@ -35,14 +42,6 @@ class Migrate_images extends CI_Controller
 				file_put_contents($logFile, "Vytvorený priečinok: $baseDir\n", FILE_APPEND);
 			}
 
-			// Staré priečinky na kontrolu
-			$oldDirs = [
-				'uploads/articles/sections/',
-				'uploads/articles/summernote/',
-				'uploads/articles/title_image/',
-				'uploads/articles/other/'
-			];
-
 			// Hlavný obrázok
 			if (!empty($article->image) && $article->image !== 'null') {
 				$found = false;
@@ -58,9 +57,9 @@ class Migrate_images extends CI_Controller
 							$this->db->where('id', $article->id);
 							$this->db->update('articles', ['image' => $baseDir . $imageName]);
 							file_put_contents($logFile, "Úspešne skopírované a aktualizované: $newPath\n", FILE_APPEND);
+							@unlink($oldPath); // Vymazanie starého súboru
+							file_put_contents($logFile, "Starý súbor vymazaný: $oldPath\n", FILE_APPEND);
 							$found = true;
-							// Voliteľne: zmazať starý súbor
-							// @unlink($oldPath);
 						} else {
 							file_put_contents($logFile, "Chyba pri kopírovaní: $oldPath\n", FILE_APPEND);
 						}
@@ -91,9 +90,9 @@ class Migrate_images extends CI_Controller
 								$this->db->where('id', $section->id);
 								$this->db->update('article_sections', ['image' => $baseDir . $imageName]);
 								file_put_contents($logFile, "Úspešne skopírované a aktualizované: $newPath\n", FILE_APPEND);
+								@unlink($oldPath); // Vymazanie starého súboru
+								file_put_contents($logFile, "Starý súbor vymazaný: $oldPath\n", FILE_APPEND);
 								$found = true;
-								// Voliteľne: zmazať starý súbor
-								// @unlink($oldPath);
 							} else {
 								file_put_contents($logFile, "Chyba pri kopírovaní: $oldPath\n", FILE_APPEND);
 							}
@@ -105,6 +104,23 @@ class Migrate_images extends CI_Controller
 					}
 				} else {
 					file_put_contents($logFile, "Obrázok sekcie je prázdny alebo null pre článok ID {$article->id}, sekcia ID {$section->id}\n", FILE_APPEND);
+				}
+			}
+		}
+
+		// Vymazanie starých priečinkov, ak sú prázdne
+		foreach ($oldDirs as $oldDir) {
+			$fullPath = FCPATH . $oldDir;
+			if (is_dir($fullPath)) {
+				$files = glob($fullPath . '*', GLOB_MARK);
+				if (empty($files)) {
+					if (@rmdir($fullPath)) {
+						file_put_contents($logFile, "Starý priečinok vymazaný: $oldDir\n", FILE_APPEND);
+					} else {
+						file_put_contents($logFile, "Chyba pri vymazávaní priečinka: $oldDir (možno nie je prázdny)\n", FILE_APPEND);
+					}
+				} else {
+					file_put_contents($logFile, "Priečinok nie je prázdny, nemôže byť vymazaný: $oldDir\n", FILE_APPEND);
 				}
 			}
 		}
