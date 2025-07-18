@@ -339,7 +339,7 @@ class Admin_model extends CI_Model {
 		);
 
 		if ($image && !isset($image['error'])) {
-			$data['image'] = $image['file_name'];
+			$data['image'] = $image['file_name']; // Použije se plná relativní cesta
 		} else if ($old_image) {
 			$data['image'] = $old_image;
 		}

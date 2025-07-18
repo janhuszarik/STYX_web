@@ -190,7 +190,8 @@ class Admin extends CI_Controller
 		return '';
 	}
 
-	public function sliderSave() {
+	public function sliderSave()
+	{
 		$post = $this->input->post(NULL, TRUE);
 		$id = $post['id'] ?? $this->uri->segment(4);
 		$segment3 = $this->uri->segment(3);
@@ -198,7 +199,7 @@ class Admin extends CI_Controller
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
 
-			$image = $this->upload_image('image', 'uploads/sliders/');
+			$image = $this->upload_image('image', 'uploads/sliders/'); // Bez cesty, zachová původní chování
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['slider'] = (object)$post;
@@ -287,7 +288,8 @@ class Admin extends CI_Controller
 		}
 	}
 
-	private function upload_image($field_name, $path = 'uploads/sliders/') {
+	private function upload_image($field_name, $path = 'uploads/sliders/', $include_path = false)
+	{
 		if (empty($_FILES[$field_name]['name'])) {
 			return false;
 		}
@@ -322,7 +324,12 @@ class Admin extends CI_Controller
 			return ['error' => $error];
 		}
 
-		return $this->upload->data();
+		$upload_data = $this->upload->data();
+		// Přidání relativní cesty pouze pokud je požadováno
+		if ($include_path) {
+			$upload_data['file_name'] = $path . $upload_data['file_name'];
+		}
+		return $upload_data;
 	}
 
 	private function uploadImageToPath($field_name, $path = 'uploads/news/') {
@@ -362,14 +369,15 @@ class Admin extends CI_Controller
 		echo json_encode($response);
 	}
 
-	public function newsSave() {
+	public function newsSave()
+	{
 		$post = $this->input->post();
 		$id = $this->uri->segment(4);
 		$segment3 = $this->uri->segment(3);
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/news/');
+			$image = $this->upload_image('image', 'uploads/news/'); // Bez cesty, zachová původní chování
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['news'] = (object)$post;
@@ -447,7 +455,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getProduct($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/Produkte/');
+			$image = $this->upload_image('image', 'uploads/Produkte/', true); // Přidána cesta pro bestProduct
 
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
@@ -457,8 +465,8 @@ class Admin extends CI_Controller
 
 			if (!empty($id)) {
 				if ($this->Admin_model->bestProductSave($post, $image, $old_image)) {
-					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . 'uploads/Produkte/' . $old_image)) {
-						unlink(FCPATH . 'uploads/Produkte/' . $old_image);
+					if ($image && !isset($image['error']) && $old_image && file_exists(FCPATH . $old_image)) {
+						unlink(FCPATH . $old_image);
 					}
 					$this->session->set_flashdata('success', 'Alle Daten wurden gespeichert');
 					redirect('admin/bestProduct');
@@ -480,8 +488,8 @@ class Admin extends CI_Controller
 		if ($segment2 == 'del' && is_numeric($id)) {
 			$product = $this->Admin_model->getProduct($id);
 			if ($this->Admin_model->bestProductDelete($id)) {
-				if ($product->image && file_exists(FCPATH . 'uploads/Produkte/' . $product->image)) {
-					unlink(FCPATH . 'uploads/Produkte/' . $product->image);
+				if ($product->image && file_exists(FCPATH . $product->image)) {
+					unlink(FCPATH . $product->image);
 				}
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
 			} else {
