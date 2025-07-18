@@ -257,8 +257,8 @@ class Admin_model extends CI_Model {
 		if (!$slider) {
 			return false;
 		}
-		if ($slider->image && file_exists(FCPATH . 'uploads/sliders/' . $slider->image)) {
-			unlink(FCPATH . 'uploads/sliders/' . $slider->image);
+		if ($slider->image && file_exists(FCPATH . 'Uploads/Sliders/' . $slider->image)) {
+			unlink(FCPATH . 'Uploads/Sliders/' . $slider->image);
 		}
 		$this->db->where('id', $id);
 		return $this->db->delete('slider');
@@ -545,7 +545,7 @@ class Admin_model extends CI_Model {
 		$total = $this->db->count_all_results();
 
 		$this->db->order_by('updated_at', 'DESC');
-		$top = $this->db->get('bestProduct', 1)->row();
+		$top = $this->db->get('bestProduct', 1)-> the->row();
 
 		$this->db->order_by('updated_at', 'DESC');
 		$recent = $this->db->get('bestProduct', 3)->result();
