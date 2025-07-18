@@ -155,7 +155,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 						</div>
 						<div class="col-md-5">
 							<label for="subtitle" class="col-form-label">Untertitel</label>
-							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>" data-label="Untertitel">
+							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>" data liberación="Untertitel">
 						</div>
 					</div>
 
@@ -210,8 +210,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							<label for="image_title" class="col-form-label">Titel des Bildes (SEO) <span class="text-danger">*</span></label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Hauptbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern. Pflichtfeld für neue Bilder."></i>
 							<input type="text" class="form-control mb-1" name="image_title" id="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>" data-label="Bildtitel (SEO)" required>
-							<input type="hidden" name="old_image" value="<?= htmlspecialchars($article->image ?? '') ?>">
-							<input type="hidden" name="ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
+							<input type="hidden" name=" ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
 							<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_image" data-preview-target="ftpImagePreview">
 								Bild aus FTP wählen
 							</button>
@@ -476,7 +475,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		const titleInput = document.getElementById('title');
 		const slugInput = document.getElementById('slug');
 		const slugDisplay = document.getElementById('slug_display');
-		const menuSelect = document.getElementById('menu_select');
 		const isMainSelect = document.getElementById('is_main');
 		const subcategorySelect = document.getElementById('subcategory_id');
 		const manageSubcategoriesBtn = document.getElementById('manageSubcategoriesBtn');
@@ -511,6 +509,27 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		function hideWarning(element) {
 			const warning = element.parentElement.querySelector('.text-danger');
 			if (warning) warning.remove();
+		}
+
+		function getImageUploadPath() {
+			const categoryId = '<?= htmlspecialchars($categoryId) ?>';
+			const subcategoryId = document.getElementById('subcategory_id')?.value || '';
+			const title = document.getElementById('title')?.value || 'article';
+			const suffix = (categoryId == '100') ? '_neuigkeiten' : (categoryId == '102' ? '_tipps' : '');
+			let baseDir = `uploads/articles/${categoryId == '100' ? 'neuigkeiten' : 'tipps'}/`;
+
+			if (subcategoryId && subcategoryId !== 'new') {
+				const subcategoryName = document.querySelector(`#subcategory_id option[value="${subcategoryId}"]`)?.text || '';
+				if (subcategoryName) {
+					baseDir += urlOprava(subcategoryName) + '/';
+				}
+			}
+
+			return { baseDir, suffix, title: urlOprava(title) };
+		}
+
+		function urlOprava(str) {
+			return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 		}
 
 		document.getElementById('articleForm').addEventListener('submit', function (e) {
@@ -770,11 +789,16 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		function initSummernote(selector) {
 			if (typeof jQuery === 'undefined') { return; }
 			$(selector).summernote({
-				height: 300, lang: 'de-DE',
+				height: 300,
+				lang: 'de-DE',
 				toolbar: [
-					['style', ['style']], ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'fontsize']],
-					['color', ['color']], ['para', ['ul', 'ol', 'paragraph', 'height', 'blockquote']], ['table', ['table']],
-					['insert', ['link', 'picture', 'video', 'hr']], ['view', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
+					['style', ['style']],
+					['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'fontsize']],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph', 'height', 'blockquote']],
+					['table', ['table']],
+					['insert', ['link', 'picture', 'video', 'hr']],
+					['view', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
 				],
 				callbacks: {
 					onPaste: function (e) {
@@ -786,23 +810,40 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					},
 					onChange: function(contents) { validateInput(this, contents); },
 					onImageUpload: function (files) {
+						const { baseDir, suffix, title } = getImageUploadPath();
 						const data = new FormData();
 						data.append('image', files[0]);
+						data.append('category_id', categoryId);
+						data.append('subcategory_id', document.getElementById('subcategory_id')?.value || '');
+						data.append('title', title);
 						$.ajax({
-							url: '<?= base_url('admin/article/upload_image') ?>', method: 'POST', data: data, contentType: false, processData: false,
+							url: '<?= base_url('admin/article/upload_image') ?>',
+							method: 'POST',
+							data: data,
+							contentType: false,
+							processData: false,
 							success: function (response) {
-								if (response.success) { $(selector).summernote('insertImage', response.image_url); }
-								else { showAlert(response.error || 'Fehler beim Hochladen des Bildes.', 'error'); }
+								if (response.success) {
+									$(selector).summernote('insertImage', response.image_url);
+								} else {
+									showAlert(response.error || 'Fehler beim Hochladen des Bildes.', 'error');
+								}
 							},
-							error: function () { showAlert('Fehler beim Hochladen des Bildes.', 'error'); }
+							error: function () {
+								showAlert('Fehler beim Hochladen des Bildes.', 'error');
+							}
 						});
 					},
 					onMediaDelete: function ($target) {
 						const imageUrl = $target.attr('src');
 						$.ajax({
-							url: '<?= base_url('admin/article/delete_image') ?>', method: 'POST', data: { image_url: imageUrl },
+							url: '<?= base_url('admin/article/delete_image') ?>',
+							method: 'POST',
+							data: { image_url: imageUrl },
 							success: function (response) {
-								if (!response.success) { showAlert(response.error || 'Fehler beim Löschen des Bildes.', 'error'); }
+								if (!response.success) {
+									showAlert(response.error || 'Fehler beim Löschen des Bildes.', 'error');
+								}
 							}
 						});
 					}

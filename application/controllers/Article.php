@@ -350,33 +350,38 @@ class Article extends CI_Controller
 
 	public function upload_image()
 	{
-		$this->load->helper('app_helper');
-		$response = ['success' => false, 'error' => ''];
-
-		$dir = './uploads/articles/summernote/';
-		if (!file_exists($dir)) {
-			if (!mkdir($dir, 0777, true)) {
-				$response['error'] = 'Fehler beim Erstellen des Ordners.';
-				$this->output->set_content_type('application/json')->set_output(json_encode($response));
-				return;
-			}
-		}
+		$this->output->set_content_type('application/json');
 
 		if (!empty($_FILES['image']['name'])) {
-			$upload_path = uploadImg('image', 'uploads/articles/summernote');
-			if ($upload_path && file_exists($upload_path)) {
-				$response['success'] = true;
-				$response['image_url'] = $upload_path;
+			$categoryId = $this->input->post('category_id', true);
+			$subcategoryId = $this->input->post('subcategory_id', true);
+			$articleTitle = $this->input->post('title', true) ?: 'article';
+			$categoryBaseDir = ($categoryId == 100) ? 'neuigkeiten' : (($categoryId == 102) ? 'tipps' : 'other');
+			$suffix = ($categoryId == 100) ? '_neuigkeiten' : (($categoryId == 102) ? '_tipps' : '');
+
+			$subcategoryDir = '';
+			if (in_array($categoryId, [100, 102]) && !empty($subcategoryId) && $subcategoryId !== 'new') {
+				$table = ($categoryId == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+				$subcategory = $this->db->get_where($table, ['id' => $subcategoryId])->row();
+				$subcategoryDir = $subcategory ? url_oprava($subcategory->name) : '';
+			}
+
+			$baseDir = "uploads/articles/{$categoryBaseDir}/" . ($subcategoryDir ? "{$subcategoryDir}/" : '');
+			if (!file_exists(FCPATH . $baseDir)) {
+				mkdir(FCPATH . $baseDir, 0755, true);
+			}
+
+			$imageName = url_oprava($articleTitle) . '_summernote_' . time() . $suffix;
+			$uploadResult = uploadImg('image', $baseDir, $imageName, false, false, true);
+
+			if ($uploadResult && file_exists($uploadResult)) {
+				$this->output->set_output(json_encode(['success' => true, 'image_url' => base_url($uploadResult)]));
 			} else {
-				$response['error'] = 'Fehler beim Hochladen des Bildes: ' . ($_FILES['image']['error'] ?? 'Unbekannter Fehler');
+				$this->output->set_output(json_encode(['success' => false, 'error' => 'Fehler beim Hochladen des Bildes.']));
 			}
 		} else {
-			$response['error'] = 'Kein Bild wurde hochgeladen.';
+			$this->output->set_output(json_encode(['success' => false, 'error' => 'Kein Bild hochgeladen.']));
 		}
-
-		$this->output
-			->set_content_type('application/json')
-			->set_output(json_encode($response));
 	}
 
 	public function delete_image()
