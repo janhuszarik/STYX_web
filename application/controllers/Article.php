@@ -350,38 +350,44 @@ class Article extends CI_Controller
 
 	public function upload_image()
 	{
-		$this->output->set_content_type('application/json');
+		$category_id = $this->input->post('category_id');
+		$subcategory_id = $this->input->post('subcategory_id');
+		$title = $this->input->post('title') ?: 'article';
 
-		if (!empty($_FILES['image']['name'])) {
-			$categoryId = $this->input->post('category_id', true);
-			$subcategoryId = $this->input->post('subcategory_id', true);
-			$articleTitle = $this->input->post('title', true) ?: 'article';
-			$categoryBaseDir = ($categoryId == 100) ? 'neuigkeiten' : (($categoryId == 102) ? 'tipps' : 'other');
-			$suffix = ($categoryId == 100) ? '_neuigkeiten' : (($categoryId == 102) ? '_tipps' : '');
-
+		if ($this->input->post('is_product')) {
+			$baseDir = 'uploads/Produkte/';
+		} else {
+			$categoryBaseDir = ($category_id == 100) ? 'neuigkeiten' : (($category_id == 102) ? 'tipps' : 'neuigkeiten');
+			$suffix = ($category_id == 100) ? '_neuigkeiten' : (($category_id == 102) ? '_tipps' : '');
 			$subcategoryDir = '';
-			if (in_array($categoryId, [100, 102]) && !empty($subcategoryId) && $subcategoryId !== 'new') {
-				$table = ($categoryId == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
-				$subcategory = $this->db->get_where($table, ['id' => $subcategoryId])->row();
+			if (in_array($category_id, [100, 102]) && !empty($subcategory_id) && $subcategory_id !== 'new') {
+				$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+				$subcategory = $this->db->get_where($table, ['id' => $subcategory_id])->row();
 				$subcategoryDir = $subcategory ? url_oprava($subcategory->name) : '';
 			}
-
 			$baseDir = "uploads/articles/{$categoryBaseDir}/" . ($subcategoryDir ? "{$subcategoryDir}/" : '');
-			if (!file_exists(FCPATH . $baseDir)) {
-				mkdir(FCPATH . $baseDir, 0755, true);
-			}
-
-			$imageName = url_oprava($articleTitle) . '_summernote_' . time() . $suffix;
-			$uploadResult = uploadImg('image', $baseDir, $imageName, false, false, true);
-
-			if ($uploadResult && file_exists($uploadResult)) {
-				$this->output->set_output(json_encode(['success' => true, 'image_url' => base_url($uploadResult)]));
-			} else {
-				$this->output->set_output(json_encode(['success' => false, 'error' => 'Fehler beim Hochladen des Bildes.']));
-			}
-		} else {
-			$this->output->set_output(json_encode(['success' => false, 'error' => 'Kein Bild hochgeladen.']));
 		}
+
+		if (!file_exists(FCPATH . $baseDir)) {
+			mkdir(FCPATH . $baseDir, 0755, true);
+		}
+
+		$imageName = url_oprava($title) . '_summernote_' . time() . $suffix;
+		$uploadResult = uploadImg('image', $baseDir, $imageName, false, false, true);
+
+		if ($uploadResult && file_exists($uploadResult)) {
+			$response = [
+				'success' => true,
+				'image_url' => base_url($uploadResult)
+			];
+		} else {
+			$response = [
+				'success' => false,
+				'error' => 'Fehler beim Hochladen des Bildes.'
+			];
+		}
+
+		$this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
 
 	public function delete_image()
