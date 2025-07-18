@@ -60,7 +60,7 @@
                             </label>
                             <input type="file" name="image" class="form-control">
                             <?php if (!empty($product->image)): ?>
-                                <img src="<?= base_url($product->image) ?>" height="50" class="mt-2">
+                                <img src="<?= base_url('uploads/Produkte/' . $product->image) ?>" height="50" class="mt-2">
                             <?php endif; ?>
                         </div>
                         <div class="col-lg-6">
