@@ -199,7 +199,7 @@ class Admin extends CI_Controller
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->get_slider_image_by_id($id) : false;
 
-			$image = $this->upload_image('image', 'uploads/Sliders/'); // Updated path
+			$image = $this->upload_image('image', 'uploads/Sliders/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['slider'] = (object)$post;
