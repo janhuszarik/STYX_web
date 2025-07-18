@@ -41,7 +41,7 @@
 									</td>
 									<td class="text-center">
 										<?php if ($slider->image): ?>
-											<img src="<?= base_url('uploads/sliders/' . $slider->image) ?>" style="width: 50px;">
+											<img src="<?= base_url('uploads/Sliders/' . $slider->image) ?>" style="width: 50px;">
 										<?php else: ?>
 											-
 										<?php endif; ?>
