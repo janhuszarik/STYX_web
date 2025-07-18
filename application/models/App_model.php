@@ -106,7 +106,7 @@ class App_model extends CI_Model
 	function getAllActiveProduct()
 	{
 		$this->db->select('*');
-		$this->db->where('active', '1');
+		$this->db->where('active', 1);
 		$this->db->where('lang', language());
 
 		$now = date('Y-m-d H:i:s');
