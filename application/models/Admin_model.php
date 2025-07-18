@@ -545,7 +545,8 @@ class Admin_model extends CI_Model {
 		$total = $this->db->count_all_results();
 
 		$this->db->order_by('updated_at', 'DESC');
-		$top = $this->db->get('bestProduct', 1)-> the->row();
+		$query = $this->db->get('bestProduct', 1);
+		$top = $query->num_rows() > 0 ? $query->row() : null;
 
 		$this->db->order_by('updated_at', 'DESC');
 		$recent = $this->db->get('bestProduct', 3)->result();
@@ -553,7 +554,7 @@ class Admin_model extends CI_Model {
 		return [
 			'total' => $total,
 			'last_title' => $top ? $top->name : '',
-			'last_date' => $top ? date('d.m.Y', strtotime($top->updated_at ?? '')) : '',
+			'last_date' => $top && $top->updated_at ? date('d.m.Y', strtotime($top->updated_at)) : '',
 			'recent' => $recent
 		];
 	}
