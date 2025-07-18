@@ -98,6 +98,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		display: flex;
 		gap: 10px;
 	}
+	.product-image-preview {
+		max-width: 150px;
+		max-height: 150px;
+		object-fit: contain;
+	}
 </style>
 
 <div id="global-status"
@@ -155,7 +160,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 						</div>
 						<div class="col-md-5">
 							<label for="subtitle" class="col-form-label">Untertitel</label>
-							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>" data liberación="Untertitel">
+							<input type="text" class="form-control" name="subtitle" id="subtitle" value="<?= htmlspecialchars($article->subtitle ?? '') ?>" data-label="Untertitel">
 						</div>
 					</div>
 
@@ -210,7 +215,8 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							<label for="image_title" class="col-form-label">Titel des Bildes (SEO) <span class="text-danger">*</span></label>
 							<i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Der SEO-Titel des Hauptbildes. Wird als Alt-Text verwendet, um die Suchmaschinenoptimierung zu verbessern. Pflichtfeld für neue Bilder."></i>
 							<input type="text" class="form-control mb-1" name="image_title" id="image_title" placeholder="Titel des Bildes (SEO)" value="<?= htmlspecialchars($article->image_title ?? '') ?>" data-label="Bildtitel (SEO)" required>
-							<input type="hidden" name=" ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
+							<input type="hidden" name="old_image" value="<?= htmlspecialchars($article->image ?? '') ?>">
+							<input type="hidden" name="ftp_image" id="ftp_image" value="<?= htmlspecialchars($article->ftp_image ?? '') ?>">
 							<button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_image" data-preview-target="ftpImagePreview">
 								Bild aus FTP wählen
 							</button>
@@ -260,7 +266,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					<hr class="my-4 border-dark">
 
 					<div class="form-group pb-3">
-						<?php $this->load->view('admin/settings/article_products_dynamic'); ?>
+						<?php $this->load->view('admin/settings/article_products_dynamic', ['article' => $article]); ?>
 					</div>
 					<hr class="my-4 border-dark">
 
@@ -541,6 +547,8 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			const imageTitle = document.getElementById('image_title').value.trim();
 			const sectionImageInputs = document.querySelectorAll('input[name^="section_images"]');
 			const sectionImageTitles = document.querySelectorAll('input[name^="section_image_titles"]');
+			const productImageInputs = document.querySelectorAll('input[name^="product_image"]');
+			const productImageTitles = document.querySelectorAll('input[name^="product_image_title"]');
 
 			if (imageInput.files.length > 0 && !imageTitle) {
 				e.preventDefault();
@@ -552,6 +560,14 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				if (sectionImageInputs[i].files.length > 0 && !sectionImageTitles[i].value.trim()) {
 					e.preventDefault();
 					showAlert(`Bitte geben Sie einen Bildtitel (SEO) für die Sektion ${i + 1} ein.`, 'error');
+					return;
+				}
+			}
+
+			for (let i = 0; i < productImageInputs.length; i++) {
+				if (productImageInputs[i].files.length > 0 && !productImageTitles[i].value.trim()) {
+					e.preventDefault();
+					showAlert(`Bitte geben Sie einen Bildtitel (SEO) für Produktbild ${i + 1} ein.`, 'error');
 					return;
 				}
 			}
@@ -716,12 +732,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		}
 
 		function isBadText(text) {
-			const badPatterns = [ /<o:p>/i, /<v:shape>/i, /<w:>/i, /mso-/i, /( ){5,}/i ];
+			const badPatterns = [/<\o:p>/i, /<v:shape>/i, /<w:>/i, /mso-/i, /( ){5,}/i];
 			return badPatterns.some(pattern => pattern.test(text));
 		}
 
 		function cleanText(text) {
-			let cleaned = text.replace(/<o:p>.*?<\/o:p>/gi, '').replace(/mso-[\w-]+/gi, '').replace(/( ){3,}/gi, ' ');
+			let cleaned = text.replace(/<\o:p>.*?<\/\o:p>/gi, '').replace(/mso-[\w-]+/gi, '').replace(/( ){3,}/gi, ' ');
 			return cleaned;
 		}
 
@@ -853,7 +869,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 
 		const addSection = (content = '', image = '', imageTitle = '', imageDescription = '', buttonName = '', subpage = '', externalUrl = '', index) => {
 			content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
-			const sectionHtml = `<div class="section mb-4 p-3 border rounded"><input type="hidden" name="sections[${index}]" value="section-${index}"><div class="row"><div class="col-md-9"><label class="col-form-label">Inhalt</label><textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea></div><div class="col-md-3"><label class="col-form-label">Bild hochladen</label><input type="file" class="form-control mb-1" name="section_images[${index}]"><input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}"><input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}"><button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">Bild aus FTP wählen</button><div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">${image ? `<img src="${BASE_URL}${image}" style="max-width:150px;max-height:150px;object-fit:contain;"><button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">×</button>` : ''}</div><label class="col-form-label">Bildtitel (SEO) <span class="text-danger">*</span></label><input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)" required><label class="col-form-label">Bildbeschreibung in der Sektion <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i></label><input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung"></div></div><div class="row mt-3"><div class="col-md-4"><label class="col-form-label">Button-Text</label><input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text"></div><div class="col-md-4"><label class="col-form-label">Unterseite</label><select class="form-control mb-1 subpage-select" name="subpages[${index}]"><option value="">-- Unterseite auswählen --</option>${articleOptions.map(opt => `<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>${opt.label} (${opt.lang})</option>`).join('')}</select></div><div class="col-md-4"><label class="col-form-label">Externe URL</label><input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL"></div></div><div class="section-actions mt-3"><button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button></div></div>`;
+			const sectionHtml = `<div class="section mb-4 p-3 border rounded"><input type="hidden" name="sections[${index}]" value="section-${index}"><div class="row"><div class="col-md-9"><label class="col-form-label">Inhalt</label><textarea class="form-control section-content" name="sections[${index}]" rows="5" data-label="Sektion ${index + 1}">${content}</textarea></div><div class="col-md-3"><label class="col-form-label">Bild hochladen</label><input type="file" class="form-control mb-1" name="section_images[${index}]"><input type="hidden" name="old_section_image[${index}]" id="old_section_image_${index}" value="${image}"><input type="hidden" name="ftp_section_image[${index}]" id="ftp_section_image_${index}" value="${image}"><button type="button" class="btn btn-outline-secondary btn-sm ftp-picker mb-1" data-ftp-target="ftp_section_image_${index}" data-preview-target="ftpSectionImagePreview_${index}">Bild aus FTP wählen</button><div id="ftpSectionImagePreview_${index}" class="mb-2 position-relative">${image ? `<img src="${base_url()}${image}" style="max-width:150px;max-height:150px;object-fit:contain;"><button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="padding: 2px 6px;" onclick="document.getElementById('ftpSectionImagePreview_${index}').innerHTML='';document.getElementById('old_section_image_${index}').value='';document.getElementById('ftp_section_image_${index}').value='';">×</button>` : ''}</div><label class="col-form-label">Bildtitel (SEO) <span class="text-danger">*</span></label><input type="text" class="form-control mb-1" name="section_image_titles[${index}]" value="${imageTitle}" data-label="Sektion ${index + 1} - Bildtitel (SEO)" required><label class="col-form-label">Bildbeschreibung in der Sektion <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Beschreibung des Bildes in der Sektion, die im Frontend angezeigt werden kann."></i></label><input type="text" class="form-control mb-1" name="section_image_descriptions[${index}]" value="${imageDescription}" data-label="Sektion ${index + 1} - Bildbeschreibung"></div></div><div class="row mt-3"><div class="col-md-4"><label class="col-form-label">Button-Text</label><input type="text" class="form-control mb-1" name="button_names[${index}]" value="${buttonName}" data-label="Sektion ${index + 1} - Button-Text"></div><div class="col-md-4"><label class="col-form-label">Unterseite</label><select class="form-control mb-1 subpage-select" name="subpages[${index}]"><option value="">-- Unterseite auswählen --</option>${articleOptions.map(opt => `<option value="${opt.slug}" ${subpage === opt.slug ? 'selected' : ''}>${opt.label} (${opt.lang})</option>`).join('')}</select></div><div class="col-md-4"><label class="col-form-label">Externe URL</label><input type="text" class="form-control mb-1" name="external_urls[${index}]" value="${externalUrl}" data-label="Sektion ${index + 1} - Externe URL"></div></div><div class="section-actions mt-3"><button type="button" class="btn btn-sm btn-danger remove-section">Entfernen</button></div></div>`;
 			const sectionsContainer = document.getElementById('sections-container');
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
@@ -968,6 +984,27 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					if (!allowedTypes.includes(file.type)) { showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.'); this.value = ''; }
 					else if (file.size > 5 * 1024 * 1024) { showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!'); this.value = ''; }
 					else { hideWarning(this); }
+				}
+				// Validácia titulov pre obrázky
+				if (this.name === 'image' && file && !document.getElementById('image_title').value.trim()) {
+					showWarning(document.getElementById('image_title'), 'Bitte geben Sie einen Bildtitel (SEO) ein.');
+					document.getElementById('image_title').focus();
+				}
+				if (this.name.startsWith('section_images') && file) {
+					const index = this.name.match(/\d+/)[0];
+					const titleInput = document.querySelector(`input[name="section_image_titles[${index}]"]`);
+					if (!titleInput.value.trim()) {
+						showWarning(titleInput, 'Bitte geben Sie einen Bildtitel (SEO) ein.');
+						titleInput.focus();
+					}
+				}
+				if (this.name.startsWith('product_image') && file) {
+					const index = this.name.match(/\d+/)[0] - 1;
+					const titleInput = document.querySelector(`input[name="product_image_title${index + 1}"]`);
+					if (!titleInput.value.trim()) {
+						showWarning(titleInput, 'Bitte geben Sie einen Bildtitel (SEO) ein.');
+						titleInput.focus();
+					}
 				}
 			});
 		});
