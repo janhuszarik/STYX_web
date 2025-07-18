@@ -23,6 +23,8 @@ class Migrate_images extends CI_Controller
 			'uploads/articles/other/'
 		];
 
+		$migratedFiles = []; // Zoznam presunutých súborov
+
 		foreach ($articles as $article) {
 			$categoryId = $article->category_id;
 			$categoryBaseDir = ($categoryId == 100) ? 'neuigkeiten' : (($categoryId == 102) ? 'tipps' : 'neuigkeiten');
@@ -56,8 +58,9 @@ class Migrate_images extends CI_Controller
 						if (@copy($oldPath, $newPath)) {
 							$this->db->where('id', $article->id);
 							$this->db->update('articles', ['image' => $baseDir . $imageName]);
-							file_put_contents($logFile, "Úspešne skopírované a aktualizované: $newPath\n", FILE_APPEND);
 							@unlink($oldPath); // Vymazanie starého súboru
+							$migratedFiles[] = $oldPath; // Pridanie do zoznamu presunutých
+							file_put_contents($logFile, "Úspešne skopírované a aktualizované: $newPath\n", FILE_APPEND);
 							file_put_contents($logFile, "Starý súbor vymazaný: $oldPath\n", FILE_APPEND);
 							$found = true;
 						} else {
@@ -89,8 +92,9 @@ class Migrate_images extends CI_Controller
 							if (@copy($oldPath, $newPath)) {
 								$this->db->where('id', $section->id);
 								$this->db->update('article_sections', ['image' => $baseDir . $imageName]);
-								file_put_contents($logFile, "Úspešne skopírované a aktualizované: $newPath\n", FILE_APPEND);
 								@unlink($oldPath); // Vymazanie starého súboru
+								$migratedFiles[] = $oldPath; // Pridanie do zoznamu presunutých
+								file_put_contents($logFile, "Úspešne skopírované a aktualizované: $newPath\n", FILE_APPEND);
 								file_put_contents($logFile, "Starý súbor vymazaný: $oldPath\n", FILE_APPEND);
 								$found = true;
 							} else {
@@ -108,25 +112,42 @@ class Migrate_images extends CI_Controller
 			}
 		}
 
-		// Vymazanie starých priečinkov, ak sú prázdne
+		// Vymazanie starých priečinkov aj s obsahom, ak boli súbory migrované
 		foreach ($oldDirs as $oldDir) {
 			$fullPath = FCPATH . $oldDir;
 			if (is_dir($fullPath)) {
 				$files = glob($fullPath . '*', GLOB_MARK);
-				if (empty($files)) {
-					if (@rmdir($fullPath)) {
-						file_put_contents($logFile, "Starý priečinok vymazaný: $oldDir\n", FILE_APPEND);
-					} else {
-						file_put_contents($logFile, "Chyba pri vymazávaní priečinka: $oldDir (možno nie je prázdny)\n", FILE_APPEND);
+				$allMigrated = true;
+				foreach ($files as $file) {
+					if (is_file($file) && !in_array($file, $migratedFiles)) {
+						$allMigrated = false;
+						break;
 					}
+				}
+				if ($allMigrated || empty($files)) {
+					$this->deleteDirectory($fullPath);
+					file_put_contents($logFile, "Starý priečinok vymazaný: $oldDir\n", FILE_APPEND);
 				} else {
-					file_put_contents($logFile, "Priečinok nie je prázdny, nemôže byť vymazaný: $oldDir\n", FILE_APPEND);
+					file_put_contents($logFile, "Priečinok nie je prázdny alebo obsahuje nemigrované súbory, ponechaný: $oldDir\n", FILE_APPEND);
 				}
 			}
 		}
 
 		file_put_contents($logFile, "Migrácia dokončená: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
 		echo "Migrácia dokončená. Skontroluj log v migration_log.txt.";
+	}
+
+	private function deleteDirectory($dir) {
+		if (!file_exists($dir)) return true;
+		if (!is_dir($dir)) return unlink($dir);
+		foreach (glob($dir . '*', GLOB_MARK) as $file) {
+			if (is_dir($file)) {
+				$this->deleteDirectory($file);
+			} else {
+				unlink($file);
+			}
+		}
+		return rmdir($dir);
 	}
 }
 ?>
