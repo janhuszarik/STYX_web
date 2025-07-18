@@ -257,8 +257,8 @@ class Admin_model extends CI_Model {
 		if (!$slider) {
 			return false;
 		}
-		if ($slider->image && file_exists(FCPATH . 'Uploads/Sliders/' . $slider->image)) {
-			unlink(FCPATH . 'Uploads/Sliders/' . $slider->image);
+		if ($slider->image && file_exists(FCPATH . 'uploads/Sliders/' . $slider->image)) {
+			unlink(FCPATH . 'uploads/Sliders/' . $slider->image);
 		}
 		$this->db->where('id', $id);
 		return $this->db->delete('slider');
