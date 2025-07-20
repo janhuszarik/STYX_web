@@ -13,7 +13,7 @@
 	}
 	#ftp-items-list {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responzívny grid */
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 		gap: 10px;
 	}
 	.ftp-item {
@@ -59,7 +59,7 @@
 		text-align: center;
 		padding: 20px;
 		color: #666;
-		grid-column: 1 / -1; /* Zaberá všetky stĺpce */
+		grid-column: 1 / -1;
 	}
 </style>
 
@@ -96,12 +96,9 @@
 		const backBtn = document.getElementById("ftp-back-btn");
 		const homeBtn = document.getElementById("ftp-home-btn");
 		const searchInput = document.getElementById("ftp-search-input");
-		// Search button už nepotrebujeme na vyhľadávanie, ale môžeme ho nechať v HTML
-		// const searchBtn = document.getElementById("ftp-search-btn");
-
 		let lastTarget = null;
 		let lastPreview = null;
-		let debounceTimer; // ✅ Premenná pre náš debouncing časovač
+		let debounceTimer;
 
 		modalEl.addEventListener('hidden.bs.modal', () => {
 			document.body.classList.remove('modal-open');
@@ -111,15 +108,15 @@
 			backdrops.forEach(backdrop => backdrop.remove());
 		});
 
-		let pathHistory = [''];
+		let pathHistory = ['uploads'];
 		let currentPathIndex = 0;
 
 		function updateBreadcrumb(path) {
-			const parts = path ? path.split('/') : [];
-			let html = `<a href="#" data-path="">/</a>`;
-			let currentPath = '';
-			parts.forEach(part => {
-				if (part) {
+			const parts = path ? path.split('/') : ['uploads'];
+			let html = `<a href="#" data-path="uploads">/uploads</a>`;
+			let currentPath = 'uploads';
+			parts.forEach((part, index) => {
+				if (part && part !== 'uploads') {
 					currentPath += (currentPath ? '/' : '') + part;
 					html += ` / <a href="#" data-path="${currentPath}">${part}</a>`;
 				}
@@ -146,7 +143,7 @@
 
 		function loadFolder(path, searchQuery = '') {
 			itemsList.innerHTML = '<div class="ftp-loading">Lade...</div>';
-			backBtn.disabled = currentPathIndex === 0;
+			backBtn.disabled = path === 'uploads';
 
 			fetch(BASE_URL + "admin/ftpmanager/load_folder", {
 				method: "POST",
@@ -170,14 +167,14 @@
 									? `<img src="${item.url}" alt="${item.name}" loading="lazy">`
 									: '<i class="fa fa-file" style="color: #999;"></i>');
 							const actionClass = item.type === 'dir' ? 'ftp-folder' : (isImage ? 'ftp-image-choose' : '');
-							const size = item.size && item.size !== -1 ? (item.size / 1024).toFixed(2) + ' KB' : '-';
+							const size = item.size && item.size !== -1 ? (item.nize / 1024).toFixed(2) + ' KB' : '-';
 
 							html += `
-							<div class="ftp-item ${actionClass}" data-path="${item.path}" data-url="${item.url || ''}">
-								<div>${icon}</div>
-								<div>${item.name}</div>
-								<div style="margin-left: auto;">${size}</div>
-							</div>`;
+                            <div class="ftp-item ${actionClass}" data-path="${item.path}" data-url="${item.url || ''}">
+                                <div>${icon}</div>
+                                <div>${item.name}</div>
+                                <div style="margin-left: auto;">${size}</div>
+                            </div>`;
 						});
 					}
 
@@ -230,25 +227,20 @@
 
 		homeBtn.addEventListener('click', e => {
 			e.preventDefault();
-			pathHistory = [''];
+			pathHistory = ['uploads'];
 			currentPathIndex = 0;
 			searchInput.value = '';
-			loadFolder('');
+			loadFolder('uploads');
 		});
 
-		// ✅ --- NOVÁ LOGIKA PRE DYNAMICKÉ VYHĽADÁVANIE --- ✅
 		searchInput.addEventListener('input', () => {
-			// Zrušíme predchádzajúci časovač, ak existuje
 			clearTimeout(debounceTimer);
-
-			// Nastavíme nový časovač
 			debounceTimer = setTimeout(() => {
 				const query = searchInput.value;
 				const currentPath = pathHistory[currentPathIndex];
 				loadFolder(currentPath, query);
-			}, 300); // Počkáme 300ms po poslednom zadanom znaku
+			}, 300);
 		});
-
 
 		document.body.addEventListener('click', function (e) {
 			if (!e.target.matches('.ftp-picker')) return;

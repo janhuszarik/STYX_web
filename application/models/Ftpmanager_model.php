@@ -36,13 +36,14 @@ class Ftpmanager_model extends CI_Model
 			}
 
 			$list = [];
+			$ignore_files = ['.htaccess', '.ftpquota']; // Zoznam súborov/priečinkov na ignorovanie
 			foreach ($raw_list as $item) {
 				$info = preg_split("/\s+/", $item, 9);
 				if (count($info) < 9) continue;
 
 				$type = $info[0][0] === 'd' ? 'dir' : 'file';
 				$name = $info[8];
-				if ($name === '.' || $name === '..') continue;
+				if ($name === '.' || $name === '..' || in_array($name, $ignore_files)) continue; // Ignorovať .htaccess a iné
 
 				$full_path = $path_normalized === '' ? $name : $path_normalized . '/' . $name;
 				$size = $type === 'file' ? (int)$info[4] : null;
@@ -61,19 +62,18 @@ class Ftpmanager_model extends CI_Model
 			$this->cache->save($cache_key, $list, 3600);
 		}
 
-		// --- ✅ NOVÁ ČASŤ: Filtrovanie výsledkov ---
+		// Filtrovanie výsledkov podľa vyhľadávania
 		if (!empty($search_query) && is_array($list)) {
 			$filtered_list = [];
 			foreach ($list as $file) {
-				// Hľadáme reťazec v názve súboru (case-insensitive)
 				if (stripos($file['name'], $search_query) !== false) {
 					$filtered_list[] = $file;
 				}
 			}
-			return $filtered_list; // Vrátime len prefiltrované výsledky
+			return $filtered_list;
 		}
 
-		return $list;
+		return is_array($list) ? $list : ['__error' => 'Unexpected data format from FTP.'];
 	}
 
 	public function delete($path)

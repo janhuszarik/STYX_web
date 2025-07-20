@@ -11,7 +11,7 @@ class Ftpmanager extends CI_Controller
 
 	public function index()
 	{
-		$path = $this->input->get('path') ?? '';
+		$path = $this->input->get('path') ?? 'uploads';
 		$search_query = $this->input->get('q') ?? '';
 
 		$data['title'] = 'FTP-Manager';
