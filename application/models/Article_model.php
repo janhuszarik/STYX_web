@@ -161,65 +161,57 @@ class Article_model extends CI_Model
 		$post['keywords'] = clean_input_text($post['keywords'] ?? '');
 		$post['meta'] = clean_input_text($post['meta'] ?? '');
 
-		// Čistenie produktových polí
-		for ($set = 0; $set < 2; $set++) {
-			for ($i = 1; $i <= 3; $i++) {
-				$suffix = ($set * 3) + $i;
-				$post["product_name{$suffix}"] = clean_input_text($post["product_name{$suffix}"] ?? '');
-				$post["product_description{$suffix}"] = clean_input_text($post["product_description{$suffix}"] ?? '');
-			}
-		}
-
-		// Čistenie odporúčaných odkazov
-		for ($i = 1; $i <= 3; $i++) {
-			$post["empfohlen_name{$i}"] = clean_input_text($post["empfohlen_name{$i}"] ?? '');
-			$post["empfohlen_url{$i}"] = clean_input_text($post["empfohlen_url{$i}"] ?? '');
-		}
-
-		// Kombinácia dátumu a času pre start_date_from
-		$start_date_from = null;
-		if (!empty($post['start_date_from_date']) && !empty($post['start_date_from_time'])) {
-			$start_date_from = $post['start_date_from_date'] . ' ' . $post['start_date_from_time'] . ':00';
-		} elseif (!empty($post['start_date_from_date'])) {
-			$start_date_from = $post['start_date_from_date'] . ' 00:00:00';
-		}
-
-		// Kombinácia dátumu a času pre end_date_to
-		$end_date_to = null;
-		if (!empty($post['end_date_to_date']) && !empty($post['end_date_to_time'])) {
-			$end_date_to = $post['end_date_to_date'] . ' ' . $post['end_date_to_time'] . ':00';
-		} elseif (!empty($post['end_date_to_date'])) {
-			$end_date_to = $post['end_date_to_date'] . ' 00:00:00';
-		}
+		// Kombinácia dátumu a času
+		$start_date_from = !empty($post['start_date_from_date']) ? $post['start_date_from_date'] . ' ' . ($post['start_date_from_time'] ?? '00:00') . ':00' : null;
+		$end_date_to = !empty($post['end_date_to_date']) ? $post['end_date_to_date'] . ' ' . ($post['end_date_to_time'] ?? '00:00') . ':00' : null;
 
 		// Určenie základného priečinka podľa kategórie
-		$category = $this->db->get_where('article_categories', ['id' => $post['category_id']])->row();
-		$categoryBaseDir = ($post['category_id'] == 100) ? 'neuigkeiten' : (($post['category_id'] == 102) ? 'tipps' : 'neuigkeiten');
-		$subcategoryDir = '';
+		switch ((int)$post['category_id']) {
+			case 100:
+				$categoryBaseDir = 'neuigkeiten';
+				break;
+			case 102:
+				$categoryBaseDir = 'tipps';
+				break;
+			case 104:
+				$categoryBaseDir = 'Jobs';
+				break;
+			default:
+				$categoryBaseDir = 'neuigkeiten';
+		}
 
-		// Ak je zadaná podkategória (pre Neuigkeiten alebo Tipps)
-		if (in_array($post['category_id'], [100, 102]) && !empty($post['subcategory_id']) && $post['subcategory_id'] !== 'new') {
-			$table = ($post['category_id'] == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+		// Spracovanie podkategórie (len pre 100/102)
+		$subcategoryDir = '';
+		if (in_array((int)$post['category_id'], [100, 102]) && !empty($post['subcategory_id']) && $post['subcategory_id'] !== 'new') {
+			$table = $post['category_id'] == 100 ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
 			$subcategory = $this->db->get_where($table, ['id' => $post['subcategory_id']])->row();
 			$subcategoryDir = $subcategory ? url_oprava($subcategory->name) : '';
 		}
 
-		// Základná cesta pre obrázky článkov
-		$articleBaseDir = "uploads/articles/{$categoryBaseDir}/" . ($subcategoryDir ? "{$subcategoryDir}/" : '');
+		// Dynamické určenie cesty pre obrázky
+		$articleBaseDir = 'uploads/' . $categoryBaseDir . '/';
+		if ($subcategoryDir) {
+			$articleBaseDir .= $subcategoryDir . '/';
+		}
+
 		if (!file_exists(FCPATH . $articleBaseDir)) {
 			mkdir(FCPATH . $articleBaseDir, 0755, true);
 		}
 
-		// Prípona podľa kategórie
-		$suffix = ($post['category_id'] == 100) ? '_neuigkeiten' : (($post['category_id'] == 102) ? '_tipps' : '');
+		// Prípona pre obrázky
+		$suffix = match ((int)$post['category_id']) {
+			100 => '_neuigkeiten',
+			102 => '_tipps',
+			104 => '_Jobs',
+			default => '',
+		};
 
 		// Spracovanie hlavného obrázka
-		$image = null;
+		$image = $post['old_image'] ?? null;
 		$image_title = $post['image_title'] ?? null;
 
 		if (!empty($_FILES['image']['name'])) {
-			$imageName = $image_title ? url_oprava($image_title) : url_oprava($post['title'] ?? 'article');
-			$imageName = $imageName . $suffix;
+			$imageName = url_oprava($image_title ?: ($post['title'] ?? 'article')) . $suffix;
 			$uploadResult = uploadImg('image', $articleBaseDir, $imageName, false, false, true);
 			if ($uploadResult && file_exists($uploadResult)) {
 				$image = $uploadResult;
@@ -228,37 +220,25 @@ class Article_model extends CI_Model
 			}
 		} elseif (!empty($post['ftp_image'])) {
 			$ftpPath = $post['ftp_image'];
-			$imageName = $image_title ? url_oprava($image_title) : url_oprava($post['title'] ?? 'article');
-			$imageName = $imageName . $suffix . '.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
-			$localDir = FCPATH . $articleBaseDir;
-			@mkdir($localDir, 0755, true);
+			$imageName = url_oprava($image_title ?: ($post['title'] ?? 'article')) . $suffix . '.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
+			$localFile = FCPATH . $articleBaseDir . $imageName;
 
 			if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
-				$localFile = $localDir . $imageName;
 				if (@file_put_contents($localFile, @file_get_contents($ftpPath))) {
 					$image = $articleBaseDir . $imageName;
-				} else {
-					return false;
 				}
 			} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
 				$src = FCPATH . ltrim($ftpPath, '/');
-				$dst = $localDir . $imageName;
-				if (@copy($src, $dst)) {
+				if (@copy($src, $localFile)) {
 					$image = $articleBaseDir . $imageName;
-				} else {
-					return false;
 				}
-			} else {
-				$image = $articleBaseDir . $imageName;
 			}
-		} else {
-			$image = $post['old_image'] ?? null;
 		}
 
-		$is_main = isset($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
+		$is_main = !empty($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
 		$slug_title = $is_main ? null : url_title($post['title'], 'dash', true);
 
-		// Ak je článok hlavný, deaktivuj iné hlavné články v rovnakej kategórii
+		// Deaktivácia predchádzajúcich hlavných článkov
 		if ($is_main && !empty($post['category_id'])) {
 			$this->db->where('category_id', $post['category_id']);
 			$this->db->where('is_main', 1);
@@ -268,95 +248,31 @@ class Article_model extends CI_Model
 			$this->db->update('articles', ['is_main' => 0]);
 		}
 
-		// Základné údaje článku
 		$data = [
-			'category_id'     => $post['category_id'],
-			'subcategory_id'  => !empty($post['subcategory_id']) && $post['subcategory_id'] !== 'new' ? $post['subcategory_id'] : null,
-			'lang'            => $post['lang'] ?? 'de',
-			'title'           => $post['title'],
-			'subtitle'        => $post['subtitle'],
-			'slug'            => $post['slug'],
-			'image'           => $image,
-			'image_title'     => $image_title,
-			'keywords'        => $post['keywords'] ?? null,
-			'meta'            => $post['meta'] ?? null,
-			'gallery_id'      => !empty($post['gallery_id']) ? $post['gallery_id'] : null,
-			'active'          => !empty($post['active']) ? 1 : 0,
+			'category_id' => $post['category_id'],
+			'subcategory_id' => !empty($post['subcategory_id']) && $post['subcategory_id'] !== 'new' ? $post['subcategory_id'] : null,
+			'lang' => $post['lang'] ?? 'de',
+			'title' => $post['title'],
+			'subtitle' => $post['subtitle'],
+			'slug' => $post['slug'],
+			'image' => $image,
+			'image_title' => $image_title,
+			'keywords' => $post['keywords'] ?? null,
+			'meta' => $post['meta'] ?? null,
+			'gallery_id' => $post['gallery_id'] ?? null,
+			'active' => !empty($post['active']) ? 1 : 0,
 			'start_date_from' => $start_date_from,
-			'end_date_to'     => $end_date_to,
-			'updated_at'      => date('Y-m-d H:i:s'),
-			'is_main'         => $is_main,
-			'slug_title'      => $slug_title,
+			'end_date_to' => $end_date_to,
+			'updated_at' => date('Y-m-d H:i:s'),
+			'is_main' => $is_main,
+			'slug_title' => $slug_title,
 		];
 
-		// Spracovanie created_at
-		if (!empty($post['id'])) {
-			if (!empty($post['created_at'])) {
-				$data['created_at'] = $post['created_at'] . ' 00:00:00';
-			}
-		} else {
-			$data['created_at'] = (!empty($post['created_at']) ? $post['created_at'] : date('Y-m-d')) . ' 00:00:00';
-		}
-
-		// Spracovanie odporúčaných produktov
-		for ($set = 0; $set < 2; $set++) {
-			for ($i = 1; $i <= 3; $i++) {
-				$suffix = ($set * 3) + $i;
-				$setNum = $set + 1;
-				$prodNum = $i;
-
-				$data["product_set{$setNum}_product{$prodNum}_name"] = $post["product_name{$suffix}"] ?? null;
-				$data["product_set{$setNum}_product{$prodNum}_description"] = $post["product_description{$suffix}"] ?? null;
-				$data["product_set{$setNum}_product{$prodNum}_image_title"] = $post["product_image{$suffix}_title"] ?? null;
-				$data["product_set{$setNum}_product{$prodNum}_url"] = $post["product_url{$suffix}"] ?? null;
-				$data["product_set{$setNum}_product{$prodNum}_image"] = $post["old_product_image{$suffix}"] ?? null;
-
-				if (!empty($_FILES["product_image{$suffix}"]['name']) && $_FILES["product_image{$suffix}"]['size'] > 0) {
-					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}";
-					$up = uploadImg("product_image{$suffix}", 'uploads/Produkte/', $nazov, false, false, false);
-					if ($up && file_exists($up)) {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = $up;
-					} else {
-						return false;
-					}
-				} elseif (!empty($post["ftp_product_image{$suffix}"]) && $post["ftp_product_image{$suffix}"] !== $post["old_product_image{$suffix}"]) {
-					$ftpPath = $post["ftp_product_image{$suffix}"];
-					$nazov = url_oprava($post['title'] ?? 'product') . "_set{$setNum}_produkt{$prodNum}" . '.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
-					$localDir = FCPATH . 'uploads/Produkte/';
-					@mkdir($localDir, 0755, true);
-
-					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
-						$dst = $localDir . $nazov;
-						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/Produkte/' . $nazov;
-						} else {
-							return false;
-						}
-					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
-						$src = FCPATH . ltrim($ftpPath, '/');
-						$dst = $localDir . $nazov;
-						if (@copy($src, $dst)) {
-							$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/Produkte/' . $nazov;
-						} else {
-							return false;
-						}
-					} else {
-						$data["product_set{$setNum}_product{$prodNum}_image"] = 'uploads/Produkte/' . $nazov;
-					}
-				}
-			}
-		}
-
-		// Spracovanie odporúčaných odkazov
-		for ($i = 1; $i <= 3; $i++) {
-			$data["empfohlen_name{$i}"] = $post["empfohlen_name{$i}"] ?? null;
-			$data["empfohlen_url{$i}"] = $post["empfohlen_url{$i}"] ?? null;
-		}
+		$data['created_at'] = !empty($post['created_at']) ? $post['created_at'] . ' 00:00:00' : date('Y-m-d 00:00:00');
 
 		// Uloženie alebo aktualizácia článku
-		if (!empty($post['id']) && is_numeric($post['id'])) {
+		if (!empty($post['id'])) {
 			$this->db->where('id', $post['id']);
-			$data['updated_at'] = date('Y-m-d H:i:s');
 			$ok = $this->db->update('articles', $data);
 			$articleId = $post['id'];
 		} else {
@@ -368,20 +284,14 @@ class Article_model extends CI_Model
 			return false;
 		}
 
-		// Spracovanie sekcií
+		// SEKCIE
 		if (isset($post['sections']) && is_array($post['sections'])) {
 			$this->db->delete('article_sections', ['article_id' => $articleId]);
 			foreach ($post['sections'] as $idx => $content) {
 				$secImg = $post['old_section_image'][$idx] ?? null;
 				$secImgTitle = $post['section_image_titles'][$idx] ?? null;
-				$secImgDescription = $post['section_image_descriptions'][$idx] ?? null;
-				$buttonName = $post['button_names'][$idx] ?? null;
-				$subpage = $post['subpages'][$idx] ?? null;
-				$externalUrl = $post['external_urls'][$idx] ?? null;
 
 				if (!empty($_FILES['section_images']['name'][$idx])) {
-					$sectionName = $secImgTitle ? url_oprava($secImgTitle) : url_oprava($post['title'] . '_section_' . $idx);
-					$sectionName = $sectionName . $suffix;
 					$_FILES['temp_section_image'] = [
 						'name' => $_FILES['section_images']['name'][$idx],
 						'type' => $_FILES['section_images']['type'][$idx],
@@ -389,49 +299,38 @@ class Article_model extends CI_Model
 						'error' => $_FILES['section_images']['error'][$idx],
 						'size' => $_FILES['section_images']['size'][$idx],
 					];
-					$uploadResult = uploadImg('temp_section_image', $articleBaseDir, $sectionName, false, false, true);
+
+					$imgName = url_oprava($secImgTitle ?: ($post['title'] . '_section_' . $idx)) . $suffix;
+					$uploadResult = uploadImg('temp_section_image', $articleBaseDir, $imgName, false, false, true);
 					if ($uploadResult && file_exists($uploadResult)) {
 						$secImg = $uploadResult;
-					} else {
-						return false;
 					}
 				} elseif (!empty($post['ftp_section_image'][$idx])) {
 					$ftpPath = $post['ftp_section_image'][$idx];
-					$sectionName = $secImgTitle ? url_oprava($secImgTitle) : url_oprava($post['title'] . '_section_' . $idx);
-					$sectionName = $sectionName . $suffix . '.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
-					$localDir = FCPATH . $articleBaseDir;
-					@mkdir($localDir, 0755, true);
+					$imgName = url_oprava($secImgTitle ?: ($post['title'] . '_section_' . $idx)) . $suffix . '.' . pathinfo($ftpPath, PATHINFO_EXTENSION);
+					$localPath = FCPATH . $articleBaseDir . $imgName;
 
 					if (filter_var($ftpPath, FILTER_VALIDATE_URL)) {
-						$dst = $localDir . $sectionName;
-						if (@file_put_contents($dst, @file_get_contents($ftpPath))) {
-							$secImg = $articleBaseDir . $sectionName;
-						} else {
-							$secImg = $ftpPath;
+						if (@file_put_contents($localPath, @file_get_contents($ftpPath))) {
+							$secImg = $articleBaseDir . $imgName;
 						}
 					} elseif (file_exists(FCPATH . ltrim($ftpPath, '/'))) {
-						$src = FCPATH . ltrim($ftpPath, '/');
-						$dst = $localDir . $sectionName;
-						if (@copy($src, $dst)) {
-							$secImg = $articleBaseDir . $sectionName;
-						} else {
-							$secImg = $ftpPath;
+						if (@copy(FCPATH . ltrim($ftpPath, '/'), $localPath)) {
+							$secImg = $articleBaseDir . $imgName;
 						}
-					} else {
-						$secImg = $articleBaseDir . $sectionName;
 					}
 				}
 
 				$sectionData = [
-					'article_id'   => $articleId,
-					'content'      => remove_empty_tags(purify_html($content)),
-					'image'        => $secImg,
-					'image_title'  => $secImgTitle,
-					'image_description' => $secImgDescription,
-					'button_name'  => $buttonName,
-					'subpage'      => $subpage,
-					'external_url' => $externalUrl,
-					'order'        => $idx,
+					'article_id' => $articleId,
+					'content' => remove_empty_tags(purify_html($content)),
+					'image' => $secImg,
+					'image_title' => $secImgTitle,
+					'image_description' => $post['section_image_descriptions'][$idx] ?? null,
+					'button_name' => $post['button_names'][$idx] ?? null,
+					'subpage' => $post['subpages'][$idx] ?? null,
+					'external_url' => $post['external_urls'][$idx] ?? null,
+					'order' => $idx,
 				];
 
 				if (!$this->db->insert('article_sections', $sectionData)) {
@@ -442,6 +341,7 @@ class Article_model extends CI_Model
 
 		return $ok;
 	}
+
 
 	public function deleteArticle($id)
 	{

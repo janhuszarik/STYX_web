@@ -357,15 +357,31 @@ class Article extends CI_Controller
 		if ($this->input->post('is_product')) {
 			$baseDir = 'uploads/Produkte/';
 		} else {
-			$categoryBaseDir = ($category_id == 100) ? 'neuigkeiten' : (($category_id == 102) ? 'tipps' : 'neuigkeiten');
-			$suffix = ($category_id == 100) ? '_neuigkeiten' : (($category_id == 102) ? '_tipps' : '');
-			$subcategoryDir = '';
-			if (in_array($category_id, [100, 102]) && !empty($subcategory_id) && $subcategory_id !== 'new') {
-				$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
-				$subcategory = $this->db->get_where($table, ['id' => $subcategory_id])->row();
-				$subcategoryDir = $subcategory ? url_oprava($subcategory->name) : '';
+			if ($category_id == 100) {
+				$categoryBaseDir = 'neuigkeiten';
+				$suffix = '_neuigkeiten';
+			} elseif ($category_id == 102) {
+				$categoryBaseDir = 'tipps';
+				$suffix = '_tipps';
+			} elseif ($category_id == 104) {
+				// Pri Jobs nejdeme cez uploads/articles
+				$baseDir = 'uploads/Jobs/';
+				$suffix = '_Jobs';
+			} else {
+				$categoryBaseDir = 'neuigkeiten';
+				$suffix = '';
 			}
-			$baseDir = "uploads/articles/{$categoryBaseDir}/" . ($subcategoryDir ? "{$subcategoryDir}/" : '');
+
+			if (!isset($baseDir)) {
+				// Iba ak sa nenastavil $baseDir vyššie (čiže nie pri Jobs)
+				$subcategoryDir = '';
+				if (in_array($category_id, [100, 102]) && !empty($subcategory_id) && $subcategory_id !== 'new') {
+					$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
+					$subcategory = $this->db->get_where($table, ['id' => $subcategory_id])->row();
+					$subcategoryDir = $subcategory ? url_oprava($subcategory->name) : '';
+				}
+				$baseDir = "uploads/articles/{$categoryBaseDir}/" . ($subcategoryDir ? "{$subcategoryDir}/" : '');
+			}
 		}
 
 		if (!file_exists(FCPATH . $baseDir)) {
@@ -389,6 +405,7 @@ class Article extends CI_Controller
 
 		$this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
+
 
 	public function delete_image()
 	{
@@ -535,4 +552,5 @@ class Article extends CI_Controller
 		}
 		echo json_encode(['success' => true, 'html' => $html]);
 	}
+
 }

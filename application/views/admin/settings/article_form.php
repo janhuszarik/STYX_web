@@ -524,18 +524,37 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			const categoryId = '<?= htmlspecialchars($categoryId) ?>';
 			const subcategoryId = document.getElementById('subcategory_id')?.value || '';
 			const title = document.getElementById('title')?.value || 'article';
-			const suffix = (categoryId == '100') ? '_neuigkeiten' : (categoryId == '102' ? '_tipps' : '');
-			let baseDir = `uploads/articles/${categoryId == '100' ? 'neuigkeiten' : 'tipps'}/`;
 
-			if (subcategoryId && subcategoryId !== 'new') {
+			let baseDir = '';
+			let suffix = '';
+
+			if (categoryId == '100') {
+				baseDir = 'uploads/neuigkeiten/';
+				suffix = '_neuigkeiten';
+			} else if (categoryId == '102') {
+				baseDir = 'uploads/tipps/';
+				suffix = '_tipps';
+			} else if (categoryId == '104') {
+				baseDir = 'uploads/Jobs/';
+				suffix = '_Jobs';
+			} else {
+				baseDir = 'uploads/neuigkeiten/';
+			}
+
+			if (subcategoryId && subcategoryId !== 'new' && (categoryId == '100' || categoryId == '102')) {
 				const subcategoryName = document.querySelector(`#subcategory_id option[value="${subcategoryId}"]`)?.text || '';
 				if (subcategoryName) {
 					baseDir += urlOprava(subcategoryName) + '/';
 				}
 			}
 
-			return { baseDir, suffix, title: urlOprava(title) };
+			return {
+				baseDir,
+				suffix,
+				title: urlOprava(title)
+			};
 		}
+
 
 		function urlOprava(str) {
 			return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -848,13 +867,26 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							data: data,
 							contentType: false,
 							processData: false,
-							success: function (response) {
-								if (response.success) {
+							success: function (resp) {
+								let response = resp;
+
+								// Ak je odpoveď string, parsuj ako JSON
+								if (typeof resp === 'string') {
+									try {
+										response = JSON.parse(resp);
+									} catch (e) {
+										showAlert('Neplatná odpoveď zo servera.', 'error');
+										return;
+									}
+								}
+
+								if (response.success && response.image_url) {
 									$(selector).summernote('insertImage', response.image_url);
 								} else {
-									showAlert(response.error || 'Fehler beim Hochladen des Bildes.', 'error');
+									showAlert(response.error || 'Obrázok sa nepodarilo vložiť.', 'error');
 								}
-							},
+							}
+							,
 							error: function () {
 								showAlert('Fehler beim Hochladen des Bildes.', 'error');
 							}
