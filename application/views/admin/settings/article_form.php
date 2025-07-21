@@ -833,6 +833,8 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 
 		function initSummernote(selector) {
 			if (typeof jQuery === 'undefined') { return; }
+			document.execCommand("styleWithCSS", null, true);
+
 			$(selector).summernote({
 				height: 300,
 				lang: 'de-DE',
@@ -881,8 +883,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 								}
 
 								if (response.success && response.image_url) {
-									$(selector).summernote('insertImage', response.image_url);
-								} else {
+									$(selector).summernote('insertImage', response.image_url, function ($image) {
+										$image.css('width', '25%');
+									});
+								}
+
+							} else {
 									showAlert(response.error || 'Obrázok sa nepodarilo vložiť.', 'error');
 								}
 							}
