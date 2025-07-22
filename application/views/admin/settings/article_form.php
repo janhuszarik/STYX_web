@@ -478,8 +478,8 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 	const base_url = "<?= base_url() ?>";
 </script>
 
-<script>
-	document.addEventListener('DOMContentLoaded', function () {
+<script>document.addEventListener('DOMContentLoaded', function () {
+		const base_url = "<?= base_url() ?>";
 		const articleOptions = <?= $articleOptionsJson ?>;
 		const langSelect = document.getElementById('lang');
 		const titleInput = document.getElementById('title');
@@ -530,16 +530,16 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			let suffix = '';
 
 			if (categoryId == '100') {
-				baseDir = 'uploads/Neuigkeiten/';
+				baseDir = 'Uploads/Neuigkeiten/';
 				suffix = '_neuigkeiten';
 			} else if (categoryId == '102') {
-				baseDir = 'uploads/Tipps/';
+				baseDir = 'Uploads/Tipps/';
 				suffix = '_tipps';
 			} else if (categoryId == '104') {
-				baseDir = 'uploads/Jobs/';
+				baseDir = 'Uploads/Jobs/';
 				suffix = '_Jobs';
 			} else {
-				baseDir = 'uploads/neuigkeiten/';
+				baseDir = 'Uploads/neuigkeiten/';
 			}
 
 			if (subcategoryId && subcategoryId !== 'new' && (categoryId == '100' || categoryId == '102')) {
@@ -555,7 +555,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				title: urlOprava(title)
 			};
 		}
-
 
 		function urlOprava(str) {
 			return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -584,7 +583,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					return;
 				}
 			}
-
 
 			for (let i = 0; i < sectionImageInputs.length; i++) {
 				if (sectionImageInputs[i].files.length > 0 && !sectionImageTitles[i].value.trim()) {
@@ -621,11 +619,40 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					return;
 				}
 			}
-			// const warnings = document.querySelectorAll('.text-danger');
-			// if (warnings.length > 0) {
-			// 	e.preventDefault();
-			// 	showAlert('Das Formular enthält ungültigen Text oder Dateien! Korrigieren Sie sie vor dem Speichern.', 'error');
-			// }
+		});
+
+		// Automatické predvyplnenie image_title názvom súboru
+		document.getElementById('image').addEventListener('change', function () {
+			const file = this.files[0];
+			const imageTitleInput = document.getElementById('image_title');
+			const articleTitle = document.getElementById('title')?.value.trim();
+
+			if (file) {
+				const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+				if (!allowedTypes.includes(file.type)) {
+					showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.');
+					this.value = '';
+					return;
+				}
+				if (file.size > 5 * 1024 * 1024) {
+					showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!');
+					this.value = '';
+					return;
+				}
+				hideWarning(this);
+
+				// Ak nie je vyplnený image_title, použije sa názov súboru alebo article title
+				if (!imageTitleInput.value.trim()) {
+					if (articleTitle) {
+						imageTitleInput.value = articleTitle;
+					} else {
+						// Použitie názvu súboru bez prípony
+						const fileName = file.name.split('.').slice(0, -1).join('.');
+						imageTitleInput.value = fileName;
+					}
+					hideWarning(imageTitleInput);
+				}
+			}
 		});
 
 		if (allowedCategoryIds.includes(categoryId)) {
@@ -637,8 +664,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				})
 					.then(response => response.json())
 					.then(data => {
-						if (data.success) { subcategorySelect.innerHTML = data.options; }
-						else { showAlert(data.message || 'Fehler beim Laden der Unterkategorien.', 'error'); }
+						if (data.success) {
+							subcategorySelect.innerHTML = data.options;
+						} else {
+							showAlert(data.message || 'Fehler beim Laden der Unterkategorien.', 'error');
+						}
 					})
 					.catch(error => showAlert('Fehler beim Laden der Unterkategorien.', 'error'));
 			}
@@ -675,7 +705,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			}
 
 			const subcategoryModal = document.getElementById('subcategoryModal');
-			subcategoryModal.addEventListener('hidden.bs.modal', function () { resetSubcategoryForm(); });
+			subcategoryModal.addEventListener('hidden.bs.modal', function () {
+				resetSubcategoryForm();
+			});
 
 			subcategoryForm.addEventListener('submit', function (e) {
 				e.preventDefault();
@@ -683,7 +715,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				this.dataset.submitting = true;
 				const formData = new FormData(this);
 				const data = new URLSearchParams();
-				for (let [key, value] of formData.entries()) { data.append(key, value); }
+				for (let [key, value] of formData.entries()) {
+					data.append(key, value);
+				}
 				data.append('category_id', categoryId);
 				data.append('<?= $this->security->get_csrf_token_name() ?>', '<?= $this->security->get_csrf_hash() ?>');
 				fetch('<?= base_url('admin/article/manageSubcategory') ?>', {
@@ -691,7 +725,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
 					body: data
 				})
-					.then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Network response was not ok');
+						}
+						return response.json();
+					})
 					.then(data => {
 						this.dataset.submitting = false;
 						if (data.success) {
@@ -702,12 +741,19 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							loadSubcategories();
 							loadSubcategoriesForManagement();
 							if (data.subcategory && data.subcategory.id) {
-								setTimeout(() => { subcategorySelect.value = data.subcategory.id; }, 150);
+								setTimeout(() => {
+									subcategorySelect.value = data.subcategory.id;
+								}, 150);
 							}
 							resetSubcategoryForm();
-						} else { showAlert(data.message || 'Fehler beim Speichern der Unterkategorie.', 'error'); }
+						} else {
+							showAlert(data.message || 'Fehler beim Speichern der Unterkategorie.', 'error');
+						}
 					})
-					.catch(error => { this.dataset.submitting = false; showAlert('Fehler beim Speichern der Unterkategorie: ' + error.message, 'error'); });
+					.catch(error => {
+						this.dataset.submitting = false;
+						showAlert('Fehler beim Speichern der Unterkategorie: ' + error.message, 'error');
+					});
 			});
 
 			function bindSubcategoryActions() {
@@ -732,7 +778,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
 							body: 'id=' + encodeURIComponent(id) + '&category_id=' + encodeURIComponent(categoryId) + '&<?= $this->security->get_csrf_token_name() ?>=' + '<?= $this->security->get_csrf_hash() ?>'
 						})
-							.then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								return response.json();
+							})
 							.then(data => {
 								if (data.success) {
 									showAlert(data.message || 'Unterkategorie erfolgreich gelöscht.', 'success');
@@ -742,7 +793,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 									const modalElement = document.getElementById('subcategoryModal');
 									const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
 									modalInstance.hide();
-								} else { showAlert(data.message || 'Fehler beim Löschen der Unterkategorie.', 'error'); }
+								} else {
+									showAlert(data.message || 'Fehler beim Löschen der Unterkategorie.', 'error');
+								}
 							})
 							.catch(error => showAlert('Fehler beim Löschen der Unterkategorie: ' + error.message, 'error'));
 					});
@@ -758,7 +811,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			manageSubcategoriesBtn.addEventListener('click', loadSubcategoriesForManagement);
 		} else {
 			const subcategoryField = document.querySelector('#subcategory_id')?.closest('.col-md-3');
-			if (subcategoryField) { subcategoryField.style.display = 'none'; }
+			if (subcategoryField) {
+				subcategoryField.style.display = 'none';
+			}
 		}
 
 		function isBadText(text) {
@@ -779,8 +834,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			let errors = [];
 			let fixes = [];
 			Object.entries(inputStates).forEach(([id, state]) => {
-				if (state.status === 'error') { errors.push(state.label); }
-				if (state.status === 'fixed') { fixes.push(state.label); }
+				if (state.status === 'error') {
+					errors.push(state.label);
+				}
+				if (state.status === 'fixed') {
+					fixes.push(state.label);
+				}
 			});
 
 			let message = '';
@@ -802,7 +861,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 					message = `Alle Texte sind in Ordnung und wurden erfolgreich korrigiert.`;
 					statusText.innerHTML = message.trim();
 					globalStatus.style.display = 'block';
-					successTimer = setTimeout(() => { globalStatus.style.display = 'none'; }, 8000);
+					successTimer = setTimeout(() => {
+						globalStatus.style.display = 'none';
+					}, 8000);
 				} else {
 					globalStatus.style.display = 'none';
 				}
@@ -833,7 +894,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		}
 
 		function initSummernote(selector) {
-			if (typeof jQuery === 'undefined') { return; }
+			if (typeof jQuery === 'undefined') {
+				return;
+			}
 			$(selector).summernote({
 				height: 300,
 				lang: 'de-DE',
@@ -855,7 +918,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 						document.execCommand('insertText', false, cleanedText);
 						validateInput(this, cleanedText);
 					},
-					onChange: function(contents) { validateInput(this, contents); },
+					onChange: function(contents) {
+						validateInput(this, contents);
+					},
 					onImageUpload: function (files) {
 						const { baseDir, suffix, title } = getImageUploadPath();
 						const data = new FormData();
@@ -871,8 +936,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							processData: false,
 							success: function (resp) {
 								let response = resp;
-
-								// Ak je odpoveď string, parsuj ako JSON
 								if (typeof resp === 'string') {
 									try {
 										response = JSON.parse(resp);
@@ -881,14 +944,12 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 										return;
 									}
 								}
-
 								if (response.success && response.image_url) {
 									$(selector).summernote('insertImage', response.image_url);
 								} else {
 									showAlert(response.error || 'Obrázok sa nepodarilo vložiť.', 'error');
 								}
-							}
-							,
+							},
 							error: function () {
 								showAlert('Fehler beim Hochladen des Bildes.', 'error');
 							}
@@ -918,13 +979,28 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			if (sectionsContainer) {
 				sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
 				const textarea = sectionsContainer.querySelector('.section:last-child .section-content');
-				if (textarea) { try { initSummernote(textarea); } catch (err) { textarea.value = textarea.value.replace(/<[^>]*>/g, ''); initSummernote(textarea); } }
+				if (textarea) {
+					try {
+						initSummernote(textarea);
+					} catch (err) {
+						textarea.value = textarea.value.replace(/<[^>]*>/g, '');
+						initSummernote(textarea);
+					}
+				}
 				bindRemoveSection();
 				bindFtpPicker();
 				const newSection = document.querySelector('#sections-container .section:last-child');
 				newSection.querySelectorAll('input[type="text"], textarea').forEach(el => {
-					el.addEventListener('input', function() { validateInput(this, this.value); });
-					el.addEventListener('paste', function(e) { const pasted = e.clipboardData.getData('Text'); e.preventDefault(); let cleaned = cleanText(pasted); this.value = (this.value || '') + cleaned; validateInput(this, this.value); });
+					el.addEventListener('input', function() {
+						validateInput(this, this.value);
+					});
+					el.addEventListener('paste', function(e) {
+						const pasted = e.clipboardData.getData('Text');
+						e.preventDefault();
+						let cleaned = cleanText(pasted);
+						this.value = (this.value || '') + cleaned;
+						validateInput(this, this.value);
+					});
 					validateInput(el, el.value);
 				});
 				newSection.querySelectorAll('input[type="file"]').forEach(el => {
@@ -932,21 +1008,30 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 						const file = this.files[0];
 						if (file) {
 							const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-							if (!allowedTypes.includes(file.type)) { showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.'); this.value = ''; }
-							else if (file.size > 5 * 1024 * 1024) { showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!'); this.value = ''; }
-							else { hideWarning(this); }
-							const imageTitleInput = newSection.querySelector(`input[name="section_image_titles[${index}]"]`);
-							if (file && !imageTitleInput.value.trim()) {
+							if (!allowedTypes.includes(file.type)) {
+								showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.');
+								this.value = '';
+							}
+							else if (file.size > 5 * 1024 * 1024) {
+								showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!');
+								this.value = '';
+							}
+							else {
+								hideWarning(this);
+							}
+							const index = this.name.match(/\d+/)[0];
+							const titleInput = document.querySelector(`input[name="section_image_titles[${index}]"]`);
+							if (file && !titleInput.value.trim()) {
 								const title = document.getElementById('title')?.value.trim();
 								if (title) {
-									imageTitleInput.value = title;
-									hideWarning(imageTitleInput);
+									titleInput.value = title;
+									hideWarning(titleInput);
 								} else {
-									showWarning(imageTitleInput, 'Bitte geben Sie einen Bildtitel (SEO) ein.');
-									imageTitleInput.focus();
+									const fileName = file.name.split('.').slice(0, -1).join('.');
+									titleInput.value = fileName;
+									hideWarning(titleInput);
 								}
 							}
-
 						}
 					});
 				});
@@ -958,7 +1043,9 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				button.addEventListener('click', function () {
 					if (confirm('Sind Sie sicher, dass Sie diese Sektion entfernen möchten?')) {
 						const section = this.closest('.section');
-						section.querySelectorAll('input[type="text"], textarea').forEach(el => { delete inputStates[el.id || el.dataset.label]; });
+						section.querySelectorAll('input[type="text"], textarea').forEach(el => {
+							delete inputStates[el.id || el.dataset.label];
+						});
 						section.remove();
 						updateGlobalStatus();
 					}
@@ -999,24 +1086,42 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		document.getElementById('gallery_category_id').addEventListener('change', function () {
 			const categoryId = this.value;
 			const gallerySelect = document.getElementById('gallery_id');
-			if (!categoryId) { gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen --</option>'; return; }
+			if (!categoryId) {
+				gallerySelect.innerHTML = '<option value="">-- Zuerst Kategorie auswählen --</option>';
+				return;
+			}
 			fetch('<?= base_url('admin/article/getGalleriesByCategory') ?>', {
-				method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded', },
 				body: 'category_id=' + encodeURIComponent(categoryId)
 			})
-				.then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
-				.then(data => {
-					if (data.success) { gallerySelect.innerHTML = data.options; }
-					else { showAlert(data.message || 'Fehler beim Laden der Galerien.', 'error'); }
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Network response was not ok');
+					}
+					return response.json();
 				})
-				.catch(error => { showAlert('Fehler beim Laden der Galerien: ' + error.message, 'error'); });
+				.then(data => {
+					if (data.success) {
+						gallerySelect.innerHTML = data.options;
+					} else {
+						showAlert(data.message || 'Fehler beim Laden der Galerien.', 'error');
+					}
+				})
+				.catch(error => {
+					showAlert('Fehler beim Laden der Galerien: ' + error.message, 'error');
+				});
 		});
 
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-		tooltipTriggerList.forEach(function (tooltipTriggerEl) { new bootstrap.Tooltip(tooltipTriggerEl); });
+		tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+			new bootstrap.Tooltip(tooltipTriggerEl);
+		});
 
 		document.querySelectorAll('input[type="text"], textarea:not(.section-content)').forEach(input => {
-			input.addEventListener('input', function() { validateInput(this, this.value); });
+			input.addEventListener('input', function() {
+				validateInput(this, this.value);
+			});
 			input.addEventListener('paste', function(e) {
 				const pasted = e.clipboardData.getData('Text');
 				e.preventDefault();
@@ -1032,29 +1137,57 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				const file = this.files[0];
 				if (file) {
 					const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-					if (!allowedTypes.includes(file.type)) { showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.'); this.value = ''; }
-					else if (file.size > 5 * 1024 * 1024) { showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!'); this.value = ''; }
-					else { hideWarning(this); }
-				}
-				// Validácia titulov pre obrázky
-				if (this.name === 'image' && file && !document.getElementById('image_title').value.trim()) {
-					showWarning(document.getElementById('image_title'), 'Bitte geben Sie einen Bildtitel (SEO) ein.');
-					document.getElementById('image_title').focus();
-				}
-				if (this.name.startsWith('section_images') && file) {
-					const index = this.name.match(/\d+/)[0];
-					const titleInput = document.querySelector(`input[name="section_image_titles[${index}]"]`);
-					if (!titleInput.value.trim()) {
-						showWarning(titleInput, 'Bitte geben Sie einen Bildtitel (SEO) ein.');
-						titleInput.focus();
+					if (!allowedTypes.includes(file.type)) {
+						showWarning(this, 'Achtung: Ungültiger Dateityp! Unterstützt: JPG, PNG, GIF, WEBP.');
+						this.value = '';
 					}
-				}
-				if (this.name.startsWith('product_image') && file) {
-					const index = this.name.match(/\d+/)[0] - 1;
-					const titleInput = document.querySelector(`input[name="product_image_title${index + 1}"]`);
-					if (!titleInput.value.trim()) {
-						showWarning(titleInput, 'Bitte geben Sie einen Bildtitel (SEO) ein.');
-						titleInput.focus();
+					else if (file.size > 5 * 1024 * 1024) {
+						showWarning(this, 'Achtung: Die Datei ist zu groß (max 5MB)!');
+						this.value = '';
+					}
+					else {
+						hideWarning(this);
+					}
+					if (this.name === 'image' && file && !document.getElementById('image_title').value.trim()) {
+						const title = document.getElementById('title')?.value.trim();
+						if (title) {
+							document.getElementById('image_title').value = title;
+							hideWarning(document.getElementById('image_title'));
+						} else {
+							const fileName = file.name.split('.').slice(0, -1).join('.');
+							document.getElementById('image_title').value = fileName;
+							hideWarning(document.getElementById('image_title'));
+						}
+					}
+					if (this.name.startsWith('section_images') && file) {
+						const index = this.name.match(/\d+/)[0];
+						const titleInput = document.querySelector(`input[name="section_image_titles[${index}]"]`);
+						if (!titleInput.value.trim()) {
+							const title = document.getElementById('title')?.value.trim();
+							if (title) {
+								titleInput.value = title;
+								hideWarning(titleInput);
+							} else {
+								const fileName = file.name.split('.').slice(0, -1).join('.');
+								titleInput.value = fileName;
+								hideWarning(titleInput);
+							}
+						}
+					}
+					if (this.name.startsWith('product_image') && file) {
+						const index = this.name.match(/\d+/)[0] - 1;
+						const titleInput = document.querySelector(`input[name="product_image_title${index + 1}"]`);
+						if (!titleInput.value.trim()) {
+							const title = document.getElementById('title')?.value.trim();
+							if (title) {
+								titleInput.value = title;
+								hideWarning(titleInput);
+							} else {
+								const fileName = file.name.split('.').slice(0, -1).join('.');
+								titleInput.value = fileName;
+								hideWarning(titleInput);
+							}
+						}
 					}
 				}
 			});
@@ -1062,12 +1195,13 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 
 		setTimeout(() => {
 			document.querySelectorAll('.section-content').forEach(textarea => {
-				if (!$(textarea).hasClass('note-editor')) { initSummernote(textarea); }
+				if (!$(textarea).hasClass('note-editor')) {
+					initSummernote(textarea);
+				}
 			});
 		}, 500);
 	});
+
 	$(document).on('click', '.note-modal .close, .note-modal .modal-header .close', function () {
 		$(this).closest('.note-modal').modal('hide');
-	});
-
-</script>
+	});</script>
