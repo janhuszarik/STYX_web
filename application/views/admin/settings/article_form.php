@@ -103,6 +103,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		max-height: 150px;
 		object-fit: contain;
 	}
+
 </style>
 
 <div id="global-status"
@@ -836,6 +837,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			$(selector).summernote({
 				height: 300,
 				lang: 'de-DE',
+				dialogsInBody: true,
 				toolbar: [
 					['style', ['style']],
 					['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'fontsize']],
@@ -1064,4 +1066,8 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			});
 		}, 500);
 	});
+	$(document).on('click', '.note-modal .close, .note-modal .modal-header .close', function () {
+		$(this).closest('.note-modal').modal('hide');
+	});
+
 </script>
