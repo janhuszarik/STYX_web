@@ -937,11 +937,11 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 							else { hideWarning(this); }
 							const imageTitleInput = newSection.querySelector(`input[name="section_image_titles[${index}]"]`);
 							if (file && !imageTitleInput.value.trim()) {
-								const title = document.getElementById('title')?.value.trim();
-								if (title) {
-									imageTitleInput.value = title;
-									hideWarning(imageTitleInput);
-								} else {
+								const filename = file.name.replace(/\.[^/.]+$/, ""); // bez prípony
+								imageTitleInput.value = filename;
+								hideWarning(imageTitleInput);
+							}
+								else {
 									showWarning(imageTitleInput, 'Bitte geben Sie einen Bildtitel (SEO) ein.');
 									imageTitleInput.focus();
 								}
@@ -1069,5 +1069,16 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 	$(document).on('click', '.note-modal .close, .note-modal .modal-header .close', function () {
 		$(this).closest('.note-modal').modal('hide');
 	});
+	document.getElementById('image').addEventListener('change', function () {
+		const file = this.files[0];
+		if (file) {
+			const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // odstraň príponu
+			const titleInput = document.getElementById('image_title');
+			if (titleInput && !titleInput.value.trim()) {
+				titleInput.value = fileNameWithoutExtension;
+			}
+		}
+	});
+
 
 </script>
