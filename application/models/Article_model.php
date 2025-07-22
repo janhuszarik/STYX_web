@@ -168,17 +168,18 @@ class Article_model extends CI_Model
 		// Určenie základného priečinka podľa kategórie
 		switch ((int)$post['category_id']) {
 			case 100:
-				$categoryBaseDir = 'neuigkeiten';
+				$categoryBaseDir = 'Neuigkeiten';
 				break;
 			case 102:
-				$categoryBaseDir = 'tipps';
+				$categoryBaseDir = 'Tipps';
 				break;
 			case 104:
 				$categoryBaseDir = 'Jobs';
 				break;
 			default:
-				$categoryBaseDir = 'neuigkeiten';
+				$categoryBaseDir = 'Neuigkeiten';
 		}
+
 
 		// Spracovanie podkategórie (len pre 100/102)
 		$subcategoryDir = '';

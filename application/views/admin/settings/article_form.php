@@ -530,10 +530,10 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			let suffix = '';
 
 			if (categoryId == '100') {
-				baseDir = 'uploads/neuigkeiten/';
+				baseDir = 'uploads/Neuigkeiten/';
 				suffix = '_neuigkeiten';
 			} else if (categoryId == '102') {
-				baseDir = 'uploads/tipps/';
+				baseDir = 'uploads/Tipps/';
 				suffix = '_tipps';
 			} else if (categoryId == '104') {
 				baseDir = 'uploads/Jobs/';
