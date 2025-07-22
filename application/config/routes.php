@@ -181,9 +181,6 @@ $route['admin/uploadImage']                             = 'admin/uploadImage';
 $route['admin/shopfind']                                = 'shopfind/shopfindSave';
 $route['admin/shopfind/(:any)']                         = 'shopfind/shopfindSave/$1';
 $route['admin/shopfind/(:any)/(:num)']                  = 'shopfind/shopfindSave/$1/$2';
-$route['admin/migrate_images']                  		= 'Migrate_images/index';
-$route['admin/Migrate_best_products']                  	= 'Migrate_best_products/index';
-$route['testmove'] = 'TestMove/index';
 
 
 // Dynamische Routen
