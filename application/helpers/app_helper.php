@@ -402,15 +402,46 @@ if (!function_exists('checkDateOrIcon')) {
 	}
 }
 if (!function_exists('purify_html')) {
-	function purify_html($dirty_html) {
-		require_once FCPATH . 'vendor/autoload.php';
+	function purify_html($html)
+	{
+		require_once APPPATH . 'third_party/htmlpurifier-4.18.0/library/HTMLPurifier.auto.php';
+
 		$config = HTMLPurifier_Config::createDefault();
-		// Povolené základné značky a obrázky:
-		$config->set('HTML.Allowed', 'p,b,strong,i,u,ul,ol,li,br,a[href],img[src|alt|width|height]');
+
+		$config->set('Attr.EnableCSS', true);
+		$config->set('HTML.AllowedAttributes', '*.style,*.class,*.id,img.src,img.alt,img.width,img.height,img.style,font.color,font.style,a.href,a.title,a.target,a.rel');
+		$config->set('CSS.AllowedProperties', 'color,background-color,text-align,font-size,font-weight,font-style,text-decoration,width,height,max-width,min-width');
+		$config->set('HTML.Allowed',
+			'p[style],br,b,strong,i,em,u,s,sub,sup,span[style],div[style],h1[style],h2[style],h3[style],h4[style],h5[style],h6[style],' .
+			'img[style|src|alt|width|height],' .
+			'a[href|title|target|rel],' .
+			'ul,ol,li,blockquote,hr,table[style|border],thead,tbody,tr,td[style|colspan|rowspan],th[style|colspan|rowspan],' .
+			'font[color|style],' .
+			'pre,code'
+		);
+
+		// Povoliť atribút style pre IMG (niekedy je to potrebné pre niektoré verzie)
+		$config->set('HTML.DefinitionID', 'styx_custom_img_v1');
+		$config->set('HTML.DefinitionRev', 1);
+		if ($def = $config->maybeGetRawHTMLDefinition()) {
+			$def->addAttribute('img', 'style', 'CDATA');
+		}
+
 		$purifier = new HTMLPurifier($config);
-		return $purifier->purify($dirty_html);
+		return $purifier->purify($html);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
 if (!function_exists('remove_empty_tags')) {
 	function remove_empty_tags($html) {
 		// Odstráni prázdne <b>, <i>, <u>, <p> tagy (aj tie s whitespacom alebo &nbsp;)
