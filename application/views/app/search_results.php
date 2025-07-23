@@ -123,6 +123,7 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 			->select('id, title, slug, image')
 			->from('articles')
 			->where('active', 1)
+			->where('lang !=', 'en')
 			->limit(6)
 			->get()
 			->result_array();
