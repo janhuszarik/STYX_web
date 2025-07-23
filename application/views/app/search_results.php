@@ -4,8 +4,15 @@ $this->load->view('partials/search_assets');
 <?php
 if (!function_exists('get_article_url')) {
 	function get_article_url($result) {
+		$CI = get_instance();
+		$base_url = rtrim($CI->config->item('base_url'), '/'); // Odstránime koncové lomítko z base_url
 		if (!empty($result['url'])) {
-			return base_url($result['url']);
+			$url = ltrim($result['url'], '/'); // Odstránime vedúce lomítko z url, ak existuje
+			$full_url = $base_url . '/' . $url; // Spojíme s jedným lomítkom
+			if ($result['type'] === 'article_section' && !empty($result['id'])) {
+				return $full_url . '#section-' . $result['id'];
+			}
+			return $full_url;
 		}
 		return '#';
 	}
@@ -45,23 +52,19 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 				$main_title = '';
 				$url = get_article_url($result);
 				$image = '';
-				$subtitle = '';
+				$subtext = '';
 
 				if ($result['type'] === 'article_section') {
 					$main_title = !empty($result['article_title']) ? $result['article_title'] : '(Ohne Titel)';
 					$image = !empty($result['article_image']) ? $result['article_image'] : '';
-					$subtitle = !empty($result['title']) ? $result['title'] : '';
 				} elseif ($result['type'] === 'article') {
 					$main_title = !empty($result['title']) ? $result['title'] : '(Ohne Titel)';
 					$image = !empty($result['image']) ? $result['image'] : '';
-				} else {
-					$main_title = !empty($result['title']) ? $result['title'] : '(Ohne Titel)';
 				}
 
-				// -------- Výpis ukážky textu (max 100 znakov okolo zhody) --------
-				$subtext = '';
+				// -------- Ausgabe eines Textausschnitts (max 100 Zeichen um die Übereinstimmung) --------
 				$found = false;
-				$limit = 100; // počet znakov výpisu
+				$limit = 100; // Anzahl Zeichen für den Ausschnitt
 
 				if (!empty($result['content'])) {
 					$content = strip_tags($result['content']);
@@ -78,7 +81,7 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 					}
 				}
 				if (empty($subtext)) {
-					foreach (['keywords', 'subtitle', 'text', 'content'] as $field) {
+					foreach (['keywords', 'text', 'content'] as $field) {
 						if (!empty($result[$field])) {
 							$tmp = htmlspecialchars(strip_tags($result[$field]));
 							$subtext = mb_substr($tmp, 0, $limit, 'UTF-8');
@@ -96,27 +99,20 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 				<div class="search-result-item mb-3 border rounded">
 					<div class="search-result-main">
 						<div class="search-result-header">
-							<span class="search-result-title">
-								<a href="<?= htmlspecialchars($url) ?>"
+                            <span class="search-result-title">
+                                <a href="<?= htmlspecialchars($url) ?>"
 								   class="text-decoration-none text-primary"
 								   target="_blank">
-									<?= htmlspecialchars($main_title) ?>
-								</a>
-							</span>
+                                    <?= htmlspecialchars($main_title) ?>
+                                </a>
+                            </span>
 							<?php if ($found): ?>
 								<span class="badge-found">
-									<i class="fas fa-check-circle"></i>
-									Gefunden!
-								</span>
+                                    <i class="fas fa-check-circle"></i>
+                                    Gefunden!
+                                </span>
 							<?php endif; ?>
 						</div>
-
-						<?php if ($subtitle): ?>
-							<div style="margin-bottom:4px;font-size:1.04rem;color:#bc3a3a;">
-								<i class="fas fa-folder-open me-1"></i>
-								Sektion: <?= htmlspecialchars($subtitle) ?>
-							</div>
-						<?php endif; ?>
 
 						<small class="text-secondary">
 							<i class="fas fa-globe me-1"></i>

@@ -25,19 +25,9 @@ class Search extends CI_Controller {
 		$data['generate_path'] = function($result) {
 			switch ($result['type']) {
 				case 'article':
-					return 'Artikel > ID ' . $result['id'];
-				case 'article_category':
-					return 'Menü > ' . $result['title'];
+					return 'Artikel > ' . $result['title'];
 				case 'article_section':
-					return 'Artikel > Sektion ' . $result['id'];
-				case 'best_product':
-					return 'Produkte > ' . $result['title'];
-				case 'location':
-					return 'Standorte > ' . $result['title'];
-				case 'neuigkeiten_subcategory':
-					return 'Neuigkeiten > ' . $result['title'];
-				case 'news':
-					return 'Neuigkeiten > ' . $result['title'];
+					return 'Artikel > ' . (!empty($result['article_title']) ? $result['article_title'] : 'Unbekannt');
 				default:
 					return 'Unbekannter Pfad';
 			}
