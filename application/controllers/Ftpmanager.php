@@ -44,7 +44,6 @@ class Ftpmanager extends CI_Controller
 			show_error('Datei konnte nicht von der URL geladen werden.');
 		}
 
-		// MIME-Typ basierend auf der Erweiterung, Fallback
 		$extension = strtolower(pathinfo($remote_url, PATHINFO_EXTENSION));
 		$mime_types = [
 			'jpg' => 'image/jpeg',
@@ -55,7 +54,6 @@ class Ftpmanager extends CI_Controller
 			'pdf' => 'application/pdf',
 			'mp4' => 'video/mp4',
 			'zip' => 'application/zip',
-			// nach Bedarf ergänzen
 		];
 		$mime = $mime_types[$extension] ?? 'application/octet-stream';
 
@@ -102,8 +100,6 @@ class Ftpmanager extends CI_Controller
 		redirect('admin/ftpmanager?path=' . urlencode($path));
 	}
 
-
-
 	public function move_file()
 	{
 		$from = $this->input->post('from');
@@ -117,6 +113,7 @@ class Ftpmanager extends CI_Controller
 		}
 		redirect('admin/ftpmanager?path=' . urlencode(dirname($to)));
 	}
+
 	public function upload()
 	{
 		$current_path = $this->input->get_post('path') ?? '';
@@ -127,7 +124,6 @@ class Ftpmanager extends CI_Controller
 			$filename = basename($_FILES['image']['name']);
 			$remote_path = ($current_path ? $current_path . '/' : '') . $filename;
 
-			// ✅ Erlaubte Dateiendungen
 			$allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'];
 			$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
@@ -150,6 +146,7 @@ class Ftpmanager extends CI_Controller
 
 		redirect('admin/ftpmanager?path=' . urlencode($current_path));
 	}
+
 	public function get_article_images()
 	{
 		$this->load->library('ftp');
@@ -168,11 +165,12 @@ class Ftpmanager extends CI_Controller
 		header('Content-Type: application/json');
 		echo json_encode($list);
 	}
+
 	public function modal()
 	{
 		$this->load->helper('directory');
 
-		$path = './uploads/articles/'; // ✅ správna cesta podľa tvojho projektu
+		$path = './uploads/articles/';
 		$files = directory_map($path);
 
 		$data['images'] = [];
@@ -191,8 +189,6 @@ class Ftpmanager extends CI_Controller
 		$this->load->view('admin/settings/ftp_modal', $data);
 	}
 
-
-
 	public function browser()
 	{
 		$data['start_path'] = './uploads/articles/';
@@ -202,10 +198,9 @@ class Ftpmanager extends CI_Controller
 	public function load_folder()
 	{
 		$folder = $this->input->post('folder') ?? '';
-		$search_query = $this->input->post('q') ?? ''; // ✅ Získame dopyt z POST požiadavky
+		$search_query = $this->input->post('q') ?? '';
 		$folder = trim($folder, '/');
 
-		// ✅ Pošleme dopyt do modelu
 		$files = $this->Ftpmanager_model->connect_to_ftp($folder, $search_query);
 
 		if (isset($files['__error'])) {
@@ -215,7 +210,7 @@ class Ftpmanager extends CI_Controller
 		}
 
 		$list = [];
-		if (is_array($files)) { // Uistíme sa, že $files je pole
+		if (is_array($files)) {
 			foreach ($files as $file) {
 				$full_path = $file['path'];
 				$url = null;
@@ -235,10 +230,4 @@ class Ftpmanager extends CI_Controller
 		header('Content-Type: application/json');
 		echo json_encode($list);
 	}
-
-
-
-
-
-
 }
