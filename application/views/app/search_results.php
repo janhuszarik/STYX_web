@@ -1,91 +1,11 @@
 <?php
 $this->load->view('partials/search_assets');
-?>
-<?php
-//if (!function_exists('get_article_url')) {
-//	function get_article_url($result) {
-//		$CI = get_instance();
-//		$base_url = rtrim($CI->config->item('base_url'), '/');
-//		error_log("Base URL nastavená na: " . $base_url); // Logovanie base_url
-//		$lang = $result['lang'] ? $result['lang'] : 'de';
-//
-//		if (!empty($result['url'])) {
-//			// Očistenie pôvodnej url iba od jazyka, zachovanie ostatnej cesty
-//			$url = trim(ltrim($result['url'], '/'), '/');
-//			$url = preg_replace('/^' . preg_quote($lang, '/') . '\//', '', $url); // Odstránenie iba jazyka
-//
-//			$tipps_subcategories = $CI->db->select('id, slug')->where('category_id', 102)->get('tipps_subcategories')->result_array();
-//			$neuigkeiten_subcategories = $CI->db->select('id, slug')->where('category_id', 100)->get('neuigkeiten_subcategories')->result_array();
-//			$subcategory_slugs = array_merge($tipps_subcategories, $neuigkeiten_subcategories);
-//			$slug_map = [];
-//			foreach ($subcategory_slugs as $subcat) {
-//				$slug_map[$subcat['id']] = $subcat['slug'];
-//			}
-//
-//			// Rozšírenie category_path pre ďalšie kategórie
-//			$category_path = '';
-//			if (!empty($result['category_id'])) {
-//				switch ($result['category_id']) {
-//					case 102:
-//						$category_path = 'aktuelles/tipps';
-//						break;
-//					case 100:
-//						$category_path = 'aktuelles/neuigkeiten';
-//						break;
-//					case 103: // Príklad pre Unternehmen, uprav podľa tvojej databázy
-//						$category_path = 'Unternehmen';
-//						break;
-//					default:
-//						$category_path = ''; // Ak nie je známa kategória, použije sa iba slug
-//				}
-//			}
-//
-//			// Zostavenie cesty s category_path a zachovaním očisteného url
-//			$constructed_url = trim($url, '/'); // Zachovanie pôvodnej cesty po odstránení jazyka
-//			if ($category_path && empty($constructed_url)) {
-//				$constructed_url = $category_path; // Ak je url prázdne, použije sa iba category_path
-//			} elseif ($category_path) {
-//				$constructed_url = rtrim($category_path, '/') . '/' . ltrim($constructed_url, '/');
-//			}
-//
-//			// Pridanie jazyka iba ak nie je prítomný
-//			if (!preg_match('/^' . preg_quote($lang, '/') . '\//', $constructed_url)) {
-//				$constructed_url = $lang . '/' . $constructed_url;
-//			}
-//
-//			// Odstránenie viacerých lomítok
-//			$constructed_url = preg_replace('/\/+/', '/', $constructed_url);
-//
-//			// Debug pred finálnou URL
-//			error_log("URL pred pridaním base_url a title: " . $constructed_url);
-//			echo '<pre>'; var_dump($result['lang'], $result['subcategory_id'], $result['subcategory_type'], $result['url'], $constructed_url); echo '</pre>';
-//
-//			// Finálna URL s base_url
-//			$full_url = $base_url . '/' . $constructed_url;
-//			error_log("Full URL pred title: " . $full_url);
-//
-//			// Pridanie title (bez ohľadu na subcategory_id, ak je title dostupné)
-//			if (isset($result['title']) && !empty($result['title'])) {
-//				$title_part = '/' . url_oprava($result['type'] === 'article' ? $result['title'] : $result['article_title']);
-//				error_log("Title part: " . $title_part);
-//				if (strpos($full_url, $title_part) === false) {
-//					$full_url .= $title_part;
-//				}
-//			}
-//
-//			if ($result['type'] === 'article_section' && !empty($result['id'])) {
-//				return $full_url . '#section-' . $result['id'];
-//			}
-//			return $full_url;
-//		}
-//		return '#';
-//	}
-//}
-$resultCount = !empty($results) && is_array($results) ? count($results) : 0;
-error_log("Počet výsledkov v View: " . $resultCount);
-if (empty($results)) { echo '<pre>Prázdne výsledky</pre>'; exit; }
-?>
 
+$CI =& get_instance();
+$CI->load->database();
+
+$resultCount = !empty($results) && is_array($results) ? count($results) : 0;
+?>
 <div class="search-results">
 	<form action="<?= base_url('search') ?>" method="get" class="mb-4" autocomplete="off">
 		<div style="display: flex; gap:8px; align-items: center; max-width: 420px;">
@@ -117,7 +37,6 @@ if (empty($results)) { echo '<pre>Prázdne výsledky</pre>'; exit; }
 
 				$main_title = '';
 				$url = base_url($result['url']);
-
 				$image = '';
 				$subtext = '';
 
@@ -164,21 +83,20 @@ if (empty($results)) { echo '<pre>Prázdne výsledky</pre>'; exit; }
 				<div class="search-result-item mb-3 border rounded">
 					<div class="search-result-main">
 						<div class="search-result-header">
-                            <span class="search-result-title">
-                                <a href="<?= htmlspecialchars($url) ?>"
+							<span class="search-result-title">
+								<a href="<?= htmlspecialchars($url) ?>"
 								   class="text-decoration-none text-primary"
 								   target="_blank">
-                                    <?= htmlspecialchars($main_title) ?>
-                                </a>
-                            </span>
+									<?= htmlspecialchars($main_title) ?>
+								</a>
+							</span>
 							<?php if ($found): ?>
 								<span class="badge-found">
-                                    <i class="fas fa-check-circle"></i>
-                                    Gefunden!
-                                </span>
+									<i class="fas fa-check-circle"></i>
+									Gefunden!
+								</span>
 							<?php endif; ?>
 						</div>
-
 						<small class="text-secondary">
 							<i class="fas fa-globe me-1"></i>
 							<a href="<?= htmlspecialchars($url) ?>" target="_blank"><?= htmlspecialchars($url) ?></a>
@@ -198,7 +116,36 @@ if (empty($results)) { echo '<pre>Prázdne výsledky</pre>'; exit; }
 				</div>
 			<?php endforeach; ?>
 		</div>
-	<?php else: ?>
-		<p class="text-center mt-4">Keine Ergebnisse gefunden.</p>
-	<?php endif; ?>
+	<?php else:
+		echo '<div class="alert alert-warning">Keine Ergebnisse gefunden für: <strong>' . htmlspecialchars($query) . '</strong></div>';
+		$like_query = '%' . $CI->db->escape_like_str($query) . '%';
+		$similar_results = $CI->db
+			->select('id, title, slug, image')
+			->from('articles')
+			->where('active', 1)
+			->limit(6)
+			->get()
+			->result_array();
+
+		if (!empty($similar_results)) {
+			echo '<div class="mt-4"><h5>Entdecken Sie stattdessen diese Beiträge:</h5>';
+			echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">';
+			foreach ($similar_results as $sim) {
+				$sim_url = base_url('de/' . $sim['slug']);
+				$sim_title = htmlspecialchars($sim['title']);
+				$sim_image = !empty($sim['image']) ? htmlspecialchars($sim['image']) : null;
+				echo '<div class="col">';
+				echo '<div class="card h-100">';
+				if ($sim_image) {
+					echo '<img src="' . $sim_image . '" class="card-img-top" alt="' . $sim_title . '">';
+				}
+				echo '<div class="card-body">';
+				echo '<h6 class="card-title"><a href="' . $sim_url . '" target="_blank" class="text-decoration-none">' . $sim_title . '</a></h6>';
+				echo '</div>';
+				echo '</div>';
+				echo '</div>';
+			}
+			echo '</div></div>';
+		}
+	endif; ?>
 </div>
