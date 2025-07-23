@@ -7,7 +7,7 @@ class Gallery extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Gallery_model');
-		$this->load->helper('App_helper'); // Načítanie vášho helpera
+		$this->load->helper('App_helper');
 
 		if (!$this->ion_auth->is_admin()) {
 			$this->session->set_flashdata('error', 'Zugriff verweigert.');
@@ -169,7 +169,6 @@ class Gallery extends CI_Controller
 		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
 		$gallery_path = './uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
 
-		// Odstránenie priečinka galérie a jej obsahu
 		if (is_dir($gallery_path)) {
 			$this->deleteDirectory($gallery_path);
 		}
@@ -245,12 +244,10 @@ class Gallery extends CI_Controller
 
 				$image_path = uploadImg('image', $base_path, $save_as_name, TRUE, FALSE);
 				if ($image_path) {
-					// Create thumbnail with proper orientation
 					$extension = pathinfo($image_path, PATHINFO_EXTENSION);
 					$basename = str_replace('.' . $extension, '', $image_path);
 					$thumb_path = $basename . '_thumb.' . $extension;
 
-					// Create thumbnail using image_lib
 					$this->load->library('image_lib');
 					$config['image_library'] = 'gd2';
 					$config['source_image'] = $image_path;
@@ -260,11 +257,11 @@ class Gallery extends CI_Controller
 					$config['height'] = 400;
 					$this->image_lib->initialize($config);
 					if (!$this->image_lib->resize()) {
-						log_message('error', "Chyba pri vytváraní náhľadu: " . $this->image_lib->display_errors());
+						echo json_encode(['success' => false, 'message' => 'Fehler beim Erstellen des Thumbnails.']);
+						return;
 					}
 					$this->image_lib->clear();
 
-					// Convert to WebP
 					$webp_path = $basename . '.webp';
 					$thumb_webp_path = $basename . '_thumb.webp';
 					$this->convertToWebp($image_path, $webp_path);
@@ -296,13 +293,12 @@ class Gallery extends CI_Controller
 		}
 
 		$gallery_id = $image->gallery_id;
-		$JOHN = $this->Gallery_model->getGallery($gallery_id);
+		$gallery = $this->Gallery_model->getGallery($gallery_id);
 		$category = $this->Gallery_model->getCategory($gallery->category_id);
 		$category_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($category->name));
 		$gallery_name = preg_replace('/[^a-zA-Z0-9-_]/', '_', strtolower($gallery->name));
 		$base_path = './uploads/gallery/' . $category_name . '/' . $gallery_name . '/';
 
-		// Odstránenie súborov
 		$filename = basename($image->image_path);
 		$extension = pathinfo($filename, PATHINFO_EXTENSION);
 		$basename = str_replace('.' . $extension, '', $filename);
@@ -335,7 +331,7 @@ class Gallery extends CI_Controller
 		if ($this->Gallery_model->updateImageOrder($image_id, $order_position)) {
 			echo json_encode(['success' => true]);
 		} else {
-			echo json_encode(['success' => false, 'message' => 'Fehler beim Aktualisieren des Reihenfolge.']);
+			echo json_encode(['success' => false, 'message' => 'Fehler beim Aktualisieren der Reihenfolge.']);
 		}
 	}
 
