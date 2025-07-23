@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('Kein direkter Skriptzugriff erlaubt');
-
 /**
  * Class Admin
  * @property Admin_model|Admin_model $Admin_model
@@ -107,20 +106,17 @@ class Admin extends CI_Controller
 			$post['lang'] = isset($post['lang']) ? $post['lang'] : 'de';
 			$post['base'] = isset($post['base']) ? $post['base'] : '0';
 
-			// Clean URL if provided
 			$existingUrl = trim($post['url']);
 			$isExternal = (strpos($existingUrl, 'http://') === 0 || strpos($existingUrl, 'https://') === 0);
 
 			if ($isExternal) {
 				$post['url'] = $existingUrl;
 			} else {
-				// Ensure language prefix is added to the URL
 				if (empty($existingUrl) || strpos($existingUrl, $post['lang'] . '/') !== 0) {
 					$slugPart = !empty($existingUrl) ? $existingUrl : url_oprava($post['name']);
 					$post['url'] = $post['lang'] . '/' . $slugPart;
 				}
 
-				// Ensure uniqueness if URL is generated
 				$this->load->model('Admin_model');
 				$uniqueUrl = $post['url'];
 				$counter = 1;
@@ -155,7 +151,6 @@ class Admin extends CI_Controller
 				$this->session->set_flashdata('message', 'Die Daten wurden unwiderruflich gelöscht');
 				redirect(BASE_URL . 'admin/menu/');
 			} else {
-				// Použi existujúcu chybovú hlášku z modelu, ak existuje
 				if (!$this->session->flashdata('error')) {
 					$this->session->set_flashdata('error', 'Fehler, versuchen Sie es noch einmal');
 				}
@@ -325,7 +320,6 @@ class Admin extends CI_Controller
 		}
 
 		$upload_data = $this->upload->data();
-		// Přidání relativní cesty pouze pokud je požadováno
 		if ($include_path) {
 			$upload_data['file_name'] = $path . $upload_data['file_name'];
 		}
@@ -377,7 +371,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getNews($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/news/'); // Bez cesty, zachová původní chování
+			$image = $this->upload_image('image', 'uploads/news/');
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
 				$data['news'] = (object)$post;
@@ -455,7 +449,7 @@ class Admin extends CI_Controller
 
 		if (!empty($post)) {
 			$old_image = !empty($id) ? $this->Admin_model->getProduct($id)->image : false;
-			$image = $this->upload_image('image', 'uploads/Produkte/', true); // Přidána cesta pro bestProduct
+			$image = $this->upload_image('image', 'uploads/Produkte/', true);
 
 			if (isset($image['error']) && $image['error']) {
 				$this->session->set_flashdata('error', $image['error']);
