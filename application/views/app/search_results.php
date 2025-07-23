@@ -5,21 +5,74 @@ $this->load->view('partials/search_assets');
 if (!function_exists('get_article_url')) {
 	function get_article_url($result) {
 		$CI = get_instance();
-		$base_url = rtrim($CI->config->item('base_url'), '/'); // Odstránime koncové lomítko z base_url
-		$lang = $result['lang'] ? $result['lang'] : 'de'; // Dynamický jazyk z lang, fallback na 'de'
+		$base_url = rtrim($CI->config->item('base_url'), '/');
+		error_log("Base URL nastavená na: " . $base_url); // Logovanie base_url
+		$lang = $result['lang'] ? $result['lang'] : 'de';
+
 		if (!empty($result['url'])) {
-			$url = ltrim($result['url'], '/'); // Odstránime vedúce lomítko z url, ak existuje
-			// Skontrolujeme, či url už neobsahuje jazyk na začiatku
-			if (preg_match('/^' . preg_quote($lang, '/') . '\//', $url)) {
-				$full_url = $base_url . '/' . $url; // Pridáme iba base_url, ak jazyk už je
-			} else {
-				$full_url = $base_url . '/' . $lang . '/' . $url; // Pridáme jazyk pred url
+			// Očistenie pôvodnej url iba od jazyka, zachovanie ostatnej cesty
+			$url = trim(ltrim($result['url'], '/'), '/');
+			$url = preg_replace('/^' . preg_quote($lang, '/') . '\//', '', $url); // Odstránenie iba jazyka
+
+			$tipps_subcategories = $CI->db->select('id, slug')->where('category_id', 102)->get('tipps_subcategories')->result_array();
+			$neuigkeiten_subcategories = $CI->db->select('id, slug')->where('category_id', 100)->get('neuigkeiten_subcategories')->result_array();
+			$subcategory_slugs = array_merge($tipps_subcategories, $neuigkeiten_subcategories);
+			$slug_map = [];
+			foreach ($subcategory_slugs as $subcat) {
+				$slug_map[$subcat['id']] = $subcat['slug'];
 			}
-			// Ak ide o článok (subcategory_type je 'tipps' alebo 'neuigkeiten'), pridáme title
-			if (!empty($result['subcategory_type']) && in_array($result['subcategory_type'], ['tipps', 'neuigkeiten'])) {
+
+			// Rozšírenie category_path pre ďalšie kategórie
+			$category_path = '';
+			if (!empty($result['category_id'])) {
+				switch ($result['category_id']) {
+					case 102:
+						$category_path = 'aktuelles/tipps';
+						break;
+					case 100:
+						$category_path = 'aktuelles/neuigkeiten';
+						break;
+					case 103: // Príklad pre Unternehmen, uprav podľa tvojej databázy
+						$category_path = 'Unternehmen';
+						break;
+					default:
+						$category_path = ''; // Ak nie je známa kategória, použije sa iba slug
+				}
+			}
+
+			// Zostavenie cesty s category_path a zachovaním očisteného url
+			$constructed_url = trim($url, '/'); // Zachovanie pôvodnej cesty po odstránení jazyka
+			if ($category_path && empty($constructed_url)) {
+				$constructed_url = $category_path; // Ak je url prázdne, použije sa iba category_path
+			} elseif ($category_path) {
+				$constructed_url = rtrim($category_path, '/') . '/' . ltrim($constructed_url, '/');
+			}
+
+			// Pridanie jazyka iba ak nie je prítomný
+			if (!preg_match('/^' . preg_quote($lang, '/') . '\//', $constructed_url)) {
+				$constructed_url = $lang . '/' . $constructed_url;
+			}
+
+			// Odstránenie viacerých lomítok
+			$constructed_url = preg_replace('/\/+/', '/', $constructed_url);
+
+			// Debug pred finálnou URL
+			error_log("URL pred pridaním base_url a title: " . $constructed_url);
+			echo '<pre>'; var_dump($result['lang'], $result['subcategory_id'], $result['subcategory_type'], $result['url'], $constructed_url); echo '</pre>';
+
+			// Finálna URL s base_url
+			$full_url = $base_url . '/' . $constructed_url;
+			error_log("Full URL pred title: " . $full_url);
+
+			// Pridanie title (bez ohľadu na subcategory_id, ak je title dostupné)
+			if (isset($result['title']) && !empty($result['title'])) {
 				$title_part = '/' . url_oprava($result['type'] === 'article' ? $result['title'] : $result['article_title']);
-				$full_url .= $title_part;
+				error_log("Title part: " . $title_part);
+				if (strpos($full_url, $title_part) === false) {
+					$full_url .= $title_part;
+				}
 			}
+
 			if ($result['type'] === 'article_section' && !empty($result['id'])) {
 				return $full_url . '#section-' . $result['id'];
 			}
@@ -29,6 +82,8 @@ if (!function_exists('get_article_url')) {
 	}
 }
 $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
+error_log("Počet výsledkov v View: " . $resultCount);
+if (empty($results)) { echo '<pre>Prázdne výsledky</pre>'; exit; }
 ?>
 
 <div class="search-results">
@@ -73,9 +128,8 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 					$image = !empty($result['image']) ? $result['image'] : '';
 				}
 
-				// -------- Ausgabe eines Textausschnitts (max 100 Zeichen um die Übereinstimmung) --------
 				$found = false;
-				$limit = 100; // Anzahl Zeichen pre výpis
+				$limit = 100;
 
 				if (!empty($result['content'])) {
 					$content = strip_tags($result['content']);
@@ -105,7 +159,6 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 						}
 					}
 				}
-				// -------------------------------------------------------------
 				?>
 				<div class="search-result-item mb-3 border rounded">
 					<div class="search-result-main">
