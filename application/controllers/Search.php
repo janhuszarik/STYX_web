@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('Kein direkter Skriptzugriff erlaubt');
 
 class Search extends CI_Controller {
 
@@ -9,46 +9,40 @@ class Search extends CI_Controller {
 	}
 
 	public function index() {
-		$query = $this->input->get('q'); // Získanie vyhľadávacieho dotazu
+		$query = $this->input->get('q');
 
 		$data = array();
 		$data['query'] = $query;
 
 		if (!empty($query)) {
-			// Vyhľadávanie pomocou modelu
 			$data['results'] = $this->Search_model->search($query);
-			log_message('debug', 'Results from search: ' . print_r($data['results'], TRUE));
 		} else {
 			$data['results'] = array();
-			log_message('debug', 'No query provided');
 		}
 
-		// Ladenie načítania view
 		$data['page'] = 'app/search_results';
-		log_message('debug', 'Loading view: layout/normal with page: ' . $data['page'] . ' and data: ' . print_r($data, TRUE));
 
 		$data['generate_path'] = function($result) {
 			switch ($result['type']) {
 				case 'article':
 					return 'Artikel > ID ' . $result['id'];
 				case 'article_category':
-					return 'Menu > ' . $result['title'];
+					return 'Menü > ' . $result['title'];
 				case 'article_section':
-					return 'Artikel > Sekcia ' . $result['id'];
+					return 'Artikel > Sektion ' . $result['id'];
 				case 'best_product':
-					return 'Produkty > ' . $result['title'];
+					return 'Produkte > ' . $result['title'];
 				case 'location':
-					return 'Lokality > ' . $result['title'];
+					return 'Standorte > ' . $result['title'];
 				case 'neuigkeiten_subcategory':
-					return 'Novinky > ' . $result['title'];
+					return 'Neuigkeiten > ' . $result['title'];
 				case 'news':
-					return 'Novinky > ' . $result['title'];
+					return 'Neuigkeiten > ' . $result['title'];
 				default:
-					return 'Neznáma cesta';
+					return 'Unbekannter Pfad';
 			}
 		};
 
 		$this->load->view('layout/normal', $data);
 	}
 }
-?>
