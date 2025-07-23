@@ -147,7 +147,7 @@ class Article extends CI_Controller
 			if (is_string($value) && !in_array($key, ['slug', 'image', 'start_date_from_date', 'start_date_from_time', 'end_date_to_date', 'end_date_to_time', 'created_at'])) {
 				$post[$key] = clean_input_text($value);
 				if (preg_match('/<o:p>/i', $post[$key])) {
-					$this->session->set_flashdata('error', 'Neplatný text v poli ' . $key . '!');
+					$this->session->set_flashdata('error', 'Ungültiger Text im Feld ' . $key . '!');
 				}
 			}
 		}
@@ -336,7 +336,7 @@ class Article extends CI_Controller
 	public function syncCategories()
 	{
 		$this->Article_model->syncMenuWithArticleCategories();
-		$this->session->set_flashdata('success', 'Menu a submenu boli synchronizované s kategóriami článkov.');
+		$this->session->set_flashdata('success', 'Menü und Untermenü wurden mit den Artikelkategorien synchronisiert.');
 		redirect(BASE_URL . 'admin/article_categories');
 	}
 
@@ -364,7 +364,6 @@ class Article extends CI_Controller
 				$categoryBaseDir = 'tipps';
 				$suffix = '_tipps';
 			} elseif ($category_id == 104) {
-				// Pri Jobs nejdeme cez uploads/articles
 				$baseDir = 'uploads/Jobs/';
 				$suffix = '_Jobs';
 			} else {
@@ -373,7 +372,6 @@ class Article extends CI_Controller
 			}
 
 			if (!isset($baseDir)) {
-				// Iba ak sa nenastavil $baseDir vyššie (čiže nie pri Jobs)
 				$subcategoryDir = '';
 				if (in_array($category_id, [100, 102]) && !empty($subcategory_id) && $subcategory_id !== 'new') {
 					$table = ($category_id == 100) ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
@@ -405,7 +403,6 @@ class Article extends CI_Controller
 
 		$this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
-
 
 	public function delete_image()
 	{
@@ -552,5 +549,4 @@ class Article extends CI_Controller
 		}
 		echo json_encode(['success' => true, 'html' => $html]);
 	}
-
 }
