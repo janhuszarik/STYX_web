@@ -155,17 +155,14 @@ class Article_model extends CI_Model
 	{
 		$this->load->helper('app_helper');
 
-		// Čistenie textových vstupov
 		$post['title'] = clean_input_text($post['title']);
 		$post['subtitle'] = clean_input_text($post['subtitle']);
 		$post['keywords'] = clean_input_text($post['keywords'] ?? '');
 		$post['meta'] = clean_input_text($post['meta'] ?? '');
 
-		// Kombinácia dátumu a času
 		$start_date_from = !empty($post['start_date_from_date']) ? $post['start_date_from_date'] . ' ' . ($post['start_date_from_time'] ?? '00:00') . ':00' : null;
 		$end_date_to = !empty($post['end_date_to_date']) ? $post['end_date_to_date'] . ' ' . ($post['end_date_to_time'] ?? '00:00') . ':00' : null;
 
-		// Určenie základného priečinka podľa kategórie
 		switch ((int)$post['category_id']) {
 			case 100:
 				$categoryBaseDir = 'Neuigkeiten';
@@ -180,8 +177,6 @@ class Article_model extends CI_Model
 				$categoryBaseDir = 'Neuigkeiten';
 		}
 
-
-		// Spracovanie podkategórie (len pre 100/102)
 		$subcategoryDir = '';
 		if (in_array((int)$post['category_id'], [100, 102]) && !empty($post['subcategory_id']) && $post['subcategory_id'] !== 'new') {
 			$table = $post['category_id'] == 100 ? 'neuigkeiten_subcategories' : 'tipps_subcategories';
@@ -189,7 +184,6 @@ class Article_model extends CI_Model
 			$subcategoryDir = $subcategory ? url_oprava($subcategory->name) : '';
 		}
 
-		// Dynamické určenie cesty pre obrázky
 		$articleBaseDir = 'uploads/' . $categoryBaseDir . '/';
 		if ($subcategoryDir) {
 			$articleBaseDir .= $subcategoryDir . '/';
@@ -199,7 +193,6 @@ class Article_model extends CI_Model
 			mkdir(FCPATH . $articleBaseDir, 0755, true);
 		}
 
-		// Prípona pre obrázky
 		$suffix = match ((int)$post['category_id']) {
 			100 => '_neuigkeiten',
 			102 => '_tipps',
@@ -207,7 +200,6 @@ class Article_model extends CI_Model
 			default => '',
 		};
 
-		// Spracovanie hlavného obrázka
 		$image = $post['old_image'] ?? null;
 		$image_title = $post['image_title'] ?? null;
 
@@ -239,7 +231,6 @@ class Article_model extends CI_Model
 		$is_main = !empty($post['is_main']) && $post['is_main'] == '1' ? 1 : 0;
 		$slug_title = $is_main ? null : url_title($post['title'], 'dash', true);
 
-		// Deaktivácia predchádzajúcich hlavných článkov
 		if ($is_main && !empty($post['category_id'])) {
 			$this->db->where('category_id', $post['category_id']);
 			$this->db->where('is_main', 1);
@@ -271,7 +262,6 @@ class Article_model extends CI_Model
 
 		$data['created_at'] = !empty($post['created_at']) ? $post['created_at'] . ' 00:00:00' : date('Y-m-d 00:00:00');
 
-		// Uloženie alebo aktualizácia článku
 		if (!empty($post['id'])) {
 			$this->db->where('id', $post['id']);
 			$ok = $this->db->update('articles', $data);
@@ -285,7 +275,6 @@ class Article_model extends CI_Model
 			return false;
 		}
 
-		// SEKCIE
 		if (isset($post['sections']) && is_array($post['sections'])) {
 			$this->db->delete('article_sections', ['article_id' => $articleId]);
 			foreach ($post['sections'] as $idx => $content) {
@@ -342,7 +331,6 @@ class Article_model extends CI_Model
 
 		return $ok;
 	}
-
 
 	public function deleteArticle($id)
 	{
@@ -496,7 +484,6 @@ class Article_model extends CI_Model
 			return $this->db->insert_id();
 		}
 	}
-
 
 	public function deleteSubcategory($id, $category_id)
 	{

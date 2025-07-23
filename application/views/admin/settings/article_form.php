@@ -530,16 +530,16 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			let suffix = '';
 
 			if (categoryId == '100') {
-				baseDir = 'Uploads/Neuigkeiten/';
+				baseDir = 'uploads/Neuigkeiten/';
 				suffix = '_neuigkeiten';
 			} else if (categoryId == '102') {
-				baseDir = 'Uploads/Tipps/';
+				baseDir = 'uploads/Tipps/';
 				suffix = '_tipps';
 			} else if (categoryId == '104') {
-				baseDir = 'Uploads/Jobs/';
+				baseDir = 'uploads/Jobs/';
 				suffix = '_Jobs';
 			} else {
-				baseDir = 'Uploads/neuigkeiten/';
+				baseDir = 'uploads/neuigkeiten/';
 			}
 
 			if (subcategoryId && subcategoryId !== 'new' && (categoryId == '100' || categoryId == '102')) {
