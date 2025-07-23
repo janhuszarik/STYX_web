@@ -6,9 +6,20 @@ if (!function_exists('get_article_url')) {
 	function get_article_url($result) {
 		$CI = get_instance();
 		$base_url = rtrim($CI->config->item('base_url'), '/'); // Odstránime koncové lomítko z base_url
+		$lang = $result['lang'] ? $result['lang'] : 'de'; // Dynamický jazyk z lang, fallback na 'de'
 		if (!empty($result['url'])) {
 			$url = ltrim($result['url'], '/'); // Odstránime vedúce lomítko z url, ak existuje
-			$full_url = $base_url . '/' . $url; // Spojíme s jedným lomítkom
+			// Skontrolujeme, či url už neobsahuje jazyk na začiatku
+			if (preg_match('/^' . preg_quote($lang, '/') . '\//', $url)) {
+				$full_url = $base_url . '/' . $url; // Pridáme iba base_url, ak jazyk už je
+			} else {
+				$full_url = $base_url . '/' . $lang . '/' . $url; // Pridáme jazyk pred url
+			}
+			// Ak ide o článok (subcategory_type je 'tipps' alebo 'neuigkeiten'), pridáme title
+			if (!empty($result['subcategory_type']) && in_array($result['subcategory_type'], ['tipps', 'neuigkeiten'])) {
+				$title_part = '/' . url_oprava($result['type'] === 'article' ? $result['title'] : $result['article_title']);
+				$full_url .= $title_part;
+			}
 			if ($result['type'] === 'article_section' && !empty($result['id'])) {
 				return $full_url . '#section-' . $result['id'];
 			}
@@ -64,7 +75,7 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 
 				// -------- Ausgabe eines Textausschnitts (max 100 Zeichen um die Übereinstimmung) --------
 				$found = false;
-				$limit = 100; // Anzahl Zeichen für den Ausschnitt
+				$limit = 100; // Anzahl Zeichen pre výpis
 
 				if (!empty($result['content'])) {
 					$content = strip_tags($result['content']);

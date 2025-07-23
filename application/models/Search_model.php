@@ -24,6 +24,8 @@ class Search_model extends CI_Model {
 			'articles.image',
 			'articles.keywords',
 			'articles.text',
+			'articles.subcategory_type', // Na určenie typu obsahu
+			'articles.lang', // Pridáme jazyk
 			"'article' as type"
 		]);
 		$this->db->from('articles');
@@ -40,7 +42,12 @@ class Search_model extends CI_Model {
 		}
 		$articles_results = $articles_results->result_array();
 		foreach ($articles_results as &$article) {
-			$article['url'] = $article['slug'] . '/' . url_oprava($article['title']);
+			// Ak je subcategory_type NULL alebo nie je "tipps" ani "neuigkeiten", predpokladáme podstránku
+			if (empty($article['subcategory_type']) || !in_array($article['subcategory_type'], ['tipps', 'neuigkeiten'])) {
+				$article['url'] = $article['slug']; // Iba slug pre podstránky
+			} else {
+				$article['url'] = $article['slug'] . '/' . url_oprava($article['title']); // Slug + title pre články
+			}
 		}
 		$results = array_merge($results, $articles_results);
 
@@ -55,6 +62,8 @@ class Search_model extends CI_Model {
 			'articles.title as article_title',
 			'articles.slug',
 			'articles.image as article_image',
+			'articles.subcategory_type', // Na určenie typu obsahu
+			'articles.lang', // Pridáme jazyk
 			"'article_section' as type"
 		]);
 		$this->db->from('article_sections');
@@ -70,22 +79,33 @@ class Search_model extends CI_Model {
 		}
 		$article_sections_results = $article_sections_results->result_array();
 		foreach ($article_sections_results as &$section) {
-			$section['url'] = $section['slug'] . '/' . url_oprava($section['article_title']);
+			// Použijeme subcategory_type z príslušného článku
+			if (empty($section['subcategory_type']) || !in_array($section['subcategory_type'], ['tipps', 'neuigkeiten'])) {
+				$section['url'] = $section['slug']; // Iba slug pre podstránky
+			} else {
+				$section['url'] = $section['slug'] . '/' . url_oprava($section['article_title']); // Slug + title pre články
+			}
 		}
 		$results = array_merge($results, $article_sections_results);
 
 		// ========================
-		// DEDUPLIZIERUNG (nur ein Ergebnis pro Artikel-ID)
+		// DEDUPLIZIERUNG (nur ein Ergebnis pro id a article_id kombinácie)
 		// ========================
 		$unique_results = [];
-		$article_ids = [];
+		$processed_ids = []; // Pole na sledovanie spracovaných id
 		foreach ($results as $result) {
-			$key = $result['type'] . '|' . ($result['type'] === 'article_section' ? $result['article_id'] : $result['id']);
+			$unique_key = $result['type'] . '|' . $result['id']; // Pre články a sekcie používame id
 			if ($result['type'] === 'article') {
-				$article_ids[$result['id']] = true;
-				$unique_results[$key] = $result; // Artikel haben Priorität
-			} elseif ($result['type'] === 'article_section' && !isset($article_ids[$result['article_id']])) {
-				$unique_results[$key] = $result; // Nur Sektionen, deren Artikel nicht bereits vorhanden ist
+				if (!isset($processed_ids[$result['id']])) {
+					$processed_ids[$result['id']] = true;
+					$unique_results[$unique_key] = $result; // Pridáme iba prvý výskyt článku
+				}
+			} elseif ($result['type'] === 'article_section') {
+				// Pre sekcie kombinujeme article_id a id sekcie
+				$section_key = $result['type'] . '|' . $result['article_id'] . '|' . $result['id'];
+				if (!isset($processed_ids[$result['article_id']])) {
+					$unique_results[$section_key] = $result; // Pridáme sekciu, ak jej článok ešte nie je
+				}
 			}
 		}
 		$results = array_values($unique_results);
