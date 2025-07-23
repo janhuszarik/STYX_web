@@ -1,6 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-
+defined('BASEPATH') OR exit('Kein direkter Skriptzugriff erlaubt');
 /**
  * Class App
  * @property Ion_auth|Ion_auth_model $ion_auth         The ION Auth spark
@@ -14,7 +13,7 @@ class App extends CI_Controller
 		parent::__construct();
 		$this->load->model(array('App_model', 'Mail_model'));
 		$this->load->language('app_lang');
-		$this->refresh = get_http_referer(); // Speichern des Referers in die Eigenschaft des Controllers / verwende redirect($this->refresh);
+		$this->refresh = get_http_referer();
 		setlocale(LC_ALL, 'de_DE');
 	}
 
@@ -25,22 +24,11 @@ class App extends CI_Controller
 
 	public function home()
 	{
-		// Laden und Senden von Daten
 		$data['user'] = $this->ion_auth->user()->row();
 		$data['sliders'] = $this->App_model->getSliders(true);
 		$data['news'] = $this->App_model->getAllActiveNews();
 		$data['products'] = $this->App_model->getAllActiveProduct();
 
-		// Debugovanie - overenie, či sú produkty načítané
-		if (empty($data['products'])) {
-			log_message('error', 'Žiadne aktívne produkty načítané v home(). Skontroluj getAllActiveProduct().');
-			// Dočasné zobrazenie všetkých produktov bez filtra dátumu pre testovanie
-			$data['products'] = $this->App_model->getAllProductsForDebug();
-		} else {
-			log_message('debug', 'Načítané produkty: ' . print_r($data['products'], true));
-		}
-
-		// Prispôsobenie cesty k obrázkom produktov
 		foreach ($data['products'] as $product) {
 			if (!empty($product->image)) {
 				$product->image = str_replace('uploads/product/', 'uploads/Produkte/', $product->image);
@@ -107,7 +95,6 @@ class App extends CI_Controller
 			return;
 		}
 
-		// Výpis článkov (zoznam)
 		$subcategoryId = $this->input->get('sub');
 		$subcategories = [];
 		$articles = [];
@@ -126,7 +113,6 @@ class App extends CI_Controller
 
 		$noArticles = empty($articles);
 
-		// Ak existuje len jeden článok → presmeruj na detail
 		if (count($articles) === 1) {
 			$article = $articles[0];
 			$sections = $this->App_model->getSections($article->id);
@@ -149,7 +135,6 @@ class App extends CI_Controller
 			return;
 		}
 
-		// Výstup pre zoznam článkov
 		$data['articles'] = $articles;
 		$data['category'] = $category;
 		$data['subcategories'] = $subcategories;
@@ -166,7 +151,6 @@ class App extends CI_Controller
 
 	public function error404()
 	{
-		log_message('error', '404 Page Not Found: ' . current_url());
 		header("HTTP/1.1 404 Not Found");
 		$data['user'] = $this->ion_auth->user()->row();
 		$data['title'] = lang('ERROR_404_TITLE') ?: '404 - Seite nicht gefunden';
@@ -220,7 +204,6 @@ class App extends CI_Controller
 			return;
 		}
 
-		// === Email odoslanie ===
 		$data = [
 			'name' => $this->input->post('name', true),
 			'adresse' => $this->input->post('adresse', true),
@@ -244,7 +227,7 @@ class App extends CI_Controller
 
 	public function preview_email()
 	{
-		$data['name'] = 'Max Mustermann'; // testovacie dáta
+		$data['name'] = 'Max Mustermann';
 		$this->load->view('emails/contact_reply', $data);
 	}
 
@@ -283,7 +266,6 @@ class App extends CI_Controller
 			$username = trim($post['username']);
 			$password = trim($post['password']);
 
-			// === reCAPTCHA kontrola ===
 			$recaptcha_response = $this->input->post('g-recaptcha-response');
 			if (empty($recaptcha_response)) {
 				$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
@@ -300,7 +282,6 @@ class App extends CI_Controller
 				return;
 			}
 
-			// === Jednoduché overenie prístupových údajov ===
 			if ($username === 'styx' && $password === 'styx3100') {
 				redirect('https://drive.google.com/drive/u/1/folders/1j-DjaM3af-ZAodvNLB-jNOLADFqaPoS9');
 			} else {
@@ -330,7 +311,6 @@ class App extends CI_Controller
 		$this->load->library('form_validation');
 		$this->load->library('email');
 
-		// Form validation rules
 		$this->form_validation->set_rules('event_date', 'Datum', 'required');
 		$this->form_validation->set_rules('event_time', 'Uhrzeit', 'required');
 		$this->form_validation->set_rules('child_name', 'Kind', 'required|trim|max_length[100]');
@@ -352,9 +332,7 @@ class App extends CI_Controller
 			return;
 		}
 
-		// reCAPTCHA validation
 		$recaptcha_response = $this->input->post('g-recaptcha-response');
-		log_message('debug', 'reCAPTCHA response: ' . $recaptcha_response);
 		if (empty($recaptcha_response)) {
 			$this->session->set_flashdata('error', 'Bitte bestätigen Sie das reCAPTCHA.');
 			redirect($_SERVER['HTTP_REFERER']);
@@ -365,13 +343,11 @@ class App extends CI_Controller
 		$response = json_decode($verify);
 
 		if (!$response->success) {
-			log_message('error', 'reCAPTCHA failed: ' . print_r($response, true));
 			$this->session->set_flashdata('error', 'reCAPTCHA Überprüfung fehlgeschlagen.');
 			redirect($_SERVER['HTTP_REFERER']);
 			return;
 		}
 
-		// Form data
 		$data = [
 			'event_date' => $this->input->post('event_date', true),
 			'event_time' => $this->input->post('event_time', true),
@@ -389,15 +365,12 @@ class App extends CI_Controller
 			'notes' => $this->input->post('notes', true),
 		];
 
-		log_message('debug', 'Formulárové dáta: ' . print_r($data, true));
-
 		$this->load->model('App_model');
 		$sent = $this->App_model->sendKindergeburtstagMail($data);
 
 		if ($sent) {
 			$this->session->set_flashdata('success', 'Vielen Dank für Ihre Anfrage. Wir melden uns baldmöglichst bei Ihnen.');
 		} else {
-			log_message('error', 'Chyba pri odosielaní e-mailu: ' . $this->email->print_debugger());
 			$this->session->set_flashdata('error', 'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.');
 		}
 
@@ -495,4 +468,3 @@ class App extends CI_Controller
 		redirect('besuchen/gruppenfuhrungen');
 	}
 }
-?>
