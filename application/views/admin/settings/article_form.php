@@ -103,7 +103,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		max-height: 150px;
 		object-fit: contain;
 	}
-
 </style>
 
 <div id="global-status"
@@ -426,7 +425,7 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="subcategoryModalLabel">Unterkategorien verwalten</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
 			</div>
 			<div class="modal-body">
 				<form id="subcategoryForm">
@@ -478,7 +477,8 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 	const base_url = "<?= base_url() ?>";
 </script>
 
-<script>document.addEventListener('DOMContentLoaded', function () {
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
 		const base_url = "<?= base_url() ?>";
 		const articleOptions = <?= $articleOptionsJson ?>;
 		const langSelect = document.getElementById('lang');
@@ -615,7 +615,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 			}
 		});
 
-		// Automatické predvyplnenie image_title názvom súboru z inputu image
 		document.getElementById('image').addEventListener('change', function () {
 			const file = this.files[0];
 			const imageTitleInput = document.getElementById('image_title');
@@ -634,7 +633,6 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 				}
 				hideWarning(this);
 
-				// Ak nie je vyplnený image_title, použije sa názov súboru
 				if (!imageTitleInput.value.trim()) {
 					const fileName = file.name.split('.').slice(0, -1).join('.');
 					imageTitleInput.value = fileName;
@@ -928,14 +926,14 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 									try {
 										response = JSON.parse(resp);
 									} catch (e) {
-										showAlert('Neplatná odpoveď zo servera.', 'error');
+										showAlert('Ungültige Antwort vom Server.', 'error');
 										return;
 									}
 								}
 								if (response.success && response.image_url) {
 									$(selector).summernote('insertImage', response.image_url);
 								} else {
-									showAlert(response.error || 'Obrázok sa nepodarilo vložiť.', 'error');
+									showAlert(response.error || 'Bild konnte nicht eingefügt werden.', 'error');
 								}
 							},
 							error: function () {
@@ -1168,4 +1166,5 @@ if (isset($article->end_date_to) && !empty($article->end_date_to)) {
 
 	$(document).on('click', '.note-modal .close, .note-modal .modal-header .close', function () {
 		$(this).closest('.note-modal').modal('hide');
-	});</script>
+	});
+</script>
