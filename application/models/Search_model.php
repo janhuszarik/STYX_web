@@ -49,9 +49,7 @@ class Search_model extends CI_Model {
 		}
 		$articles_results = $articles_results->result_array();
 		error_log("Počet nájdených článkov: " . count($articles_results));
-		foreach ($articles_results as &$article) {
-			$article['url'] = $article['slug']; // iba slug, bez cesty
-		}
+
 		$results = array_merge($results, $articles_results);
 
 		$this->db->select([
@@ -81,9 +79,7 @@ class Search_model extends CI_Model {
 		}
 		$article_sections_results = $article_sections_results->result_array();
 		error_log("Počet nájdených sekcií: " . count($article_sections_results));
-		foreach ($article_sections_results as &$section) {
-			$section['url'] = $section['slug'];
-		}
+
 		$results = array_merge($results, $article_sections_results);
 
 		$unique_results = [];
@@ -142,6 +138,33 @@ class Search_model extends CI_Model {
 			}
 			return $b_match - $a_match;
 		});
+		foreach ($results as &$result) {
+			$lang = $result['lang'] ?? 'de';
+			$slug = trim($result['slug'], '/');
+			$title = $result['type'] === 'article' ? $result['title'] : ($result['article_title'] ?? '');
+			$subcategory_id = $result['subcategory_id'] ?? null;
+
+			// Pomocná funkcia na úpravu title → slug-like
+			$slugify = function($text) {
+				$text = strtolower(trim($text));
+				$text = preg_replace('/[^a-z0-9áäčďéěíľĺňóôŕšťúýžüß\s-]/u', '', $text);
+				$text = preg_replace('/[\s_]+/', '-', $text);
+				$text = preg_replace('/-+/', '-', $text);
+				return trim($text, '-');
+			};
+
+			// Ak subcategory_id nie je vyplnené → použijeme len slug
+			if (empty($subcategory_id)) {
+				$result['url'] =  $slug;
+			} else {
+				// Ak existuje subcategory → použijeme slug + title slug
+				$title_slug = $slugify($title);
+				$result['url'] = $slug . '/' . $title_slug;
+			}
+		}
+
+
+
 
 		return $results;
 	}
