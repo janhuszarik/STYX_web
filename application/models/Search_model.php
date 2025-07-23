@@ -8,6 +8,36 @@ class Search_model extends CI_Model {
 		$this->load->database();
 		$this->load->helper('app');
 	}
+	private function search_url_oprava($str, $separator = '-', $lowercase = true) {
+		if ($separator === 'dash') $separator = '-';
+		elseif ($separator === 'underscore') $separator = '_';
+
+		$q_separator = preg_quote($separator, '#');
+
+		$trans = [
+			'ä' => 'a', 'ö' => 'o', 'ü' => 'u', 'ß' => 'ss',
+			'Ä' => 'a', 'Ö' => 'o', 'Ü' => 'u',
+
+			'á' => 'a', 'à' => 'a', 'â' => 'a', 'č' => 'c', 'ć' => 'c', 'ď' => 'd', 'é' => 'e', 'ě' => 'e', 'ë' => 'e', 'í' => 'i', 'ĺ' => 'l',
+			'ľ' => 'l', 'ň' => 'n', 'ó' => 'o', 'ô' => 'o', 'ŕ' => 'r', 'ř' => 'r', 'š' => 's', 'ť' => 't', 'ú' => 'u', 'ý' => 'y', 'ž' => 'z',
+
+			'&.+?;' => '',     // HTML entities
+			'[^\w\d _-]' => '', // Invalid chars
+			'\s+' => $separator,
+			'(' . $q_separator . ')+' => $separator
+		];
+
+		$str = strip_tags($str);
+		foreach ($trans as $key => $val) {
+			$str = preg_replace('#' . $key . '#i' . (UTF8_ENABLED ? 'u' : ''), $val, $str);
+		}
+
+		if ($lowercase) {
+			$str = strtolower($str);
+		}
+
+		return trim(trim($str, $separator));
+	}
 
 	public function search($query) {
 		$orig_query = $query;
@@ -138,30 +168,21 @@ class Search_model extends CI_Model {
 			}
 			return $b_match - $a_match;
 		});
+		$this->load->helper('app');
+
 		foreach ($results as &$result) {
-			$lang = $result['lang'] ?? 'de';
 			$slug = trim($result['slug'], '/');
 			$title = $result['type'] === 'article' ? $result['title'] : ($result['article_title'] ?? '');
 			$subcategory_id = $result['subcategory_id'] ?? null;
 
-			// Pomocná funkcia na úpravu title → slug-like
-			$slugify = function($text) {
-				$text = strtolower(trim($text));
-				$text = preg_replace('/[^a-z0-9áäčďéěíľĺňóôŕšťúýžüß\s-]/u', '', $text);
-				$text = preg_replace('/[\s_]+/', '-', $text);
-				$text = preg_replace('/-+/', '-', $text);
-				return trim($text, '-');
-			};
-
-			// Ak subcategory_id nie je vyplnené → použijeme len slug
 			if (empty($subcategory_id)) {
-				$result['url'] =  $slug;
+				$result['url'] = $slug;
 			} else {
-				// Ak existuje subcategory → použijeme slug + title slug
-				$title_slug = $slugify($title);
+				$title_slug = $this->search_url_oprava($title);
 				$result['url'] = $slug . '/' . $title_slug;
 			}
 		}
+
 
 
 
