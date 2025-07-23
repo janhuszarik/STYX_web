@@ -133,7 +133,7 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 			echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">';
 			foreach ($similar_results as $sim) {
 				$sim_url = base_url($sim['slug']);
-				$sim_title = htmlspecialchars($sim['title']);
+				$sim_title = $sim['title'];
 				$sim_image = !empty($sim['image']) ? htmlspecialchars($sim['image']) : null;
 				echo '<div class="col">';
 				echo '<div class="card h-100">';
@@ -146,7 +146,7 @@ $resultCount = !empty($results) && is_array($results) ? count($results) : 0;
 				echo '</div>';
 				echo '</div>';
 			}
-			echo '</div></div>';
+			echo '</div></div><div style="margin-bottom: 20px;"></div>';
 		}
 	endif; ?>
 </div>
