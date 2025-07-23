@@ -1,6 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+/**
+ * @property Article_model $Article_model
+ * @property Admin_model $Admin_model
+ * @property CI_DB_query_builder $db
+ * @property CI_Session $session
+ * @property CI_Pagination $pagination
+ * @property CI_Upload $upload
+ * @property CI_Input $input
+ */
 class Article extends CI_Controller
 {
 	public function __construct()
