@@ -6,7 +6,7 @@ $this->load->view('partials/slider_assets');
 		<section class="slider-container" role="region" aria-label="<?= lang('SLIDER_STARTSEITE') ?>">
 			<?php foreach ($sliders as $index => $s): ?>
 				<div class="slider-wrapper <?= $index === 0 ? 'active' : '' ?>" role="group" aria-roledescription="slide" aria-label="<?= ($index + 1) . ' / ' . count($sliders) ?>">
-					<div class="slider-section" style="background-image: url('<?= base_url('Uploads/Sliders/' . $s->image); ?>');" aria-hidden="<?= $index === 0 ? 'false' : 'true' ?>">
+					<div class="slider-section" style="background-image: url('<?= base_url('uploads/Sliders/' . $s->image); ?>');" aria-hidden="<?= $index === 0 ? 'false' : 'true' ?>">
 						<div class="slider-navigation">
 							<button class="prev" aria-label="<?= lang('SLIDER_PREV') ?>">❮</button>
 							<button class="next" aria-label="<?= lang('SLIDER_NEXT') ?>">❯</button>
