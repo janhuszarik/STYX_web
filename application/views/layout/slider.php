@@ -1,5 +1,6 @@
-
-
+<?php
+$this->load->view('partials/slider_assets');
+?>
 <div role="main" class="main">
 		<?php if (!empty($sliders)): ?>
 		<section class="slider-container" role="region" aria-label="<?= lang('SLIDER_STARTSEITE') ?>">
@@ -21,6 +22,20 @@
 					</a>
 				</div>
 			<?php endforeach; ?>
+			<div class="slider-controls">
+				<div class="progress-ring">
+					<svg>
+						<circle class="progress-ring-bg" cx="30" cy="30" r="22" />
+						<circle class="progress-ring-circle" cx="30" cy="30" r="22" />
+					</svg>
+					<button id="pauseBtn" aria-label="Pause slider">⏸️</button>
+				</div>
+			</div>
 		</section>
 	<?php endif; ?>
 </div>
+
+
+
+
+

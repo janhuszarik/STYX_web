@@ -1,0 +1,70 @@
+@media (min-width: 768px) {
+	.slider-controls {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		z-index: 10;
+		width: 60px;
+		height: 60px;
+		display: block;
+	}
+
+	.progress-ring {
+		position: relative;
+		width: 60px;
+		height: 60px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.progress-ring svg {
+		position: absolute;
+		width: 60px;
+		height: 60px;
+		transform: rotate(-90deg);
+	}
+
+	.progress-ring-bg {
+		fill: none;
+		stroke: rgba(255, 255, 255, 0.2);
+		stroke-width: 6;
+	}
+
+	.progress-ring-circle {
+		fill: none;
+		stroke: limegreen;
+		stroke-width: 6;
+		stroke-linecap: round;
+		stroke-dasharray: 138;
+		stroke-dashoffset: 138;
+		transition: stroke-dashoffset 0.1s linear;
+	}
+
+	#pauseBtn {
+		width: 44px;
+		height: 44px;
+		border: none;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, 0.6);
+		color: white;
+		font-size: 20px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 2;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+		transition: background-color 0.3s;
+
+	}
+	#pauseBtn:hover {
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+}
+
+@media (max-width: 767px) {
+	.slider-controls {
+		display: none;
+	}
+}
