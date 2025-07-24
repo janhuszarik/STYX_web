@@ -68,3 +68,147 @@
 		display: none;
 	}
 }
+.slider-container {
+	background: white;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	height: auto;
+}
+
+.slider-wrapper {
+	position: relative;
+	width: 100%;
+	height: auto;
+	opacity: 0;
+	transition: opacity 1s ease-in-out;
+	z-index: 0;
+	display: none;
+}
+
+.slider-wrapper.active {
+	opacity: 1;
+	z-index: 1;
+	display: block;
+}
+
+.slider-section {
+	width: 100%;
+	height: 600px;
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	z-index: 1;
+}
+
+.slider-navigation {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	justify-content: space-between;
+	z-index: 1000;
+}
+
+.slider-navigation .prev,
+.slider-navigation .next {
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	padding: 10px;
+	cursor: pointer;
+	user-select: none;
+	font-size: 24px;
+}
+
+.slider-text {
+	padding: 20px 20px 1px 20px;
+	text-align: center;
+	z-index: 2;
+	position: relative;
+	display: block;
+	margin-top: 3px;
+	color: inherit;
+}
+
+.slider-text.empty {
+	background-color: transparent !important;
+	color: transparent;
+	pointer-events: none;
+	height: 60px;
+	margin-top: 40px;
+}
+
+.slider-text h1,
+.slider-text h3,
+.slider-text h4,
+.slider-text p {
+	margin-bottom: 0.5rem !important;
+	margin-top: 0 !important;
+}
+
+.slider-text h1:last-child,
+.slider-text h3:last-child,
+.slider-text h4:last-child,
+.slider-text p:last-child {
+	margin-bottom: 25px !important;
+}
+
+@media (max-width: 1024px) {
+	.slider-section {
+		height: 400px;
+	}
+
+	.slider-text {
+		padding: 20px 15px;
+		font-size: 16px;
+	}
+
+	.slider-text h2,
+	.slider-text h3,
+	.slider-text p {
+		line-height: 1.3;
+		margin-bottom: 4px;
+	}
+}
+
+@media (max-width: 768px) {
+	.slider-section {
+		height: auto;
+		aspect-ratio: 16 / 9;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.slider-text {
+		padding: 15px 10px;
+		margin-top: 1px;
+	}
+
+	.slider-navigation {
+		display: none;
+	}
+}
+
+@media (max-width: 480px) {
+	.slider-section {
+		height: auto;
+		aspect-ratio: 16 / 9;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.slider-text {
+		padding: 4px 10px;
+		font-size: 14px;
+	}
+
+	.slider-text h2,
+	.slider-text h3,
+	.slider-text p {
+		line-height: 1.25;
+		margin-bottom: 3px;
+	}
+}
