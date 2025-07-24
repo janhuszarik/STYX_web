@@ -70,7 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Pauza/Play tlačidlo
 	pauseBtn.addEventListener('click', () => {
 		isPaused = !isPaused;
-		pauseBtn.textContent = isPaused ? '▶️' : '⏸️';
+		const icon = pauseBtn.querySelector('i');
+		icon.classList.toggle('fa-pause', !isPaused);
+		icon.classList.toggle('fa-play', isPaused);
+		pauseBtn.setAttribute('aria-label', isPaused ? 'Play slider' : 'Pause slider');
 	});
 
 	// Navigácia - ďalej

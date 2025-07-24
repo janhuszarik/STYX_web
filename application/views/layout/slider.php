@@ -2,11 +2,11 @@
 $this->load->view('partials/slider_assets');
 ?>
 <div role="main" class="main">
-		<?php if (!empty($sliders)): ?>
+	<?php if (!empty($sliders)): ?>
 		<section class="slider-container" role="region" aria-label="<?= lang('SLIDER_STARTSEITE') ?>">
 			<?php foreach ($sliders as $index => $s): ?>
 				<div class="slider-wrapper <?= $index === 0 ? 'active' : '' ?>" role="group" aria-roledescription="slide" aria-label="<?= ($index + 1) . ' / ' . count($sliders) ?>">
-					<div class="slider-section" style="background-image: url('<?= base_url('uploads/Sliders/' . $s->image); ?>');" aria-hidden="<?= $index === 0 ? 'false' : 'true' ?>">
+					<div class="slider-section" style="background-image: url('<?= base_url('Uploads/Sliders/' . $s->image); ?>');" aria-hidden="<?= $index === 0 ? 'false' : 'true' ?>">
 						<div class="slider-navigation">
 							<button class="prev" aria-label="<?= lang('SLIDER_PREV') ?>">❮</button>
 							<button class="next" aria-label="<?= lang('SLIDER_NEXT') ?>">❯</button>
@@ -28,14 +28,9 @@ $this->load->view('partials/slider_assets');
 						<circle class="progress-ring-bg" cx="30" cy="30" r="22" />
 						<circle class="progress-ring-circle" cx="30" cy="30" r="22" />
 					</svg>
-					<button id="pauseBtn" aria-label="Pause slider">⏸️</button>
+					<button id="pauseBtn" aria-label="Pause slider"><i class="fas fa-pause"></i></button>
 				</div>
 			</div>
 		</section>
 	<?php endif; ?>
 </div>
-
-
-
-
-
