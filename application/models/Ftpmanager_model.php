@@ -3,17 +3,13 @@ defined('BASEPATH') OR exit('Kein direkter Skriptzugriff erlaubt');
 
 class Ftpmanager_model extends CI_Model
 {
-	// Pridáme nový parameter $search_query
 	public function connect_to_ftp($path = '', $search_query = '')
 	{
 		$this->load->driver('cache', ['adapter' => 'file']);
 		$cache_key = 'ftp_list_' . md5(trim($path, '/'));
 
-		// Skontrolujeme, či je zoznam v cache
 		if ($list = $this->cache->get($cache_key)) {
-			// Dáta sú z keše
 		} else {
-			// Dáta nie sú v keši, ideme na FTP
 			$ftp_server = "ftp.styxnatur.at";
 			$ftp_user = "testujem@styxnatur.at";
 			$ftp_pass = "tQS!2g-x6Oy3S_7.";
@@ -36,14 +32,14 @@ class Ftpmanager_model extends CI_Model
 			}
 
 			$list = [];
-			$ignore_files = ['.htaccess', '.ftpquota']; // Zoznam súborov/priečinkov na ignorovanie
+			$ignore_files = ['.htaccess', '.ftpquota'];
 			foreach ($raw_list as $item) {
 				$info = preg_split("/\s+/", $item, 9);
 				if (count($info) < 9) continue;
 
 				$type = $info[0][0] === 'd' ? 'dir' : 'file';
 				$name = $info[8];
-				if ($name === '.' || $name === '..' || in_array($name, $ignore_files)) continue; // Ignorovať .htaccess a iné
+				if ($name === '.' || $name === '..' || in_array($name, $ignore_files)) continue;
 
 				$full_path = $path_normalized === '' ? $name : $path_normalized . '/' . $name;
 				$size = $type === 'file' ? (int)$info[4] : null;
@@ -58,11 +54,16 @@ class Ftpmanager_model extends CI_Model
 
 			ftp_close($conn);
 
-			// Uložíme KOMPLETNÝ zoznam do keše na 1 hodinu
+			usort($list, function($a, $b) {
+				if ($a['type'] === $b['type']) {
+					return strnatcmp($a['name'], $b['name']);
+				}
+				return $a['type'] === 'dir' ? -1 : 1;
+			});
+
 			$this->cache->save($cache_key, $list, 3600);
 		}
 
-		// Filtrovanie výsledkov podľa vyhľadávania
 		if (!empty($search_query) && is_array($list)) {
 			$filtered_list = [];
 			foreach ($list as $file) {
@@ -83,17 +84,15 @@ class Ftpmanager_model extends CI_Model
 
 		$parent_path = dirname($path);
 
-		// Najprv skúsime zmazať ako súbor
 		if (@ftp_delete($conn, $path)) {
 			ftp_close($conn);
-			$this->invalidate_cache($parent_path); // ✅ Invalidácia keše
+			$this->invalidate_cache($parent_path);
 			return true;
 		}
 
-		// Ak sa nepodarilo, skúsime zmazať ako priečinok
 		if (@ftp_rmdir($conn, $path)) {
 			ftp_close($conn);
-			$this->invalidate_cache($parent_path); // ✅ Invalidácia keše
+			$this->invalidate_cache($parent_path);
 			return true;
 		}
 
@@ -119,8 +118,8 @@ class Ftpmanager_model extends CI_Model
 
 		if (ftp_rename($conn, $from, $to)) {
 			ftp_close($conn);
-			$this->invalidate_cache(dirname($from)); // ✅ Invalidácia zdrojového priečinka
-			$this->invalidate_cache(dirname($to));   // ✅ Invalidácia cieľového priečinka
+			$this->invalidate_cache(dirname($from));
+			$this->invalidate_cache(dirname($to));
 			return true;
 		}
 		ftp_close($conn);
@@ -134,7 +133,7 @@ class Ftpmanager_model extends CI_Model
 
 		if (@ftp_mkdir($conn, $path)) {
 			ftp_close($conn);
-			$this->invalidate_cache(dirname($path)); // ✅ Invalidácia nadradeného priečinka
+			$this->invalidate_cache(dirname($path));
 			return true;
 		}
 
@@ -151,21 +150,15 @@ class Ftpmanager_model extends CI_Model
 		ftp_close($conn);
 
 		if ($upload) {
-			// Táto funkcia už správne invalidovala cache
 			$this->invalidate_cache(dirname($remote_path));
 			return true;
 		}
 		return ['__error' => 'Datei konnte nicht auf den FTP-Server hochgeladen werden.'];
 	}
 
-	/**
-	 * Zmaže cache pre zadanú cestu.
-	 * @param string $path Cesta k priečinku, ktorého cache sa má zmazať.
-	 */
 	public function invalidate_cache($path)
 	{
 		$this->load->driver('cache', ['adapter' => 'file']);
-		// Normalizujeme cestu, aby bola konzistentná (napr. '.' sa stane prázdnym stringom)
 		$normalized_path = trim($path, '/');
 		if ($normalized_path === '.') {
 			$normalized_path = '';

@@ -5,11 +5,29 @@
 		object-fit: contain;
 	}
 	#ftp-browser-container {
-		max-height: 600px;
+		max-height: calc(80vh - 100px);
 		overflow-y: auto;
 	}
 	.modal-dialog {
-		max-width: 90vw;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		width: 80vw;
+		height: 80vh;
+		margin-top: -40vh;
+		margin-left: -40vw;
+		max-width: 80vw;
+		max-height: 80vh;
+		display: flex;
+		flex-direction: column;
+	}
+	.modal-content {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+	#ftp-folder-contents {
+		flex: 1;
 	}
 	#ftp-items-list {
 		display: grid;
@@ -100,6 +118,14 @@
 		let lastPreview = null;
 		let debounceTimer;
 
+		modalEl.addEventListener('show.bs.modal', () => {
+			modalEl.querySelector('.modal-dialog').style.width = '80vw';
+			modalEl.querySelector('.modal-dialog').style.height = '80vh';
+			modalEl.querySelector('.modal-dialog').style.marginTop = '-40vh';
+			modalEl.querySelector('.modal-dialog').style.marginLeft = '-40vw';
+			document.getElementById('ftp-browser-container').style.maxHeight = 'calc(80vh - 100px)';
+		});
+
 		modalEl.addEventListener('hidden.bs.modal', () => {
 			document.body.classList.remove('modal-open');
 			document.body.style.overflow = '';
@@ -167,7 +193,7 @@
 									? `<img src="${item.url}" alt="${item.name}" loading="lazy">`
 									: '<i class="fa fa-file" style="color: #999;"></i>');
 							const actionClass = item.type === 'dir' ? 'ftp-folder' : (isImage ? 'ftp-image-choose' : '');
-							const size = item.size && item.size !== -1 ? (item.nize / 1024).toFixed(2) + ' KB' : '-';
+							const size = item.size && item.size !== -1 ? (item.size / 1024).toFixed(2) + ' KB' : '-';
 
 							html += `
                             <div class="ftp-item ${actionClass}" data-path="${item.path}" data-url="${item.url || ''}">
