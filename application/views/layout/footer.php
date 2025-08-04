@@ -3,7 +3,7 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-8">
 				<h1 id="newsletter-heading" class="text-center font-weight-bold mb-4"><?= lang('NEWSLETTER_TITLE') ?></h1>
-				<form id="newsletterForm" action="https://www.citypin.eu/doubleoptin/submit" method="post" class="newsletter-form">
+				<form action="https://www.citypin.eu/doubleoptin/submit" method="post" target="_blank">
 					<div class="row">
 						<div class="col-md-4 mb-3">
 							<select name="anrede" class="form-control" required>
