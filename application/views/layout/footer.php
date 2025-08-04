@@ -3,14 +3,10 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-8">
 				<h1 id="newsletter-heading" class="text-center font-weight-bold mb-4"><?= lang('NEWSLETTER_TITLE') ?></h1>
-				<form id="newsletterForm" onsubmit="return validateNewsletterForm()" action="https://mailworx.marketingsuite.info/sys/form-submit.aspx" method="post" class="newsletter-form">
-					<input type="hidden" name="frm" value="3ebb53d5-0afb-489c-b75a-493990d2e4af">
-					<input type="hidden" name="acc" value="7ad42b71-86b9-450b-bfae-a9e0d961dc8c">
-					<input type="hidden" name="mxCFF_empty" value="">
-					<input type="hidden" name="dpl" value="email">
+				<form id="newsletterForm" onsubmit="return validateNewsletterForm()" action="https://www.citypin.eu/doubleoptin/submit" method="post" class="newsletter-form">
 					<div class="row">
 						<div class="col-md-4 mb-3">
-							<select name="salutation" class="form-control" required>
+							<select name="anrede" class="form-control" required>
 								<option value=""><?= lang('SELECT_ANREDE')?></option>
 								<option value="Frau">Frau</option>
 								<option value="Herr">Herr</option>
@@ -18,17 +14,17 @@
 							</select>
 						</div>
 						<div class="col-md-4 mb-3">
-							<input type="text" name="firstname" class="form-control" placeholder="<?= lang('VORNAME') ?>">
+							<input type="text" name="vorname" class="form-control" placeholder="<?= lang('VORNAME') ?>">
 						</div>
 						<div class="col-md-4 mb-3">
-							<input type="text" name="lastname" class="form-control" placeholder="<?= lang('NACHNAME') ?>">
+							<input type="text" name="nachname" class="form-control" placeholder="<?= lang('NACHNAME') ?>">
 						</div>
 						<div class="col-md-12 mb-3">
 							<input type="email" name="email" class="form-control" placeholder="<?= lang('EMAIL_PLACEHOLDER') ?>" required>
 						</div>
 						<div class="col-md-12 mb-3">
 							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="privacy" id="privacyCheck" required>
+								<input class="form-check-input" type="checkbox" name="consent" id="privacyCheck" value="1" required>
 								<label class="form-check-label" for="privacyCheck">
 									<?= lang('NEWSLETTER_PRIVACY_TEXT') ?>
 								</label>
@@ -42,6 +38,7 @@
 						</div>
 					</div>
 				</form>
+
 			</div>
 		</div>
 	</div>
